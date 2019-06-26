@@ -1,0 +1,598 @@
+Data Exported from: D:/Users/James/Documents/EAGLE/projects/WaiveTelemMKR/001000-003.brd
+with: C:/EAGLE 9.4.0/examples/ulps/examples/statistic-brd.ulp Version 1.3.9
+at: 6/21/2019 11:07 AM
+EAGLE Version 9.4.0 Copyright (c) 1988-2019 Autodesk, Inc.
+
+all Values in mm
+max. Board length (Layer 20)
+X = 85.00
+Y = 63.00
+Outline contour = 296.00
+
+used layers 4
+
+ 1 Top
+16 Bottom
+ 2 Route2
+15 Route15
+_________________________
+
+1639  	 Wire(s) incl. Arc(s)
+6     	 Polygon(s)
+_________________________
+449   	 SMD(s) top
+167   	 SMD(s) bottom
+===================
+616   	 SMD(s) total
+
+24    	 PAD(s)
+_________________________
+162   	 Via
+6     	 Hole
+===================
+192   	 Drills total
+_________________________
+449	 tCream
+167	 bCream
+_________________________
+Routing Info: 
+125   	 Signal(s) 
+640   	 PAD/SMD total
+===================
+577   	 PAD/SMD on Signal
+_________________________
+Packages used area:
+~ 4024.76 mm² (0.402 dm²)
+_________________________
+
+
+============================
+
+============================
+153 Elements: 0 locked / 153 unlocked
+9 Testpoints (TP)
+
+----------------------------
+LAYER
+Nb.	Name	Used
+  1	Top	1
+  2	Route2	1
+  3	Route3	0
+  4	Route4	0
+  5	Route5	0
+  6	Route6	0
+  7	Route7	0
+  8	Route8	0
+  9	Route9	0
+ 10	Route10	0
+ 11	Route11	0
+ 12	Route12	0
+ 13	Route13	0
+ 14	Route14	0
+ 15	Route15	1
+ 16	Bottom	1
+ 17	Pads	1
+ 18	Vias	1
+ 19	Unrouted	0
+ 20	Dimension	1
+ 21	tPlace	1
+ 22	bPlace	1
+ 23	tOrigins	1
+ 24	bOrigins	1
+ 25	tNames	1
+ 26	bNames	1
+ 27	tValues	1
+ 28	bValues	1
+ 29	tStop	1
+ 30	bStop	1
+ 31	tCream	1
+ 32	bCream	1
+ 33	tFinish	0
+ 34	bFinish	0
+ 35	tGlue	1
+ 36	bGlue	1
+ 37	tTest	1
+ 38	bTest	0
+ 39	tKeepout	1
+ 40	bKeepout	1
+ 41	tRestrict	1
+ 42	bRestrict	1
+ 43	vRestrict	1
+ 44	Drills	1
+ 45	Holes	1
+ 46	Milling	0
+ 47	Measures	0
+ 48	Document	1
+ 49	Reference	0
+ 50	dxf	0
+ 51	tDocu	1
+ 52	bDocu	1
+ 53	tGND_GNDA	0
+ 54	bGND_GNDA	0
+ 56	wert	0
+ 57	tCAD	0
+ 59	tCarbon	0
+ 60	bCarbon	0
+100	Mechanical	0
+101	Gehäuse	0
+102	Mittellin	0
+103	tMap	0
+104	Name	0
+105	tPlate	0
+106	bPlate	0
+107	Crop	0
+108	fp8	0
+109	fp9	0
+110	fp0	0
+111	LPC17xx	0
+112	tSilk	0
+113	IDFDebug	0
+114	ANT	0
+115	usb	0
+116	Patch_BOT	0
+117	BACKMAAT1	0
+118	Rect_Pads	0
+119	KAP_TEKEN	0
+120	KAP_MAAT1	0
+121	_tsilk	0
+122	_bsilk	0
+123	tTestmark	0
+124	bTestmark	0
+125	_tNames	0
+126	_bNames	0
+127	_tValues	0
+128	_bValues	0
+129	Mask	0
+130	SMDSTROOK	0
+131	tAdjust	0
+132	bAdjust	0
+133	bottom_silk	0
+134	silk_top	0
+135	silk_bottom	0
+136	silktop	0
+137	silkbottom	0
+138	EEE	0
+139	_tKeepout	0
+140	mbKeepout	0
+141	ASSEMBLY_TOP	0
+142	mbRestrict	0
+143	PLACE_BOUND_TOP	0
+144	Drill_legend	0
+145	DrillLegend_01-02	0
+146	DrillLegend_01-15	0
+147	DrillLegend_01-16	0
+148	DrillLegend_01-20	0
+149	DrillLegend_02-15	0
+150	Notes	0
+151	HeatSink	0
+152	_bDocu	0
+153	FabDoc1	0
+154	FabDoc2	0
+155	FabDoc3	0
+166	AntennaArea	0
+168	4mmHeightArea	0
+191	mNets	0
+192	mBusses	0
+193	mPins	0
+194	mSymbols	0
+195	mNames	0
+196	mValues	0
+199	Contour	0
+200	200bmp	0
+201	201bmp	0
+202	202bmp	0
+203	203bmp	0
+204	204bmp	0
+205	205bmp	0
+206	206bmp	0
+207	207bmp	0
+208	208bmp	0
+209	209bmp	0
+210	210bmp	0
+211	211bmp	0
+212	212bmp	0
+213	213bmp	0
+214	214bmp	0
+215	215bmp	0
+216	216bmp	0
+217	217bmp	0
+218	218bmp	0
+219	219bmp	0
+220	220bmp	0
+221	221bmp	0
+222	222bmp	0
+223	223bmp	0
+224	224bmp	0
+225	225bmp	0
+226	226bmp	0
+227	227bmp	0
+228	228bmp	0
+229	229bmp	0
+230	230bmp	0
+231	231bmp	0
+232	Eagle3D_PG2	0
+233	Eagle3D_PG3	0
+248	Housing	0
+249	Edge	0
+250	Descript	0
+251	SMDround	0
+254	OrgLBR	0
+255	routoute	0
+
+----------------------------
+CLASS
+# 	Name	min. Width	Clearance	min. Drill	Used
+0	default	0.0000 	0.0000 	0.0000 	124 
+1	ant_wide	0.8000 	0.0000 	0.0000 	0   
+2	signal	0.2032 	0.1524 	0.2032 	1   
+
+----------------------------
+WIDTH
+WIRE	Q.
+0.2540 	723 
+0.2032 	841 
+0.6096 	14  
+0.3048 	10  
+1.0160 	1   
+0.8128 	13  
+0.5080 	15  
+0.2000 	17  
+0.4064 	5   
+
+ARC	Q.
+ * Wire width are saved in 0.2 micron resolution.
+
+POLY. width	Q.
+0.2540 	4   
+0.2032 	2   
+
+POLY. Isol.	Q.
+0.3048 	6   
+
+Polygon
+Type	Name	Layer	Rank	Width
+Signal	+1V8	15	1	0.254
+Signal	+3V3	15	1	0.203
+Signal	+3V8	15	1	0.254
+Signal	+12V	15	1	0.254
+Signal	GND	2	1	0.203
+Signal	VIN	15	1	0.254
+ * Wire width are saved in 0.2 micron resolution.
+
+----------------------------
+CIRCLE (width)	Q.
+
+CIRCLE diam.	Q.
+
+----------------------------
+TEXT (w)	Q.
+
+TEXT (s)	Q.
+
+----------------------------
+SMD x	SMD y	Roundn.	Q.
+1.8200 	0.6200 	0%	4   
+0.6000 	0.7000 	0%	124 
+1.2000 	1.5000 	0%	4   
+3.5000 	1.5000 	0%	1   
+2.5000 	1.5000 	0%	1   
+1.4700 	0.6200 	0%	6   
+0.9400 	0.7500 	0%	4   
+0.9000 	1.1000 	0%	10  
+1.4000 	1.8000 	0%	6   
+0.6200 	0.6000 	0%	12  
+0.6200 	0.6200 	3%	4   
+1.0300 	1.1700 	0%	2   
+0.7000 	0.6500 	0%	18  
+1.0500 	0.5000 	0%	2   
+1.0500 	0.8500 	0%	4   
+1.0000 	1.0000 	3%	1   
+1.0000 	0.6000 	3%	3   
+3.4300 	1.3100 	0%	2   
+1.0000 	0.8500 	0%	2   
+0.7500 	0.6000 	0%	16  
+1.4750 	0.3000 	0%	48  
+1.5000 	0.8000 	0%	64  
+1.1000 	1.1000 	0%	32  
+1.2000 	0.6000 	0%	5   
+1.5250 	0.6500 	0%	8   
+0.4750 	0.3000 	0%	6   
+0.8500 	0.3000 	0%	8   
+1.6000 	1.4000 	0%	1   
+1.4000 	1.0000 	0%	11  
+1.0500 	0.4500 	0%	8   
+4.3500 	3.4500 	0%	1   
+0.8500 	0.3500 	0%	14  
+4.2500 	1.6500 	0%	1   
+1.4750 	0.4500 	0%	40  
+2.0000 	0.4000 	0%	6   
+1.2000 	0.8000 	0%	6   
+1.7500 	1.3000 	0%	1   
+1.0000 	0.6500 	0%	1   
+2.3500 	1.2000 	0%	1   
+1.4000 	1.2000 	0%	1   
+1.1000 	1.0000 	0%	1   
+1.1000 	0.8500 	0%	7   
+1.1000 	0.7500 	0%	1   
+1.8000 	1.1700 	0%	1   
+1.9000 	1.3500 	0%	2   
+1.2000 	1.0000 	0%	2   
+1.5500 	1.3500 	0%	1   
+0.4000 	1.3500 	3%	5   
+2.1000 	1.6000 	3%	2   
+1.8000 	1.9000 	3%	2   
+1.9000 	1.9000 	3%	2   
+2.4000 	0.7400 	0%	10  
+3.0000 	1.0000 	0%	10  
+6.0000 	2.0100 	0%	2   
+3.6000 	1.8000 	0%	2   
+1.0000 	1.0000 	0%	2   
+0.9500 	0.8500 	0%	4   
+1.0000 	0.4000 	0%	12  
+1.0500 	0.6000 	0%	6   
+1.5000 	0.9000 	0%	6   
+3.2000 	1.5000 	0%	2   
+0.4400 	0.4200 	0%	2   
+1.4500 	1.1000 	0%	2   
+0.8500 	0.6000 	0%	2   
+1.2700 	1.2700 	100%	9   
+1.8000 	0.7000 	0%	4   
+1.8000 	0.8000 	0%	14  
+0.8000 	0.2000 	0%	10  
+1.9000 	1.1000 	0%	2   
+
+PAD tDiam	Q.
+2.6550 	8   
+1.8600 	2   
+1.6500 	14  
+
+PAD bDiam	Q.
+2.6550 	8   
+1.8600 	2   
+1.6500 	14  
+
+PAD tRestring	Q.
+0.4425 	8   
+0.3100 	2   
+0.2900 	14  
+
+PAD bRestring	Q.
+0.4425 	8   
+0.3100 	2   
+0.2900 	14  
+
+PAD iDiam	Q.
+2.6550 	8   
+1.8600 	2   
+1.6050 	14  
+
+PAD iRestring	Q.
+0.4425 	8   
+0.3100 	2   
+0.2675 	14  
+
+VIA Outer-Diam	Q.
+0.7366 	68  
+0.5588 	84  
+1.0000 	9   
+1.2000 	1   
+
+VIA Outer-Restring 	Q.
+0.1778 	152 
+0.3095 	9   
+0.4095 	1   
+
+VIA Inner-Diam.	Q.
+0.7366 	78  
+0.5588 	84  
+
+VIA Inner-Restring	Q.
+0.1778 	162 
+
+VIA drill	Q.
+0.3810 	78  
+0.2032 	84  
+
+VIA Stack	Q.
+01-16	162 
+01-16-PAD	24  
+
+PAD drill	Q.
+1.7700 	8   
+1.2400 	2   
+1.0700 	14  
+
+----------------------------
+HOLE drill	Q.
+3.0000 	4   
+3.0500 	2   
+
+RACK
+T01   0.2
+T02   0.4
+T03   1.1
+T04   1.2
+T05   1.8
+T06   3.0
+T07   3.1
+
+----------------------------
+LIBRARY	Q.
+SamacSys_Parts	72  
+rc-master	72  
+MKRNB1500_V3.0	4   
+holes	4   
+testpad	9   
+ubloxLib	1   
+
+PACKAGE	Q.
+CAPC3216X180N	2   
+C0402	31  
+C0805	2   
+DSK-414_HL	1   
+CAPC2012X100N	2   
+CAPC2012X145N	1   
+CAPC1608X90N	2   
+C0603	4   
+C1206	1   
+CAPC1005X55N	6   
+0402-1005X55N	2   
+SODFL3617X108N	1   
+DIONC1005X43N	9   
+SOD2513X110N	1   
+SOD3716X135N	2   
+SOT190P230X110-4N	1   
+FUSC4632X62N	1   
+BEADC1608X95N	1   
+BEADC1005X55N	2   
+3,0	4   
+QFP50P900X900X120-48N	1   
+SARA-U201-03B	1   
+SOT95P282X130-5N	1   
+SOIC127P600X175-8N	1   
+SOTFL50P160X60-6N	1   
+SON50P300X200X60-9N	1   
+SPSGRF868	1   
+SON127P600X500X80-9N	1   
+SON65P300X450X100-15N	1   
+SOP65P640X120-20N	2   
+CSTCE16M0V53CR0	2   
+SF56S006V4BR2000	1   
+1040310811	1   
+FA1NCRPPCB8	1   
+43045-1400	1   
+ZX62-AB-5PA	1   
+FA1NDRPPCB8	1   
+M503600542R	1   
+EE25TNU	1   
+SRN6045_1	1   
+SRU10484R7Y	1   
+INDC1608X95N	1   
+INDC1005X55N	1   
+LEDC1608X90N	1   
+LEDC1608X80N	1   
+SOT65P210X100-6N	2   
+SOT95P230X110-3N	2   
+SOT230P700X170-4N	2   
+RESC1005X40N	5   
+R0402	31  
+R0603	1   
+RESC0603X26N	1   
+R1206	2   
+TL4100AF120QG	1   
+B1,27	9   
+MAX-M8	1   
+RSW(RPUQFNN10)	1   
+ABS0716632768KHZT	1   
+
+VALUE	PAC	Q.	Top	Bot
+C3216X7R1V106K160AC	CAPC3216X180N	2	0	2
+100n	C0402	17	12	5
+10p	C0402	1	0	1
+2n2	C0402	1	0	1
+8n2	C0402	1	0	1
+10u	C0805	2	0	2
+DSK-3R3H224U-HL	DSK-414_HL	1	1	0
+1u	C0402	3	1	2
+C2012X5R1V106K085AC	CAPC2012X100N	2	0	2
+C2012X5R1A336M125AC	CAPC2012X145N	1	0	1
+GRM188R71H104KA93D	CAPC1608X90N	2	0	2
+20p	C0402	2	2	0
+10u	C0603	3	3	0
+100u	C1206	1	1	0
+10n	C0402	1	1	0
+68p	C0402	1	1	0
+15p	C0402	1	1	0
+10u	C0402	1	0	1
+47p	C0402	1	1	0
+1u	C0603	1	1	0
+10nF	C0402	1	1	0
+GRM1555C1H150JA01J	CAPC1005X55N	1	1	0
+GRM1555C1H330JA01J	CAPC1005X55N	1	1	0
+4n7	0402-1005X55N	1	1	0
+GRM1555C1H470JA01D	CAPC1005X55N	4	0	4
+100p	0402-1005X55N	1	0	1
+SS13FL	SODFL3617X108N	1	0	1
+PESD0402-140	DIONC1005X43N	9	4	5
+BAT60AE6327HTSA1	SOD2513X110N	1	1	0
+MBR0560-TP	SOD3716X135N	2	2	0
+PRTR5V	SOT190P230X110-4N	1	1	0
+MINISMDC050F-2	FUSC4632X62N	1	0	1
+BLM18PG471SZ1D	BEADC1608X95N	1	1	0
+BLM15HD102SN1D	BEADC1005X55N	2	2	0
+MOUNT-HOLE3.0	3,0	4	4	0
+ATSAMD21G18A-AU	QFP50P900X900X120-48N	1	1	0
+SARA-R410M-02B	SARA-U201-03B	1	1	0
+AP2112K-3.3TRG1	SOT95P282X130-5N	1	0	1
+TPS54232D	SOIC127P600X175-8N	1	0	1
+TPS563231DRLR	SOTFL50P160X60-6N	1	0	1
+ATECC508A-MAHDA-T	SON50P300X200X60-9N	1	0	1
+SPBTLE-RF0TR	SPSGRF868	1	1	0
+W25Q16JVZPIQ	SON127P600X500X80-9N	1	0	1
+TJA1048TK,118	SON65P300X450X100-15N	1	1	0
+MCP2515T-I_ST	SOP65P640X120-20N	2	2	0
+CSTCE16M0V53C-R0	CSTCE16M0V53CR0	2	2	0
+SF56S006V4BR2000	SF56S006V4BR2000	1	0	1
+1040310811	1040310811	1	0	1
+FA1-NCRP-PCB-8	FA1NCRPPCB8	1	1	0
+43045-1400	43045-1400	1	1	0
+-	ZX62-AB-5PA	1	1	0
+FA1-NDRP-PCB-8	FA1NDRPPCB8	1	1	0
+M50-3600542R	M503600542R	1	1	0
+EE2-3TNU-L	EE25TNU	1	1	0
+SRN6045-150M	SRN6045_1	1	1	0
+SRU1048-4R7Y	SRU10484R7Y	1	1	0
+27nH	INDC1608X95N	1	1	0
+LQG15HN39NJ02D	INDC1005X55N	1	1	0
+HSMS-C190	LEDC1608X90N	1	1	0
+HSMR-C190	LEDC1608X80N	1	1	0
+2N7002DW-7-F	SOT65P210X100-6N	2	2	0
+2N7002,215	SOT95P230X110-3N	2	1	1
+BSP76E6433HUMA1	SOT230P700X170-4N	2	0	2
+10k2	RESC1005X40N	1	0	1
+1k96	RESC1005X40N	1	0	1
+28k	R0402	1	0	1
+10k	R0603	1	1	0
+0R	R0402	3	3	0
+1M2	R0402	8	6	2
+CRCW040237K4FKED	RESC1005X40N	1	0	1
+CRCW0402169KFKED	RESC1005X40N	1	0	1
+CRCW040253K6FKED	RESC1005X40N	1	0	1
+RC0201FR-0710KL	RESC0603X26N	1	0	1
+10R	R0402	1	1	0
+10k	R0402	5	2	3
+0R	R1206	2	0	2
+10k2	R0402	8	8	0
+470R	R0402	1	1	0
+40k2	R0402	1	1	0
+DNP	R0402	2	2	0
+39R	R0402	1	0	1
+TL4100AF120QG	TL4100AF120QG	1	1	0
+TPB1,27	B1,27	9	9	0
+MAX-M8	MAX-M8	1	1	0
+SN74AVC2T245RSWR	RSW(RPUQFNN10)	1	1	0
+ABS07-32.768KHZ-1-T	ABS0716632768KHZT	1	1	0
+
+----------------------------
+RECT x	RECT y	Q.
+0 RECT (copper)
+
+----------------------------
+RECT Layer	Q.
+
+----------------------------
+TEXT (s)	Q.
+0 TEXT size (copper)
+
+TEXT (w)	Q.
+0 TEXT wire width (copper)
+
+TEXT 	Q.
+0.8128 	1   
+1 TEXT size (place)
+1 TEXT wire width (place)
+
+CIRCLE diam.	Q.
+0 CIRCLE (copper)
+
+End report

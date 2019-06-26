@@ -1,0 +1,50 @@
+SAMD21 Pin to Net To devices,,,,,,,
+Pin,Name,Net Name,Device,Signal,DSingle/Multiple,ARD,notes
+1,PA00,PA00_XIN,Oscillator,-,Single,,
+2,PA01,PA01_XOUT,Oscillator,-,Single,,
+3,PA02,PA02_AIN0,mcp2515-CAN1,~CS,Single,A0,
+4,PA03,PA03_VREFA,UNUSED,,,,Can I use this for another chip select digital out line?
+5,GNDANA,GND,Gnd,,,,
+6,VDDANA,+3V3,FeriteBead,,,,
+7,PB08,PB08_RST,modem,~Mreset,single,,
+8,PB09,,UNUSED,,,,typically used to measure battery voltage
+9,PA04,PA04_AIN4,BLE,Reset,single,a3,
+10,PA05,PA05_AIN5,Lock,Lock,single,a4,Nets not currently connected
+11,PA06,PA06_AIN6,unlock,unlock,single,a5,Nets not currently connected
+12,PA07,PA07_AIN7,mcp2515-CAN1,~INT,single,a6,
+13,PA08,PA08_S0_I2C_SDA,"Crypto, battery charge",SDA,mux,D11/SDA,
+14,PA09,PA09_S0_I2C_SCL,"Crypto, battery charge",SCL,mux,D12/SCL,
+15,PA10,PA10_TCC0-W2,Immobilizer,activate,single,D2,
+16,PA11,PA11_TCC0-W3,mcp2515-CAN0,~CS,single,D3,
+17,VDDIO_1,+3V3,supply,,,,
+18,GND_1,GND,Gnd,,,,
+19,PB10,PB10_TCC0-W4,SD,~CS,single,D4,
+20,PB11,PB11_TCC0-W5,Flash,~CS,single,D5,
+21,PA12,PA12_S2_TX,modem,MTX,single,,through shifter1
+22,PA13,PA13_S2_RX,modem,MRX,Single,,through shifter1
+23,PA14,PA14_S2_RTS,modem,MRTS,Single,,through shifter1
+24,PA15,PA15_S2_CTS,modem,MCTS,Single,,through shifter1
+25,PA16,PA16_S1_MOSI,"SD, Flash, Can0, Can1",MOSI,mux,D8/MOSI,
+26,PA17,PA17_S1_SCK,"SD, Flash, Can0, Can1",SCK,mux,D9/sck,
+27,PA18,PA18_OTG,battery charger,OTG,Single,,
+28,PA19,PA19_S1_MISO,"SD, Flash, Can0, Can1",MISO,mux,D10/MISO,
+29,PA20,PA20_TCC0-W6,BLE,MISO,single,D6,
+30,PA21,PA21_TCC0-W7,mcp2515-CAN0,~INT,single,D7,
+31,PA22,PA22_TC4-W0,BLE,MOSI,single,D0,
+32,PA23,PA23_TC4-W1,BLE,SCK,single,D1,
+33,PA24,PA24_USB_N,,,,,"currently not used, probably want the easy programming interface, however."
+34,PA25,PA25_USB_P,,,,,"currently not used, probably want the easy programming interface, however."
+35,GND_2,GND,Gnd,,,,
+36,VDDIO_2,+3V3,supply,,,,
+37,PB22,PB22_S5_TX,GPS,RX,Single,D14/TX,
+38,PB23,PB23_S5_RX,GPS,TX,Single,D13/RX,
+39,PA27,PA27_INT,battery charger,INT,Single,,
+40,RESET,,,,,,Need to have a way to remotely reset the board.
+41,PA28,PA28_S2_PWRON,modem,PWRON,single,,
+42,GND_3,GND,Gnd,,,,
+43,VDDCORE,GND,Gnd,,,,
+44,VDDIN,+3V3,supply,,,,
+45,PA30,PA30_SWCLK,,,,,"not currently connected, need to add programming header"
+46,PA31,PA31_SWDIO,,,,,"not currently connected, need to add programming header"
+47,PB02,PB02_AIN10,BLE,~CS,single,A1,
+48,PB03,PB03_AIN11,BLE,INT,single,A2,
