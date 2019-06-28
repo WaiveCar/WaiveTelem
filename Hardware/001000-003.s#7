@@ -695,41 +695,6 @@
 <wire x1="-2.15" y1="-3.25" x2="-2.15" y2="3.25" width="0.2" layer="21"/>
 <wire x1="-4" y1="3.1" x2="-2.5" y2="3.1" width="0.2" layer="21"/>
 </package>
-<package name="SPSGRF868">
-<description>&lt;b&gt;SPSGRF-868-2&lt;/b&gt;&lt;br&gt;
-</description>
-<smd name="1" x="-6.6" y="0.68" dx="1.4" dy="1" layer="1"/>
-<smd name="2" x="-6.6" y="-0.59" dx="1.4" dy="1" layer="1"/>
-<smd name="3" x="-6.6" y="-1.86" dx="1.4" dy="1" layer="1"/>
-<smd name="4" x="-6.6" y="-3.13" dx="1.4" dy="1" layer="1"/>
-<smd name="5" x="-6.6" y="-4.4" dx="1.4" dy="1" layer="1"/>
-<smd name="6" x="-2.5" y="-5.4" dx="1.4" dy="1" layer="1" rot="R90"/>
-<smd name="7" x="7.1" y="-4.4" dx="1.4" dy="1" layer="1"/>
-<smd name="8" x="7.1" y="-3.13" dx="1.4" dy="1" layer="1"/>
-<smd name="9" x="7.1" y="-1.86" dx="1.4" dy="1" layer="1"/>
-<smd name="10" x="7.1" y="-0.59" dx="1.4" dy="1" layer="1"/>
-<smd name="11" x="7.1" y="0.68" dx="1.4" dy="1" layer="1"/>
-<text x="0" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
-<text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
-<wire x1="-6.5" y1="6.1" x2="7" y2="6.1" width="0.2" layer="51"/>
-<wire x1="7" y1="6.1" x2="7" y2="-5.4" width="0.2" layer="51"/>
-<wire x1="7" y1="-5.4" x2="-6.5" y2="-5.4" width="0.2" layer="51"/>
-<wire x1="-6.5" y1="-5.4" x2="-6.5" y2="6.1" width="0.2" layer="51"/>
-<wire x1="-8.8" y1="7.1" x2="8.8" y2="7.1" width="0.1" layer="51"/>
-<wire x1="8.8" y1="7.1" x2="8.8" y2="-7.1" width="0.1" layer="51"/>
-<wire x1="8.8" y1="-7.1" x2="-8.8" y2="-7.1" width="0.1" layer="51"/>
-<wire x1="-8.8" y1="-7.1" x2="-8.8" y2="7.1" width="0.1" layer="51"/>
-<wire x1="7" y1="2.22" x2="7" y2="6.03" width="0.1" layer="21"/>
-<wire x1="7" y1="6.03" x2="7" y2="6.1" width="0.1" layer="21"/>
-<wire x1="7" y1="6.1" x2="-6.5" y2="6.1" width="0.1" layer="21"/>
-<wire x1="-6.5" y1="6.1" x2="-6.5" y2="2.22" width="0.1" layer="21"/>
-<wire x1="-3.5" y1="-5.4" x2="-6.5" y2="-5.4" width="0.1" layer="21"/>
-<wire x1="-1.5" y1="-5.4" x2="7" y2="-5.4" width="0.1" layer="21"/>
-<wire x1="-7.7" y1="0.8" x2="-7.7" y2="0.8" width="0.2" layer="21"/>
-<wire x1="-7.7" y1="0.8" x2="-7.7" y2="0.6" width="0.2" layer="21" curve="-180"/>
-<wire x1="-7.7" y1="0.6" x2="-7.7" y2="0.6" width="0.2" layer="21"/>
-<wire x1="-7.7" y1="0.6" x2="-7.7" y2="0.8" width="0.2" layer="21" curve="-180"/>
-</package>
 <package name="1040310811">
 <description>&lt;b&gt;1040310811&lt;/b&gt;&lt;br&gt;
 </description>
@@ -1716,25 +1681,6 @@
 <pin name="D_1" x="0" y="-2.54" length="middle" direction="pwr"/>
 <pin name="S" x="25.4" y="0" length="middle" direction="pwr" rot="R180"/>
 <pin name="D_2" x="25.4" y="-2.54" length="middle" direction="pwr" rot="R180"/>
-</symbol>
-<symbol name="SPBTLE-RF0TR">
-<wire x1="5.08" y1="2.54" x2="35.56" y2="2.54" width="0.254" layer="94"/>
-<wire x1="35.56" y1="-15.24" x2="35.56" y2="2.54" width="0.254" layer="94"/>
-<wire x1="35.56" y1="-15.24" x2="5.08" y2="-15.24" width="0.254" layer="94"/>
-<wire x1="5.08" y1="2.54" x2="5.08" y2="-15.24" width="0.254" layer="94"/>
-<text x="36.83" y="7.62" size="1.778" layer="95" align="center-left">&gt;NAME</text>
-<text x="36.83" y="5.08" size="1.778" layer="96" align="center-left">&gt;VALUE</text>
-<pin name="EXT_LPCLK" x="0" y="0" length="middle"/>
-<pin name="GPIO" x="0" y="-2.54" length="middle"/>
-<pin name="ANA_TEST" x="0" y="-5.08" length="middle"/>
-<pin name="SPI_IRQ" x="0" y="-7.62" length="middle"/>
-<pin name="VIN" x="0" y="-10.16" length="middle"/>
-<pin name="GND" x="0" y="-12.7" length="middle"/>
-<pin name="SPI_CLK" x="40.64" y="0" length="middle" rot="R180"/>
-<pin name="SPI_MISO" x="40.64" y="-2.54" length="middle" rot="R180"/>
-<pin name="SPI_MOSI" x="40.64" y="-5.08" length="middle" rot="R180"/>
-<pin name="SPI_CS" x="40.64" y="-7.62" length="middle" rot="R180"/>
-<pin name="BT_RESET" x="40.64" y="-10.16" length="middle" rot="R180"/>
 </symbol>
 <symbol name="1040310811">
 <wire x1="5.08" y1="2.54" x2="27.94" y2="2.54" width="0.254" layer="94"/>
@@ -2782,40 +2728,6 @@ Source: &lt;a href=""&gt; Datasheet &lt;/a&gt;</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="BSP76E6433HUMA1" constant="no"/>
 <attribute name="MOUSER_PART_NUMBER" value="" constant="no"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" constant="no"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="SPBTLE-RF0TR" prefix="IC">
-<description>&lt;b&gt;STMICROELECTRONICS - SPBTLE-RF0TR - BLUETOOTH MODULE, V4.1, 3.6V&lt;/b&gt;&lt;p&gt;
-Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/SPBTLE-RF0TR.pdf"&gt; Datasheet &lt;/a&gt;</description>
-<gates>
-<gate name="G$1" symbol="SPBTLE-RF0TR" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="SPSGRF868">
-<connects>
-<connect gate="G$1" pin="ANA_TEST" pad="3"/>
-<connect gate="G$1" pin="BT_RESET" pad="11"/>
-<connect gate="G$1" pin="EXT_LPCLK" pad="1"/>
-<connect gate="G$1" pin="GND" pad="6"/>
-<connect gate="G$1" pin="GPIO" pad="2"/>
-<connect gate="G$1" pin="SPI_CLK" pad="7"/>
-<connect gate="G$1" pin="SPI_CS" pad="10"/>
-<connect gate="G$1" pin="SPI_IRQ" pad="4"/>
-<connect gate="G$1" pin="SPI_MISO" pad="8"/>
-<connect gate="G$1" pin="SPI_MOSI" pad="9"/>
-<connect gate="G$1" pin="VIN" pad="5"/>
-</connects>
-<technologies>
-<technology name="">
-<attribute name="DESCRIPTION" value="STMICROELECTRONICS - SPBTLE-RF0TR - BLUETOOTH MODULE, V4.1, 3.6V" constant="no"/>
-<attribute name="HEIGHT" value="3mm" constant="no"/>
-<attribute name="MANUFACTURER_NAME" value="STMicroelectronics" constant="no"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="SPBTLE-RF0TR" constant="no"/>
-<attribute name="MOUSER_PART_NUMBER" value="511-SPBTLE-RF0TR" constant="no"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=511-SPBTLE-RF0TR" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -10669,6 +10581,99 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="SPBTLE-RF">
+<packages>
+<package name="XCVR_SPBTLE-RF">
+<wire x1="-6.75" y1="5.75" x2="6.75" y2="5.75" width="0.2" layer="21"/>
+<wire x1="6.75" y1="5.75" x2="6.75" y2="1.3" width="0.2" layer="21"/>
+<wire x1="6.75" y1="-5.75" x2="-1.85" y2="-5.75" width="0.2" layer="21"/>
+<wire x1="-3.65" y1="-5.75" x2="-6.75" y2="-5.75" width="0.2" layer="21"/>
+<wire x1="-6.75" y1="1.25" x2="-6.75" y2="5.75" width="0.2" layer="21"/>
+<wire x1="-7.8" y1="1.1" x2="-7" y2="1.1" width="0.05" layer="39"/>
+<wire x1="-7" y1="1.1" x2="-7" y2="6" width="0.05" layer="39"/>
+<wire x1="-7" y1="6" x2="7" y2="6" width="0.05" layer="39"/>
+<wire x1="7" y1="6" x2="7" y2="1.1" width="0.05" layer="39"/>
+<wire x1="7" y1="1.1" x2="7.8" y2="1.1" width="0.05" layer="39"/>
+<wire x1="7.8" y1="1.1" x2="7.8" y2="-6" width="0.05" layer="39"/>
+<wire x1="7.8" y1="-6" x2="-2" y2="-6" width="0.05" layer="39"/>
+<wire x1="-2" y1="-6" x2="-2" y2="-6.8" width="0.05" layer="39"/>
+<wire x1="-2" y1="-6.8" x2="-3.5" y2="-6.8" width="0.05" layer="39"/>
+<wire x1="-3.5" y1="-6.8" x2="-3.5" y2="-6" width="0.05" layer="39"/>
+<wire x1="-3.5" y1="-6" x2="-7.8" y2="-6" width="0.05" layer="39"/>
+<wire x1="-7.8" y1="-6" x2="-7.8" y2="1.1" width="0.05" layer="39"/>
+<text x="-6.701009375" y="6.200940625" size="1.270190625" layer="25">&gt;NAME</text>
+<text x="-7.3515" y="-8.601759375" size="1.270259375" layer="27">&gt;VALUE</text>
+<circle x="-8.05" y="0.35" radius="0.22360625" width="0" layer="21"/>
+<smd name="1" x="-6.75" y="0.33" dx="1.6" dy="1" layer="1"/>
+<smd name="2" x="-6.75" y="-0.94" dx="1.6" dy="1" layer="1"/>
+<smd name="3" x="-6.75" y="-2.21" dx="1.6" dy="1" layer="1"/>
+<smd name="4" x="-6.75" y="-3.48" dx="1.6" dy="1" layer="1"/>
+<smd name="5" x="-6.75" y="-4.75" dx="1.6" dy="1" layer="1"/>
+<smd name="6" x="-2.75" y="-5.75" dx="1.6" dy="1" layer="1" rot="R90"/>
+<smd name="7" x="6.75" y="-4.75" dx="1.6" dy="1" layer="1"/>
+<smd name="8" x="6.75" y="-3.48" dx="1.6" dy="1" layer="1"/>
+<smd name="9" x="6.75" y="-2.21" dx="1.6" dy="1" layer="1"/>
+<smd name="10" x="6.75" y="-0.94" dx="1.6" dy="1" layer="1"/>
+<smd name="11" x="6.75" y="0.33" dx="1.6" dy="1" layer="1"/>
+</package>
+</packages>
+<symbols>
+<symbol name="SPBTLE-RF">
+<wire x1="-15.24" y1="12.7" x2="-15.24" y2="-12.7" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="-12.7" x2="15.24" y2="-12.7" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-12.7" x2="15.24" y2="12.7" width="0.254" layer="94"/>
+<wire x1="15.24" y1="12.7" x2="-15.24" y2="12.7" width="0.254" layer="94"/>
+<text x="-15.267" y="13.4858" size="1.27225" layer="95">&gt;NAME</text>
+<text x="-15.2705" y="-14.507" size="1.272540625" layer="96">&gt;VALUE</text>
+<pin name="SPI_IRQ" x="20.32" y="5.08" length="middle" direction="out" rot="R180"/>
+<pin name="SPI_CLK" x="-20.32" y="10.16" length="middle" direction="in"/>
+<pin name="SPI_MISO" x="20.32" y="2.54" length="middle" direction="out" rot="R180"/>
+<pin name="SPI_MOSI" x="-20.32" y="7.62" length="middle" direction="in"/>
+<pin name="SPI_CS" x="-20.32" y="5.08" length="middle" direction="in"/>
+<pin name="VIN" x="20.32" y="10.16" length="middle" direction="pwr" rot="R180"/>
+<pin name="GND" x="20.32" y="-10.16" length="middle" direction="pwr" rot="R180"/>
+<pin name="BT_RESET" x="-20.32" y="-2.54" length="middle" direction="in"/>
+<pin name="EXT_LPCLK" x="-20.32" y="-5.08" length="middle" direction="in"/>
+<pin name="GPIO2" x="-20.32" y="-10.16" length="middle"/>
+<pin name="ANATEST0" x="-20.32" y="0" length="middle" direction="in"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="SPBTLE-RF" prefix="U">
+<description>Very low power module for Bluetooth Smart v4.1</description>
+<gates>
+<gate name="G$1" symbol="SPBTLE-RF" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="XCVR_SPBTLE-RF">
+<connects>
+<connect gate="G$1" pin="ANATEST0" pad="3"/>
+<connect gate="G$1" pin="BT_RESET" pad="11"/>
+<connect gate="G$1" pin="EXT_LPCLK" pad="1"/>
+<connect gate="G$1" pin="GND" pad="6"/>
+<connect gate="G$1" pin="GPIO2" pad="2"/>
+<connect gate="G$1" pin="SPI_CLK" pad="7"/>
+<connect gate="G$1" pin="SPI_CS" pad="10"/>
+<connect gate="G$1" pin="SPI_IRQ" pad="4"/>
+<connect gate="G$1" pin="SPI_MISO" pad="8"/>
+<connect gate="G$1" pin="SPI_MOSI" pad="9"/>
+<connect gate="G$1" pin="VIN" pad="5"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="AVAILABILITY" value="Unavailable"/>
+<attribute name="DESCRIPTION" value=" Very low power module for Bluetooth Smart v4.1 "/>
+<attribute name="MF" value="STMicroelectronics"/>
+<attribute name="MP" value="SPBTLE-RF"/>
+<attribute name="PACKAGE" value="SMD-11 STMicroelectronics"/>
+<attribute name="PRICE" value="None"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -11077,7 +11082,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="GND25" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R20" library="rc-master" deviceset="R_" device="1206" value="0R"/>
 <part name="R21" library="rc-master" deviceset="R_" device="1206" value="0R"/>
-<part name="IC7" library="SamacSys_Parts" deviceset="SPBTLE-RF0TR" device=""/>
+<part name="IC7" library="SPBTLE-RF" deviceset="SPBTLE-RF" device=""/>
 <part name="GND26" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="V16" library="Personal" deviceset="+3V3" device=""/>
 <part name="J2" library="SamacSys_Parts" deviceset="1040310811" device=""/>
@@ -11176,7 +11181,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="J6" library="SamacSys_Parts" deviceset="FA1-NDRP-PCB-8" device=""/>
 <part name="GND37" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R13" library="rc-master" deviceset="R_" device="0402" value="10R"/>
-<part name="C40" library="rc-master" deviceset="C_" device="0402" value="10nF"/>
+<part name="C40" library="rc-master" deviceset="C_" device="0402" value="10n"/>
 <part name="L3" library="SamacSys_Parts" deviceset="L-14C27NJV4T" device="" value="27nH"/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+12V" device=""/>
 <part name="F1" library="SamacSys_Parts" deviceset="MINISMDC050F-2" device=""/>
@@ -13312,7 +13317,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <plain>
 <text x="20.32" y="200.66" size="2.54" layer="91">Crypto Auth</text>
 <text x="101.6" y="200.66" size="2.54" layer="91">Lock/Unlock Output</text>
-<text x="203.2" y="200.66" size="2.54" layer="91">Bluetooth Low Energy</text>
+<text x="205.74" y="195.58" size="2.54" layer="91">Bluetooth Low Energy</text>
 <text x="142.24" y="134.62" size="2.54" layer="91">SD Card</text>
 <text x="91.44" y="63.5" size="2.54" layer="91">Immobilizer</text>
 <text x="218.44" y="132.08" size="2.54" layer="91">Flash</text>
@@ -13361,15 +13366,15 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <attribute name="NAME" x="144.78" y="164.1475" size="1.778" layer="95"/>
 <attribute name="VALUE" x="144.78" y="159.385" size="1.778" layer="96"/>
 </instance>
-<instance part="IC7" gate="G$1" x="205.74" y="187.96" smashed="yes">
-<attribute name="NAME" x="242.57" y="195.58" size="1.778" layer="95" align="center-left"/>
-<attribute name="VALUE" x="242.57" y="193.04" size="1.778" layer="96" align="center-left"/>
+<instance part="IC7" gate="G$1" x="220.98" y="172.72" smashed="yes">
+<attribute name="NAME" x="257.81" y="180.34" size="1.778" layer="95" align="center-left"/>
+<attribute name="VALUE" x="257.81" y="177.8" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="GND26" gate="1" x="203.2" y="162.56" smashed="yes">
-<attribute name="VALUE" x="200.66" y="160.02" size="1.778" layer="96"/>
+<instance part="GND26" gate="1" x="248.92" y="157.48" smashed="yes">
+<attribute name="VALUE" x="246.38" y="154.94" size="1.778" layer="96"/>
 </instance>
-<instance part="V16" gate="G$1" x="198.12" y="198.12" smashed="yes">
-<attribute name="VALUE" x="194.31" y="198.755" size="1.778" layer="96" ratio="12"/>
+<instance part="V16" gate="G$1" x="259.08" y="187.96" smashed="yes">
+<attribute name="VALUE" x="255.27" y="188.595" size="1.778" layer="96" ratio="12"/>
 </instance>
 <instance part="J2" gate="G$1" x="127" y="109.22" smashed="yes">
 <attribute name="NAME" x="156.21" y="116.84" size="1.778" layer="95" align="center-left"/>
@@ -13451,9 +13456,9 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <instance part="GND40" gate="1" x="40.64" y="81.28" smashed="yes">
 <attribute name="VALUE" x="38.1" y="78.74" size="1.778" layer="96"/>
 </instance>
-<instance part="C54" gate="G$1" x="198.12" y="170.18" smashed="yes" rot="R90">
-<attribute name="NAME" x="196.85" y="172.085" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="202.2475" y="166.37" size="1.778" layer="96" rot="R90"/>
+<instance part="C54" gate="G$1" x="259.08" y="172.72" smashed="yes" rot="R90">
+<attribute name="NAME" x="265.43" y="169.545" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="263.2075" y="168.91" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -13471,12 +13476,12 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </segment>
 <segment>
 <pinref part="IC7" gate="G$1" pin="VIN"/>
-<wire x1="205.74" y1="177.8" x2="198.12" y2="177.8" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="182.88" x2="259.08" y2="182.88" width="0.1524" layer="91"/>
 <pinref part="V16" gate="G$1" pin="+3V3"/>
-<wire x1="198.12" y1="177.8" x2="198.12" y2="195.58" width="0.1524" layer="91"/>
+<wire x1="259.08" y1="182.88" x2="259.08" y2="185.42" width="0.1524" layer="91"/>
 <pinref part="C54" gate="G$1" pin="2"/>
-<wire x1="198.12" y1="177.8" x2="198.12" y2="172.72" width="0.1524" layer="91"/>
-<junction x="198.12" y="177.8"/>
+<wire x1="259.08" y1="182.88" x2="259.08" y2="175.26" width="0.1524" layer="91"/>
+<junction x="259.08" y="182.88"/>
 </segment>
 <segment>
 <pinref part="V17" gate="G$1" pin="+3V3"/>
@@ -13559,13 +13564,13 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </segment>
 <segment>
 <pinref part="IC7" gate="G$1" pin="GND"/>
-<wire x1="205.74" y1="175.26" x2="203.2" y2="175.26" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="162.56" x2="248.92" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="GND26" gate="1" pin="GND"/>
-<wire x1="203.2" y1="175.26" x2="203.2" y2="165.1" width="0.1524" layer="91"/>
+<wire x1="248.92" y1="162.56" x2="248.92" y2="160.02" width="0.1524" layer="91"/>
 <pinref part="C54" gate="G$1" pin="1"/>
-<wire x1="198.12" y1="167.64" x2="198.12" y2="165.1" width="0.1524" layer="91"/>
-<wire x1="198.12" y1="165.1" x2="203.2" y2="165.1" width="0.1524" layer="91"/>
-<junction x="203.2" y="165.1"/>
+<wire x1="259.08" y1="170.18" x2="259.08" y2="160.02" width="0.1524" layer="91"/>
+<wire x1="259.08" y1="160.02" x2="248.92" y2="160.02" width="0.1524" layer="91"/>
+<junction x="248.92" y="160.02"/>
 </segment>
 <segment>
 <pinref part="J2" gate="G$1" pin="VSS"/>
@@ -13691,43 +13696,43 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <net name="PB03_AIN11" class="0">
 <segment>
 <pinref part="IC7" gate="G$1" pin="SPI_IRQ"/>
-<wire x1="205.74" y1="180.34" x2="193.04" y2="180.34" width="0.1524" layer="91"/>
-<label x="193.04" y="180.34" size="1.27" layer="95"/>
+<wire x1="241.3" y1="177.8" x2="251.46" y2="177.8" width="0.1524" layer="91"/>
+<label x="241.3" y="177.8" size="1.27" layer="95"/>
 </segment>
 </net>
 <net name="PB02_AIN10" class="0">
 <segment>
 <pinref part="IC7" gate="G$1" pin="SPI_CS"/>
-<wire x1="246.38" y1="180.34" x2="259.08" y2="180.34" width="0.1524" layer="91"/>
-<label x="248.92" y="180.34" size="1.27" layer="95"/>
+<wire x1="200.66" y1="177.8" x2="187.96" y2="177.8" width="0.1524" layer="91"/>
+<label x="187.96" y="177.8" size="1.27" layer="95"/>
 </segment>
 </net>
 <net name="PA22_TC4-W0" class="0">
 <segment>
 <pinref part="IC7" gate="G$1" pin="SPI_MOSI"/>
-<wire x1="246.38" y1="182.88" x2="259.08" y2="182.88" width="0.1524" layer="91"/>
-<label x="248.92" y="182.88" size="1.27" layer="95"/>
+<wire x1="200.66" y1="180.34" x2="187.96" y2="180.34" width="0.1524" layer="91"/>
+<label x="187.96" y="180.34" size="1.27" layer="95"/>
 </segment>
 </net>
 <net name="PA20_TCC0-W6" class="0">
 <segment>
 <pinref part="IC7" gate="G$1" pin="SPI_MISO"/>
-<wire x1="246.38" y1="185.42" x2="259.08" y2="185.42" width="0.1524" layer="91"/>
-<label x="248.92" y="185.42" size="1.27" layer="95"/>
+<wire x1="241.3" y1="175.26" x2="251.46" y2="175.26" width="0.1524" layer="91"/>
+<label x="241.3" y="175.26" size="1.27" layer="95"/>
 </segment>
 </net>
 <net name="PA23_TC4-W1" class="0">
 <segment>
 <pinref part="IC7" gate="G$1" pin="SPI_CLK"/>
-<wire x1="246.38" y1="187.96" x2="259.08" y2="187.96" width="0.1524" layer="91"/>
-<label x="248.92" y="187.96" size="1.27" layer="95"/>
+<wire x1="200.66" y1="182.88" x2="187.96" y2="182.88" width="0.1524" layer="91"/>
+<label x="187.96" y="182.88" size="1.27" layer="95"/>
 </segment>
 </net>
 <net name="PA04_AIN4" class="0">
 <segment>
 <pinref part="IC7" gate="G$1" pin="BT_RESET"/>
-<wire x1="246.38" y1="177.8" x2="259.08" y2="177.8" width="0.1524" layer="91"/>
-<label x="248.92" y="177.8" size="1.27" layer="95"/>
+<wire x1="200.66" y1="170.18" x2="187.96" y2="170.18" width="0.1524" layer="91"/>
+<label x="187.96" y="170.18" size="1.27" layer="95"/>
 </segment>
 </net>
 <net name="PB10_TCC0-W4" class="0">

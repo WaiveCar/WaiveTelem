@@ -1506,6 +1506,23 @@
 <wire x1="0.9" y1="-0.7" x2="0.48433125" y2="-0.7" width="0.254" layer="21"/>
 <wire x1="-0.9" y1="-0.7" x2="-0.521" y2="-0.7" width="0.254" layer="21"/>
 </package>
+<package name="RESC3116X65N">
+<description>&lt;b&gt;CRG_1206&lt;/b&gt;&lt;br&gt;
+</description>
+<smd name="1" x="-1.45" y="0" dx="1.75" dy="1.05" layer="1" rot="R90"/>
+<smd name="2" x="1.45" y="0" dx="1.75" dy="1.05" layer="1" rot="R90"/>
+<text x="0" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
+<wire x1="-2.225" y1="1.15" x2="2.225" y2="1.15" width="0.05" layer="51"/>
+<wire x1="2.225" y1="1.15" x2="2.225" y2="-1.15" width="0.05" layer="51"/>
+<wire x1="2.225" y1="-1.15" x2="-2.225" y2="-1.15" width="0.05" layer="51"/>
+<wire x1="-2.225" y1="-1.15" x2="-2.225" y2="1.15" width="0.05" layer="51"/>
+<wire x1="-1.55" y1="0.775" x2="1.55" y2="0.775" width="0.1" layer="51"/>
+<wire x1="1.55" y1="0.775" x2="1.55" y2="-0.775" width="0.1" layer="51"/>
+<wire x1="1.55" y1="-0.775" x2="-1.55" y2="-0.775" width="0.1" layer="51"/>
+<wire x1="-1.55" y1="-0.775" x2="-1.55" y2="0.775" width="0.1" layer="51"/>
+<wire x1="0" y1="0.675" x2="0" y2="-0.675" width="0.2" layer="21"/>
+</package>
 </packages>
 </library>
 <library name="rc-master">
@@ -1654,27 +1671,6 @@
 <rectangle x1="-0.554" y1="-0.3048" x2="-0.254" y2="0.2951" layer="51"/>
 <rectangle x1="0.2588" y1="-0.3048" x2="0.5588" y2="0.2951" layer="51"/>
 <rectangle x1="-0.1999" y1="-0.4001" x2="0.1999" y2="0.4001" layer="35"/>
-</package>
-<package name="R1206">
-<description>&lt;b&gt;SMD RESISTOR&lt;/b&gt;&lt;p&gt;
-1206, grid 0.0125 inch</description>
-<wire x1="0.9525" y1="-0.8128" x2="-0.9652" y2="-0.8128" width="0.1016" layer="51"/>
-<wire x1="0.9525" y1="0.8128" x2="-0.9652" y2="0.8128" width="0.1016" layer="51"/>
-<wire x1="-2.4731" y1="0.983" x2="2.4731" y2="0.983" width="0.0508" layer="39"/>
-<wire x1="2.4731" y1="0.983" x2="2.4731" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="2.4731" y1="-0.983" x2="-2.4731" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="-2.4731" y1="-0.983" x2="-2.4731" y2="0.983" width="0.0508" layer="39"/>
-<wire x1="-2.3401" y1="1.1907" x2="2.3401" y2="1.1907" width="0.2032" layer="21"/>
-<wire x1="2.3401" y1="1.1907" x2="2.3401" y2="-1.1907" width="0.2032" layer="21"/>
-<wire x1="2.3401" y1="-1.1907" x2="-2.3401" y2="-1.1907" width="0.2032" layer="21"/>
-<wire x1="-2.3401" y1="-1.1907" x2="-2.3401" y2="1.1907" width="0.2032" layer="21"/>
-<smd name="2" x="1.3288" y="0" dx="1.4" dy="1.8" layer="1"/>
-<smd name="1" x="-1.3288" y="0" dx="1.4" dy="1.8" layer="1"/>
-<text x="-2.0638" y="1.5875" size="1.016" layer="25" ratio="18">&gt;NAME</text>
-<text x="-2.0638" y="-2.2225" size="0.8128" layer="27" ratio="10">&gt;VALUE</text>
-<rectangle x1="-1.6891" y1="-0.8763" x2="-0.9525" y2="0.8763" layer="51"/>
-<rectangle x1="0.9525" y1="-0.8763" x2="1.6891" y2="0.8763" layer="51"/>
-<rectangle x1="-0.3" y1="-0.7" x2="0.3" y2="0.7" layer="35"/>
 </package>
 <package name="R0603">
 <description>&lt;b&gt;SMD RESISTOR&lt;/b&gt;&lt;p&gt;
@@ -2387,15 +2383,33 @@ design rules under a new name.</description>
 <attribute name="NAME" x="53.5335" y="53.7789" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="55.4325" y="54.6476" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="C18" library="rc-master" package="C0402" value="100n" x="45.233" y="43.631" smashed="yes">
+<element name="C18" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="45.233" y="43.631" smashed="yes">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="45.233" y="43.631" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="45.233" y="43.631" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="45.233" y="43.631" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="45.233" y="43.631" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="45.233" y="43.631" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="45.233" y="43.631" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="41.9945" y="43.2819" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="44.2805" y="42.0434" size="0.8128" layer="27" ratio="10"/>
 </element>
-<element name="C19" library="rc-master" package="C0402" value="100n" x="55.44" y="36.969" smashed="yes">
+<element name="C19" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="55.44" y="36.969" smashed="yes">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="55.44" y="36.969" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="55.44" y="36.969" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="55.44" y="36.969" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="55.44" y="36.969" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="55.44" y="36.969" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="55.44" y="36.969" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="54.4875" y="35.4769" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="54.4875" y="35.3814" size="0.8128" layer="27" ratio="10"/>
 </element>
-<element name="C2" library="rc-master" package="C0402" value="100n" x="54.71" y="19.271" smashed="yes" rot="MR0">
+<element name="C2" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="54.71" y="19.271" smashed="yes" rot="MR0">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="54.71" y="19.271" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="54.71" y="19.271" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="54.71" y="19.271" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="54.71" y="19.271" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="54.71" y="19.271" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="54.71" y="19.271" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="NAME" x="53.9385" y="18.4161" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="55.6625" y="17.6834" size="0.8128" layer="28" ratio="10" rot="MR0"/>
 </element>
@@ -2403,7 +2417,13 @@ design rules under a new name.</description>
 <attribute name="NAME" x="51.776" y="53.6787" size="1.016" layer="25" ratio="18" rot="R180"/>
 <attribute name="VALUE" x="48.842" y="52.157" size="0.8128" layer="27" ratio="10" rot="R270"/>
 </element>
-<element name="C21" library="rc-master" package="C0402" value="100n" x="49.132" y="50.409" smashed="yes" rot="R270">
+<element name="C21" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="49.132" y="50.409" smashed="yes" rot="R270">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="49.132" y="50.409" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="49.132" y="50.409" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="49.132" y="50.409" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="49.132" y="50.409" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="49.132" y="50.409" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="49.132" y="50.409" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="48.4405" y="51.5471" size="0.8128" layer="25" ratio="18" rot="R180"/>
 <attribute name="VALUE" x="47.5444" y="51.3615" size="0.8128" layer="27" ratio="10" rot="R270"/>
 </element>
@@ -2415,7 +2435,13 @@ design rules under a new name.</description>
 <attribute name="NAME" x="2.1968" y="20.2794375" size="1.016" layer="25" ratio="18"/>
 <attribute name="VALUE" x="5.2448" y="18.9141375" size="0.8128" layer="27" ratio="10"/>
 </element>
-<element name="C24" library="rc-master" package="C0402" value="100n" x="6.923" y="22.543175" smashed="yes">
+<element name="C24" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="6.923" y="22.543175" smashed="yes">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="6.923" y="22.543175" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="6.923" y="22.543175" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="6.923" y="22.543175" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="6.923" y="22.543175" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="6.923" y="22.543175" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="6.923" y="22.543175" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="3.5575" y="22.194075" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="5.9705" y="20.955575" size="0.8128" layer="27" ratio="10"/>
 </element>
@@ -2427,7 +2453,13 @@ design rules under a new name.</description>
 <attribute name="NAME" x="3.5575" y="25.03895" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="5.9705" y="23.92745" size="0.8128" layer="27" ratio="10"/>
 </element>
-<element name="C27" library="rc-master" package="C0402" value="100n" x="13.119" y="43.2099" smashed="yes" rot="MR180">
+<element name="C27" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="13.119" y="43.2099" smashed="yes" rot="MR180">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="13.119" y="43.2099" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="13.119" y="43.2099" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="13.119" y="43.2099" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="13.119" y="43.2099" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="13.119" y="43.2099" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="13.119" y="43.2099" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="NAME" x="11.9635" y="42.801" size="0.8128" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="12.1665" y="44.7975" size="0.8128" layer="28" ratio="10" rot="MR180"/>
 </element>
@@ -2443,11 +2475,23 @@ design rules under a new name.</description>
 <attribute name="NAME" x="61.1755" y="24.87715" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="60.8715" y="22.90635" size="0.8128" layer="28" ratio="10" rot="MR0"/>
 </element>
-<element name="C30" library="rc-master" package="C0402" value="100n" x="61.157" y="44.437" smashed="yes" rot="R90">
+<element name="C30" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="61.157" y="44.437" smashed="yes" rot="R90">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="61.157" y="44.437" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="61.157" y="44.437" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="61.157" y="44.437" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="61.157" y="44.437" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="61.157" y="44.437" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="61.157" y="44.437" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="62.1535" y="44.5389" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="62.7446" y="43.4845" size="0.8128" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="C31" library="rc-master" package="C0402" value="100n" x="43.94" y="47.84" smashed="yes" rot="MR180">
+<element name="C31" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="43.94" y="47.84" smashed="yes" rot="MR180">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="43.94" y="47.84" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="43.94" y="47.84" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="43.94" y="47.84" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="43.94" y="47.84" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="43.94" y="47.84" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="43.94" y="47.84" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="NAME" x="41.8485" y="47.5689" size="0.8128" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="42.9875" y="49.4276" size="0.8128" layer="28" ratio="10" rot="MR180"/>
 </element>
@@ -2455,15 +2499,33 @@ design rules under a new name.</description>
 <attribute name="NAME" x="60.9165" y="29.0231" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="60.1624" y="29.2935" size="0.8128" layer="28" ratio="10" rot="MR90"/>
 </element>
-<element name="C33" library="rc-master" package="C0402" value="100n" x="79.511" y="40.126" smashed="yes" rot="MR90">
+<element name="C33" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="79.511" y="40.126" smashed="yes" rot="MR90">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="79.511" y="40.126" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="79.511" y="40.126" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="79.511" y="40.126" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="79.511" y="40.126" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="79.511" y="40.126" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="79.511" y="40.126" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="NAME" x="80.3049" y="39.1735" size="0.8128" layer="26" ratio="18" rot="MR90"/>
 <attribute name="VALUE" x="77.9234" y="39.1735" size="0.8128" layer="28" ratio="10" rot="MR90"/>
 </element>
-<element name="C34" library="rc-master" package="C0402" value="100n" x="62.0486" y="7.457" smashed="yes" rot="R90">
+<element name="C34" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="62.0486" y="7.457" smashed="yes" rot="R90">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="62.0486" y="7.457" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="62.0486" y="7.457" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="62.0486" y="7.457" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="62.0486" y="7.457" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="62.0486" y="7.457" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="62.0486" y="7.457" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="61.6945" y="6.2637" size="0.8128" layer="25" ratio="18" rot="R180"/>
 <attribute name="VALUE" x="63.6362" y="6.5045" size="0.8128" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="C35" library="rc-master" package="C0402" value="100n" x="62.911" y="15.16" smashed="yes">
+<element name="C35" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="62.911" y="15.16" smashed="yes">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="62.911" y="15.16" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="62.911" y="15.16" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="62.911" y="15.16" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="62.911" y="15.16" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="62.911" y="15.16" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="62.911" y="15.16" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="59.7995" y="14.9379" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="61.9585" y="13.5724" size="0.8128" layer="27" ratio="10"/>
 </element>
@@ -2475,7 +2537,13 @@ design rules under a new name.</description>
 <attribute name="NAME" x="66.533" y="28.2933" size="1.016" layer="25" ratio="18"/>
 <attribute name="VALUE" x="71.77" y="30.095" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="C38" library="rc-master" package="C0402" value="100n" x="35.751" y="22.927" smashed="yes" rot="MR90">
+<element name="C38" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="35.751" y="22.927" smashed="yes" rot="MR90">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="35.751" y="22.927" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="35.751" y="22.927" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="35.751" y="22.927" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="35.751" y="22.927" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="35.751" y="22.927" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="35.751" y="22.927" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="NAME" x="35.0485" y="22.9559" size="0.8128" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="34.1634" y="21.9745" size="0.8128" layer="28" ratio="10" rot="MR90"/>
 </element>
@@ -2493,7 +2561,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="61.1255" y="22.0574" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="58.9665" y="23.1689" size="0.8128" layer="28" ratio="10" rot="MR180"/>
 </element>
-<element name="C40" library="rc-master" package="C0402" value="10nF" x="73.1077" y="13.726" smashed="yes" rot="R270">
+<element name="C40" library="rc-master" package="C0402" value="10n" x="73.1077" y="13.726" smashed="yes" rot="R270">
 <attribute name="NAME" x="72.2095" y="14.2364" size="0.8128" layer="25" ratio="18" rot="R180"/>
 <attribute name="VALUE" x="71.5201" y="14.6785" size="0.8128" layer="27" ratio="10" rot="R270"/>
 </element>
@@ -2527,11 +2595,23 @@ design rules under a new name.</description>
 <attribute name="NAME" x="38.754" y="56.055" size="0.4064" layer="51" font="vector" ratio="10" rot="R180"/>
 <attribute name="NOTE" value="-" x="70.35" y="-111.8" size="1.778" layer="27" display="off"/>
 </element>
-<element name="C44" library="rc-master" package="C0402" value="100n" x="35.162" y="37.2785" smashed="yes" rot="R270">
+<element name="C44" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="35.162" y="37.2785" smashed="yes" rot="R270">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="35.162" y="37.2785" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="35.162" y="37.2785" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="35.162" y="37.2785" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="35.162" y="37.2785" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="35.162" y="37.2785" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="35.162" y="37.2785" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="34.8129" y="35.818" size="0.8128" layer="25" ratio="18" rot="R270"/>
 <attribute name="VALUE" x="33.5744" y="38.231" size="0.8128" layer="27" ratio="10" rot="R270"/>
 </element>
-<element name="C45" library="rc-master" package="C0402" value="100n" x="36.575" y="37.2785" smashed="yes" rot="R90">
+<element name="C45" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="36.575" y="37.2785" smashed="yes" rot="R90">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="36.575" y="37.2785" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="36.575" y="37.2785" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="36.575" y="37.2785" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="36.575" y="37.2785" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="36.575" y="37.2785" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="36.575" y="37.2785" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="36.2279" y="35.81" size="0.8128" layer="25" ratio="18" rot="R270"/>
 <attribute name="VALUE" x="38.1626" y="36.326" size="0.8128" layer="27" ratio="10" rot="R90"/>
 </element>
@@ -3165,7 +3245,13 @@ design rules under a new name.</description>
 <attribute name="NAME" x="75.7655" y="13.4258" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="76.4585" y="12.7735" size="0.8128" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="R14" library="rc-master" package="R0402" value="0R" x="28.797" y="30.731" smashed="yes">
+<element name="R14" library="SamacSys_Parts" package="RESC1005X40N" value="0R" x="28.797" y="30.731" smashed="yes">
+<attribute name="DESCRIPTION" value="General Purpose Thick Film Surface Mount Chip Resistor" x="28.797" y="30.731" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="28.797" y="30.731" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Stackpole Electronics Inc." x="28.797" y="30.731" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RMCF0402ZT0R00" x="28.797" y="30.731" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="28.797" y="30.731" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="28.797" y="30.731" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="30.7655" y="30.5088" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="27.8445" y="29.1435" size="0.8128" layer="27" ratio="10"/>
 </element>
@@ -3199,11 +3285,23 @@ design rules under a new name.</description>
 <attribute name="NAME" x="59.919" y="27.138125" size="1.27" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="59.919" y="25.868125" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
-<element name="R20" library="rc-master" package="R1206" value="0R" x="27.87" y="11.397" smashed="yes" rot="MR180">
+<element name="R20" library="SamacSys_Parts" package="RESC3116X65N" value="0R" x="27.87" y="11.397" smashed="yes" rot="MR180">
+<attribute name="DESCRIPTION" value="CRG1206 Surface mount chip resistor, 0R0 TE Connectivity CRG1206 Series Thick Film Surface Mount Resistor 1206 Case 0 +/-1% 0.25W" x="27.87" y="11.397" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="HEIGHT" value="0.65mm" x="27.87" y="11.397" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="27.87" y="11.397" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="CRG1206ZR" x="27.87" y="11.397" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="279-CRG1206ZR" x="27.87" y="11.397" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=279-CRG1206ZR" x="27.87" y="11.397" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="NAME" x="25.2478" y="11.1455" size="1.016" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="25.8062" y="13.6195" size="0.8128" layer="28" ratio="10" rot="MR180"/>
 </element>
-<element name="R21" library="rc-master" package="R1206" value="0R" x="27.87" y="8.54" smashed="yes" rot="MR180">
+<element name="R21" library="SamacSys_Parts" package="RESC3116X65N" value="0R" x="27.87" y="8.54" smashed="yes" rot="MR180">
+<attribute name="DESCRIPTION" value="CRG1206 Surface mount chip resistor, 0R0 TE Connectivity CRG1206 Series Thick Film Surface Mount Resistor 1206 Case 0 +/-1% 0.25W" x="27.87" y="8.54" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="HEIGHT" value="0.65mm" x="27.87" y="8.54" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="27.87" y="8.54" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="CRG1206ZR" x="27.87" y="8.54" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="279-CRG1206ZR" x="27.87" y="8.54" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=279-CRG1206ZR" x="27.87" y="8.54" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="NAME" x="25.2478" y="8.2875" size="1.016" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="25.8062" y="10.7625" size="0.8128" layer="28" ratio="10" rot="MR180"/>
 </element>
@@ -3259,7 +3357,13 @@ design rules under a new name.</description>
 <attribute name="NAME" x="38.6635" y="55.1362" size="0.8128" layer="25" ratio="18" rot="R180"/>
 <attribute name="VALUE" x="40.8225" y="56.2475" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="R34" library="rc-master" package="R0402" value="0R" x="26.539" y="29.437" smashed="yes" rot="R270">
+<element name="R34" library="SamacSys_Parts" package="RESC1005X40N" value="0R" x="26.539" y="29.437" smashed="yes" rot="R270">
+<attribute name="DESCRIPTION" value="General Purpose Thick Film Surface Mount Chip Resistor" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Stackpole Electronics Inc." x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RMCF0402ZT0R00" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="27.5225" y="29.1108" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="24.9515" y="30.3895" size="0.8128" layer="27" ratio="10" rot="R270"/>
 </element>
@@ -3291,7 +3395,13 @@ design rules under a new name.</description>
 <attribute name="NAME" x="53.0482" y="55.3182" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="52.7428" y="53.2985" size="0.8128" layer="28" ratio="10" rot="MR0"/>
 </element>
-<element name="R5" library="rc-master" package="R0402" value="0R" x="73.68" y="29.03" smashed="yes" rot="R90">
+<element name="R5" library="SamacSys_Parts" package="RESC1005X40N" value="0R" x="73.68" y="29.03" smashed="yes" rot="R90">
+<attribute name="DESCRIPTION" value="General Purpose Thick Film Surface Mount Chip Resistor" x="73.68" y="29.03" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="73.68" y="29.03" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Stackpole Electronics Inc." x="73.68" y="29.03" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RMCF0402ZT0R00" x="73.68" y="29.03" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="73.68" y="29.03" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="73.68" y="29.03" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="74.0305" y="31.1032" size="0.8128" layer="25" ratio="18" rot="R180"/>
 <attribute name="VALUE" x="75.2675" y="28.0775" size="0.8128" layer="27" ratio="10" rot="R90"/>
 </element>
@@ -3402,11 +3512,23 @@ design rules under a new name.</description>
 <element name="H5" library="holes" library_urn="urn:adsk.eagle:library:237" package="3,0" package3d_urn="urn:adsk.eagle:package:14277/1" value="MOUNT-HOLE3.0" x="4" y="4" smashed="yes"/>
 <element name="H6" library="holes" library_urn="urn:adsk.eagle:library:237" package="3,0" package3d_urn="urn:adsk.eagle:package:14277/1" value="MOUNT-HOLE3.0" x="4" y="59" smashed="yes"/>
 <element name="H1" library="holes" library_urn="urn:adsk.eagle:library:237" package="3,0" package3d_urn="urn:adsk.eagle:package:14277/1" value="MOUNT-HOLE3.0" x="81" y="59" smashed="yes"/>
-<element name="C52" library="rc-master" package="C0402" value="100n" x="53.834" y="23.27" smashed="yes" rot="R180">
+<element name="C52" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="53.834" y="23.27" smashed="yes" rot="R180">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="53.834" y="23.27" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="53.834" y="23.27" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="53.834" y="23.27" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="53.834" y="23.27" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="53.834" y="23.27" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="53.834" y="23.27" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="52.6275" y="23.6191" size="0.8128" layer="25" ratio="18" rot="R180"/>
 <attribute name="VALUE" x="54.7865" y="24.8576" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="C53" library="rc-master" package="C0402" value="100n" x="41.765" y="23.2701" smashed="yes" rot="R180">
+<element name="C53" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="41.765" y="23.2701" smashed="yes" rot="R180">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="41.765" y="23.2701" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="41.765" y="23.2701" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="41.765" y="23.2701" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="41.765" y="23.2701" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="41.765" y="23.2701" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="41.765" y="23.2701" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="40.5585" y="23.7462" size="0.8128" layer="25" ratio="18" rot="R180"/>
 <attribute name="VALUE" x="42.7175" y="24.8577" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
@@ -3415,7 +3537,13 @@ design rules under a new name.</description>
 <attribute name="TP_SIGNAL_NAME" value="" x="26.587" y="33.349" size="1.778" layer="27" font="vector" ratio="15" display="off"/>
 <attribute name="VALUE" x="25.952" y="32.587" size="0.0254" layer="27"/>
 </element>
-<element name="C54" library="rc-master" package="C0402" value="100n" x="62.281" y="49.932" smashed="yes" rot="R180">
+<element name="C54" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="62.281" y="49.932" smashed="yes" rot="R180">
+<attribute name="DESCRIPTION" value="Multilayer Ceramic Capacitors MLCC - SMD/SMT 0.1uF 16Volts X7R 10%" x="62.281" y="49.932" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="HEIGHT" value="0.55mm" x="62.281" y="49.932" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="62.281" y="49.932" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="62.281" y="49.932" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="62.281" y="49.932" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="62.281" y="49.932" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="63.7665" y="49.5409" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="63.2335" y="51.5196" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
@@ -3555,17 +3683,17 @@ design rules under a new name.</description>
 <wire x1="71.2938" y1="26.3522" x2="71.2938" y2="28.19" width="0.254" layer="1"/>
 <wire x1="71.2938" y1="28.19" x2="71.0042" y2="28.4796" width="0.254" layer="1"/>
 <wire x1="71.0042" y1="28.4796" x2="71.0042" y2="30.007" width="0.254" layer="1"/>
-<wire x1="62.0486" y1="7.9332" x2="62.01" y2="7.9718" width="0.254" layer="1"/>
+<wire x1="62.0486" y1="7.917" x2="62.01" y2="7.9718" width="0.254" layer="1"/>
 <wire x1="62.01" y1="7.9718" x2="62.01" y2="10.63" width="0.254" layer="1"/>
 <contactref element="C52" pad="1"/>
 <contactref element="C53" pad="1"/>
-<wire x1="54.3102" y1="23.27" x2="56.087" y2="23.27" width="0.254" layer="1"/>
+<wire x1="54.294" y1="23.27" x2="56.087" y2="23.27" width="0.254" layer="1"/>
 <wire x1="56.087" y1="23.27" x2="56.432" y2="23.615" width="0.254" layer="1"/>
 <wire x1="44.2771" y1="23.2701" x2="44.622" y2="23.615" width="0.254" layer="1"/>
-<wire x1="42.2412" y1="23.2701" x2="44.2771" y2="23.2701" width="0.254" layer="1"/>
+<wire x1="42.225" y1="23.2701" x2="44.2771" y2="23.2701" width="0.254" layer="1"/>
 <wire x1="56.808" y1="43.61" x2="59.0968" y2="43.61" width="0.254" layer="1"/>
 <wire x1="59.0968" y1="43.61" x2="59.57" y2="44.0832" width="0.254" layer="1"/>
-<wire x1="61.157" y1="43.9608" x2="59.6924" y2="43.9608" width="0.254" layer="1"/>
+<wire x1="61.157" y1="43.977" x2="59.6924" y2="43.9608" width="0.254" layer="1"/>
 <wire x1="59.6924" y1="43.9608" x2="59.57" y2="44.0832" width="0.254" layer="1"/>
 <wire x1="7.8042" y1="48.842" x2="7.92" y2="48.7262" width="0.254" layer="16"/>
 <wire x1="61.8172" y1="30.655" x2="72.18" y2="30.655" width="0.254" layer="16"/>
@@ -3574,16 +3702,16 @@ design rules under a new name.</description>
 <wire x1="6.369" y1="48.883" x2="7.7632" y2="48.883" width="0.254" layer="16"/>
 <wire x1="7.7632" y1="48.883" x2="7.92" y2="48.7262" width="0.254" layer="16"/>
 <wire x1="36.02" y1="39.03" x2="36.575" y2="38.475" width="0.2032" layer="1"/>
-<wire x1="36.575" y1="38.475" x2="36.575" y2="37.7547" width="0.254" layer="1"/>
+<wire x1="36.575" y1="38.475" x2="36.575" y2="37.7385" width="0.254" layer="1"/>
 <wire x1="27.92" y1="54.25" x2="27.92" y2="57.585" width="0.254" layer="1"/>
 <wire x1="27.92" y1="57.585" x2="24.267" y2="57.585" width="0.254" layer="1"/>
 <wire x1="7.63" y1="54.25" x2="10.965" y2="57.585" width="0.254" layer="1"/>
 <wire x1="10.965" y1="57.585" x2="11.567" y2="57.585" width="0.254" layer="1"/>
-<wire x1="44.4162" y1="47.84" x2="45.4" y2="47.84" width="0.254" layer="16"/>
+<wire x1="44.4" y1="47.84" x2="45.4" y2="47.84" width="0.254" layer="16"/>
 <via x="45.4" y="47.84" extent="1-16" drill="0.2032"/>
 <wire x1="45.31" y1="49.12" x2="45.31" y2="47.93" width="0.254" layer="16"/>
 <wire x1="45.31" y1="47.93" x2="45.4" y2="47.84" width="0.254" layer="16"/>
-<wire x1="79.511" y1="40.6022" x2="77.8468" y2="40.6022" width="0.254" layer="16"/>
+<wire x1="79.511" y1="40.586" x2="77.8468" y2="40.6022" width="0.254" layer="16"/>
 <wire x1="77.8468" y1="40.6022" x2="77.814" y2="40.635" width="0.254" layer="16"/>
 <wire x1="77.814" y1="40.635" x2="77.814" y2="41.905" width="0.254" layer="16"/>
 <contactref element="C54" pad="2"/>
@@ -3614,7 +3742,7 @@ design rules under a new name.</description>
 <wire x1="52.501" y1="51.668" x2="50.569" y2="53.6" width="0.254" layer="1"/>
 <wire x1="50.569" y1="53.6" x2="50.1" y2="53.6" width="0.254" layer="1"/>
 <via x="50.1" y="53.6" extent="1-16" drill="0.381"/>
-<wire x1="79.511" y1="40.6022" x2="79.4673" y2="40.6459" width="0.254" layer="16"/>
+<wire x1="79.511" y1="40.586" x2="79.4673" y2="40.6459" width="0.254" layer="16"/>
 <wire x1="79.4673" y1="40.6459" x2="79.4673" y2="41.8" width="0.254" layer="16"/>
 <via x="79.4673" y="41.8" extent="1-16" drill="0.381"/>
 <wire x1="70.417" y1="39.6498" x2="71.9979" y2="39.6498" width="0.254" layer="16"/>
@@ -3628,7 +3756,7 @@ design rules under a new name.</description>
 <via x="76.389" y="37.453" extent="1-16" drill="0.381"/>
 <wire x1="67.92389375" y1="31.72709375" x2="61.75" y2="31.72709375" width="0.254" layer="16"/>
 <via x="67.92389375" y="31.72709375" extent="1-16" drill="0.381"/>
-<wire x1="62.0486" y1="7.9332" x2="61.97740625" y2="7.86200625" width="0.2032" layer="1"/>
+<wire x1="62.0486" y1="7.917" x2="61.97740625" y2="7.86200625" width="0.2032" layer="1"/>
 <wire x1="61.97740625" y1="7.86200625" x2="61.13799375" y2="7.86200625" width="0.2032" layer="1"/>
 <via x="61.13799375" y="7.86200625" extent="1-16" drill="0.381"/>
 <wire x1="64.993" y1="7.0138" x2="64.9792" y2="7" width="0.2032" layer="1"/>
@@ -3639,11 +3767,11 @@ design rules under a new name.</description>
 <via x="58.2" y="7" extent="1-16" drill="0.381"/>
 <wire x1="60.8862" y1="3.24" x2="62" y2="3.24" width="0.2032" layer="1"/>
 <via x="62" y="3.24" extent="1-16" drill="0.381"/>
-<wire x1="55.9162" y1="36.969" x2="57.969" y2="36.969" width="0.254" layer="1"/>
+<wire x1="55.9" y1="36.969" x2="57.969" y2="36.969" width="0.254" layer="1"/>
 <wire x1="57.969" y1="36.969" x2="58" y2="37" width="0.254" layer="1"/>
 <via x="58" y="37" extent="1-16" drill="0.381"/>
 <wire x1="41.2888" y1="24.71523125" x2="41.2888" y2="25.2184" width="0.254" layer="1"/>
-<wire x1="42.2412" y1="23.2701" x2="42.2412" y2="23.76283125" width="0.254" layer="1"/>
+<wire x1="42.225" y1="23.2701" x2="42.2412" y2="23.76283125" width="0.254" layer="1"/>
 <wire x1="42.2412" y1="23.76283125" x2="41.2888" y2="24.71523125" width="0.254" layer="1"/>
 <wire x1="41.2888" y1="25.2184" x2="41.2888" y2="27.1667" width="0.254" layer="1"/>
 <wire x1="41.2888" y1="27.1667" x2="41.2888" y2="29.115" width="0.254" layer="1"/>
@@ -3659,38 +3787,38 @@ design rules under a new name.</description>
 <wire x1="57.351" y1="60.732" x2="59.5" y2="58.583" width="0.254" layer="1"/>
 <wire x1="59.5" y1="58.583" x2="59.5" y2="55.5" width="0.254" layer="1"/>
 <via x="59.5" y="55.5" extent="1-16" drill="0.381"/>
-<wire x1="61.157" y1="43.9608" x2="61.1962" y2="44" width="0.254" layer="1"/>
+<wire x1="61.157" y1="43.977" x2="61.1962" y2="44" width="0.254" layer="1"/>
 <wire x1="61.1962" y1="44" x2="62.1" y2="44" width="0.254" layer="1"/>
 <via x="62.1" y="44" extent="1-16" drill="0.381"/>
-<wire x1="61.8048" y1="49.932" x2="61.7651" y2="49.8923" width="0.254" layer="1"/>
+<wire x1="61.821" y1="49.932" x2="61.7651" y2="49.8923" width="0.254" layer="1"/>
 <wire x1="60.762" y1="49.8923" x2="61.7651" y2="49.8923" width="0.254" layer="1"/>
 <via x="60.762" y="49.8923" extent="1-16" drill="0.381"/>
 <wire x1="40.2470875" y1="40.63" x2="36.72" y2="40.63" width="0.254" layer="1"/>
 <wire x1="36.72" y1="40.13" x2="36.72" y2="40.63" width="0.2032" layer="1"/>
 <wire x1="40.2470875" y1="40.63" x2="44.4170875" y2="44.8" width="0.254" layer="1"/>
 <wire x1="44.4170875" y1="44.8" x2="45.4" y2="44.8" width="0.254" layer="1"/>
-<wire x1="45.7092" y1="43.631" x2="45.7092" y2="44.4908" width="0.254" layer="1"/>
+<wire x1="45.693" y1="43.631" x2="45.7092" y2="44.4908" width="0.254" layer="1"/>
 <wire x1="45.7092" y1="44.4908" x2="45.4" y2="44.8" width="0.254" layer="1"/>
 <wire x1="48.332" y1="43.61" x2="45.7302" y2="43.61" width="0.254" layer="1"/>
-<wire x1="45.7302" y1="43.61" x2="45.7092" y2="43.631" width="0.254" layer="1"/>
+<wire x1="45.7302" y1="43.61" x2="45.693" y2="43.631" width="0.254" layer="1"/>
 <wire x1="71.0042" y1="30.007" x2="71.0042" y2="30.53565" width="0.3048" layer="1"/>
 <wire x1="71.0042" y1="30.53565" x2="69.81275625" y2="31.72709375" width="0.3048" layer="1"/>
 <wire x1="69.81275625" y1="31.72709375" x2="67.92389375" y2="31.72709375" width="0.3048" layer="1"/>
 <via x="38" y="35" extent="1-16" drill="0.381"/>
 <wire x1="38" y1="36.45835" x2="38" y2="35" width="0.3048" layer="1"/>
 <wire x1="72.623" y1="26.123" x2="71.523" y2="26.123" width="0.254" layer="1"/>
-<wire x1="55.9162" y1="36.969" x2="55.9162" y2="38.0258" width="0.254" layer="1"/>
+<wire x1="55.9" y1="36.969" x2="55.9162" y2="38.0258" width="0.254" layer="1"/>
 <wire x1="55.9162" y1="38.0258" x2="55.32" y2="38.622" width="0.254" layer="1"/>
 <wire x1="54.3102" y1="24.0476" x2="53.3578" y2="25" width="0.254" layer="1"/>
-<wire x1="54.3102" y1="23.27" x2="54.3102" y2="24.0476" width="0.254" layer="1"/>
-<wire x1="36.575" y1="37.7547" x2="37.2" y2="37.7547" width="0.254" layer="1"/>
+<wire x1="54.294" y1="23.27" x2="54.3102" y2="24.0476" width="0.254" layer="1"/>
+<wire x1="36.575" y1="37.7385" x2="37.2" y2="37.7547" width="0.254" layer="1"/>
 <wire x1="37.2" y1="37.7547" x2="38" y2="36.9547" width="0.254" layer="1"/>
 <wire x1="38" y1="36.9547" x2="38" y2="36.45835" width="0.254" layer="1"/>
 <contactref element="TP3V3" pad="TP"/>
 <wire x1="5" y1="52" x2="3.499" y2="52" width="0.2032" layer="16"/>
 <wire x1="3.499" y1="52" x2="3.429" y2="52.07" width="0.2032" layer="16"/>
 <wire x1="61.229" y1="52.352" x2="61.8048" y2="51.7762" width="0.254" layer="1"/>
-<wire x1="61.8048" y1="51.7762" x2="61.8048" y2="49.932" width="0.254" layer="1"/>
+<wire x1="61.8048" y1="51.7762" x2="61.821" y2="49.932" width="0.254" layer="1"/>
 <wire x1="27.92" y1="54.25" x2="29.57" y2="54.25" width="0.2032" layer="1"/>
 <wire x1="29.57" y1="54.25" x2="29.591" y2="54.229" width="0.2032" layer="1"/>
 <via x="29.591" y="54.229" extent="1-16" drill="0.381"/>
@@ -3728,8 +3856,8 @@ design rules under a new name.</description>
 <wire x1="26.674" y1="25.289" x2="26.674" y2="23.753" width="0.254" layer="1"/>
 <wire x1="26.674" y1="23.753" x2="26.67" y2="23.749" width="0.254" layer="1"/>
 <wire x1="35.62" y1="39.03" x2="35.162" y2="38.572" width="0.2032" layer="1"/>
-<wire x1="35.162" y1="38.572" x2="35.162" y2="37.7547" width="0.254" layer="1"/>
-<wire x1="35.162" y1="37.7547" x2="34.3488" y2="37.7547" width="0.2032" layer="1"/>
+<wire x1="35.162" y1="38.572" x2="35.162" y2="37.7385" width="0.254" layer="1"/>
+<wire x1="35.162" y1="37.7385" x2="34.3488" y2="37.7547" width="0.2032" layer="1"/>
 <via x="34.3488" y="37.7547" extent="1-16" drill="0.2032"/>
 </signal>
 <signal name="GND">
@@ -3826,7 +3954,6 @@ design rules under a new name.</description>
 <contactref element="R18" pad="1"/>
 <contactref element="R19" pad="1"/>
 <contactref element="C30" pad="2"/>
-<contactref element="C50" pad="2"/>
 <contactref element="IC1" pad="42"/>
 <contactref element="C29" pad="2"/>
 <contactref element="C45" pad="1"/>
@@ -3878,7 +4005,6 @@ design rules under a new name.</description>
 <contactref element="D6" pad="1"/>
 <contactref element="IC9" pad="2"/>
 <contactref element="IC9" pad="5"/>
-<contactref element="C35" pad="2"/>
 <contactref element="C34" pad="1"/>
 <contactref element="U$1" pad="10_GND"/>
 <contactref element="U$1" pad="1_GND"/>
@@ -3910,7 +4036,6 @@ design rules under a new name.</description>
 <wire x1="64.424" y1="25.4458" x2="65.8942" y2="25.4458" width="0.254" layer="1"/>
 <wire x1="65.8942" y1="25.4458" x2="66.24" y2="25.1" width="0.254" layer="1"/>
 <wire x1="63.31" y1="13.53" x2="63.31" y2="15.0828" width="0.254" layer="1"/>
-<wire x1="63.31" y1="15.0828" x2="63.3872" y2="15.16" width="0.254" layer="1"/>
 <contactref element="C52" pad="2"/>
 <contactref element="C53" pad="2"/>
 <wire x1="60.469" y1="25.868125" x2="60.469" y2="24.56775" width="0.254" layer="16"/>
@@ -3927,18 +4052,17 @@ design rules under a new name.</description>
 <wire x1="61.27736875" y1="19.654" x2="62.7281" y2="19.654" width="0.254" layer="16"/>
 <wire x1="46.13" y1="16.641" x2="48.559" y2="16.641" width="0.254" layer="16"/>
 <wire x1="48.559" y1="16.641" x2="48.575" y2="16.657" width="0.254" layer="16"/>
-<wire x1="61.157" y1="44.9132" x2="60.3276" y2="44.9132" width="0.254" layer="1"/>
-<wire x1="60.3276" y1="44.9132" x2="59.57" y2="45.6708" width="0.254" layer="1"/>
+<wire x1="61.157" y1="44.897" x2="60.3276" y2="44.9132" width="0.254" layer="1"/>
 <wire x1="58.95806875" y1="41.8226" x2="60.2262" y2="41.8226" width="0.254" layer="1"/>
 <wire x1="60.2262" y1="42.652" x2="60.2262" y2="41.8226" width="0.254" layer="1"/>
 <wire x1="50.747" y1="51.6808" x2="49.9514" y2="50.8852" width="0.254" layer="1"/>
-<wire x1="49.9514" y1="50.8852" x2="49.132" y2="50.8852" width="0.254" layer="1"/>
+<wire x1="49.9514" y1="50.8852" x2="49.132" y2="50.869" width="0.254" layer="1"/>
 <contactref element="U1" pad="2"/>
 <contactref element="U1" pad="1"/>
 <wire x1="6.4468" y1="27.0009875" x2="6.4468" y2="25.51505" width="0.254" layer="1"/>
 <wire x1="6.4468" y1="25.51505" x2="6.4468" y2="24.0291125" width="0.254" layer="1"/>
-<wire x1="6.4468" y1="24.0291125" x2="6.4468" y2="22.543175" width="0.254" layer="1"/>
-<wire x1="6.4468" y1="22.543175" x2="6.4468" y2="21.5449375" width="0.254" layer="1"/>
+<wire x1="6.4468" y1="24.0291125" x2="6.463" y2="22.543175" width="0.254" layer="1"/>
+<wire x1="6.463" y1="22.543175" x2="6.4468" y2="21.5449375" width="0.254" layer="1"/>
 <wire x1="6.4468" y1="21.5449375" x2="5.721" y2="20.8191375" width="0.254" layer="1"/>
 <wire x1="5.721" y1="20.8191375" x2="5.721" y2="19.9043" width="0.254" layer="1"/>
 <wire x1="5.721" y1="19.9043" x2="4.2767" y2="18.46" width="0.254" layer="1"/>
@@ -3967,7 +4091,7 @@ design rules under a new name.</description>
 <wire x1="31.0474" y1="37.7806" x2="31.0474" y2="37.39426875" width="0.2032" layer="1"/>
 <wire x1="32.51" y1="37.8442" x2="31.0522" y2="37.8442" width="0.254" layer="1"/>
 <wire x1="31.0522" y1="37.8442" x2="31.018" y2="37.81" width="0.2032" layer="1"/>
-<wire x1="35.162" y1="36.8023" x2="36.575" y2="36.8023" width="0.254" layer="1"/>
+<wire x1="35.162" y1="36.8185" x2="36.575" y2="36.8185" width="0.254" layer="1"/>
 <wire x1="36.02" y1="40.43" x2="35.62" y2="40.43" width="0.254" layer="1"/>
 <wire x1="35.62" y1="40.43" x2="35.32" y2="40.13" width="0.2032" layer="1"/>
 <wire x1="35.32" y1="40.13" x2="34.92" y2="40.13" width="0.2032" layer="1"/>
@@ -3983,14 +4107,14 @@ design rules under a new name.</description>
 <wire x1="42.41" y1="50.62" x2="42.3806" y2="50.6494" width="0.254" layer="16"/>
 <wire x1="42.3806" y1="50.6494" x2="41.76926875" y2="50.6494" width="0.254" layer="16"/>
 <wire x1="41.76926875" y1="48.5906" x2="42.7132" y2="48.5906" width="0.254" layer="16"/>
-<wire x1="42.7132" y1="48.5906" x2="43.4638" y2="47.84" width="0.254" layer="16"/>
+<wire x1="42.7132" y1="48.5906" x2="43.48" y2="47.84" width="0.254" layer="16"/>
 <wire x1="12.569" y1="44.58" x2="12.6428" y2="44.5062" width="0.254" layer="16"/>
-<wire x1="12.6428" y1="44.5062" x2="12.6428" y2="43.2099" width="0.254" layer="16"/>
+<wire x1="12.6428" y1="44.5062" x2="12.659" y2="43.2099" width="0.254" layer="16"/>
 <wire x1="12.659" y1="41.93" x2="12.6428" y2="41.9462" width="0.254" layer="16"/>
-<wire x1="12.6428" y1="41.9462" x2="12.6428" y2="43.2099" width="0.254" layer="16"/>
+<wire x1="12.6428" y1="41.9462" x2="12.659" y2="43.2099" width="0.254" layer="16"/>
 <contactref element="C54" pad="1"/>
 <wire x1="54.82" y1="38.622" x2="54.82" y2="37.1128" width="0.254" layer="1"/>
-<wire x1="54.82" y1="37.1128" x2="54.9638" y2="36.969" width="0.254" layer="1"/>
+<wire x1="54.82" y1="37.1128" x2="54.98" y2="36.969" width="0.254" layer="1"/>
 <wire x1="40.3462" y1="54.66" x2="40.32" y2="54.6862" width="0.254" layer="1"/>
 <wire x1="40.32" y1="54.6862" x2="40.32" y2="55.84" width="0.254" layer="1"/>
 <wire x1="40.32" y1="55.84" x2="40.8406" y2="56.3606" width="0.254" layer="1"/>
@@ -4012,10 +4136,10 @@ design rules under a new name.</description>
 <wire x1="40.3462" y1="54.66" x2="41.593634375" y2="54.66" width="0.254" layer="1"/>
 <wire x1="41.593634375" y1="54.66" x2="41.6" y2="54.653634375" width="0.254" layer="1"/>
 <via x="41.6" y="54.653634375" extent="1-16" drill="0.381"/>
-<wire x1="43.4638" y1="47.84" x2="42.34" y2="47.84" width="0.254" layer="16"/>
+<wire x1="43.48" y1="47.84" x2="42.34" y2="47.84" width="0.254" layer="16"/>
 <wire x1="42.34" y1="47.84" x2="42.3" y2="47.8" width="0.254" layer="16"/>
 <via x="42.3" y="47.8" extent="1-16" drill="0.381"/>
-<wire x1="44.7568" y1="43.631" x2="44.7568" y2="42.5742" width="0.254" layer="1"/>
+<wire x1="44.773" y1="43.631" x2="44.7568" y2="42.5742" width="0.254" layer="1"/>
 <wire x1="44.8" y1="42.531" x2="44.7568" y2="42.5742" width="0.254" layer="1"/>
 <via x="44.8" y="42.531" extent="1-16" drill="0.381"/>
 <via x="65.479" y="49.1477" extent="1-16" drill="0.381"/>
@@ -4025,7 +4149,7 @@ design rules under a new name.</description>
 <wire x1="74.964" y1="42.54" x2="74.964" y2="39.536" width="0.2032" layer="16"/>
 <wire x1="74.964" y1="39.536" x2="75" y2="39.5" width="0.2032" layer="16"/>
 <via x="75" y="39.5" extent="1-16" drill="0.381"/>
-<wire x1="79.511" y1="39.6498" x2="78.3498" y2="39.6498" width="0.2032" layer="16"/>
+<wire x1="79.511" y1="39.666" x2="78.3498" y2="39.6498" width="0.2032" layer="16"/>
 <wire x1="78.3498" y1="39.6498" x2="78.3" y2="39.6" width="0.2032" layer="16"/>
 <via x="78.3" y="39.6" extent="1-16" drill="0.381"/>
 <wire x1="66.24" y1="25.1" x2="67.5" y2="26.36" width="0.254" layer="1"/>
@@ -4046,7 +4170,7 @@ design rules under a new name.</description>
 <wire x1="73.08685" y1="14.22305" x2="73.08685" y2="15.08685" width="0.2032" layer="1"/>
 <wire x1="70.473" y1="16.623" x2="70.473" y2="15.1" width="0.2032" layer="1"/>
 <via x="70.473" y="15.1" extent="1-16" drill="0.381"/>
-<wire x1="62.0486" y1="6.9808" x2="62.0486" y2="5.9645875" width="0.2032" layer="1"/>
+<wire x1="62.0486" y1="6.997" x2="62.0486" y2="5.9645875" width="0.2032" layer="1"/>
 <wire x1="62.0486" y1="5.9645875" x2="62.04200625" y2="5.95799375" width="0.2032" layer="1"/>
 <via x="62.04200625" y="5.95799375" extent="1-16" drill="0.381"/>
 <wire x1="23.549" y1="1.608" x2="21.908" y2="1.608" width="0.2032" layer="1"/>
@@ -4208,9 +4332,9 @@ design rules under a new name.</description>
 <via x="54.8" y="58.8" extent="1-16" drill="0.381"/>
 <wire x1="57.4138" y1="53.0599" x2="57.4138" y2="54.3" width="0.254" layer="1"/>
 <via x="57.4138" y="54.3" extent="1-16" drill="0.381"/>
-<wire x1="62.7572" y1="49.932" x2="63.5415" y2="49.1477" width="0.254" layer="1"/>
+<wire x1="62.741" y1="49.932" x2="63.5415" y2="49.1477" width="0.254" layer="1"/>
 <wire x1="63.5415" y1="49.1477" x2="65.479" y2="49.1477" width="0.254" layer="1"/>
-<wire x1="61.157" y1="44.9132" x2="62.4404" y2="46.1966" width="0.254" layer="1"/>
+<wire x1="61.157" y1="44.897" x2="62.4404" y2="46.1966" width="0.254" layer="1"/>
 <wire x1="62.4404" y1="46.1966" x2="64.2419875" y2="46.1966" width="0.254" layer="1"/>
 <wire x1="64.2419875" y1="46.1966" x2="65.479" y2="47.4336125" width="0.254" layer="1"/>
 <wire x1="65.479" y1="47.4336125" x2="65.479" y2="49.1477" width="0.254" layer="1"/>
@@ -4239,14 +4363,14 @@ design rules under a new name.</description>
 <wire x1="18" y1="31.4" x2="17.36" y2="30.76" width="0.254" layer="16"/>
 <wire x1="17.36" y1="30.38" x2="17.36" y2="30.76" width="0.254" layer="16"/>
 <via x="18" y="31.4" extent="1-16" drill="0.381"/>
-<wire x1="29.2732" y1="30.731" x2="30.269" y2="30.731" width="0.254" layer="1"/>
+<wire x1="29.347" y1="30.731" x2="30.269" y2="30.731" width="0.254" layer="1"/>
 <wire x1="30.269" y1="30.731" x2="30.3" y2="30.7" width="0.254" layer="1"/>
 <via x="30.3" y="30.7" extent="1-16" drill="0.381"/>
 <wire x1="48.332" y1="43.11" x2="47" y2="43.11" width="0.254" layer="1"/>
 <via x="36.254" y="27.27" extent="1-16" drill="0.381"/>
-<wire x1="41.2888" y1="23.2701" x2="41.2888" y2="20.1814" width="0.254" layer="1"/>
+<wire x1="41.305" y1="23.2701" x2="41.2888" y2="20.1814" width="0.254" layer="1"/>
 <wire x1="41.2888" y1="20.1814" x2="41.5352" y2="19.935" width="0.254" layer="1"/>
-<wire x1="53.3578" y1="23.27" x2="53.3578" y2="22.2422" width="0.254" layer="1"/>
+<wire x1="53.374" y1="23.27" x2="53.3578" y2="22.2422" width="0.254" layer="1"/>
 <wire x1="53.3578" y1="22.2422" x2="53.4" y2="22.2" width="0.254" layer="1"/>
 <via x="53.4" y="22.2" extent="1-16" drill="0.381"/>
 <wire x1="60.3952" y1="24.49395" x2="62.7281" y2="22.16105" width="0.254" layer="16"/>
@@ -4256,13 +4380,12 @@ design rules under a new name.</description>
 <via x="47.7" y="24.5" extent="1-16" drill="0.381"/>
 <wire x1="63.75" y1="36.3" x2="66.7" y2="36.3" width="0.3048" layer="1"/>
 <via x="66.7" y="36.3" extent="1-16" drill="0.381"/>
-<wire x1="35.162" y1="36.8023" x2="35.162" y2="35.624" width="0.3048" layer="1"/>
+<wire x1="35.162" y1="36.8185" x2="35.162" y2="35.624" width="0.3048" layer="1"/>
 <wire x1="35.162" y1="35.624" x2="30.269" y2="30.731" width="0.3048" layer="1"/>
 <wire x1="63.3872" y1="16.0937" x2="64.2935" y2="17" width="0.254" layer="1"/>
 <via x="64.2935" y="17" extent="1-16" drill="0.381"/>
 <wire x1="64.2935" y1="17" x2="62.7281" y2="18.5654" width="0.254" layer="16"/>
 <wire x1="62.7281" y1="18.5654" x2="62.7281" y2="19.654" width="0.254" layer="16"/>
-<wire x1="63.3872" y1="15.16" x2="63.3872" y2="16.0937" width="0.254" layer="1"/>
 <wire x1="61.36" y1="13.53" x2="61.36" y2="14.37513125" width="0.254" layer="1"/>
 <wire x1="61.36" y1="14.37513125" x2="61.1208" y2="14.61433125" width="0.254" layer="1"/>
 <wire x1="61.1208" y1="14.61433125" x2="61.1208" y2="20.328675" width="0.254" layer="1"/>
@@ -4386,6 +4509,11 @@ design rules under a new name.</description>
 <wire x1="68.9339" y1="28.1412" x2="67.5" y2="26.7073" width="0.2032" layer="16"/>
 <wire x1="72.18" y1="28.455" x2="72.18" y2="28.1412" width="0.2032" layer="16"/>
 <wire x1="72.18" y1="28.1412" x2="68.9339" y2="28.1412" width="0.2032" layer="16"/>
+<contactref element="C50" pad="2"/>
+<contactref element="C35" pad="2"/>
+<wire x1="60.3276" y1="44.9132" x2="59.57" y2="45.6708" width="0" layer="19" extent="1-1"/>
+<wire x1="63.371" y1="15.16" x2="63.3872" y2="16.0937" width="0" layer="19" extent="1-1"/>
+<wire x1="63.31" y1="15.0828" x2="63.371" y2="15.16" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="MRX">
 <contactref element="IC2" pad="13"/>
@@ -4402,13 +4530,13 @@ design rules under a new name.</description>
 <signal name="MCTS">
 <contactref element="IC2" pad="11"/>
 <contactref element="R34" pad="1"/>
-<wire x1="26.539" y1="29.9132" x2="26.4822" y2="29.97" width="0.254" layer="1"/>
+<wire x1="26.539" y1="29.987" x2="26.4822" y2="29.97" width="0.254" layer="1"/>
 <wire x1="26.4822" y1="29.97" x2="24.4" y2="29.97" width="0.254" layer="1"/>
 </signal>
 <signal name="MRTS">
 <contactref element="IC2" pad="10"/>
 <contactref element="R34" pad="2"/>
-<wire x1="26.539" y1="28.9608" x2="24.4908" y2="28.9608" width="0.254" layer="1"/>
+<wire x1="26.539" y1="28.887" x2="24.4908" y2="28.9608" width="0.254" layer="1"/>
 <wire x1="24.4908" y1="28.9608" x2="24.4" y2="28.87" width="0.254" layer="1"/>
 </signal>
 <signal name="MTX">
@@ -5180,7 +5308,7 @@ design rules under a new name.</description>
 <wire x1="52.501" y1="50.068" x2="52.4758" y2="50.0932" width="0.254" layer="1"/>
 <wire x1="52.4758" y1="50.0932" x2="50.747" y2="50.0932" width="0.254" layer="1"/>
 <wire x1="50.747" y1="50.0932" x2="49.2924" y2="50.0932" width="0.254" layer="1"/>
-<wire x1="49.2924" y1="50.0932" x2="49.132" y2="49.9328" width="0.254" layer="1"/>
+<wire x1="49.2924" y1="50.0932" x2="49.132" y2="49.949" width="0.254" layer="1"/>
 <wire x1="52.82" y1="47.098" x2="52.82" y2="49.8" width="0.254" layer="1"/>
 <wire x1="52.82" y1="49.8" x2="52.552" y2="50.068" width="0.254" layer="1"/>
 <wire x1="52.552" y1="50.068" x2="52.501" y2="50.068" width="0.254" layer="1"/>
@@ -5203,8 +5331,8 @@ design rules under a new name.</description>
 <contactref element="L2" pad="2"/>
 <wire x1="7.3992" y1="27.0009875" x2="7.3992" y2="25.51505" width="0.6096" layer="1"/>
 <wire x1="7.3992" y1="25.51505" x2="7.3992" y2="24.0291125" width="0.6096" layer="1"/>
-<wire x1="7.3992" y1="24.0291125" x2="7.3992" y2="22.543175" width="0.6096" layer="1"/>
-<wire x1="7.3992" y1="22.543175" x2="7.3992" y2="20.9097375" width="0.6096" layer="1"/>
+<wire x1="7.3992" y1="24.0291125" x2="7.383" y2="22.543175" width="0.6096" layer="1"/>
+<wire x1="7.383" y1="22.543175" x2="7.3992" y2="20.9097375" width="0.6096" layer="1"/>
 <wire x1="7.3992" y1="20.9097375" x2="7.3086" y2="20.8191375" width="0.254" layer="1"/>
 <wire x1="7.3086" y1="20.8191375" x2="7.3086" y2="19" width="0.6096" layer="1"/>
 <wire x1="7.3086" y1="19" x2="7.3086" y2="18.8344" width="0.254" layer="1"/>
@@ -5259,7 +5387,7 @@ design rules under a new name.</description>
 <signal name="MDTR">
 <contactref element="IC2" pad="9"/>
 <contactref element="R14" pad="1"/>
-<wire x1="27.3684" y1="30.731" x2="28.3208" y2="30.731" width="0.254" layer="1"/>
+<wire x1="27.3684" y1="30.731" x2="28.247" y2="30.731" width="0.254" layer="1"/>
 <wire x1="24.4" y1="27.77" x2="24.4206" y2="27.7906" width="0.254" layer="1"/>
 <wire x1="27.3684" y1="28.34506875" x2="27.3684" y2="30.731" width="0.254" layer="1"/>
 <wire x1="24.4206" y1="27.7906" x2="26.81393125" y2="27.7906" width="0.254" layer="1"/>
@@ -5363,8 +5491,8 @@ design rules under a new name.</description>
 <wire x1="13.97" y1="49.606" x2="13.669" y2="49.305" width="0.254" layer="16"/>
 <wire x1="13.669" y1="49.305" x2="13.669" y2="44.58" width="0.254" layer="16"/>
 <wire x1="13.669" y1="44.58" x2="13.669" y2="43.2837" width="0.254" layer="16"/>
-<wire x1="13.669" y1="43.2837" x2="13.5952" y2="43.2099" width="0.254" layer="16"/>
-<wire x1="13.5952" y1="43.2099" x2="13.5952" y2="41.9462" width="0.254" layer="16"/>
+<wire x1="13.669" y1="43.2837" x2="13.579" y2="43.2099" width="0.254" layer="16"/>
+<wire x1="13.579" y1="43.2099" x2="13.5952" y2="41.9462" width="0.254" layer="16"/>
 <wire x1="13.5952" y1="41.9462" x2="13.579" y2="41.93" width="0.254" layer="16"/>
 <wire x1="13.579" y1="41.93" x2="13.579" y2="33.01" width="0.254" layer="16"/>
 <wire x1="13.579" y1="33.01" x2="12.192" y2="31.623" width="0.254" layer="16"/>
@@ -5593,7 +5721,7 @@ design rules under a new name.</description>
 <contactref element="IC4" pad="1"/>
 <contactref element="C2" pad="2"/>
 <wire x1="52.0618" y1="20.7302" x2="51.998" y2="20.794" width="0.254" layer="16"/>
-<wire x1="54.2338" y1="19.271" x2="54.2338" y2="20.32" width="0.254" layer="16"/>
+<wire x1="54.25" y1="19.271" x2="54.2338" y2="20.32" width="0.254" layer="16"/>
 <wire x1="54.2338" y1="20.32" x2="53.8236" y2="20.7302" width="0.254" layer="16"/>
 <wire x1="53.8236" y1="20.7302" x2="52.0618" y2="20.7302" width="0.254" layer="16"/>
 </signal>
@@ -5608,11 +5736,11 @@ design rules under a new name.</description>
 <wire x1="55.247" y1="18" x2="52" y2="18" width="0.254" layer="16"/>
 <wire x1="51" y1="19" x2="52" y2="18" width="0.254" layer="16"/>
 <wire x1="55.247" y1="18" x2="55.247" y2="19.2102" width="0.254" layer="16"/>
-<wire x1="55.247" y1="19.2102" x2="55.1862" y2="19.271" width="0.254" layer="16"/>
-<wire x1="55.1862" y1="19.271" x2="55.5692" y2="19.654" width="0.254" layer="16"/>
+<wire x1="55.247" y1="19.2102" x2="55.17" y2="19.271" width="0.254" layer="16"/>
+<wire x1="55.17" y1="19.271" x2="55.5692" y2="19.654" width="0.254" layer="16"/>
 <wire x1="55.5692" y1="19.654" x2="59.4281" y2="19.654" width="0.254" layer="16"/>
 <wire x1="55.12" y1="20.32" x2="55.12" y2="19.3372" width="0.254" layer="16"/>
-<wire x1="55.12" y1="19.3372" x2="55.1862" y2="19.271" width="0.254" layer="16"/>
+<wire x1="55.12" y1="19.3372" x2="55.17" y2="19.271" width="0.254" layer="16"/>
 <wire x1="55.594" y1="20.794" x2="55.12" y2="20.32" width="0.254" layer="16"/>
 <wire x1="57.422" y1="20.794" x2="55.594" y2="20.794" width="0.254" layer="16"/>
 </signal>
@@ -5643,11 +5771,11 @@ design rules under a new name.</description>
 <wire x1="65.232" y1="23.606" x2="63.235" y2="23.606" width="0.254" layer="16"/>
 <wire x1="63.16" y1="23.531" x2="63.235" y2="23.606" width="0.254" layer="16"/>
 <via x="65.232" y="23.606" extent="1-16" drill="0.381" diameter="1"/>
-<wire x1="62.4348" y1="14.5" x2="62.4348" y2="15.16" width="0.2032" layer="1"/>
+<wire x1="62.4348" y1="14.5" x2="62.451" y2="15.16" width="0.2032" layer="1"/>
 <wire x1="62.66" y1="14.2748" x2="62.4348" y2="14.5" width="0.2032" layer="1"/>
 <wire x1="62.66" y1="13.53" x2="62.66" y2="14.2748" width="0.2032" layer="1"/>
 <wire x1="62.4348" y1="16.702" x2="62.8698" y2="17.137" width="0.2032" layer="1"/>
-<wire x1="62.4348" y1="15.16" x2="62.4348" y2="16.702" width="0.2032" layer="1"/>
+<wire x1="62.451" y1="15.16" x2="62.4348" y2="16.702" width="0.2032" layer="1"/>
 <contactref element="TP5V" pad="TP"/>
 <wire x1="57.009" y1="12.7" x2="57.009" y2="13.956" width="0.2032" layer="16"/>
 <wire x1="57.009" y1="13.956" x2="57.404" y2="14.351" width="0.2032" layer="16"/>
@@ -5693,7 +5821,7 @@ design rules under a new name.</description>
 <contactref element="C7" pad="1"/>
 <contactref element="R5" pad="2"/>
 <wire x1="72.68" y1="33.5062" x2="72.68" y2="30.5062" width="0.4064" layer="1"/>
-<wire x1="73.68" y1="29.5062" x2="72.68" y2="30.5062" width="0.4064" layer="1"/>
+<wire x1="73.68" y1="29.58" x2="72.68" y2="30.5062" width="0.4064" layer="1"/>
 <wire x1="72.68" y1="33.5062" x2="69.8862" y2="36.3" width="0.4064" layer="1"/>
 <wire x1="69.85" y1="36.3" x2="69.8862" y2="36.3" width="0.254" layer="1"/>
 <wire x1="69.85" y1="36.3" x2="71.746" y2="36.3" width="0.4064" layer="1"/>
@@ -5703,7 +5831,7 @@ design rules under a new name.</description>
 <contactref element="R5" pad="1"/>
 <contactref element="U$1" pad="6_V_BCKP"/>
 <wire x1="73.723" y1="26.123" x2="73.68" y2="26.166" width="0.254" layer="1"/>
-<wire x1="73.68" y1="26.166" x2="73.68" y2="28.5538" width="0.4064" layer="1"/>
+<wire x1="73.68" y1="26.166" x2="73.68" y2="28.48" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$13">
 <contactref element="R8" pad="1"/>
@@ -5732,15 +5860,15 @@ design rules under a new name.</description>
 <wire x1="37.441" y1="23" x2="34.7" y2="23" width="0.508" layer="1"/>
 <via x="34.7" y="23" extent="1-16" drill="0.2032"/>
 <wire x1="37.44" y1="22.262315625" x2="35.939484375" y2="22.262315625" width="0.2032" layer="16"/>
-<wire x1="35.751" y1="22.4508" x2="35.939484375" y2="22.262315625" width="0.2032" layer="16"/>
-<wire x1="35.751" y1="22.4508" x2="35.2492" y2="22.4508" width="0.254" layer="16"/>
+<wire x1="35.751" y1="22.467" x2="35.939484375" y2="22.262315625" width="0.2032" layer="16"/>
+<wire x1="35.751" y1="22.467" x2="35.2492" y2="22.4508" width="0.254" layer="16"/>
 <wire x1="35.2492" y1="22.4508" x2="34.7" y2="23" width="0.254" layer="16"/>
 </signal>
 <signal name="N$20">
 <contactref element="C38" pad="2"/>
 <contactref element="IC5" pad="4"/>
 <wire x1="36.94" y1="23.398" x2="36.9348" y2="23.4032" width="0.254" layer="16"/>
-<wire x1="36.9348" y1="23.4032" x2="35.751" y2="23.4032" width="0.254" layer="16"/>
+<wire x1="36.9348" y1="23.4032" x2="35.751" y2="23.387" width="0.254" layer="16"/>
 </signal>
 <signal name="12V_OUT">
 <contactref element="F1" pad="2"/>
@@ -5755,7 +5883,7 @@ design rules under a new name.</description>
 <wire x1="21.54" y1="14.89" x2="24" y2="12.43" width="0.8128" layer="16"/>
 <wire x1="24" y1="12.43" x2="24" y2="11" width="0.8128" layer="16"/>
 <wire x1="24" y1="11" x2="26.46" y2="8.54" width="0.8128" layer="16"/>
-<wire x1="26.46" y1="8.54" x2="26.5412" y2="8.54" width="0.8128" layer="16"/>
+<wire x1="26.46" y1="8.54" x2="26.42" y2="8.54" width="0.8128" layer="16"/>
 <wire x1="21.54" y1="21.39" x2="21.54" y2="14.89" width="0.508" layer="16"/>
 </signal>
 <signal name="N$29">
@@ -5764,19 +5892,19 @@ design rules under a new name.</description>
 <contactref element="R20" pad="1"/>
 <wire x1="28.891" y1="14.89" x2="28.891" y2="13.89" width="0.8128" layer="16"/>
 <wire x1="28.891" y1="13.89" x2="26.5412" y2="11.5402" width="0.8128" layer="16"/>
-<wire x1="26.5412" y1="11.5402" x2="26.5412" y2="11.397" width="0.254" layer="16"/>
+<wire x1="26.5412" y1="11.5402" x2="26.42" y2="11.397" width="0.254" layer="16"/>
 <wire x1="28.891" y1="21.39" x2="28.891" y2="14.89" width="0.508" layer="16"/>
 </signal>
 <signal name="LOCK_OUT">
 <contactref element="R20" pad="2"/>
 <contactref element="J4" pad="14"/>
-<wire x1="29.1988" y1="11.397" x2="29.4318" y2="11.63" width="0.508" layer="16"/>
+<wire x1="29.32" y1="11.397" x2="29.4318" y2="11.63" width="0.508" layer="16"/>
 <wire x1="29.4318" y1="11.63" x2="33.5" y2="11.63" width="0.8128" layer="16"/>
 </signal>
 <signal name="UNLOCK_OUT">
 <contactref element="R21" pad="2"/>
 <contactref element="J4" pad="7"/>
-<wire x1="29.1988" y1="8.54" x2="29.2888" y2="8.63" width="0.508" layer="16"/>
+<wire x1="29.32" y1="8.54" x2="29.2888" y2="8.63" width="0.508" layer="16"/>
 <wire x1="29.2888" y1="8.63" x2="33.5" y2="8.63" width="0.8128" layer="16"/>
 </signal>
 <signal name="CODE_A_IN">
