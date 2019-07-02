@@ -1,0 +1,30 @@
+{
+  "Parameters": {
+    "ThingName": {
+      "Type": "String"
+    },
+    "CSR": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "thing": {
+      "Type": "AWS::IoT::Thing",
+      "Properties": {
+        "ThingName": { "Ref": "ThingName" },
+        "AttributePayload": {
+          "version": "v1"
+        },
+        "ThingTypeName": "plug-type",
+        "ThingGroups": ["plug-group"]
+      }
+    },
+    "certificate": {
+      "Type": "AWS::IoT::Certificate",
+      "Properties": {
+        "CertificateSigningRequest": { "Ref": "CSR" },
+        "Status": "ACTIVE"
+      }
+    }
+  }
+}
