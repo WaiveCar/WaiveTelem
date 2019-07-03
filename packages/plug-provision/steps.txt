@@ -17,4 +17,4 @@ echo ${CSR}
 REG_OUTPUT=$(aws iot register-thing --template-body file://templateBody.json --parameters "{\"ThingName\": \"${PLUG_ID}\", \"CSR\": \"${CSR}\"}")
 echo ${REG_OUTPUT}
 
-echo ${REG_OUTPUT} | jq "{id: \"${PLUG_ID}\", mqttBroker: \"${MQTT_BROKER}\", certificatePem: .certificatePem}" > /Volumes/TELEMCONFIG/config.json
+echo ${REG_OUTPUT} | jq "{id: \"${PLUG_ID}\", mqttBrokerUrl: \"${MQTT_BROKER}\", mqttBrokerCert: .certificatePem, gps: {telemetry: enable, inRideInterval: 30, notInRideInterval: 900}}" > /Volumes/TELEMCONFIG/config.json
