@@ -21,12 +21,22 @@ void ConfigClass::load() {
   }
 
   id = doc["id"].as<char*>();
+  mqttBrokerUrl = doc["mqttBrokerUrl"].as<char*>();
+  mqttBrokerCert = doc["mqttBrokerCert"].as<char*>();
 
   file.close();
 }
 
 String ConfigClass::getId() {
   return id;
+}
+
+String ConfigClass::getMqttBrokerUrl() {
+  return mqttBrokerUrl;
+}
+
+String ConfigClass::getMqttBrokerCert() {
+  return mqttBrokerCert;
 }
 
 ConfigClass Config;

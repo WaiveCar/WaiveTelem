@@ -1,8 +1,6 @@
 #ifndef Console_h
 #define Console_h
 
-#include <String.h>
-
 #ifdef DEBUG
 #define log(s) Serial.println(s)
 #else
