@@ -25,11 +25,16 @@ void loop() {
   if (!Wifi.isConnected()) {
     Wifi.connect();
   }
+#elif defined(ARDUINO_SAMD_MKRNB1500)
+  if (!Cellular.isConnected()) {
+    Cellular.connect();
+  }
 #endif
   if (!Mqtt.isConnected()) {
     Mqtt.connect();
   }
   Mqtt.poll();
-  delay(5000);
-  Mqtt.publish("arduino/outgoing", "{}");
+  // delay(5000);
+  // Mqtt.publish("$aws/things/" + Config.getId() + "/shadow/update",
+  //              "{\"state\": {\"reported\": {\"gps\": {\"lat\": 111, \"long\": 222}}}}");
 }

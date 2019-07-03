@@ -7,16 +7,16 @@
 
 void WifiClass::connect() {
   if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println("WiFi shield not present");
+    Serial.println(F("WiFi hardware not present"));
     while (true)
       ;
   }
   log("Attempting to connect to SSID: " + String(SSID_NAME));
   while (WiFi.begin(SSID_NAME, SSID_PASWORD) != WL_CONNECTED) {
-    log(".");
+    Serial.print(F("."));
     delay(5000);
   }
-  log("You're connected to the network");
+  log(F("You're connected to the network"));
 }
 
 bool WifiClass::isConnected() {

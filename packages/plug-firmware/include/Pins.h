@@ -24,6 +24,10 @@
 class PinsClass {
  public:
   void setup();
+  void unlockDoors();
+  void lockDoors();
+  void immobilize();
+  void unimmobilize();
 };
 
 extern PinsClass Pins;

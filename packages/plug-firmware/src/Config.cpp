@@ -18,11 +18,13 @@ void ConfigClass::load() {
   DeserializationError error = deserializeJson(doc, file);
   if (error) {
     Serial.println("Failed to read file: " + String(error.c_str()));
+    file.close();
+    return;
   }
 
-  id = doc["id"].as<char*>();
-  mqttBrokerUrl = doc["mqttBrokerUrl"].as<char*>();
-  mqttBrokerCert = doc["mqttBrokerCert"].as<char*>();
+  id = doc["id"].as<String>();
+  mqttBrokerUrl = doc["mqttBrokerUrl"].as<String>();
+  mqttBrokerCert = doc["mqttBrokerCert"].as<String>();
 
   file.close();
 }

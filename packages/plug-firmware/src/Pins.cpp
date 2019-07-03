@@ -32,4 +32,24 @@ void PinsClass::setup() {
   SPI.begin();
 }
 
+void PinsClass::unlockDoors() {
+  digitalWrite(DOOR_UNLOCK_PIN, HIGH);
+  delay(100);
+  digitalWrite(DOOR_UNLOCK_PIN, LOW);
+}
+
+void PinsClass::lockDoors() {
+  digitalWrite(DOOR_LOCK_PIN, HIGH);
+  delay(100);
+  digitalWrite(DOOR_LOCK_PIN, LOW);
+}
+
+void PinsClass::immobilize() {
+  digitalWrite(RELAY_2_PIN, LOW);
+}
+
+void PinsClass::unimmobilize() {
+  digitalWrite(RELAY_2_PIN, HIGH);
+}
+
 PinsClass Pins;
