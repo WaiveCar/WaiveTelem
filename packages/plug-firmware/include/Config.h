@@ -1,7 +1,7 @@
 #ifndef Config_h
 #define Config_h
 
-#include <String.h>
+#include <Arduino.h>
 
 class ConfigClass {
  public:

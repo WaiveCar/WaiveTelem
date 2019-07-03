@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <String.h>
 
 #include "Config.h"
 #include "Console.h"

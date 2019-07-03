@@ -5,6 +5,7 @@
 #include <WiFi101.h>
 WiFiClient client;
 #elif defined(ARDUINO_SAMD_MKRNB1500)
+#include <MKRNB.h>
 NBClient client;
 #endif
 BearSSLClient sslClient(client);

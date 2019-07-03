@@ -19,7 +19,7 @@
 #define CAN1_CS_PIN A0
 #define CAN1_INT_PIN A6
 
-#include <String.h>
+#include <Arduino.h>
 
 class PinsClass {
  public:

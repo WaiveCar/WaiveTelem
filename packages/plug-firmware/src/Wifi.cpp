@@ -1,3 +1,4 @@
+#ifdef ARDUINO_SAMD_MKR1000
 #include <Arduino.h>
 #include <WiFi101.h>
 
@@ -23,3 +24,4 @@ bool WifiClass::isConnected() {
 }
 
 WifiClass Wifi;
+#endif
