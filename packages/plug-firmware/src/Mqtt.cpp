@@ -63,6 +63,7 @@ void MqttClass::setup() {
       ;
   }
   ArduinoBearSSL.onGetTime(getTime);
+  Config.load();
   log("id: " + Config.getId());
   log("cert: " + Config.getMqttBrokerCert());
   log("url: " + Config.getMqttBrokerUrl());

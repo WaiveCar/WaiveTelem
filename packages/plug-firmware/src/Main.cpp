@@ -1,6 +1,5 @@
 #include <Arduino.h>
 
-#include "Config.h"
 #include "Console.h"
 #include "Gps.h"
 #include "Mqtt.h"
@@ -14,7 +13,6 @@
 void setup() {
   Console.setup();
   Serial.println("Version: " + String(VERSION));
-  Config.load();
   Pins.setup();
   Gps.setup();
   Mqtt.setup();
