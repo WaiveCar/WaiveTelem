@@ -30,22 +30,19 @@ void onMessageReceived(int messageSize) {
   }
   String doors = doc["state"]["doors"].as<String>();
   String vehicle = doc["state"]["vehicle"].as<String>();
+  String topic = "$aws/things/" + Config.getId() + "/shadow/update";
   if (doors == "unlocked") {
     Pins.unlockDoors();
-    Mqtt.publish("$aws/things/" + Config.getId() + "/shadow/update",
-                 "{\"state\": {\"reported\": {\"doors\": \"unlocked\"}}}");
+    Mqtt.publish(topic, "{\"state\": {\"reported\": {\"doors\": \"unlocked\"}, \"desired\": null}}");
   } else if (doors == "locked") {
     Pins.lockDoors();
-    Mqtt.publish("$aws/things/" + Config.getId() + "/shadow/update",
-                 "{\"state\": {\"reported\": {\"doors\": \"locked\"}}}");
+    Mqtt.publish(topic, "{\"state\": {\"reported\": {\"doors\": \"locked\"}, \"desired\": null}}");
   } else if (vehicle == "immobilized") {
     Pins.immobilize();
-    Mqtt.publish("$aws/things/" + Config.getId() + "/shadow/update",
-                 "{\"state\": {\"reported\": {\"vehicle\": \"immobilize\"}}}");
+    Mqtt.publish(topic, "{\"state\": {\"reported\": {\"vehicle\": \"immobilize\"}, \"desired\": null}}");
   } else if (vehicle == "unimmobilized") {
     Pins.unimmobilize();
-    Mqtt.publish("$aws/things/" + Config.getId() + "/shadow/update",
-                 "{\"state\": {\"reported\": {\"vehicle\": \"unimmobilize\"}}}");
+    Mqtt.publish(topic, "{\"state\": {\"reported\": {\"vehicle\": \"unimmobilize\"}, \"desired\": null}}");
   } else {
     Serial.println("Unknown command: " + payload);
   }
