@@ -29,7 +29,8 @@ This package automatically
 - In VSCode, File -> Open Folder WaiveTelem/packages/plug-provision
 - Connect to the plug via USB
 - Open run.sh, update PLUG_ID
-- Open VSCode Terminal (and allow this workspace to modifiy the terminal shell so Platformio CLI is available), then run
+- Open VSCode Terminal, allow this workspace to modifiy the terminal shell when prompted, exit Terminal
+- Open VSCode Terminal again, pio CLI should be available now, run
 
 ```bash
 ./run.sh

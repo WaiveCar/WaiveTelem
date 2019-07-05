@@ -9,6 +9,8 @@
 - In VSCode Terminal (on Windows, make sure Default Shell is bash)
   - Git clone WaiveTelem `git clone git@github.com:WaiveCar/WaiveTelem.git`
 - In VSCode, File -> Open folder WaiveCar/packages/plug-firmware
+- Open VSCode Terminal, allow this workspace to modifiy the terminal shell when prompted, exit Terminal
+- Open VSCode Terminal again, pio CLI should be available now
 - Connect to the plug via USB
 
 ### Building Binary (default mkr1000USB):
@@ -21,7 +23,7 @@
 
 ### Run Binary and Start Serial Monitoring:
 
-- pio run -v -t upload; sleep 3; pio device monitor
+- pio run -v -t upload && sleep 3 && pio device monitor
 
 ### Update Firmware Build Version:
 
