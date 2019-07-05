@@ -30,19 +30,18 @@ void onMessageReceived(int messageSize) {
   }
   String doors = doc["state"]["doors"].as<String>();
   String vehicle = doc["state"]["vehicle"].as<String>();
-  String topic = "$aws/things/" + Config.getId() + "/shadow/update";
   if (doors == "unlocked") {
     Pins.unlockDoors();
-    Mqtt.publish(topic, "{\"state\": {\"reported\": {\"doors\": \"unlocked\"}, \"desired\": null}}");
+    Mqtt.telemeter("{\"doors\": \"unlocked\"}", true);
   } else if (doors == "locked") {
     Pins.lockDoors();
-    Mqtt.publish(topic, "{\"state\": {\"reported\": {\"doors\": \"locked\"}, \"desired\": null}}");
+    Mqtt.telemeter("{\"doors\": \"locked\"}", true);
   } else if (vehicle == "immobilized") {
     Pins.immobilize();
-    Mqtt.publish(topic, "{\"state\": {\"reported\": {\"vehicle\": \"immobilize\"}, \"desired\": null}}");
+    Mqtt.telemeter("{\"vehicle\": \"immobilize\"}", true);
   } else if (vehicle == "unimmobilized") {
     Pins.unimmobilize();
-    Mqtt.publish(topic, "{\"state\": {\"reported\": {\"vehicle\": \"unimmobilize\"}, \"desired\": null}}");
+    Mqtt.telemeter("{\"vehicle\": \"unimmobilize\"}", true);
   } else {
     Serial.println("Unknown command: " + payload);
   }
@@ -63,7 +62,6 @@ void MqttClass::setup() {
       ;
   }
   ArduinoBearSSL.onGetTime(getTime);
-  Config.load();
   log("id: " + Config.getId());
   log("cert: " + Config.getMqttBrokerCert());
   log("url: " + Config.getMqttBrokerUrl());
@@ -90,7 +88,9 @@ void MqttClass::poll() {
   mqttClient.poll();
 }
 
-void MqttClass::publish(String topic, String message) {
+void MqttClass::telemeter(String json, bool resetDesired) {
+  String topic = "$aws/things/" + Config.getId() + "/shadow/update";
+  String message = "{\"state\": {\"reported\": " + json + (resetDesired ? ", \"desired\": null" : "") + "}}";
   log("publish " + topic + " " + message);
   mqttClient.beginMessage(topic);
   mqttClient.print(message);

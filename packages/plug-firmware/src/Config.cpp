@@ -12,20 +12,17 @@ void ConfigClass::load() {
     delay(1000);
   }
   File file = SD.open(CONFIG_FILE);
-  // go to https://arduinojson.org/v6/assistant/ to find the size
-  const int capacity = JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(4) + 1200;
-  DynamicJsonDocument doc(capacity);
+  // go to https://arduinojson.org/v6/assistant/ to find the size, or just use a large enough number
+  DynamicJsonDocument doc(4096);
   DeserializationError error = deserializeJson(doc, file);
   if (error) {
     Serial.println("Failed to read file: " + String(error.c_str()));
     file.close();
     return;
   }
-
   id = doc["id"].as<String>();
   mqttBrokerUrl = doc["mqttBrokerUrl"].as<String>();
   mqttBrokerCert = doc["mqttBrokerCert"].as<String>();
-
   file.close();
 }
 

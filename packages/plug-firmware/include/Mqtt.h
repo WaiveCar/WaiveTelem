@@ -7,7 +7,7 @@ class MqttClass {
   void connect();
   bool isConnected();
   void poll();
-  void publish(String topic, String message);
+  void telemeter(String json, bool resetDesired = false);
 };
 
 extern MqttClass Mqtt;

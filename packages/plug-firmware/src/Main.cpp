@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+#include "Config.h"
 #include "Console.h"
 #include "Gps.h"
 #include "Mqtt.h"
@@ -15,6 +16,7 @@ void setup() {
   Serial.println("Version: " + String(VERSION));
   Pins.setup();
   Gps.setup();
+  Config.load();
   Mqtt.setup();
 }
 
@@ -33,6 +35,5 @@ void loop() {
   }
   Mqtt.poll();
   // delay(5000);
-  // Mqtt.publish("$aws/things/" + Config.getId() + "/shadow/update",
-  //              "{\"state\": {\"reported\": {\"gps\": {\"lat\": 111, \"long\": 222}}}}");
+  Mqtt.telemeter("{\"gps\": {\"lat\": 111, \"long\": 222, \"time\": \"tbd\" }");
 }
