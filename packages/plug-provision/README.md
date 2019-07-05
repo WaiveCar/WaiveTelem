@@ -6,14 +6,15 @@ This package automatically
 - Sends a CSR to AWS
 - Stores resulting certificate and configuration to ./config/\${PLUG_ID}/config.txt that that you can copy to plug microSD.
 
-## Preparation (should work on Windows, Linux, and MacOS):
+## Preparation:
 
 - Install git (or git bash for windows, https://gitforwindows.org/)
-- Install Python 2.7 https://www.python.org (on Windows, add python.exe to Path when using the installer)
+- Install Python 3.7 https://www.python.org (on Windows, check Add python 3.7 when using the installer)
 - Install Visual Studio Code (https://code.visualstudio.com/download)
 - In VSCode, install PlatformIO IDE extension (File -> Preferences -> Extensions)
 - In VSCode Terminal (on Windows, make sure Default Shell is bash)
-  - install aws-cli `pip install awscli`
+  - install jq `curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe --output ~/bin/jq.exe`
+  - install aws-cli `pip3 install awscli`
   - login aws `aws configure`
   - Git clone WaiveTelem `git clone git@github.com:WaiveCar/WaiveTelem.git`
 - Review plug-type, plug-group, and plug policy on AWS IoT console as they should be considered carefully. They were created with the following:
@@ -29,8 +30,8 @@ This package automatically
 - In VSCode, File -> Open Folder WaiveTelem/packages/plug-provision
 - Connect to the plug via USB
 - Open run.sh, update PLUG_ID
-- Open VSCode Terminal, allow this workspace to modifiy the terminal shell when prompted, exit Terminal
-- Open VSCode Terminal again, pio CLI should be available now, run
+- Open VSCode Terminal, allow this workspace to modifiy the terminal shell if prompted, exit Terminal
+- Open VSCode Terminal, run
 
 ```bash
 ./run.sh
