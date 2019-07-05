@@ -13,9 +13,9 @@
 - Open VSCode Terminal again, pio CLI should be available now
 - Connect to the plug via USB
 
-### Run Binary and Start Serial Monitoring:
+### Run Binary and Start Serial Monitoring (default mkr1000USB):
 
-- pio run -v -t upload && sleep 5 && pio device monitor
+- pio run -v -t upload && sleep 3 && pio device monitor
 
 ### Building, Flash and Run Binary for mkrnb1500:
 
