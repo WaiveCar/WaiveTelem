@@ -6,7 +6,7 @@
 #include "Console.h"
 
 NB nbAccess;
-GPRS gprs;
+static GPRS gprs;
 
 void CellularClass::connect() {
   log(F("Attempting to connect to the cellular network"));

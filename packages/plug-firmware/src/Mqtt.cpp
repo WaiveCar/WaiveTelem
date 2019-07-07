@@ -4,21 +4,21 @@
 #include <ArduinoMqttClient.h>
 #ifdef ARDUINO_SAMD_MKR1000
 #include <WiFi101.h>
-WiFiClient client;
+static WiFiClient client;
 #elif defined(ARDUINO_SAMD_MKRNB1500)
 #include <MKRNB.h>
 extern NB nbAccess;
-NBClient client;
+static NBClient client;
 #endif
-BearSSLClient sslClient(client);
-MqttClient mqttClient(sslClient);
+static BearSSLClient sslClient(client);
+static MqttClient mqttClient(sslClient);
 
 #include "Config.h"
 #include "Console.h"
 #include "Mqtt.h"
 #include "Pins.h"
 
-void onMessageReceived(int messageSize) {
+static void onMessageReceived(int messageSize) {
   log("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
   String payload = mqttClient.readString();
   log("payload: " + payload);
@@ -47,7 +47,7 @@ void onMessageReceived(int messageSize) {
   }
 }
 
-unsigned long getTime() {
+static unsigned long getTime() {
 #ifdef ARDUINO_SAMD_MKR1000
   return WiFi.getTime();
 #elif defined(ARDUINO_SAMD_MKRNB1500)
@@ -71,10 +71,17 @@ void MqttClass::setup() {
 }
 
 void MqttClass::connect() {
-  log(F("Attempting to MQTT broker: "));
+  log(F("Attempting to connect to MQTT broker: "));
+  const int maxTry = 10;
+  int i = 0;
   while (!mqttClient.connect(Config.getMqttBrokerUrl().c_str(), 8883)) {
+    i++;
+    if (i == maxTry) {
+      log(F("Failed to connect"));
+      return;
+    }
     Serial.print(F("M"));
-    delay(5000);
+    delay(3000);
   }
   log(F("You're connected to the MQTT broker"));
   mqttClient.subscribe("$aws/things/" + Config.getId() + "/shadow/update/delta");

@@ -34,6 +34,5 @@ void loop() {
     Mqtt.connect();
   }
   Mqtt.poll();
-  delay(5000);
-  Mqtt.telemeter("{\"gps\": {\"lat\": 111, \"long\": 222, \"time\": \"tbd\" }");
+  Gps.poll();
 }

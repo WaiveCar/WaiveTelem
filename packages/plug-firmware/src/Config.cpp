@@ -23,6 +23,9 @@ void ConfigClass::load() {
   id = doc["id"].as<String>();
   mqttBrokerUrl = doc["mqttBrokerUrl"].as<String>();
   mqttBrokerCert = doc["mqttBrokerCert"].as<String>();
+  gpsTelemetry = doc["gps"]["telemetry"].as<bool>();
+  gpsInRideInterval = doc["gps"]["inRideInterval"].as<int>();
+  gpsNotInRideInterval = doc["gps"]["notInRideInterval"].as<int>();
   file.close();
 }
 
@@ -36,6 +39,13 @@ String ConfigClass::getMqttBrokerUrl() {
 
 String ConfigClass::getMqttBrokerCert() {
   return mqttBrokerCert;
+}
+
+int ConfigClass::getGpsInterval() {
+  if (!gpsTelemetry) {
+    return -1;
+  }
+  return (true ? gpsInRideInterval : gpsNotInRideInterval) * 1000 - 500;
 }
 
 ConfigClass Config;

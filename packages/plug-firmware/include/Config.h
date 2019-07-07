@@ -9,11 +9,15 @@ class ConfigClass {
   String getId();
   String getMqttBrokerUrl();
   String getMqttBrokerCert();
+  int getGpsInterval();
 
  private:
   String id;
   String mqttBrokerUrl;
   String mqttBrokerCert;
+  bool gpsTelemetry;
+  int gpsInRideInterval;
+  int gpsNotInRideInterval;
 };
 
 extern ConfigClass Config;

@@ -4,6 +4,7 @@
 class GpsClass {
  public:
   void setup();
+  void poll();
 };
 
 extern GpsClass Gps;
