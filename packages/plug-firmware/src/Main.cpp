@@ -1,5 +1,7 @@
+#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 
+#include "Can.h"
 #include "Config.h"
 #include "Console.h"
 #include "Gps.h"
@@ -14,10 +16,12 @@
 void setup() {
   Console.setup();
   Serial.println("Version: " + String(VERSION));
+  Watchdog.enable(60 * 1000);
   Pins.setup();
   Config.load();
   Gps.setup();
   Mqtt.setup();
+  Can.setup();
 }
 
 void loop() {
@@ -35,5 +39,5 @@ void loop() {
   }
   Mqtt.poll();
   Gps.poll();
-  delay(1);
+  Watchdog.reset();
 }
