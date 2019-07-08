@@ -27,11 +27,11 @@ void GpsClass::poll() {
       int interval = Config.getGpsInterval();
       if (interval > 0 && millis() - lastSentTime > (u_int32_t)interval) {
         NeoGPS::time_t dt = fix.dateTime;
-        char latitude[16], longitude[16], gmt[32];
-        sprintf(latitude, "%0.7f", fix.latitudeL() / 1e7);
-        sprintf(longitude, "%0.7f", fix.longitudeL() / 1e7);
-        sprintf(gmt, "%04d-%02d-%02dT%02d:%02d:%02dZ", dt.full_year(dt.year), dt.month, dt.date, dt.hours, dt.minutes, dt.seconds);
-        Mqtt.telemeter("{\"gps\": {\"lat\": " + String(latitude) + ", \"long\": " + longitude + ", \"time\": \"" + gmt + "\" }}");
+        char latitude[16], longitude[16], time[32];
+        sprintf(latitude, "%0.6f", fix.latitudeL() / 1e7);
+        sprintf(longitude, "%0.6f", fix.longitudeL() / 1e7);
+        sprintf(time, "%04d-%02d-%02dT%02d:%02d:%02dZ", dt.full_year(dt.year), dt.month, dt.date, dt.hours, dt.minutes, dt.seconds);
+        Mqtt.telemeter("{\"gps\": {\"lat\": " + String(latitude) + ", \"long\": " + longitude + ", \"time\": \"" + time + "\" }}");
         lastSentTime = millis();
       }
     }

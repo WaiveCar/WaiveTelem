@@ -15,8 +15,8 @@ void setup() {
   Console.setup();
   Serial.println("Version: " + String(VERSION));
   Pins.setup();
-  Gps.setup();
   Config.load();
+  Gps.setup();
   Mqtt.setup();
 }
 
@@ -35,4 +35,5 @@ void loop() {
   }
   Mqtt.poll();
   Gps.poll();
+  delay(1);
 }

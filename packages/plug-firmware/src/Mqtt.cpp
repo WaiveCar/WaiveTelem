@@ -63,15 +63,14 @@ void MqttClass::setup() {
   }
   ArduinoBearSSL.onGetTime(getTime);
   log("id: " + Config.getId());
-  log("cert: " + Config.getMqttBrokerCert());
-  log("url: " + Config.getMqttBrokerUrl());
+  // log("cert: " + Config.getMqttBrokerCert());
   sslClient.setEccSlot(0, Config.getMqttBrokerCert().c_str());
   mqttClient.setId(Config.getId());
   mqttClient.onMessage(onMessageReceived);
 }
 
 void MqttClass::connect() {
-  log(F("Attempting to connect to MQTT broker: "));
+  log("Attempting to connect to MQTT broker: " + Config.getMqttBrokerUrl());
   const int maxTry = 10;
   int i = 0;
   while (!mqttClient.connect(Config.getMqttBrokerUrl().c_str(), 8883)) {

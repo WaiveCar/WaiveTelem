@@ -1,0 +1,98 @@
+{
+	"id": .id,
+	"mqttBrokerUrl": .mqttBrokerUrl,
+	"mqttBrokerCert": .regOutput .certificatePem,
+	"gps": {
+		"telemetry": true,
+		"inRideInterval": 30,
+		"notInRideInterval": 900
+	},
+	"can": {
+		"make": "Hyundai",
+		"model": "Generic",
+		"ignition": {
+			"can_id": 1345,
+			"byte_num": 0,
+			"bit_num": 0,
+			"len": 3
+		},
+		"mileage": {
+			"can_id": 1456,
+			"byte_num": 0,
+			"bit_num": 0,
+			"len": 24
+		},
+		"fuel_level": {
+			"can_id": 1292,
+			"byte_num": 2,
+			"bit_num": 2,
+			"len": 5
+		},
+		"charging": {
+			"can_id": 1353,
+			"byte_num": 2,
+			"bit_num": 0,
+			"len": 8
+		},
+		"can_speed": {
+			"can_id": 1322,
+			"byte_num": 0,
+			"bit_num": 0,
+			"len": 8
+		},
+		"central_lock": {
+			"can_id": 0,
+			"byte_num": 0,
+			"bit_num": 0,
+			"len": 1
+		},
+		"door_front_left": {
+			"can_id": 1345,
+			"byte_num": 1,
+			"bit_num": 0,
+			"len": 2
+		},
+		"door_front_right": {
+			"can_id": 1345,
+			"byte_num": 4,
+			"bit_num": 3,
+			"len": 1
+		},
+		"door_back_left": {
+			"can_id": 1363,
+			"byte_num": 2,
+			"bit_num": 7,
+			"len": 1
+		},
+		"door_back_right": {
+			"can_id": 1363,
+			"byte_num": 3,
+			"bit_num": 0,
+			"len": 1
+		},
+		"window_front_left": {
+			"can_id": 1369,
+			"byte_num": 1,
+			"bit_num": 0,
+			"len": 1
+		},
+		"window_front_right": {
+			"can_id": 1369,
+			"byte_num": 1,
+			"bit_num": 1,
+			"len": 1
+		},
+		"window_back_left": {
+			"can_id": 1369,
+			"byte_num": 1,
+			"bit_num": 2,
+			"len": 1
+		},
+		"window_back_right": {
+			"can_id": 1369,
+			"byte_num": 1,
+			"bit_num": 3,
+			"len": 1
+		}
+	}
+}

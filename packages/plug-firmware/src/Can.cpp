@@ -120,7 +120,4 @@ void CanClass::setup() {
   }
 }
 
-void CanClass::poll() {
-}
-
 CanClass Can;

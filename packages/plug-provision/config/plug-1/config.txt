@@ -1,10 +1,98 @@
 {
   "id": "plug-1",
   "mqttBrokerUrl": "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com",
-  "mqttBrokerCert": "-----BEGIN CERTIFICATE-----\nMIIC5jCCAc6gAwIBAgIUAyD6snttUee/W7WWWB8GLat64SgwDQYJKoZIhvcNAQEL\nBQAwTTFLMEkGA1UECwxCQW1hem9uIFdlYiBTZXJ2aWNlcyBPPUFtYXpvbi5jb20g\nSW5jLiBMPVNlYXR0bGUgU1Q9V2FzaGluZ3RvbiBDPVVTMB4XDTE5MDcwNTIyMDgy\nNFoXDTQ5MTIzMTIzNTk1OVowdjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRQw\nEgYDVQQHEwtMb3MgQW5nZWxlczERMA8GA1UEChMIV2FpdmVDYXIxFDASBgNVBAsT\nC0VuZ2luZWVyaW5nMRswGQYDVQQDExIwMTIzQzAxQjhEMEZFREQ1QUYwWTATBgcq\nhkjOPQIBBggqhkjOPQMBBwNCAATFMBnN9l3M6xe0udWztl7vzge0XvCU7mqAKAEL\nzfj3+0Ft/pzSjiwYoY2a8UfcjQuzSiRu7rg5YcyHcBt9P9w0o2AwXjAfBgNVHSME\nGDAWgBTYaTNOx9//ncg8mCAz1ZrldlUkEjAdBgNVHQ4EFgQUKNx506GhcwOG77Wd\nIbQjgHdMElwwDAYDVR0TAQH/BAIwADAOBgNVHQ8BAf8EBAMCB4AwDQYJKoZIhvcN\nAQELBQADggEBAKf2UgvwteG8APElauRFhwRNMGroV9z5qSawSKGcjYUWSHDU5isJ\n7VUGHhakiCU1OGNVBzNcjHDqpuLzCkzPBwonOA7Gfu7zs37/3JK/6SEpEoFuwFMG\nn+aY0LKL/ydR2Cw0UqBuLt1IqEU4dmRvcdr3tDInsz3zO8G0aZGOvZMvuvQFllab\nmvf4Q5NtuK1lkb4FhEgdyqmB6RC1iOhafKfla09o7sRKkF5SOJs93i52spILuCS0\n7iPBbBP/zWUqzszP6lwL6AWjaAXOGSeE+3ewnuQmWM9+ShC4YnI4IiT334eKcSH4\nRV/YRqkG3PSduBDAN64sTDJKPXfI5IKekTo=\n-----END CERTIFICATE-----\n",
+  "mqttBrokerCert": "-----BEGIN CERTIFICATE-----\nMIIC5zCCAc+gAwIBAgIVAIwHrQUlvKQBkfQleoQhgJvzHGeYMA0GCSqGSIb3DQEB\nCwUAME0xSzBJBgNVBAsMQkFtYXpvbiBXZWIgU2VydmljZXMgTz1BbWF6b24uY29t\nIEluYy4gTD1TZWF0dGxlIFNUPVdhc2hpbmd0b24gQz1VUzAeFw0xOTA3MDcxOTIz\nMzNaFw00OTEyMzEyMzU5NTlaMHYxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEU\nMBIGA1UEBxMLTG9zIEFuZ2VsZXMxETAPBgNVBAoTCFdhaXZlQ2FyMRQwEgYDVQQL\nEwtFbmdpbmVlcmluZzEbMBkGA1UEAxMSMDEyM0MwMUI4RDBGRURENUFGMFkwEwYH\nKoZIzj0CAQYIKoZIzj0DAQcDQgAEaCmfzZ73LvAWgQuwmlQchkL+CNN+gOoXteT9\nDTUO2G945BWeUl14Rq6L37cURxK1f0nsnbuj/OH1Rxi9DIoP/6NgMF4wHwYDVR0j\nBBgwFoAUNaKCmGw1gPbpzG6bf1m7naoQiLQwHQYDVR0OBBYEFNlCDhUab8gkwqjG\nbrhdIvHadsXxMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMA0GCSqGSIb3\nDQEBCwUAA4IBAQAWlrRwmDyqQgn8SyORjCQLSHJ9mmSAvYc2mAnwS3mtu/hz7bOH\nGGdpvmkDYAhQJj1tcZTakl5bROOklUBohSa2KBl99MoUqDiP6xN1muf5MSn9Svb5\n2Hy9AZCIJTaO5uybkMErono/f5kAReDcsG0oG505NGte8bABF1/yS9f8iw7+IUWX\nRhetmmChrOV24PLuD80hYd4krP/fSJ5fGGFRMxcA+fA222dDwQJ0iATdZJuDoF2T\nmVIPp3mhUx6+78lPU0jZHgBAqmm4XnG6AIq6bifYWWd4M8+7lNotBHGjhmwtoUFp\nEl99fS1ME1MdzmB1+TN2vAVyZG0i3XRXbz0P\n-----END CERTIFICATE-----\n",
   "gps": {
     "telemetry": true,
     "inRideInterval": 30,
     "notInRideInterval": 900
+  },
+  "can": {
+    "make": "Hyundai",
+    "model": "Generic",
+    "ignition": {
+      "can_id": 1345,
+      "byte_num": 0,
+      "bit_num": 0,
+      "len": 3
+    },
+    "mileage": {
+      "can_id": 1456,
+      "byte_num": 0,
+      "bit_num": 0,
+      "len": 24
+    },
+    "fuel_level": {
+      "can_id": 1292,
+      "byte_num": 2,
+      "bit_num": 2,
+      "len": 5
+    },
+    "charging": {
+      "can_id": 1353,
+      "byte_num": 2,
+      "bit_num": 0,
+      "len": 8
+    },
+    "can_speed": {
+      "can_id": 1322,
+      "byte_num": 0,
+      "bit_num": 0,
+      "len": 8
+    },
+    "central_lock": {
+      "can_id": 0,
+      "byte_num": 0,
+      "bit_num": 0,
+      "len": 1
+    },
+    "door_front_left": {
+      "can_id": 1345,
+      "byte_num": 1,
+      "bit_num": 0,
+      "len": 2
+    },
+    "door_front_right": {
+      "can_id": 1345,
+      "byte_num": 4,
+      "bit_num": 3,
+      "len": 1
+    },
+    "door_back_left": {
+      "can_id": 1363,
+      "byte_num": 2,
+      "bit_num": 7,
+      "len": 1
+    },
+    "door_back_right": {
+      "can_id": 1363,
+      "byte_num": 3,
+      "bit_num": 0,
+      "len": 1
+    },
+    "window_front_left": {
+      "can_id": 1369,
+      "byte_num": 1,
+      "bit_num": 0,
+      "len": 1
+    },
+    "window_front_right": {
+      "can_id": 1369,
+      "byte_num": 1,
+      "bit_num": 1,
+      "len": 1
+    },
+    "window_back_left": {
+      "can_id": 1369,
+      "byte_num": 1,
+      "bit_num": 2,
+      "len": 1
+    },
+    "window_back_right": {
+      "can_id": 1369,
+      "byte_num": 1,
+      "bit_num": 3,
+      "len": 1
+    }
   }
 }

@@ -1,8 +1,2 @@
-#upload without compiling
-stty -f /dev/cu.usbmodem14101 1200; sleep 3; stty stop /dev/cu.usbmodem14101; sleep 2; ~/.platformio/packages/tool-bossac/bossac --info --debug --port "cu.usbmodem14101" --erase --write --verify --reset -U true .pioenvs/mkr1000USB/firmware.bin
-#compile both 
-pio run -e mkrnb1500; pio run -e mkr1000USB
 #using docker
 docker run --rm -v $HOME/.platformio:/.platformio -v `pwd`:/workspace -u `id -u $USER`:`id -g $USER` sglahn/platformio-core:latest run -e mkrnb1500
-#upload code and start serial monitor
-pio run -t upload; sleep 3; pio device monitor

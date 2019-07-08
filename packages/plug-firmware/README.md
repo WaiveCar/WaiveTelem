@@ -15,11 +15,12 @@
 
 ### Run Binary and Start Serial Monitoring (default mkr1000USB):
 
-- pio run -v -t upload && sleep 3 && pio device monitor
+- `./run.sh` or
+- `pio run -v -t upload && sleep 3 && pio device monitor`
 
 ### Building, Flash and Run Binary for mkrnb1500:
 
-- pio run -v -e mkrnb1500 -t upload
+- `pio run -v -e mkrnb1500 -t upload`
 
 ### Update Firmware Build Version:
 

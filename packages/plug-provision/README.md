@@ -29,12 +29,12 @@ This package automatically
 
 - In VSCode, File -> Open Folder WaiveTelem/packages/plug-provision
 - Connect to the plug via USB
-- Open run.sh, update PLUG_ID
+- Open run.sh, update TEMPLATE, PLUG_ID
 - Open VSCode Terminal, allow this workspace to modifiy the terminal shell if prompted, exit Terminal
 - Open VSCode Terminal, run
 
 ```bash
-./run.sh
+./provision.sh
 ```
 
 - Open ./config/\${PLUG_ID}/config.txt to adjust the configuration if necessary

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+TEMPLATE=./config/hyukia.txt
 PLUG_ID=plug-1
 MQTT_BROKER=a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com
 
@@ -38,4 +39,4 @@ esac
 REG_OUTPUT=$(aws iot register-thing --template-body file://templateBody.json --parameters "{\"ThingName\": \"${PLUG_ID}\", \"CSR\": \"${CSR}\"}")
 echo ${REG_OUTPUT}
 
-echo ${REG_OUTPUT} | jq "{id: \"${PLUG_ID}\", mqttBrokerUrl: \"${MQTT_BROKER}\", mqttBrokerCert: .certificatePem, gps: {telemetry: true, inRideInterval: 30, notInRideInterval: 900}}" > ./config/${PLUG_ID}/config.txt
+echo "{ \"id\": \"${PLUG_ID}\", \"mqttBrokerUrl\": \"${MQTT_BROKER}\", \"regOutput\": ${REG_OUTPUT} }" | jq --from-file ${TEMPLATE} > ./config/${PLUG_ID}/config.txt
