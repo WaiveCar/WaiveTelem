@@ -40,4 +40,8 @@ void loop() {
   Mqtt.poll();
   Gps.poll();
   Watchdog.reset();
+  delay(1);
+  if (millis() % 1000 == 0) {
+    Console.logFreeMemory();
+  }
 }

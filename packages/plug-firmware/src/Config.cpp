@@ -17,8 +17,10 @@ void ConfigClass::load() {
     delay(1000);
   }
   File file = SD.open(CONFIG_FILE);
-  // go to https://arduinojson.org/v6/assistant/ to find the size, or just use a large enough number
-  DynamicJsonDocument doc(4096);
+  // go to https://arduinojson.org/v6/assistant/ to find the size
+  const size_t capacity = JSON_ARRAY_SIZE(2) + 2 * JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) +
+                          2 * JSON_OBJECT_SIZE(4) + 13 * JSON_OBJECT_SIZE(5) + JSON_OBJECT_SIZE(17) + 2180;
+  DynamicJsonDocument doc(capacity);
   DeserializationError error = deserializeJson(doc, file);
   if (error) {
     Serial.println("Failed to read file: " + String(error.c_str()));
@@ -39,25 +41,18 @@ void ConfigClass::load() {
   strncpy(canConfig.model, canDoc["model"], sizeof(canConfig.model));
   log("canConfig.make: " + String(canConfig.make));
   log("canConfig.model: " + String(canConfig.model));
-  if (canDoc["canbus"][0] != nullptr) {
-    canConfig.bus_baud[0] = canDoc["canbus"][0]["baud"];
+  JsonArray arr = canDoc["canbus"].as<JsonArray>();
+  for (JsonObject bus : arr) {
     canConfig.num_can++;
-  }
-  if (canDoc["canbus"][1] != nullptr) {
-    canConfig.bus_baud[1] = canDoc["canbus"][1]["baud"];
-    canConfig.num_can++;
-  }
-  if (canDoc["canbus"][2] != nullptr) {
-    canConfig.bus_baud[2] = canDoc["canbus"][2]["baud"];
-    canConfig.num_can++;
+    canConfig.bus_baud[canConfig.num_can - 1] = bus["baud"];
   }
 
-  for (int i = 0; i < num_can_items; i++) {
-    canConfig.can_id[i] = doc[can_labels[i]]["can_id"] | 0;
-    canConfig.can_byte_num[i] = doc[can_labels[i]]["byte_num"] | 0;
-    canConfig.can_bit_num[i] = doc[can_labels[i]]["bit_num"] | 0;
-    canConfig.can_data_len[i] = doc[can_labels[i]]["len"] | 1;
-    canConfig.bus_id[i] = doc[can_labels[i]]["bus_id"] | 0;
+  for (int i = 0; i < NUM_CAN_ITEMS; i++) {
+    canConfig.can_id[i] = canDoc[can_labels[i]]["can_id"] | 0;
+    canConfig.can_byte_num[i] = canDoc[can_labels[i]]["byte_num"] | 0;
+    canConfig.can_bit_num[i] = canDoc[can_labels[i]]["bit_num"] | 0;
+    canConfig.can_data_len[i] = canDoc[can_labels[i]]["len"] | 1;
+    canConfig.bus_id[i] = canDoc[can_labels[i]]["bus_id"] | 0;
   }
 
   file.close();

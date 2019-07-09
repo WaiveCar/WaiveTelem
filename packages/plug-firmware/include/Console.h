@@ -12,6 +12,7 @@
 class ConsoleClass {
  public:
   void setup();
+  void logFreeMemory();
 };
 
 extern ConsoleClass Console;

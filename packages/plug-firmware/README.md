@@ -35,8 +35,8 @@ e.g. for plug-1
 ```json
 { "desired": { "doors": "unlocked" } }
 { "desired": { "doors": "locked" } }
-{ "desired": { "vehicle": "immoblized" } }
-{ "desired": { "vehicle": "unimmoblized" } }
+{ "desired": { "vehicle": "immobilize" } }
+{ "desired": { "vehicle": "unimmobilized" } }
 ```
 
 ### MQTT Device Shadow Reported (Telemetry):
@@ -44,7 +44,7 @@ e.g. for plug-1
 ```json
 {
   "doors": "unlocked",
-  "vehicle": "unimmoblized",
+  "vehicle": "unimmobilized",
   "gps": {
     "lat": 1.11,
     "long": 2.22,

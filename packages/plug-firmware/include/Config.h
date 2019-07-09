@@ -4,33 +4,33 @@
 #include <Arduino.h>
 
 enum can_info_type {
-  ignition,
-  mileage,
-  fuel_level,
-  charging,
-  can_speed,
-  central_lock,
-  door_front_left,
-  door_front_right,
-  door_back_left,
-  door_back_right,
-  window_front_left,
-  window_front_right,
-  window_back_left,
-  window_back_right,
-  num_can_items
+  IGNITION,
+  MILEAGE,
+  FUEL_LEVEL,
+  CHARGING,
+  CAN_SPEED,
+  CENTRAL_LOCK,
+  DOOR_FRONT_LEFT,
+  DOOR_FRONT_RIGHT,
+  DOOR_BACK_LEFT,
+  DOOR_BACK_RIGHT,
+  WINDOW_FRONT_LEFT,
+  WINDOW_FRONT_RIGHT,
+  WINDOW_BACK_LEFT,
+  WINDOW_BACK_RIGHT,
+  NUM_CAN_ITEMS
 };
 
 struct CanConfig {
   char make[32];
   char model[32];
-  int num_can = 0;
-  int bus_baud[3];
-  int can_id[num_can_items];
-  int can_byte_num[num_can_items];
-  int can_bit_num[num_can_items];
-  int can_data_len[num_can_items];
-  int bus_id[num_can_items];
+  int8_t num_can = 0;
+  int16_t bus_baud[2];
+  int8_t bus_id[NUM_CAN_ITEMS];
+  int16_t can_id[NUM_CAN_ITEMS];
+  int8_t can_byte_num[NUM_CAN_ITEMS];
+  int8_t can_bit_num[NUM_CAN_ITEMS];
+  int8_t can_data_len[NUM_CAN_ITEMS];
 };
 
 class ConfigClass {

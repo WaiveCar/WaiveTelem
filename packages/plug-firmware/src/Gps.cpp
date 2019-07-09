@@ -9,7 +9,7 @@
 #define GPSSerial Serial1
 
 static NMEAGPS gps;
-static u_int32_t lastSentTime = -10000 * 1000;
+static u_int32_t lastSentTime = -10000 * 1000;  // small enough to make sure one message get sent out immediately
 
 void GpsClass::setup() {
   GPSSerial.begin(9600);

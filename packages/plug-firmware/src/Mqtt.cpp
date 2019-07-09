@@ -22,7 +22,7 @@ static void onMessageReceived(int messageSize) {
   log("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
   String payload = mqttClient.readString();
   log("payload: " + payload);
-  DynamicJsonDocument doc(4096);
+  StaticJsonDocument<1024> doc;
   DeserializationError error = deserializeJson(doc, payload);
   if (error) {
     Serial.println("Failed to read file: " + String(error.c_str()));
@@ -32,10 +32,10 @@ static void onMessageReceived(int messageSize) {
   String vehicle = doc["state"]["vehicle"].as<String>();
   if (doors == "unlocked") {
     Pins.unlockDoors();
-    Mqtt.telemeter("{\"doors\": \"unlocked\"}", true);
+    // Mqtt.telemeter("{\"doors\": \"unlocked\"}", true);
   } else if (doors == "locked") {
     Pins.lockDoors();
-    Mqtt.telemeter("{\"doors\": \"locked\"}", true);
+    // Mqtt.telemeter("{\"doors\": \"locked\"}", true);
   } else if (vehicle == "immobilized") {
     Pins.immobilize();
     Mqtt.telemeter("{\"vehicle\": \"immobilize\"}", true);
@@ -94,7 +94,7 @@ void MqttClass::poll() {
   mqttClient.poll();
 }
 
-void MqttClass::telemeter(String json, bool resetDesired) {
+void MqttClass::telemeter(const String& json, bool resetDesired) {
   String topic = "$aws/things/" + Config.getId() + "/shadow/update";
   String message = "{\"state\": {\"reported\": " + json + (resetDesired ? ", \"desired\": null" : "") + "}}";
   log("publish " + topic + " " + message);
