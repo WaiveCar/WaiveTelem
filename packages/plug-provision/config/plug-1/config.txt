@@ -1,120 +1,129 @@
 {
   "id": "plug-1",
   "mqttBrokerUrl": "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com",
-  "mqttBrokerCert": "-----BEGIN CERTIFICATE-----\nMIIC5zCCAc+gAwIBAgIVAIwHrQUlvKQBkfQleoQhgJvzHGeYMA0GCSqGSIb3DQEB\nCwUAME0xSzBJBgNVBAsMQkFtYXpvbiBXZWIgU2VydmljZXMgTz1BbWF6b24uY29t\nIEluYy4gTD1TZWF0dGxlIFNUPVdhc2hpbmd0b24gQz1VUzAeFw0xOTA3MDcxOTIz\nMzNaFw00OTEyMzEyMzU5NTlaMHYxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEU\nMBIGA1UEBxMLTG9zIEFuZ2VsZXMxETAPBgNVBAoTCFdhaXZlQ2FyMRQwEgYDVQQL\nEwtFbmdpbmVlcmluZzEbMBkGA1UEAxMSMDEyM0MwMUI4RDBGRURENUFGMFkwEwYH\nKoZIzj0CAQYIKoZIzj0DAQcDQgAEaCmfzZ73LvAWgQuwmlQchkL+CNN+gOoXteT9\nDTUO2G945BWeUl14Rq6L37cURxK1f0nsnbuj/OH1Rxi9DIoP/6NgMF4wHwYDVR0j\nBBgwFoAUNaKCmGw1gPbpzG6bf1m7naoQiLQwHQYDVR0OBBYEFNlCDhUab8gkwqjG\nbrhdIvHadsXxMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMA0GCSqGSIb3\nDQEBCwUAA4IBAQAWlrRwmDyqQgn8SyORjCQLSHJ9mmSAvYc2mAnwS3mtu/hz7bOH\nGGdpvmkDYAhQJj1tcZTakl5bROOklUBohSa2KBl99MoUqDiP6xN1muf5MSn9Svb5\n2Hy9AZCIJTaO5uybkMErono/f5kAReDcsG0oG505NGte8bABF1/yS9f8iw7+IUWX\nRhetmmChrOV24PLuD80hYd4krP/fSJ5fGGFRMxcA+fA222dDwQJ0iATdZJuDoF2T\nmVIPp3mhUx6+78lPU0jZHgBAqmm4XnG6AIq6bifYWWd4M8+7lNotBHGjhmwtoUFp\nEl99fS1ME1MdzmB1+TN2vAVyZG0i3XRXbz0P\n-----END CERTIFICATE-----\n",
+  "mqttBrokerCert": "-----BEGIN CERTIFICATE-----\nMIIC5jCCAc6gAwIBAgIUc6tJZmy3xKa0A6Y0bgsYiK6AJoYwDQYJKoZIhvcNAQEL\nBQAwTTFLMEkGA1UECwxCQW1hem9uIFdlYiBTZXJ2aWNlcyBPPUFtYXpvbi5jb20g\nSW5jLiBMPVNlYXR0bGUgU1Q9V2FzaGluZ3RvbiBDPVVTMB4XDTE5MDcwOTE3NDMx\nOVoXDTQ5MTIzMTIzNTk1OVowdjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRQw\nEgYDVQQHEwtMb3MgQW5nZWxlczERMA8GA1UEChMIV2FpdmVDYXIxFDASBgNVBAsT\nC0VuZ2luZWVyaW5nMRswGQYDVQQDExIwMTIzQzAxQjhEMEZFREQ1QUYwWTATBgcq\nhkjOPQIBBggqhkjOPQMBBwNCAAQ1UvdSfj+5kaTvTkMdXQljkaF7OF9AqzwQ+0D5\n3Xu9wJ6Oc5k9FP4q9PQZw7abZLhzkUDfkWPoYSEDwOU2EVn7o2AwXjAfBgNVHSME\nGDAWgBQ1ooKYbDWA9unMbpt/WbudqhCItDAdBgNVHQ4EFgQU1/cTHWBiYqi5j8Xl\nX/50SZ7gLMUwDAYDVR0TAQH/BAIwADAOBgNVHQ8BAf8EBAMCB4AwDQYJKoZIhvcN\nAQELBQADggEBAB/ZxEtwKGpSBLhjTflmgRJb2584OGe9LM4dWuFYWdp7id9PzehM\nwJa0p71rzHXlTOOyQI6d1bPG+8hpU/3AFtOtf28XqdnOYMjWjIp7/o6bb4cyWUX3\nNUmfS92ElQxHOwsOCrXcyJvKe5krH4B5aNXUUcq45Q4d8g2a6ZoT4wY31fKOB648\nwKQIEU1QOlmzYzCk9HPYQHvqfOf9ECIpf6fLmt+mlvSzi7azBIuANNIPMDJp7nYl\n8t87H8qr8FLcEmNsdxlcDYj4/WJc4R6zcXZ671xX1JHLFk70VgAS/EI2/1xB0N0Y\nzHhfvsAq/oMEtOisNf5Ae7Ief7GUAEK6P1Q=\n-----END CERTIFICATE-----\n",
+  "nb": {
+    "simPin": ""
+  },
   "gps": {
     "telemetry": true,
     "inRideInterval": 30,
     "notInRideInterval": 900
   },
-	"can": {
-		"make": "Hyundai",
-		"model": "Generic",
-		"canbus": [
-			{
-				"id": "can0", 
-				"baud": 500
-			},
-			{
-				"id": "can1", 
-				"baud": 100
-			}
-		],
-		"ignition": {
-			"bus_id": "0",
-			"can_id": 1345,
-			"byte_num": 0,
-			"bit_num": 0,
-			"len": 3
-		},
-		"mileage": {
-			"bus_id": "0",
-			"can_id": 1456,
-			"byte_num": 0,
-			"bit_num": 0,
-			"len": 24
-		},
-		"fuel_level": {
-			"bus_id": "0",
-			"can_id": 1292,
-			"byte_num": 2,
-			"bit_num": 2,
-			"len": 5
-		},
-		"charging": {
-			"bus_id": "0",
-			"can_id": 1353,
-			"byte_num": 2,
-			"bit_num": 0,
-			"len": 8
-		},
-		"can_speed": {
-			"bus_id": "0",
-			"can_id": 1322,
-			"byte_num": 0,
-			"bit_num": 0,
-			"len": 8
-		},
-		"central_lock": {
-			"bus_id": "0",
-			"can_id": 0,
-			"byte_num": 0,
-			"bit_num": 0,
-			"len": 1
-		},
-		"door_front_left": {
-			"can_id": 1345,
-			"byte_num": 1,
-			"bit_num": 0,
-			"len": 2
-		},
-		"door_front_right": {
-			"bus_id": "0",
-			"can_id": 1345,
-			"byte_num": 4,
-			"bit_num": 3,
-			"len": 1
-		},
-		"door_back_left": {
-			"bus_id": "0",
-			"can_id": 1363,
-			"byte_num": 2,
-			"bit_num": 7,
-			"len": 1
-		},
-		"door_back_right": {
-			"bus_id": "0",
-			"can_id": 1363,
-			"byte_num": 3,
-			"bit_num": 0,
-			"len": 1
-		},
-		"window_front_left": {
-			"can_id": 1369,
-			"byte_num": 1,
-			"bit_num": 0,
-			"len": 1
-		},
-		"window_front_right": {
-			"bus_id": "0",
-			"can_id": 1369,
-			"byte_num": 1,
-			"bit_num": 1,
-			"len": 1
-		},
-		"window_back_left": {
-			"bus_id": "0",
-			"can_id": 1369,
-			"byte_num": 1,
-			"bit_num": 2,
-			"len": 1
-		},
-		"window_back_right": {
-			"bus_id": "0",
-			"can_id": 1369,
-			"byte_num": 1,
-			"bit_num": 3,
-			"len": 1
-		}
-	}
+  "can": {
+    "make": "Hyundai",
+    "model": "Generic",
+    "bus": [
+      {
+        "baud": 500
+      },
+      {
+        "baud": 100
+      }
+    ],
+    "telemetry": [
+      {
+        "name": "ignition",
+        "bus_id": "0",
+        "can_id": 1345,
+        "byte_num": 0,
+        "bit_num": 0,
+        "len": 3
+      },
+      {
+        "name": "mileage",
+        "bus_id": "0",
+        "can_id": 1456,
+        "byte_num": 0,
+        "bit_num": 0,
+        "len": 24
+      },
+      {
+        "name": "fuel_level",
+        "bus_id": "0",
+        "can_id": 1292,
+        "byte_num": 2,
+        "bit_num": 2,
+        "len": 5
+      },
+      {
+        "name": "charging",
+        "bus_id": "0",
+        "can_id": 1353,
+        "byte_num": 2,
+        "bit_num": 0,
+        "len": 8
+      },
+      {
+        "name": "car_speed",
+        "bus_id": "0",
+        "can_id": 1322,
+        "byte_num": 0,
+        "bit_num": 0,
+        "len": 8
+      },
+      {
+        "name": "door_front_left",
+        "can_id": 1345,
+        "byte_num": 1,
+        "bit_num": 0,
+        "len": 2
+      },
+      {
+        "name": "door_front_right",
+        "bus_id": "0",
+        "can_id": 1345,
+        "byte_num": 4,
+        "bit_num": 3,
+        "len": 1
+      },
+      {
+        "name": "door_back_left",
+        "bus_id": "0",
+        "can_id": 1363,
+        "byte_num": 2,
+        "bit_num": 7,
+        "len": 1
+      },
+      {
+        "name": "door_back_right",
+        "bus_id": "0",
+        "can_id": 1363,
+        "byte_num": 3,
+        "bit_num": 0,
+        "len": 1
+      },
+      {
+        "window_front_left": null,
+        "can_id": 1369,
+        "byte_num": 1,
+        "bit_num": 0,
+        "len": 1
+      },
+      {
+        "name": "window_front_right",
+        "bus_id": "0",
+        "can_id": 1369,
+        "byte_num": 1,
+        "bit_num": 1,
+        "len": 1
+      },
+      {
+        "name": "window_back_left",
+        "bus_id": "0",
+        "can_id": 1369,
+        "byte_num": 1,
+        "bit_num": 2,
+        "len": 1
+      },
+      {
+        "name": "window_back_right",
+        "bus_id": "0",
+        "can_id": 1369,
+        "byte_num": 1,
+        "bit_num": 3,
+        "len": 1
+      }
+    ]
+  }
 }

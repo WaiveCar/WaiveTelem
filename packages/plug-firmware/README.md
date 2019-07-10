@@ -35,7 +35,7 @@ e.g. for plug-1
 ```json
 { "desired": { "doors": "unlocked" } }
 { "desired": { "doors": "locked" } }
-{ "desired": { "vehicle": "immobilize" } }
+{ "desired": { "vehicle": "immobilized" } }
 { "desired": { "vehicle": "unimmobilized" } }
 ```
 

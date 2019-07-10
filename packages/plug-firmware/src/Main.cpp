@@ -16,18 +16,22 @@
 void setup() {
   Console.setup();
   Serial.println("Version: " + String(VERSION));
+  Console.logFreeMemory();
   Watchdog.enable(60 * 1000);
   Pins.setup();
   Config.load();
+  Console.logFreeMemory();
   Gps.setup();
   Mqtt.setup();
   Can.setup();
+  Console.logFreeMemory();
 }
 
 void loop() {
 #ifdef ARDUINO_SAMD_MKR1000
   if (!Wifi.isConnected()) {
     Wifi.connect();
+    Console.logFreeMemory();
   }
 #elif defined(ARDUINO_SAMD_MKRNB1500)
   if (!Cellular.isConnected()) {
@@ -36,6 +40,7 @@ void loop() {
 #endif
   if (!Mqtt.isConnected()) {
     Mqtt.connect();
+    Console.logFreeMemory();
   }
   Mqtt.poll();
   Gps.poll();

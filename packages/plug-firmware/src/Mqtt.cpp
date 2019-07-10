@@ -1,7 +1,13 @@
 #include <ArduinoBearSSL.h>
 #include <ArduinoECCX08.h>
-#include <ArduinoJson.h>
 #include <ArduinoMqttClient.h>
+
+#ifdef USE_ARDUINO_JSON
+#include <ArduinoJson.h>
+#else
+#include <JsonStreamingParser.h>
+#endif
+
 #ifdef ARDUINO_SAMD_MKR1000
 #include <WiFi101.h>
 static WiFiClient client;
@@ -16,12 +22,18 @@ static MqttClient mqttClient(sslClient);
 #include "Config.h"
 #include "Console.h"
 #include "Mqtt.h"
+
+#ifndef USE_ARDUINO_JSON
+#include "MqttJsonListener.h"
+#endif
+
 #include "Pins.h"
 
 static void onMessageReceived(int messageSize) {
   log("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
   String payload = mqttClient.readString();
   log("payload: " + payload);
+#ifdef USE_ARDUINO_JSON
   StaticJsonDocument<1024> doc;
   DeserializationError error = deserializeJson(doc, payload);
   if (error) {
@@ -38,13 +50,38 @@ static void onMessageReceived(int messageSize) {
     // Mqtt.telemeter("{\"doors\": \"locked\"}", true);
   } else if (vehicle == "immobilized") {
     Pins.immobilize();
-    Mqtt.telemeter("{\"vehicle\": \"immobilize\"}", true);
+    Mqtt.telemeter("{\"vehicle\": \"immobilized\"}", true);
   } else if (vehicle == "unimmobilized") {
     Pins.unimmobilize();
-    Mqtt.telemeter("{\"vehicle\": \"unimmobilize\"}", true);
+    Mqtt.telemeter("{\"vehicle\": \"unimmobilized\"}", true);
   } else {
     Serial.println("Unknown command: " + payload);
   }
+#else
+  JsonStreamingParser parser;
+  MqttJsonListener listener;
+  parser.setListener(&listener);
+  for (char& c : payload) {
+    parser.parse(c);
+  }
+  String command = listener.getCommand();
+  log("command: " + command);
+  if (command == "doors_unlocked") {
+    Pins.unlockDoors();
+    // Mqtt.telemeter("{\"doors\": \"unlocked\"}", true);
+  } else if (command == "doors_locked") {
+    Pins.lockDoors();
+    // Mqtt.telemeter("{\"doors\": \"locked\"}", true);
+  } else if (command == "vehicle_immobilized") {
+    Pins.immobilize();
+    Mqtt.telemeter("{\"vehicle\": \"immobilized\"}", true);
+  } else if (command == "vehicle_unimmobilized") {
+    Pins.unimmobilize();
+    Mqtt.telemeter("{\"vehicle\": \"unimmobilized\"}", true);
+  } else {
+    Serial.println("Unknown command: " + payload);
+  }
+#endif
 }
 
 static unsigned long getTime() {
