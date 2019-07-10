@@ -8,7 +8,7 @@
 #endif
 
 struct CanTelemetry {
-  String name;
+  char* name;
   uint32_t can_id;
   uint8_t can_byte_num;
   uint8_t can_bit_num;
@@ -17,8 +17,8 @@ struct CanTelemetry {
 };
 
 struct CanConfig {
-  String make;
-  String model;
+  char* make;
+  char* model;
   uint8_t num_bus;
   uint8_t num_telemetry;
   uint16_t bus_baud[2];
@@ -35,6 +35,7 @@ class ConfigClass : public SimpleJsonListener {
   String& getId();
   String& getMqttBrokerUrl();
   String& getMqttBrokerCert();
+  String& getNbSimPin();
   int getGpsInterval();
   CanConfig& getCanConfig();
   void value(String v);
@@ -43,7 +44,7 @@ class ConfigClass : public SimpleJsonListener {
   String id;
   String mqttBrokerUrl;
   String mqttBrokerCert;
-  bool gpsTelemetry;
+  String nbSimPin;
   int gpsInRideInterval;
   int gpsNotInRideInterval;
   CanConfig canConfig;

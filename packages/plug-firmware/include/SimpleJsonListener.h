@@ -20,7 +20,7 @@ class SimpleJsonListener : public JsonListener {
 
   virtual void startObject() {
     currentObject = currentObject + currentKey + "/";
-    // log(currentObject);
+    log(currentObject);
   }
 
   virtual void endObject() {

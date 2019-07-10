@@ -8,6 +8,7 @@
 #include "Config.h"
 #include "Console.h"
 #include "Pins.h"
+#include "Status.h"
 
 #define CONFIG_FILE "/config.txt"
 
@@ -38,8 +39,8 @@ void ConfigClass::load() {
 
   JsonObject canDoc = doc["can"];
 
-  canConfig.make = canDoc["make"].as<String>();
-  canConfig.model = canDoc["model"].as<String>();
+  canConfig.make = canDoc["make"].as<char*>();
+  canConfig.model = canDoc["model"].as<char*>();
   log("canConfig.make: " + canConfig.make);
   log("canConfig.model: " + canConfig.model);
   JsonArray arr = canDoc["bus"].as<JsonArray>();
@@ -52,7 +53,7 @@ void ConfigClass::load() {
   for (JsonObject obj : arr) {
     canConfig.num_telemetry++;
     CanTelemetry& telemetry = canConfig.telemetry[canConfig.num_telemetry - 1];
-    telemetry.name = obj["name"].as<String>();
+    telemetry.name = obj["name"].as<char*>();
     telemetry.can_id = obj["can_id"] | 0;
     telemetry.can_byte_num = obj["byte_num"] | 0;
     telemetry.can_bit_num = obj["bit_num"] | 0;
@@ -81,21 +82,23 @@ void ConfigClass::value(String v) {
     } else if (currentKey == "mqttBrokerCert") {
       mqttBrokerCert = v;
     }
+  } else if (currentObject == "/nb/") {
+    if (currentKey == "simPin") {
+      nbSimPin = v;
+    }
   } else if (currentObject == "/gps/") {
-    if (currentKey == "telemetry") {
-      gpsTelemetry = (v == "true");
-    } else if (currentKey == "inRideInterval") {
+    if (currentKey == "inRideInterval") {
       gpsInRideInterval = v.toInt();
     } else if (currentKey == "notInRideInterval") {
       gpsNotInRideInterval = v.toInt();
     }
   } else if (currentObject == "/can/") {
     if (currentKey == "make") {
-      canConfig.make = v;
-      log("canConfig.make: " + canConfig.make);
+      canConfig.make = (char*)malloc(strlen(v.c_str()) + 1);
+      strcpy(canConfig.make, v.c_str());
     } else if (currentKey == "model") {
-      canConfig.model = v;
-      log("canConfig.model: " + canConfig.model);
+      canConfig.model = (char*)malloc(strlen(v.c_str()) + 1);
+      strcpy(canConfig.model, v.c_str());
     }
   } else if (currentObject == "/can/bus//") {
     canConfig.bus_baud[arrayIndex] = v.toInt();
@@ -103,7 +106,8 @@ void ConfigClass::value(String v) {
   } else if (currentObject == "/can/telemetry//") {
     CanTelemetry& telemetry = canConfig.telemetry[arrayIndex];
     if (currentKey == "name") {
-      telemetry.name = v;
+      telemetry.name = (char*)malloc(strlen(v.c_str()) + 1);
+      strcpy(telemetry.name, v.c_str());
       canConfig.num_telemetry = arrayIndex + 1;
     } else if (currentKey == "bus_id") {
       telemetry.bus_id = v.toInt();
@@ -132,11 +136,12 @@ String& ConfigClass::getMqttBrokerCert() {
   return mqttBrokerCert;
 }
 
+String& ConfigClass::getNbSimPin() {
+  return nbSimPin;
+}
+
 int ConfigClass::getGpsInterval() {
-  if (!gpsTelemetry) {
-    return -1;
-  }
-  return (true ? gpsInRideInterval : gpsNotInRideInterval) * 1000 - 500;
+  return (Status.getInRide() ? gpsInRideInterval : gpsNotInRideInterval) * 1000 - 500;
 }
 
 CanConfig& ConfigClass::getCanConfig() {

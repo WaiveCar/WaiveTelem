@@ -15,16 +15,15 @@
 
 ### Run Binary and Start Serial Monitoring (default mkr1000USB):
 
-- `./run.sh` or
-- `pio run -v -t upload && sleep 3 && pio device monitor`
+- `./run.sh`
 
 ### Building, Flash and Run Binary for mkrnb1500:
 
 - `pio run -v -e mkrnb1500 -t upload`
 
-### Update Firmware Build Version:
+### Update Firmware Build Version, wifi credential:
 
-- update it in platformio.ini
+- update them in platformio.ini
   
 ### MQTT Device Shadow Desired (Command):
 
@@ -33,10 +32,12 @@ e.g. for plug-1
 - click on "Shadow" and edit the Shadow State to have one of the following JSONs:
 
 ```json
-{ "desired": { "doors": "unlocked" } }
-{ "desired": { "doors": "locked" } }
-{ "desired": { "vehicle": "immobilized" } }
-{ "desired": { "vehicle": "unimmobilized" } }
+{"desired": {"doors": "unlocked"}}
+{"desired": {"doors": "locked"}}
+{"desired": {"vehicle": "immobilized"}}
+{"desired": {"vehicle": "unimmobilized"}}
+{"desired": {"inRide": true}}
+{"desired": {"inRide": false}}
 ```
 
 ### MQTT Device Shadow Reported (Telemetry):
@@ -47,8 +48,7 @@ e.g. for plug-1
   "vehicle": "unimmobilized",
   "gps": {
     "lat": 1.11,
-    "long": 2.22,
-    "time": "tbd"
+    "long": 2.22
   },
   ...
 }

@@ -6,7 +6,6 @@
 		"simPin": ""
 	},
 	"gps": {
-		"telemetry": true,
 		"inRideInterval": 30,
 		"notInRideInterval": 900
 	},

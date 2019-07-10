@@ -7,9 +7,9 @@
 #define BNRG_SPI_EXTI_PORT -1
 #define BNRG_SPI_RESET_PORT -1
 
-#define BNRG_SPI_CS_PIN 10
-#define BNRG_SPI_EXTI_PIN 2
-#define BNRG_SPI_RESET_PIN 9
+#define BNRG_SPI_CS_PIN A1
+#define BNRG_SPI_EXTI_PIN A2
+#define BNRG_SPI_RESET_PIN A3
 
 #define HAL_Delay(x) delay(x)
 

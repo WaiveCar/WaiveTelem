@@ -1,12 +1,14 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 
+#include "Bluetooth.h"
 #include "Can.h"
 #include "Config.h"
 #include "Console.h"
 #include "Gps.h"
 #include "Mqtt.h"
 #include "Pins.h"
+#include "Status.h"
 #ifdef ARDUINO_SAMD_MKR1000
 #include "Wifi.h"
 #elif defined(ARDUINO_SAMD_MKRNB1500)
@@ -14,24 +16,20 @@
 #endif
 
 void setup() {
-  Console.setup();
-  Serial.println("Version: " + String(VERSION));
-  Console.logFreeMemory();
   Watchdog.enable(60 * 1000);
+  Console.setup();
   Pins.setup();
   Config.load();
-  Console.logFreeMemory();
   Gps.setup();
   Mqtt.setup();
   Can.setup();
-  Console.logFreeMemory();
+  Bluetooth.setup();
 }
 
 void loop() {
 #ifdef ARDUINO_SAMD_MKR1000
   if (!Wifi.isConnected()) {
     Wifi.connect();
-    Console.logFreeMemory();
   }
 #elif defined(ARDUINO_SAMD_MKRNB1500)
   if (!Cellular.isConnected()) {
@@ -40,13 +38,9 @@ void loop() {
 #endif
   if (!Mqtt.isConnected()) {
     Mqtt.connect();
-    Console.logFreeMemory();
+    Status.sendVersion();
   }
   Mqtt.poll();
   Gps.poll();
   Watchdog.reset();
-  delay(1);
-  if (millis() % 1000 == 0) {
-    Console.logFreeMemory();
-  }
 }

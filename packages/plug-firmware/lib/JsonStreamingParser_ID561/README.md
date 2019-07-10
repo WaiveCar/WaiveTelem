@@ -1,4 +1,4 @@
-NOTE: changed JsonStreamingParse.h BUFFER_MAX_LENGTH from 512 to 1200 to accommodate mqttBrokerCert
+NOTE: changed JsonStreamingParse.h BUFFER_MAX_LENGTH from 512 to 2048 to accommodate mqttBrokerCert
 
 # json-streaming-parser
 Arduino library for parsing potentially huge json streams on devices with scarce memory.

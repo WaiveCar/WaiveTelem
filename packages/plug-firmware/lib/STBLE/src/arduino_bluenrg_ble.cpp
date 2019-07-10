@@ -81,7 +81,10 @@ extern volatile uint32_t ms_counter;
 
 SPI_HandleTypeDef SpiHandle;
 
-SPIClass *BLESPI = &SPI;
+// Creating a special SPI bus just for the BLE so it stops being noisy for the other devices
+SPIClass SPI3(&sercom3, 6u, 1u, 0u, SPI_PAD_0_SCK_1, SERCOM_RX_PAD_2);
+
+SPIClass *BLESPI = &SPI3;
 
 /**
  * @}

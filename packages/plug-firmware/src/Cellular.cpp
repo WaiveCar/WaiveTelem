@@ -3,14 +3,12 @@
 #include <MKRNB.h>
 
 #include "Cellular.h"
+#include "Config.h"
 #include "Console.h"
-
-NB nbAccess;
-static GPRS gprs;
 
 void CellularClass::connect() {
   log(F("Attempting to connect to the cellular network"));
-  while ((nbAccess.begin("") != NB_READY) || (gprs.attachGPRS("hologram") != GPRS_READY)) {
+  while ((nbAccess.begin(Config.getNbSimPin().c_str()) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
     Serial.print(F("."));
     delay(1000);
   }
@@ -19,6 +17,10 @@ void CellularClass::connect() {
 
 bool CellularClass::isConnected() {
   return nbAccess.status() == NB_READY && gprs.status() == GPRS_READY;
+}
+
+unsigned long CellularClass::getTime() {
+  return nbAccess.getTime();
 }
 
 CellularClass Cellular;

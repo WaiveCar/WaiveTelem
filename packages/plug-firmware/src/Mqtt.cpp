@@ -13,8 +13,8 @@
 static WiFiClient client;
 #elif defined(ARDUINO_SAMD_MKRNB1500)
 #include <MKRNB.h>
-extern NB nbAccess;
 static NBClient client;
+#include "Cellular.h"
 #endif
 static BearSSLClient sslClient(client);
 static MqttClient mqttClient(sslClient);
@@ -22,6 +22,7 @@ static MqttClient mqttClient(sslClient);
 #include "Config.h"
 #include "Console.h"
 #include "Mqtt.h"
+#include "Status.h"
 
 #ifndef USE_ARDUINO_JSON
 #include "MqttJsonListener.h"
@@ -64,22 +65,29 @@ static void onMessageReceived(int messageSize) {
   for (char& c : payload) {
     parser.parse(c);
   }
-  String command = listener.getCommand();
+  String& command = listener.getCommand();
   log("command: " + command);
   if (command == "doors_unlocked") {
     Pins.unlockDoors();
-    // Mqtt.telemeter("{\"doors\": \"unlocked\"}", true);
+    Mqtt.telemeter("{\"doors\": \"unlocked\"}");
   } else if (command == "doors_locked") {
     Pins.lockDoors();
-    // Mqtt.telemeter("{\"doors\": \"locked\"}", true);
+    Mqtt.telemeter("{\"doors\": \"locked\"}");
   } else if (command == "vehicle_immobilized") {
     Pins.immobilize();
-    Mqtt.telemeter("{\"vehicle\": \"immobilized\"}", true);
+    Mqtt.telemeter("{\"vehicle\": \"immobilized\"}");
   } else if (command == "vehicle_unimmobilized") {
     Pins.unimmobilize();
-    Mqtt.telemeter("{\"vehicle\": \"unimmobilized\"}", true);
+    Mqtt.telemeter("{\"vehicle\": \"unimmobilized\"}");
+  } else if (command == "inRide_true") {
+    Status.setInRide(true);
+    Mqtt.telemeter("{\"inRide\": true}");
+  } else if (command == "inRide_false") {
+    Status.setInRide(false);
+    Mqtt.telemeter("{\"inRide\": false}");
   } else {
-    Serial.println("Unknown command: " + payload);
+    Serial.print(F("Unknown command: "));
+    Serial.println(payload);
   }
 #endif
 }
@@ -88,7 +96,7 @@ static unsigned long getTime() {
 #ifdef ARDUINO_SAMD_MKR1000
   return WiFi.getTime();
 #elif defined(ARDUINO_SAMD_MKRNB1500)
-  return nbAccess.getTime();
+  return Cellular.getTime();
 #endif
 }
 
