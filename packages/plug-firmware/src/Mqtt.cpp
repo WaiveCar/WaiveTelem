@@ -1,3 +1,4 @@
+#include <Adafruit_SleepyDog.h>
 #include <ArduinoBearSSL.h>
 #include <ArduinoECCX08.h>
 #include <ArduinoJson.h>
@@ -84,7 +85,7 @@ void MqttClass::setup() {
 
 void MqttClass::connect() {
   log("Attempting to connect to MQTT broker: " + String(Config.getMqttBrokerUrl()));
-  const int maxTry = 10;
+  const int maxTry = 20;
   int i = 0;
   while (!mqttClient.connect(Config.getMqttBrokerUrl(), 8883)) {
     i++;
@@ -94,6 +95,7 @@ void MqttClass::connect() {
     }
     Serial.print(F("M"));
     delay(3000);
+    Watchdog.reset();
   }
   log(F("You're connected to the MQTT broker"));
   mqttClient.subscribe("$aws/things/" + String(Config.getId()) + "/shadow/update/delta");

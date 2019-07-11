@@ -44,11 +44,13 @@ e.g. for plug-1
 
 ```json
 {
+  "inRide":"true",
+  "firmware": "1.0.1",
   "doors": "unlocked",
   "vehicle": "unimmobilized",
   "gps": {
-    "lat": 1.11,
-    "long": 2.22
+    "lat": 36.149893,
+    "long": -115.027760
   },
   ...
 }

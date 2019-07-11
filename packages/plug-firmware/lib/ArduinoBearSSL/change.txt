@@ -1,0 +1,2 @@
+updated BearSLLClient.h _iobuf[8192 + 85 + 325] to _iobuf[1024 + 85 + 325] to reduce RAM usage
+updated BearSSLTrustAnchors.h to contain only AWS CA, to reduce flash memory usage

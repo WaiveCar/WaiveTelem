@@ -6,7 +6,6 @@
     "simPin": ""
   },
   "gps": {
-    "telemetry": true,
     "inRideInterval": 30,
     "notInRideInterval": 900
   },
@@ -64,6 +63,7 @@
       },
       {
         "name": "door_front_left",
+        "bus_id": "0",
         "can_id": 1345,
         "byte_num": 1,
         "bit_num": 0,
@@ -94,7 +94,8 @@
         "len": 1
       },
       {
-        "window_front_left": null,
+        "name": "window_front_left",
+        "bus_id": "0",
         "can_id": 1369,
         "byte_num": 1,
         "bit_num": 0,

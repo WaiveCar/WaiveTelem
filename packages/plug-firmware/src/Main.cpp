@@ -16,7 +16,7 @@
 #endif
 
 void setup() {
-  Watchdog.enable(60 * 1000);
+  Watchdog.enable(16 * 1000);
   Console.setup();
   Pins.setup();
   Config.load();

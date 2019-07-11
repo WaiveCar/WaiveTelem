@@ -93,7 +93,8 @@
 				"len": 1
 			},
 			{
-				"window_front_left",
+				"name": "window_front_left",
+				"bus_id": "0",
 				"can_id": 1369,
 				"byte_num": 1,
 				"bit_num": 0,

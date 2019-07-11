@@ -19,7 +19,8 @@ void ConfigClass::load() {
   }
   File file = SD.open(CONFIG_FILE);
   // go to https://arduinojson.org/v6/assistant/ to find the size
-  DynamicJsonDocument doc(4096);
+  const size_t capacity = JSON_ARRAY_SIZE(2) + JSON_ARRAY_SIZE(19) + 3 * JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(4) + 20 * JSON_OBJECT_SIZE(6) + 2600;
+  DynamicJsonDocument doc(capacity);
   DeserializationError error = deserializeJson(doc, file);
   if (error) {
     Serial.println("Failed to read file: " + String(error.c_str()));
@@ -56,8 +57,6 @@ void ConfigClass::load() {
     telemetry.can_data_len = obj["len"];
     telemetry.bus_id = obj["bus_id"] | 0xff;
   }
-
-  Serial.println(id);
 
   file.close();
 }
