@@ -16,7 +16,7 @@ void StatusClass::setup() {
 }
 
 void StatusClass::sendVersion() {
-  String version = "{\"inRide\": false, \"firmware\": \"" + String(VERSION) + "\"}";
+  String version = "{\"inRide\": \"false\", \"firmware\": \"" + String(VERSION) + "\"}";
   Mqtt.telemeter(version, false);
 }
 

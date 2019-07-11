@@ -1,12 +1,7 @@
 #include <ArduinoBearSSL.h>
 #include <ArduinoECCX08.h>
-#include <ArduinoMqttClient.h>
-
-#ifdef USE_ARDUINO_JSON
 #include <ArduinoJson.h>
-#else
-#include <JsonStreamingParser.h>
-#endif
+#include <ArduinoMqttClient.h>
 
 #ifdef ARDUINO_SAMD_MKR1000
 #include <WiFi101.h>
@@ -24,72 +19,45 @@ static MqttClient mqttClient(sslClient);
 #include "Mqtt.h"
 #include "Status.h"
 
-#ifndef USE_ARDUINO_JSON
-#include "MqttJsonListener.h"
-#endif
-
 #include "Pins.h"
 
 static void onMessageReceived(int messageSize) {
   log("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
   String payload = mqttClient.readString();
   log("payload: " + payload);
-#ifdef USE_ARDUINO_JSON
   StaticJsonDocument<1024> doc;
   DeserializationError error = deserializeJson(doc, payload);
   if (error) {
     Serial.println("Failed to read file: " + String(error.c_str()));
     return;
   }
-  String doors = doc["state"]["doors"].as<String>();
-  String vehicle = doc["state"]["vehicle"].as<String>();
+
+  JsonObject stateDoc = doc["state"];
+  String doors = stateDoc["doors"] | "";
+  String vehicle = stateDoc["vehicle"] | "";
+  String inRide = stateDoc["inRide"] | "";
   if (doors == "unlocked") {
     Pins.unlockDoors();
-    // Mqtt.telemeter("{\"doors\": \"unlocked\"}", true);
+    // Mqtt.telemeter("{\"doors\": \"unlocked\"}");
   } else if (doors == "locked") {
     Pins.lockDoors();
-    // Mqtt.telemeter("{\"doors\": \"locked\"}", true);
+    // Mqtt.telemeter("{\"doors\": \"locked\"}");
   } else if (vehicle == "immobilized") {
     Pins.immobilize();
-    Mqtt.telemeter("{\"vehicle\": \"immobilized\"}", true);
+    Mqtt.telemeter("{\"vehicle\": \"immobilized\"}");
   } else if (vehicle == "unimmobilized") {
     Pins.unimmobilize();
-    Mqtt.telemeter("{\"vehicle\": \"unimmobilized\"}", true);
-  } else {
-    Serial.println("Unknown command: " + payload);
-  }
-#else
-  JsonStreamingParser parser;
-  MqttJsonListener listener;
-  parser.setListener(&listener);
-  for (char& c : payload) {
-    parser.parse(c);
-  }
-  String& command = listener.getCommand();
-  log("command: " + command);
-  if (command == "doors_unlocked") {
-    Pins.unlockDoors();
-    Mqtt.telemeter("{\"doors\": \"unlocked\"}");
-  } else if (command == "doors_locked") {
-    Pins.lockDoors();
-    Mqtt.telemeter("{\"doors\": \"locked\"}");
-  } else if (command == "vehicle_immobilized") {
-    Pins.immobilize();
-    Mqtt.telemeter("{\"vehicle\": \"immobilized\"}");
-  } else if (command == "vehicle_unimmobilized") {
-    Pins.unimmobilize();
     Mqtt.telemeter("{\"vehicle\": \"unimmobilized\"}");
-  } else if (command == "inRide_true") {
+  } else if (inRide == "true") {
     Status.setInRide(true);
-    Mqtt.telemeter("{\"inRide\": true}");
-  } else if (command == "inRide_false") {
+    Mqtt.telemeter("{\"inRide\": \"true\"}");
+  } else if (inRide == "false") {
     Status.setInRide(false);
-    Mqtt.telemeter("{\"inRide\": false}");
+    Mqtt.telemeter("{\"inRide\": \"false\"}");
   } else {
     Serial.print(F("Unknown command: "));
     Serial.println(payload);
   }
-#endif
 }
 
 static unsigned long getTime() {
@@ -107,18 +75,18 @@ void MqttClass::setup() {
       ;
   }
   ArduinoBearSSL.onGetTime(getTime);
-  log("id: " + Config.getId());
+  log("id: " + String(Config.getId()));
   // log("cert: " + Config.getMqttBrokerCert());
-  sslClient.setEccSlot(0, Config.getMqttBrokerCert().c_str());
+  sslClient.setEccSlot(0, Config.getMqttBrokerCert());
   mqttClient.setId(Config.getId());
   mqttClient.onMessage(onMessageReceived);
 }
 
 void MqttClass::connect() {
-  log("Attempting to connect to MQTT broker: " + Config.getMqttBrokerUrl());
+  log("Attempting to connect to MQTT broker: " + String(Config.getMqttBrokerUrl()));
   const int maxTry = 10;
   int i = 0;
-  while (!mqttClient.connect(Config.getMqttBrokerUrl().c_str(), 8883)) {
+  while (!mqttClient.connect(Config.getMqttBrokerUrl(), 8883)) {
     i++;
     if (i == maxTry) {
       log(F("Failed to connect"));
@@ -128,7 +96,7 @@ void MqttClass::connect() {
     delay(3000);
   }
   log(F("You're connected to the MQTT broker"));
-  mqttClient.subscribe("$aws/things/" + Config.getId() + "/shadow/update/delta");
+  mqttClient.subscribe("$aws/things/" + String(Config.getId()) + "/shadow/update/delta");
 }
 
 bool MqttClass::isConnected() {
@@ -140,7 +108,7 @@ void MqttClass::poll() {
 }
 
 void MqttClass::telemeter(const String& json, bool resetDesired) {
-  String topic = "$aws/things/" + Config.getId() + "/shadow/update";
+  String topic = "$aws/things/" + String(Config.getId()) + "/shadow/update";
   String message = "{\"state\": {\"reported\": " + json + (resetDesired ? ", \"desired\": null" : "") + "}}";
   log("publish " + topic + " " + message);
   mqttClient.beginMessage(topic);

@@ -3,12 +3,8 @@
 
 #include <Arduino.h>
 
-#ifndef USE_ARDUINO_JSON
-#include "SimpleJsonListener.h"
-#endif
-
 struct CanTelemetry {
-  char* name;
+  const char* name;
   uint32_t can_id;
   uint8_t can_byte_num;
   uint8_t can_bit_num;
@@ -25,26 +21,21 @@ struct CanConfig {
   CanTelemetry telemetry[20];
 };
 
-#ifdef USE_ARDUINO_JSON
 class ConfigClass {
-#else
-class ConfigClass : public SimpleJsonListener {
-#endif
  public:
   void load();
-  String& getId();
-  String& getMqttBrokerUrl();
-  String& getMqttBrokerCert();
-  String& getNbSimPin();
+  char* getId();
+  char* getMqttBrokerUrl();
+  char* getMqttBrokerCert();
+  char* getNbSimPin();
   int getGpsInterval();
   CanConfig& getCanConfig();
-  void value(String v);
 
  protected:
-  String id;
-  String mqttBrokerUrl;
-  String mqttBrokerCert;
-  String nbSimPin;
+  char* id;
+  char* mqttBrokerUrl;
+  char* mqttBrokerCert;
+  char* nbSimPin;
   int gpsInRideInterval;
   int gpsNotInRideInterval;
   CanConfig canConfig;

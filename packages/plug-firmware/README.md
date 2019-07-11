@@ -36,8 +36,8 @@ e.g. for plug-1
 {"desired": {"doors": "locked"}}
 {"desired": {"vehicle": "immobilized"}}
 {"desired": {"vehicle": "unimmobilized"}}
-{"desired": {"inRide": true}}
-{"desired": {"inRide": false}}
+{"desired": {"inRide": "true"}}
+{"desired": {"inRide": "false"}}
 ```
 
 ### MQTT Device Shadow Reported (Telemetry):
