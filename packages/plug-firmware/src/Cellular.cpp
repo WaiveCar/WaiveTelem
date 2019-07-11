@@ -8,7 +8,7 @@
 
 void CellularClass::connect() {
   log(F("Attempting to connect to the cellular network"));
-  while ((nbAccess.begin(Config.getNbSimPin().c_str()) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
+  while ((nbAccess.begin(Config.getNbSimPin()) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
     Serial.print(F("."));
     delay(1000);
   }

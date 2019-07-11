@@ -11,8 +11,8 @@ void WifiClass::connect() {
     while (true)
       ;
   }
-  log("Attempting to connect to SSID: " + String(SSID_NAME));
-  while (WiFi.begin(SSID_NAME, SSID_PASWORD) != WL_CONNECTED) {
+  log("Attempting to connect to SSID: " + String(WIFI_SSID));
+  while (WiFi.begin(WIFI_SSID, WIFI_PASSWORD) != WL_CONNECTED) {
     Serial.print(F("."));
     delay(3000);
   }

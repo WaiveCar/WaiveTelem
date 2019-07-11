@@ -7,23 +7,34 @@
 - Install Visual Studio Code (https://code.visualstudio.com/download)
 - In VSCode, install PlatformIO IDE extension (File -> Preferences -> Extensions)
 - In VSCode Terminal (on Windows, make sure Default Shell is bash)
-  - Git clone WaiveTelem `git clone git@github.com:WaiveCar/WaiveTelem.git`
+```bash
+git clone git@github.com:WaiveCar/WaiveTelem.git
+```
 - In VSCode, File -> Open folder WaiveCar/packages/plug-firmware
 - Open VSCode Terminal, allow this workspace to modifiy the terminal shell when prompted, exit Terminal
 - Open VSCode Terminal again, pio CLI should be available now
+- export WIFI_SSID and WIFI_PASSWORD env variables in terminal shell:
+```bash
+export WIFI_SSID=***
+export WIFI_PASSWORD=***
+```
 - Connect to the plug via USB
 
 ### Run Binary and Start Serial Monitoring (default mkr1000USB):
 
-- `./run.sh`
+```bash
+./run.sh
+```
 
 ### Building, Flash and Run Binary for mkrnb1500:
 
-- `pio run -v -e mkrnb1500 -t upload`
+```bash
+pio run -v -e mkrnb1500 -t upload
+```
 
-### Update Firmware Build Version, wifi credential:
+### Update Firmware Build Version:
 
-- update them in platformio.ini
+update VERSION in platformio.ini
   
 ### MQTT Device Shadow Desired (Command):
 

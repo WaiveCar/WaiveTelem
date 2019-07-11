@@ -7,4 +7,4 @@ PORT="${PORT#\"}"
 
 stty -f ${PORT} 1200 \
   && sleep 3 \
-  && ~/.platformio/packages/tool-bossac/bossac --info --debug --port "${PORT}" --erase --write --verify --reset -U true .pioenvs/mkr1000USB/firmware.bin
+  && ~/.platformio/packages/tool-bossac/bossac --info --debug --port "${PORT}" --reset

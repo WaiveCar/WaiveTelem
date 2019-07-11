@@ -2,7 +2,14 @@
 
 #include "Bluetooth.h"
 
-#if BLE_DEBUG
+uint8_t ble_rx_buffer[21];
+uint8_t ble_rx_buffer_len = 0;
+uint8_t ble_connection_state = false;
+#define PIPE_UART_OVER_BTLE_UART_TX_TX 0
+
+#define BLE_DEBUG 1
+
+#ifdef BLE_DEBUG
 #include <stdio.h>
 char sprintbuff[100];
 #define PRINTF(...)                   \
@@ -16,11 +23,6 @@ char sprintbuff[100];
 
 void setConnectable(void);
 uint8_t Write_UART_TX(char *TXdata, uint8_t datasize);
-
-uint8_t ble_rx_buffer[21];
-uint8_t ble_rx_buffer_len = 0;
-uint8_t ble_connection_state = false;
-#define PIPE_UART_OVER_BTLE_UART_TX_TX 0
 
 volatile uint8_t set_connectable = 1;
 uint16_t connection_handle = 0;
@@ -127,7 +129,7 @@ void Read_Request_CB(uint16_t handle) {
 void setConnectable(void) {
   tBleStatus ret;
 
-  const char local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME, 'J', 'a', 'm', 'e', 's', ' ', 'B', 'l', 'u', 'e', 'N', 'R', 'G'};
+  const char local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME, 'B', 'l', 'u', 'e', 'N', 'R', 'G'};
 
   hci_le_set_scan_resp_data(0, NULL);
   PRINTF("General Discoverable Mode.\n");
@@ -267,6 +269,42 @@ void BluetoothClass::setup() {
   /* +4 dBm output power */
   //  Serial.println("Set tx power");
   ret = aci_hal_set_tx_power_level(1, 3);
+}
+
+void BluetoothClass::poll() {
+  aci_loop();               //must run frequently
+  if (ble_rx_buffer_len) {  //Check if data is available
+    Serial.print(ble_rx_buffer_len);
+    Serial.print(" : ");
+    Serial.println((char *)ble_rx_buffer);
+    Serial.println("you just got some BLE data, pushing as a command");
+    //    String buf_str = String(*ble_rx_buffer);
+    // command_handler((char *)ble_rx_buffer);
+    ble_rx_buffer_len = 0;  //clear afer reading
+  }
+  //forward serial port input to BLE output
+  if (Serial.available()) {  //Check if serial input is available to send
+    delay(10);               //should catch input
+    uint8_t sendBuffer[21];
+    uint8_t sendLength = 0;
+    while (Serial.available() && sendLength < 19) {
+      sendBuffer[sendLength] = Serial.read();
+      sendLength++;
+    }
+    if (Serial.available()) {
+      Serial.print(F("Input truncated, dropped: "));
+      if (Serial.available()) {
+        Serial.write(Serial.read());
+      }
+    }
+    sendBuffer[sendLength] = '\0';  //Terminate string
+    sendLength++;
+    if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t *)sendBuffer, sendLength)) {
+      Serial.println(F("TX dropped!"));
+    } else {
+      Serial.println(F("Forwarded serial input to BLE"));
+    }
+  }
 }
 
 BluetoothClass Bluetooth;

@@ -4,6 +4,7 @@
 class BluetoothClass {
  public:
   void setup();
+  void poll();
 };
 
 extern BluetoothClass Bluetooth;

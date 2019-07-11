@@ -1,5 +1,6 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
+#include <SDU.h>
 
 #include "Bluetooth.h"
 #include "Can.h"
@@ -42,5 +43,6 @@ void loop() {
   }
   Mqtt.poll();
   Gps.poll();
+  Bluetooth.poll();
   Watchdog.reset();
 }

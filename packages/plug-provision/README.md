@@ -39,3 +39,7 @@ This package automatically
 
 - Open ./config/\${PLUG_ID}/config.txt to adjust the configuration if necessary
 - Copy the config.txt file to the plug microSD
+
+## Config Templates:
+
+hyukia.txt is one example of config templates. The maximum number of CAN-BUS telemetry that the firmware support is 20 currently.
