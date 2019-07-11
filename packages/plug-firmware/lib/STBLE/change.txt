@@ -1,0 +1,2 @@
+updated arduino_hal.h BNRG_SPI_CS_PIN, BNRG_SPI_EXTI_PIN and BNRG_SPI_RESET_PIN
+updated arduino_bluenrg_ble.cpp to use SPI3 instead of SPI
