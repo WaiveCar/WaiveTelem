@@ -9,7 +9,7 @@ class CellularClass {
   bool isConnected();
   unsigned long getTime();
 
- protected:
+ private:
   NB nbAccess;
   GPRS gprs;
 };

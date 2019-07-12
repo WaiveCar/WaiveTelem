@@ -6,7 +6,7 @@ class GpsClass {
   void setup();
   void poll();
 
- protected:
+ private:
   u_int32_t lastSentTime;
 };
 

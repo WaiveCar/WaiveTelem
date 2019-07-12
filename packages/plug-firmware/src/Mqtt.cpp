@@ -59,6 +59,8 @@ static void onMessageReceived(int messageSize) {
     Serial.print(F("Unknown command: "));
     Serial.println(payload);
   }
+  // reset MCU
+  // update firmware
 }
 
 static unsigned long getTime() {
@@ -88,14 +90,14 @@ void MqttClass::connect() {
   const int maxTry = 20;
   int i = 0;
   while (!mqttClient.connect(Config.getMqttBrokerUrl(), 8883)) {
-    i++;
+    Watchdog.reset();
     if (i == maxTry) {
       log(F("Failed to connect"));
       return;
     }
     Serial.print(F("M"));
     delay(3000);
-    Watchdog.reset();
+    i++;
   }
   log(F("You're connected to the MQTT broker"));
   mqttClient.subscribe("$aws/things/" + String(Config.getId()) + "/shadow/update/delta");

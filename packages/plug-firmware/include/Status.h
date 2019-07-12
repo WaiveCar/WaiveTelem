@@ -9,7 +9,7 @@ class StatusClass {
   bool getInRide();
   String& getStatus();
 
- protected:
+ private:
   String status;
   bool inRide;
 };

@@ -31,7 +31,7 @@ class ConfigClass {
   int getGpsInterval();
   CanConfig& getCanConfig();
 
- protected:
+ private:
   char* id;
   char* mqttBrokerUrl;
   char* mqttBrokerCert;
