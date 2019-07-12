@@ -8,7 +8,7 @@
 #include "Gps.h"
 #include "Mqtt.h"
 #include "Pins.h"
-#include "Status.h"
+#include "System.h"
 #ifdef ARDUINO_SAMD_MKR1000
 #include "Wifi.h"
 #elif defined(ARDUINO_SAMD_MKRNB1500)
@@ -38,7 +38,7 @@ void loop() {
 #endif
   if (!Mqtt.isConnected()) {
     Mqtt.connect();
-    Status.sendVersion();
+    System.sendVersion();
   }
   Mqtt.poll();
   Gps.poll();

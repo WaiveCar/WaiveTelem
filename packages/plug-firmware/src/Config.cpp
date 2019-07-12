@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "Console.h"
 #include "Pins.h"
-#include "Status.h"
+#include "System.h"
 
 #define CONFIG_FILE "/config.txt"
 
@@ -79,7 +79,7 @@ char* ConfigClass::getNbSimPin() {
 }
 
 int ConfigClass::getGpsInterval() {
-  return (Status.getInRide() ? gpsInRideInterval : gpsNotInRideInterval) * 1000 - 500;
+  return (System.getInRide() ? gpsInRideInterval : gpsNotInRideInterval) * 1000 - 500;
 }
 
 CanConfig& ConfigClass::getCanConfig() {

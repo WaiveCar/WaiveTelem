@@ -7,9 +7,7 @@ uint8_t ble_rx_buffer_len = 0;
 uint8_t ble_connection_state = false;
 #define PIPE_UART_OVER_BTLE_UART_TX_TX 0
 
-#define BLE_DEBUG 1
-
-#ifdef BLE_DEBUG
+#ifdef DEBUG
 #include <stdio.h>
 char sprintbuff[100];
 #define PRINTF(...)                   \

@@ -1,7 +1,6 @@
 #include <Adafruit_SleepyDog.h>
 #include <ArduinoBearSSL.h>
 #include <ArduinoECCX08.h>
-#include <ArduinoJson.h>
 #include <ArduinoMqttClient.h>
 
 #ifdef ARDUINO_SAMD_MKR1000
@@ -18,49 +17,13 @@ static MqttClient mqttClient(sslClient);
 #include "Config.h"
 #include "Console.h"
 #include "Mqtt.h"
-#include "Status.h"
-
-#include "Pins.h"
+#include "System.h"
 
 static void onMessageReceived(int messageSize) {
   log("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
   String payload = mqttClient.readString();
   log("payload: " + payload);
-  StaticJsonDocument<1024> doc;
-  DeserializationError error = deserializeJson(doc, payload);
-  if (error) {
-    Serial.println("Failed to read file: " + String(error.c_str()));
-    return;
-  }
-
-  JsonObject stateDoc = doc["state"];
-  String doors = stateDoc["doors"] | "";
-  String vehicle = stateDoc["vehicle"] | "";
-  String inRide = stateDoc["inRide"] | "";
-  if (doors == "unlocked") {
-    Pins.unlockDoors();
-    // Mqtt.telemeter("{\"doors\": \"unlocked\"}");
-  } else if (doors == "locked") {
-    Pins.lockDoors();
-    // Mqtt.telemeter("{\"doors\": \"locked\"}");
-  } else if (vehicle == "immobilized") {
-    Pins.immobilize();
-    Mqtt.telemeter("{\"vehicle\": \"immobilized\"}");
-  } else if (vehicle == "unimmobilized") {
-    Pins.unimmobilize();
-    Mqtt.telemeter("{\"vehicle\": \"unimmobilized\"}");
-  } else if (inRide == "true") {
-    Status.setInRide(true);
-    Mqtt.telemeter("{\"inRide\": \"true\"}");
-  } else if (inRide == "false") {
-    Status.setInRide(false);
-    Mqtt.telemeter("{\"inRide\": \"false\"}");
-  } else {
-    Serial.print(F("Unknown command: "));
-    Serial.println(payload);
-  }
-  // reset MCU
-  // update firmware
+  System.processCommand(payload);
 }
 
 static unsigned long getTime() {
@@ -111,9 +74,9 @@ void MqttClass::poll() {
   mqttClient.poll();
 }
 
-void MqttClass::telemeter(const String& json, bool resetDesired) {
+void MqttClass::telemeter(const String& json) {
   String topic = "$aws/things/" + String(Config.getId()) + "/shadow/update";
-  String message = "{\"state\": {\"reported\": " + json + (resetDesired ? ", \"desired\": null" : "") + "}}";
+  String message = "{\"state\": {\"reported\": " + json + "}}";
   log("publish " + topic + " " + message);
   mqttClient.beginMessage(topic);
   mqttClient.print(message);

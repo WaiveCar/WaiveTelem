@@ -45,8 +45,8 @@ e.g. for plug-1
 ```json
 {"desired": {"doors": "unlocked"}}
 {"desired": {"doors": "locked"}}
-{"desired": {"vehicle": "immobilized"}}
-{"desired": {"vehicle": "unimmobilized"}}
+{"desired": {"immobilized": "true"}}
+{"desired": {"immobilized": "false"}}
 {"desired": {"inRide": "true"}}
 {"desired": {"inRide": "false"}}
 ```
@@ -58,10 +58,11 @@ e.g. for plug-1
   "inRide":"true",
   "firmware": "1.0.1",
   "doors": "unlocked",
-  "vehicle": "unimmobilized",
+  "immobilized": "false",
   "gps": {
     "lat": 36.149893,
-    "long": -115.027760
+    "long": -115.027760,
+    "time": "2019-07-12T18:33:01Z"
   },
   ...
 }
