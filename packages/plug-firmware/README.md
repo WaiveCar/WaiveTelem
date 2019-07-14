@@ -53,7 +53,7 @@ e.g. for plug-1
 {"desired": {"immobilized": "false"}}
 {"desired": {"inRide": "true"}}
 {"desired": {"inRide": "false"}}
-{"desired": {"firmware": "1.0.3", "downloadHost": "waiveplug.s3.us-east-2.amazonaws.com", "downloadFile": "1000_1.0.3_81bac42b67cde96a56f086a7c5c396592bca67cdc30a900fee96f6b8f075d065"}}
+{"desired": {"firmware": "1.0.3", "download": {"host": "waiveplug.s3.us-east-2.amazonaws.com", "file": "1000_1.0.3_593ae6b91ed7fb5ef3318b0252f9cf50e66de520627eed5092b56de9fa1b5783"}}}
 ```
 
 ### MQTT Device Shadow Reported (Telemetry):

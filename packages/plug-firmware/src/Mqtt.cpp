@@ -72,9 +72,11 @@ void MqttClass::poll() {
   mqttClient.poll();
 }
 
-void MqttClass::telemeter(const String& reported) {
+void MqttClass::telemeter(const String& reported, const String& desired) {
   String topic = "$aws/things/" + String(Config.getId()) + "/shadow/update";
-  String message = "{\"state\": {" + (reported ? "\"reported\": " + reported : "") + "}}";
+  String message = "{\"state\": {" +
+                   (reported != "" ? "\"reported\": " + reported : "") +
+                   (desired != "" ? "\"desired\": " + desired : "") + "}}";
   logLine("publish " + topic + " " + message);
   mqttClient.beginMessage(topic);
   mqttClient.print(message);

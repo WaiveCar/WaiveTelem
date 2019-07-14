@@ -65,9 +65,9 @@ void SystemClass::processCommand(String& json) {
   } else if (stateDoc["inRide"] == "false") {
     System.setInRide(false);
     Mqtt.telemeter("{\"inRide\": \"false\"}");
-  } else if (stateDoc["firmware"] != String(FIRMWARE_VERSION)) {
-    String host = stateDoc["downloadHost"];
-    String file = stateDoc["downloadFile"];
+  } else if (!stateDoc["download"].isNull() && stateDoc["firmware"] != FIRMWARE_VERSION) {
+    String host = stateDoc["download"]["host"];
+    String file = stateDoc["download"]["file"];
     Http.download(host, file);
   } else {
     Serial.print(F("Unknown command: "));
