@@ -27,7 +27,7 @@ static unsigned long getTime() {
 
 void MqttClass::setup() {
   if (!ECCX08.begin()) {
-    Serial.println(F("No ECCX08 present!"));
+    Serial.println(F("No ECCX08 present"));
     while (1)
       ;
   }
@@ -37,6 +37,7 @@ void MqttClass::setup() {
   sslClient.setEccSlot(0, Config.getMqttBrokerCert());
   mqttClient.setId(Config.getId());
   mqttClient.onMessage(onMessageReceived);
+  connect();
 }
 
 void MqttClass::connect() {
@@ -49,7 +50,7 @@ void MqttClass::connect() {
   while (!mqttClient.connect(Config.getMqttBrokerUrl(), 8883)) {
     Watchdog.reset();
     if (i == maxTry) {
-      logLine(F("Failed to connect"));
+      logLine(F("Failed to connect, try leter"));
       return;
     }
     log(F("M"));
@@ -71,9 +72,9 @@ void MqttClass::poll() {
   mqttClient.poll();
 }
 
-void MqttClass::telemeter(const String& json) {
+void MqttClass::telemeter(const String& reported) {
   String topic = "$aws/things/" + String(Config.getId()) + "/shadow/update";
-  String message = "{\"state\": {\"reported\": " + json + "}}";
+  String message = "{\"state\": {" + (reported ? "\"reported\": " + reported : "") + "}}";
   logLine("publish " + topic + " " + message);
   mqttClient.beginMessage(topic);
   mqttClient.print(message);

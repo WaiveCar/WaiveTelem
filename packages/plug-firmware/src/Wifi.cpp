@@ -24,7 +24,12 @@ bool InternetClass::isConnected() {
 }
 
 unsigned long InternetClass::getTime() {
-  return Internet.getTime();
+  return WiFi.getTime();
+}
+
+String InternetClass::getSignalStrength() {
+  long rssi = WiFi.RSSI();
+  return String(rssi) + " dBm";
 }
 
 InternetClass Internet;

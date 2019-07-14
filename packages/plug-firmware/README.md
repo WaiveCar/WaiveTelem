@@ -13,11 +13,7 @@ git clone git@github.com:WaiveCar/WaiveTelem.git
 - In VSCode, File -> Open folder WaiveCar/packages/plug-firmware
 - Open VSCode Terminal, allow this workspace to modifiy the terminal shell when prompted, exit Terminal
 - Open VSCode Terminal again, pio CLI should be available now
-- export WIFI_SSID and WIFI_PASSWORD env variables in terminal shell:
-```bash
-export WIFI_SSID=***
-export WIFI_PASSWORD=***
-```
+- Update and run setEnv.sh in terminal shell to export env variables:
 - Connect to the plug via USB
 
 ### Run Binary and Start Serial Monitoring (default mkr1000USB):
@@ -26,16 +22,24 @@ export WIFI_PASSWORD=***
 ./run.sh
 ```
 
+### Flash firmware binary:
+
+```bash
+./flash.sh bin/1000_1.0.3_06cdba4ab3c940d63f7ca4b2689e34003c18efbbaa5a7c2849d9df9661153ab8
+```
+
+### Upload firmware binaries and sync it with S3 bucket:
+
+```bash
+./uploadRelease.sh
+```
+
 ### Building, Flash and Run Binary for mkrnb1500:
 
 ```bash
 pio run -v -e mkrnb1500 -t upload
 ```
 
-### Update Firmware Build Version:
-
-update VERSION in platformio.ini
-  
 ### MQTT Device Shadow Desired (Command):
 
 e.g. for plug-1
@@ -49,6 +53,7 @@ e.g. for plug-1
 {"desired": {"immobilized": "false"}}
 {"desired": {"inRide": "true"}}
 {"desired": {"inRide": "false"}}
+{"desired": {"firmware": "1.0.3", "downloadHost": "waiveplug.s3.us-east-2.amazonaws.com", "downloadFile": "1000_1.0.3_81bac42b67cde96a56f086a7c5c396592bca67cdc30a900fee96f6b8f075d065"}}
 ```
 
 ### MQTT Device Shadow Reported (Telemetry):

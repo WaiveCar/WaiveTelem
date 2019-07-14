@@ -16,9 +16,9 @@ void setup() {
   Pins.setup();
   Config.load();
   Gps.setup();
-  Mqtt.setup();
   Can.setup();
   Bluetooth.setup();
+  Mqtt.setup();
   System.sendVersion();
 }
 

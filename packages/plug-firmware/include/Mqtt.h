@@ -7,7 +7,7 @@ class MqttClass {
   void connect();
   bool isConnected();
   void poll();
-  void telemeter(const String& json);
+  void telemeter(const String& reported);
 };
 
 extern MqttClass Mqtt;

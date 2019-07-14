@@ -7,11 +7,10 @@ class SystemClass {
   void sendVersion();
   void setInRide(bool in);
   bool getInRide();
-  String& getStatus();
+  String getStatus();
   void processCommand(String& json);
 
  private:
-  String status;
   bool inRide;
 };
 

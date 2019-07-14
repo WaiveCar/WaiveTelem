@@ -2,6 +2,8 @@
 #include <ArduinoJson.h>
 
 #include "Console.h"
+#include "Http.h"
+#include "Internet.h"
 #include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
@@ -18,7 +20,7 @@ void SystemClass::setup() {
 }
 
 void SystemClass::sendVersion() {
-  String version = "{\"inRide\": \"false\", \"firmware\": \"" + String(VERSION) + "\"}";
+  String version = "{\"inRide\": \"false\", \"firmware\": \"" + String(FIRMWARE_VERSION) + "\"}";
   Mqtt.telemeter(version);
 }
 
@@ -30,9 +32,8 @@ bool SystemClass::getInRide() {
   return inRide;
 }
 
-String& SystemClass::getStatus() {
-  status = "\"freeMemory\": " + String(freeMemory());
-  return status;
+String SystemClass::getStatus() {
+  return "\"freeMemory\": " + String(freeMemory()) + ", \"signalStrength\": \"" + String(Internet.getSignalStrength() + "\", ");
 }
 
 void SystemClass::processCommand(String& json) {
@@ -64,7 +65,10 @@ void SystemClass::processCommand(String& json) {
   } else if (stateDoc["inRide"] == "false") {
     System.setInRide(false);
     Mqtt.telemeter("{\"inRide\": \"false\"}");
-  } else if (System.getInRide() && stateDoc["firmware"] != String(VERSION)) {
+  } else if (stateDoc["firmware"] != String(FIRMWARE_VERSION)) {
+    String host = stateDoc["downloadHost"];
+    String file = stateDoc["downloadFile"];
+    Http.download(host, file);
   } else {
     Serial.print(F("Unknown command: "));
     Serial.println(json);

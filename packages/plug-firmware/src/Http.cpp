@@ -10,70 +10,80 @@
 
 static InternetClient client;
 
-void printResult() {
-  while (SHA256.available()) {
-    byte b = SHA256.read();
-
-    if (b < 16) {
-      Serial.print("0");
-    }
-
-    Serial.print(b, HEX);
-  }
-  Serial.println();
+static void sendGetRequest(String& host, String& file) {
+  client.println("GET /" + file + " HTTP/1.0");
+  client.println("Host: " + host);
+  client.println("User-Agent: waiveplug/" + String(FIRMWARE_VERSION));
+  client.println("Accept: application/octet-stream");
+  client.println();
 }
 
-void HttpClass::download() {
-  if (client.connectSSL("waiveplug.s3.us-east-2.amazonaws.com", 443)) {
-    client.println("GET /010003.bin HTTP/1.0");
-    client.println("Host: waiveplug.s3.us-east-2.amazonaws.com");
-    client.println("User-Agent: waiveplug/" + String(VERSION));
-    client.println("Accept: application/octet-stream");
-    client.println();
-
-    // skip headers
-    unsigned long timeoutStart = millis();
-    char prevPrevC = '\0';
-    char prevC = '\0';
-    char c = '\0';
-    while ((client.connected() || client.available()) && ((millis() - timeoutStart) < 30000)) {
-      if (client.available()) {
-        prevPrevC = prevC;
-        prevC = c;
-        c = client.read();
-        if (prevPrevC == '\n' && prevC == '\r' && c == '\n') {
-          break;
-        }
-      } else {
-        delay(1);
-        Watchdog.reset();
+static void skipHeaders() {
+  unsigned long timeoutStart = millis();
+  char prevPrevC = '\0';
+  char prevC = '\0';
+  char c = '\0';
+  while ((client.connected() || client.available()) && ((millis() - timeoutStart) < 30000)) {
+    if (client.available()) {
+      prevPrevC = prevC;
+      prevC = c;
+      c = client.read();
+      log(String(c));
+      if (prevPrevC == '\n' && prevC == '\r' && c == '\n') {
+        break;
       }
+    } else {
+      delay(1);
+      Watchdog.reset();
     }
-
-    //read body
-    timeoutStart = millis();
-    int counter = 0;
-    SHA256.beginHmac("Mqtt");
-
-    while ((client.connected() || client.available()) && ((millis() - timeoutStart) < 30000)) {
-      if (client.available()) {
-        c = client.read();
-        counter++;
-        // Serial.write(c);
-        SHA256.print(c);
-
-      } else {
-        delay(1);
-        Watchdog.reset();
-      }
-    }
-    log("https Sucessful: " + String(counter));
-  } else {
-    Serial.println("https failed");
   }
+}
 
+static void saveFile() {
+  unsigned long timeoutStart = millis();
+  int counter = 0;
+  SHA256.beginHmac("https failed");
+
+  while ((client.connected() || client.available()) && ((millis() - timeoutStart) < 30000)) {
+    if (client.available()) {
+      char c = client.read();
+      counter++;
+      SHA256.print(c);
+    } else {
+      delay(1);
+      Watchdog.reset();
+    }
+  }
+  logLine("total bytes downloaded: " + String(counter));
   SHA256.endHmac();
-  printResult();
+}
+
+static void moveFile(String& file) {
+  String computed = "";
+  while (SHA256.available()) {
+    byte b = SHA256.read();
+    if (b < 16) {
+      computed += "0";
+    }
+    computed += String(b, HEX);
+  }
+  String sha256 = file.substring(file.lastIndexOf("_") + 1);
+  logLine(sha256);
+  logLine(computed);
+  if (sha256 == computed) {
+    logLine("checksum passed");
+  }
+}
+
+void HttpClass::download(String& host, String& file) {
+  if (client.connectSSL(host.c_str(), 443)) {
+    sendGetRequest(host, file);
+    skipHeaders();
+    saveFile();
+    moveFile(file);
+  } else {
+    Serial.println(F("https failed"));
+  }
 }
 
 HttpClass Http;

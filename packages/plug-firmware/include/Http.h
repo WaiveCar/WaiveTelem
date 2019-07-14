@@ -3,7 +3,7 @@
 
 class HttpClass {
  public:
-  void download();
+  void download(String& host, String& file);
 };
 
 extern HttpClass Http;

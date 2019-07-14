@@ -33,7 +33,7 @@ void GpsClass::poll() {
         sprintf(latitude, "%0.6f", fix.latitudeL() / 1e7);
         sprintf(longitude, "%0.6f", fix.longitudeL() / 1e7);
         sprintf(time, "%04d-%02d-%02dT%02d:%02d:%02dZ", dt.full_year(dt.year), dt.month, dt.date, dt.hours, dt.minutes, dt.seconds);
-        Mqtt.telemeter("{" + System.getStatus() + ", \"gps\": {\"lat\": " + String(latitude) + ", \"long\": " + longitude + ", \"time\": \"" + time + "\"" + "}}");
+        Mqtt.telemeter("{" + System.getStatus() + "\"gps\": {\"lat\": " + String(latitude) + ", \"long\": " + longitude + ", \"time\": \"" + time + "\"" + "}}");
         lastSentTime = millis();
       }
     }

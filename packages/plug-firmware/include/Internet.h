@@ -14,6 +14,7 @@ class InternetClass {
   void connect();
   bool isConnected();
   unsigned long getTime();
+  String getSignalStrength();
 };
 
 extern InternetClass Internet;

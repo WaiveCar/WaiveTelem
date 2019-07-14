@@ -13,9 +13,9 @@
       "Properties": {
         "ThingName": { "Ref": "ThingName" },
         "AttributePayload": {
-          "version": "v1"
+          "vin": "55555"
         },
-        "ThingTypeName": "plug-type",
+        "ThingTypeName": "type-plug-wifi",
         "ThingGroups": ["plug-group"]
       }
     },
