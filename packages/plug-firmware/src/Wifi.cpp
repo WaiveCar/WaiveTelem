@@ -3,25 +3,29 @@
 #include <WiFi101.h>
 
 #include "Console.h"
-#include "Wifi.h"
+#include "Internet.h"
 
-void WifiClass::connect() {
+void InternetClass::connect() {
   if (WiFi.status() == WL_NO_SHIELD) {
     Serial.println(F("WiFi hardware not present"));
     while (true)
       ;
   }
-  log("Attempting to connect to SSID: " + String(WIFI_SSID));
+  logLine("Attempting to connect to SSID: " + String(WIFI_SSID));
   while (WiFi.begin(WIFI_SSID, WIFI_PASSWORD) != WL_CONNECTED) {
-    Serial.print(F("."));
+    log(F("."));
     delay(3000);
   }
-  log(F("You're connected to the network"));
+  logLine(F("You're connected to the network"));
 }
 
-bool WifiClass::isConnected() {
+bool InternetClass::isConnected() {
   return WiFi.status() == WL_CONNECTED;
 }
 
-WifiClass Wifi;
+unsigned long InternetClass::getTime() {
+  return Internet.getTime();
+}
+
+InternetClass Internet;
 #endif

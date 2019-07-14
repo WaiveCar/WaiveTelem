@@ -27,7 +27,7 @@ void ConfigClass::load() {
     file.close();
     return;
   }
-  log("JsonDoc memory usage: " + String(doc.memoryUsage()));
+  logLine("JsonDoc memory usage: " + String(doc.memoryUsage()));
   id = strdup(doc["id"]);
   mqttBrokerUrl = strdup(doc["mqttBrokerUrl"]);
   mqttBrokerCert = strdup(doc["mqttBrokerCert"]);

@@ -14,7 +14,7 @@ static NMEAGPS gps;
 void GpsClass::setup() {
   GPSSerial.begin(9600);
   while (!GPSSerial) {
-    Serial.print(F("G"));
+    log(F("G"));
     delay(1000);
   }
 

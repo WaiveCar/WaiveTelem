@@ -9,11 +9,6 @@
 #include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
-#ifdef ARDUINO_SAMD_MKR1000
-#include "Wifi.h"
-#elif defined(ARDUINO_SAMD_MKRNB1500)
-#include "Cellular.h"
-#endif
 
 void setup() {
   Watchdog.enable(16 * 1000);
@@ -24,24 +19,13 @@ void setup() {
   Mqtt.setup();
   Can.setup();
   Bluetooth.setup();
+  System.sendVersion();
 }
 
 void loop() {
-#ifdef ARDUINO_SAMD_MKR1000
-  if (!Wifi.isConnected()) {
-    Wifi.connect();
-  }
-#elif defined(ARDUINO_SAMD_MKRNB1500)
-  if (!Cellular.isConnected()) {
-    Cellular.connect();
-  }
-#endif
-  if (!Mqtt.isConnected()) {
-    Mqtt.connect();
-    System.sendVersion();
-  }
+  Watchdog.reset();
   Mqtt.poll();
   Gps.poll();
   Bluetooth.poll();
-  Watchdog.reset();
+  delay(1);
 }

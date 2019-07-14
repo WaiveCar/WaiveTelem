@@ -97,9 +97,9 @@ static void onCanReceive(const CANMessage& inMessage) {
 
 void CanClass::setup() {
   CanConfig& config = Config.getCanConfig();
-  log(F("Configure ACAN2515"));
+  logLine(F("Configure ACAN2515"));
   for (int i = 0; i < config.num_bus; i++) {
-    log("CAN" + String(i) + ", baud: " + config.bus_baud[i]);
+    logLine("CAN" + String(i) + ", baud: " + config.bus_baud[i]);
     ACAN2515Settings settings(QUARTZ_FREQUENCY, config.bus_baud[i] * 1000);
     //  settings.mRequestedMode = ACAN2515Settings::LoopBackMode ; // Select loopback mode
     const ACAN2515Mask rxm0 = standard2515Mask(0, 0, 0);

@@ -17,11 +17,11 @@ This package automatically
   - install aws-cli `pip3 install awscli`
   - login aws `aws configure`
   - Git clone WaiveTelem `git clone git@github.com:WaiveCar/WaiveTelem.git`
-- Review plug-type, plug-group, and plug policy on AWS IoT console as they should be considered carefully. They were created with the following:
+- Review plug-type, plug-group, and plug-policy on AWS IoT console as they should be considered carefully. They were created with the following:
   - aws iot create-thing-type --thing-type-name plug-type
-  - aws iot create-policy --policy-name AllowEverything --policy-document "{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Action\": [\"iot:*\"],\"Resource\": [\"*\"]}]}"
+  - aws iot create-policy --policy-name plug-policy --policy-document '{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Action": ["iot:Connect"],"Resource": ["arn:aws:iot:us-east-2:179944132799:client/${iot:Connection.Thing.ThingName}"]},{"Effect": "Allow","Action": ["iot:Publish"],"Resource": ["arn:aws:iot:us-east-2:179944132799:topic/$aws/things/${iot:Connection.Thing.ThingName}/shadow/update"]},{"Effect": "Allow","Action": ["iot:Subscribe"],"Resource": ["arn:aws:iot:us-east-2:179944132799:topicfilter/$aws/things/${iot:Connection.Thing.ThingName}/shadow/update/delta"]},{"Effect": "Allow","Action": ["iot:Receive"],"Resource": ["*"]},{"Effect": "Allow","Action": ["iot:UpdateThingShadow"],"Resource": ["arn:aws:iot:us-east-2:179944132799:thing/${iot:Connection.Thing.ThingName}"]}]}'
   - aws iot create-thing-group --thing-group-name plug-group
-  - aws iot attach-policy --policy-name AllowEverything --target arn:aws:iot:us-east-2:179944132799:thinggroup/plug-group
+  - aws iot attach-policy --policy-name plug-policy --target arn:aws:iot:us-east-2:179944132799:thinggroup/plug-group
 
 ## Provisioning:
 

@@ -1,6 +1,7 @@
 #include <STBLE.h>
 
 #include "Bluetooth.h"
+#include "Console.h"
 
 uint8_t ble_rx_buffer[21];
 uint8_t ble_rx_buffer_len = 0;
@@ -13,7 +14,7 @@ char sprintbuff[100];
 #define PRINTF(...)                   \
   {                                   \
     sprintf(sprintbuff, __VA_ARGS__); \
-    Serial.print(sprintbuff);         \
+    log(sprintbuff);                  \
   }
 #else
 #define PRINTF(...)
