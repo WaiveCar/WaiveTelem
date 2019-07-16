@@ -29,5 +29,5 @@ void loop() {
   Mqtt.poll();
   Bluetooth.poll();
   System.poll();
-  delay(1);
+  delay(6 * 1000);
 }

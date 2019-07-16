@@ -5,10 +5,14 @@ class GpsClass {
  public:
   void setup();
   void poll();
-  const String& getData();
+  float getLatitude();
+  float getLongitude();
+  const char* getTime();
 
  private:
-  String data;
+  int latitude;
+  int longitude;
+  char time[32];
 };
 
 extern GpsClass Gps;

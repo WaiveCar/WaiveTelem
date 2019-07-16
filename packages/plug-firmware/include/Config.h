@@ -10,7 +10,7 @@ class ConfigClass {
   JsonDocument& get();
 
  private:
-  StaticJsonDocument<4096> jsonDoc;
+  StaticJsonDocument<4096> configDoc;
 };
 
 extern ConfigClass Config;

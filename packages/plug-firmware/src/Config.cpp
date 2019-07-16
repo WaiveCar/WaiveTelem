@@ -14,20 +14,20 @@ void ConfigClass::load() {
   }
   File file = SD.open(CONFIG_FILE);
   // go to https://arduinojson.org/v6/assistant/ to find the size
-  DeserializationError error = deserializeJson(jsonDoc, file);
+  DeserializationError error = deserializeJson(configDoc, file);
   if (error) {
     Serial.println("Failed to read file: " + String(error.c_str()));
     file.close();
     return;
   }
-  logLine("JsonDoc memory usage: " + String(jsonDoc.memoryUsage()));
-  logLine(jsonDoc["can"]["model"].as<char*>());
+  logLine("JsonDoc memory usage: " + String(configDoc.memoryUsage()));
+  logLine(configDoc["can"]["model"].as<char*>());
 
   file.close();
 }
 
 JsonDocument& ConfigClass::get() {
-  return jsonDoc;
+  return configDoc;
 }
 
 ConfigClass Config;

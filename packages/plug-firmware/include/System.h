@@ -9,16 +9,12 @@ class SystemClass {
   void sendHeartbeat();
   void sendCanStatus();
   void setCanStatus(const String& name, const uint64_t value);
-  void setInRide(bool in);
-  bool getInRide();
   void processCommand(const String& json);
 
  private:
-  String getStatus();
-  bool inRide;
-  uint32_t lastHeartbeat;
-  StaticJsonDocument<2048> jsonDoc;
   bool canStatusChanged;
+  uint32_t lastHeartbeat;
+  StaticJsonDocument<2048> statusDoc;
 };
 
 extern SystemClass System;
