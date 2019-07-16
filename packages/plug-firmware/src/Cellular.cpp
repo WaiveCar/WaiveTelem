@@ -28,8 +28,8 @@ unsigned long InternetClass::getTime() {
   return nbAccess.getTime();
 }
 
-String InternetClass::getSignalStrength() {
-  return nbScanner.getSignalStrength();
+int InternetClass::getSignalStrength() {
+  return nbScanner.getSignalStrength().toInt();
 }
 
 InternetClass Internet;

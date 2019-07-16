@@ -14,7 +14,7 @@ class SystemClass {
  private:
   bool canStatusChanged;
   uint32_t lastHeartbeat;
-  StaticJsonDocument<2048> statusDoc;
+  StaticJsonDocument<1024> statusDoc;
 };
 
 extern SystemClass System;

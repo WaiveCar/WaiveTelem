@@ -20,7 +20,7 @@ void ConfigClass::load() {
     file.close();
     return;
   }
-  logLine("JsonDoc memory usage: " + String(configDoc.memoryUsage()));
+  logLine("configDoc memory usage: " + String(configDoc.memoryUsage()));
   logLine(configDoc["can"]["model"].as<char*>());
 
   file.close();

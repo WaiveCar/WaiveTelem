@@ -28,7 +28,7 @@ void SystemClass::setup() {
 }
 
 void SystemClass::poll() {
-  bool inRide = statusDoc["inRide"] == "true";
+  bool inRide = (statusDoc["inRide"] == "true");
   int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"];
   if (Gps.getLatitude() != 0 &&
       (lastHeartbeat == 0 ||
@@ -40,6 +40,7 @@ void SystemClass::poll() {
 
 void SystemClass::sendVersion() {
   statusDoc["firmware"] = FIRMWARE_VERSION;
+  statusDoc["inRide"] = "false";
   String version = "{\"inRide\": \"false\", \"firmware\": \"" + String(FIRMWARE_VERSION) + "\"}";
   Mqtt.telemeter(version);
 }
@@ -50,8 +51,7 @@ void SystemClass::sendHeartbeat() {
   gps["lat"] = Gps.getLatitude() / 1e7;
   gps["long"] = Gps.getLongitude() / 1e7;
   gps["time"] = Gps.getTime();
-  // return "\"freeMemory\": " + String(freeMemory()) + ", \"signalStrength\": \"" + Internet.getSignalStrength() + "\"";
-  heartbeat["freeMemory"] = freeMemory();
+  // heartbeat["freeMemory"] = freeMemory();
   heartbeat["signalStrength"] = Internet.getSignalStrength();
   Mqtt.telemeter(statusDoc["heartbeat"].as<String>());
   File writeFile = SD.open("STATUS.TXT", FILE_WRITE);
@@ -60,9 +60,10 @@ void SystemClass::sendHeartbeat() {
     return;
   }
   String json = statusDoc.as<String>();
-  logLine("json: " + json);
+  // logLine("json: " + json);
   writeFile.write(json.c_str(), json.length());
   writeFile.close();
+  logLine("statusDoc memory usage: " + String(statusDoc.memoryUsage()));
 }
 
 void SystemClass::sendCanStatus() {
@@ -81,22 +82,23 @@ void SystemClass::setCanStatus(const String& name, const uint64_t value) {
 }
 
 void SystemClass::processCommand(const String& json) {
-  StaticJsonDocument<512> doc;
-  DeserializationError error = deserializeJson(doc, json);
+  StaticJsonDocument<512> cmdDoc;
+  DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
     Serial.println("Failed to read json: " + String(error.c_str()));
     return;
   }
+  logLine("cmdDoc memory usage: " + String(cmdDoc.memoryUsage()));
 
-  JsonObject desired = doc["state"];
+  JsonObject desired = cmdDoc["state"];
   if (desired["doors"] == "unlocked") {
     Pins.unlockDoors();
     // CAN-BUS should update
-    // Mqtt.telemeter("{\"doors\": \"unlocked\"}");
+    Mqtt.telemeter("{\"doors\": \"unlocked\"}");
   } else if (desired["doors"] == "locked") {
     Pins.lockDoors();
     // CAN-BUS should update
-    // Mqtt.telemeter("{\"doors\": \"locked\"}");
+    Mqtt.telemeter("{\"doors\": \"locked\"}");
   } else if (desired["immobilized"] == "true") {
     Pins.immobilize();
     statusDoc["immobilized"] = "true";
@@ -111,7 +113,7 @@ void SystemClass::processCommand(const String& json) {
   } else if (desired["inRide"] == "false") {
     statusDoc["inRide"] = "false";
     Mqtt.telemeter("{\"inRide\": \"false\"}");
-  } else if (!desired["download"].isNull() && desired["firmware"] != FIRMWARE_VERSION) {
+  } else if (!desired["download"].isNull()) {
     String host = desired["download"]["host"];
     String file = desired["download"]["file"];
     Http.download(host, file);

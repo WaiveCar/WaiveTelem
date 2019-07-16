@@ -27,9 +27,8 @@ unsigned long InternetClass::getTime() {
   return WiFi.getTime();
 }
 
-String InternetClass::getSignalStrength() {
-  long rssi = WiFi.RSSI();
-  return String(rssi) + " dBm";
+int InternetClass::getSignalStrength() {
+  return WiFi.RSSI();
 }
 
 InternetClass Internet;
