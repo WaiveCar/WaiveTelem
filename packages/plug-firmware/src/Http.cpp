@@ -15,7 +15,7 @@
 
 static InternetClient client;
 
-static void sendGetRequest(String& host, String& file) {
+static void sendGetRequest(const String& host, const String& file) {
   client.println("GET /" + file + " HTTP/1.0");
   client.println("Host: " + host);
   client.println("User-Agent: waiveplug/" + String(FIRMWARE_VERSION));
@@ -72,7 +72,7 @@ static int32_t saveFile() {
   return 0;
 }
 
-static int32_t verifyFile(String& file) {
+static int32_t verifyFile(const String& file) {
   String computed = "";
   while (SHA256.available()) {
     byte b = SHA256.read();
@@ -116,7 +116,7 @@ static int32_t moveFile() {
   return 0;
 }
 
-void HttpClass::download(String& host, String& file) {
+void HttpClass::download(const String& host, const String& file) {
   logLine("host: " + host + ", file: " + file);
   int32_t error;
   if (client.connectSSL(host.c_str(), 443)) {

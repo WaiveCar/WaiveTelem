@@ -19,16 +19,18 @@ int freeMemory() {
 
 void SystemClass::setup() {
   inRide = false;
-  lastSentTime = 0;
+  lastHeartbeat = 0;
+  canStatusChanged = false;
+  jsonDoc.createNestedObject("can");
 }
 
 void SystemClass::poll() {
   int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"];
   if (Gps.getData().length() > 0 &&
-      (lastSentTime == 0 ||
-       (interval >= 0 && millis() - lastSentTime > (u_int32_t)interval * 1000))) {
+      (lastHeartbeat == 0 ||
+       (interval >= 0 && millis() - lastHeartbeat > (uint32_t)interval * 1000))) {
     sendHeartbeat();
-    lastSentTime = millis();
+    lastHeartbeat = millis();
   }
 }
 
@@ -42,6 +44,21 @@ void SystemClass::sendHeartbeat() {
   Mqtt.telemeter(heartbeat);
 }
 
+void SystemClass::sendCanStatus() {
+  if (canStatusChanged) {
+    Mqtt.telemeter(jsonDoc["can"].as<String>());
+    canStatusChanged = false;
+  }
+}
+
+void SystemClass::setCanStatus(const String& name, const uint64_t value) {
+  JsonObject can = jsonDoc["can"];
+  if (can[name] != value) {
+    canStatusChanged = true;
+  }
+  can[name] = value;
+}
+
 void SystemClass::setInRide(bool in) {
   inRide = in;
 }
@@ -51,10 +68,10 @@ bool SystemClass::getInRide() {
 }
 
 String SystemClass::getStatus() {
-  return "\"freeMemory\": " + String(freeMemory()) + ", \"signalStrength\": \"" + String(Internet.getSignalStrength() + "\"");
+  return "\"freeMemory\": " + String(freeMemory()) + ", \"signalStrength\": \"" + Internet.getSignalStrength() + "\"";
 }
 
-void SystemClass::processCommand(String& json) {
+void SystemClass::processCommand(const String& json) {
   StaticJsonDocument<1024> doc;
   DeserializationError error = deserializeJson(doc, json);
   if (error) {

@@ -12,14 +12,14 @@
 
 void setup() {
   Watchdog.enable(16 * 1000);
-  Console.setup();
   Pins.setup();
   Config.load();
+  Console.setup();
   Gps.setup();
   Can.setup();
   Bluetooth.setup();
   Mqtt.setup();
-
+  System.setup();
   System.sendVersion();
 }
 

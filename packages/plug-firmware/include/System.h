@@ -7,14 +7,18 @@ class SystemClass {
   void poll();
   void sendVersion();
   void sendHeartbeat();
+  void sendCanStatus();
+  void setCanStatus(const String& name, const uint64_t value);
   void setInRide(bool in);
   bool getInRide();
-  void processCommand(String& json);
+  void processCommand(const String& json);
 
  private:
   String getStatus();
   bool inRide;
-  u_int32_t lastSentTime;
+  uint32_t lastHeartbeat;
+  StaticJsonDocument<2048> jsonDoc;
+  bool canStatusChanged;
 };
 
 extern SystemClass System;

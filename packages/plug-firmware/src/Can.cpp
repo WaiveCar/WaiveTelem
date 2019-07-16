@@ -5,6 +5,7 @@
 #include "Console.h"
 #include "Mqtt.h"
 #include "Pins.h"
+#include "System.h"
 
 #define QUARTZ_FREQUENCY 16 * 1000 * 1000
 
@@ -22,7 +23,7 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
       if (inMessage.id == status["id"]) {
         int bit = status["bit"];
         int len = status["len"];
-        uint64_t data =
+        uint64_t value =
             static_cast<uint64_t>(inMessage.data[0]) |
             static_cast<uint64_t>(inMessage.data[1]) << 8 |
             static_cast<uint64_t>(inMessage.data[2]) << 16 |
@@ -32,9 +33,12 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
             static_cast<uint64_t>(inMessage.data[6]) << 48 |
             static_cast<uint64_t>(inMessage.data[7]) << 56;
         uint64_t mask = pow(2, len) - 1;
-        data = (data >> bit) & mask;
+        value = (value >> bit) & mask;
+        String name = status["name"];
+        System.setCanStatus(name, value);
       }
     }
+    System.sendCanStatus();
   }
 }
 

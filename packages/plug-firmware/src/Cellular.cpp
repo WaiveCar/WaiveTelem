@@ -12,7 +12,8 @@ static NBScanner nbScanner;
 
 void InternetClass::connect() {
   log(F("Attempting to connect to the Internet"));
-  while ((nbAccess.begin(Config.getNbSimPin()) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
+  JsonObject nb = Config.get()["nb"];
+  while ((nbAccess.begin(nb["pin"].as<char*>(), nb["apn"].as<char*>()) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
     Serial.print(F("."));
     delay(1000);
   }

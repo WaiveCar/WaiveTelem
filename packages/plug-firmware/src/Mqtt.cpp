@@ -35,7 +35,6 @@ void MqttClass::setup() {
   JsonObject mqtt = Config.get()["mqtt"];
   const char* id = mqtt["id"];
   logLine("id: " + String(id));
-  // logLine("cert: " + Config.getMqttBrokerCert());
   sslClient.setEccSlot(0, mqtt["cert"]);
   mqttClient.setId(id);
   mqttClient.onMessage(onMessageReceived);
@@ -82,6 +81,7 @@ void MqttClass::telemeter(const String& reported, const String& desired) {
   String topic = "$aws/things/" + id + "/shadow/update";
   String message = "{\"state\": {" +
                    (reported != "" ? "\"reported\": " + reported : "") +
+                   (reported != "" && desired != "" ? ", " : "") +
                    (desired != "" ? "\"desired\": " + desired : "") + "}}";
   logLine("publish " + topic + " " + message);
   mqttClient.beginMessage(topic);

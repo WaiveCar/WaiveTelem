@@ -18,7 +18,7 @@
 		"bus": [
 			{
 				"baud": 500,
-				"data": [
+				"status": [
 					{
 						"name": "fuel_level",
 						"id": 1292,
@@ -100,8 +100,8 @@
 				]				
 			},
 			{
-				"baud": 100,
-				"data": []
+				"baud": 125,
+				"status": []
 			}
 		]
 	}
