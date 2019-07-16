@@ -19,13 +19,15 @@ void setup() {
   Can.setup();
   Bluetooth.setup();
   Mqtt.setup();
+
   System.sendVersion();
 }
 
 void loop() {
   Watchdog.reset();
-  Mqtt.poll();
   Gps.poll();
+  Mqtt.poll();
   Bluetooth.poll();
+  System.poll();
   delay(1);
 }

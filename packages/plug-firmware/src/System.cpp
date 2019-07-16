@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
+#include "Config.h"
 #include "Console.h"
+#include "Gps.h"
 #include "Http.h"
 #include "Internet.h"
 #include "Mqtt.h"
@@ -17,11 +19,27 @@ int freeMemory() {
 
 void SystemClass::setup() {
   inRide = false;
+  lastSentTime = 0;
+}
+
+void SystemClass::poll() {
+  int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"];
+  if (Gps.getData().length() > 0 &&
+      (lastSentTime == 0 ||
+       (interval >= 0 && millis() - lastSentTime > (u_int32_t)interval * 1000))) {
+    sendHeartbeat();
+    lastSentTime = millis();
+  }
 }
 
 void SystemClass::sendVersion() {
   String version = "{\"inRide\": \"false\", \"firmware\": \"" + String(FIRMWARE_VERSION) + "\"}";
   Mqtt.telemeter(version);
+}
+
+void SystemClass::sendHeartbeat() {
+  String heartbeat = "{" + getStatus() + ", " + Gps.getData() + "}";
+  Mqtt.telemeter(heartbeat);
 }
 
 void SystemClass::setInRide(bool in) {
@@ -33,7 +51,7 @@ bool SystemClass::getInRide() {
 }
 
 String SystemClass::getStatus() {
-  return "\"freeMemory\": " + String(freeMemory()) + ", \"signalStrength\": \"" + String(Internet.getSignalStrength() + "\", ");
+  return "\"freeMemory\": " + String(freeMemory()) + ", \"signalStrength\": \"" + String(Internet.getSignalStrength() + "\"");
 }
 
 void SystemClass::processCommand(String& json) {

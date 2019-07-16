@@ -44,4 +44,4 @@ This package automatically
 
 ## Config Templates:
 
-hyukia.txt is one example of config templates. The maximum number of CAN-BUS telemetry that the firmware support is 20 currently.
+hyukia.txt is one example of config templates. Make sure the can bus message ids (.can.bus[].status[].id) are in ascending order

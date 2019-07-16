@@ -32,10 +32,12 @@ void MqttClass::setup() {
       ;
   }
   ArduinoBearSSL.onGetTime(getTime);
-  logLine("id: " + String(Config.getId()));
+  JsonObject mqtt = Config.get()["mqtt"];
+  const char* id = mqtt["id"];
+  logLine("id: " + String(id));
   // logLine("cert: " + Config.getMqttBrokerCert());
-  sslClient.setEccSlot(0, Config.getMqttBrokerCert());
-  mqttClient.setId(Config.getId());
+  sslClient.setEccSlot(0, mqtt["cert"]);
+  mqttClient.setId(id);
   mqttClient.onMessage(onMessageReceived);
   connect();
 }
@@ -44,10 +46,13 @@ void MqttClass::connect() {
   if (!Internet.isConnected()) {
     Internet.connect();
   }
-  logLine("Attempting to connect to MQTT broker: " + String(Config.getMqttBrokerUrl()));
+  const JsonObject mqtt = Config.get()["mqtt"];
+  const char* url = mqtt["url"];
+  String id = mqtt["id"];
+  logLine("Attempting to connect to MQTT broker: " + String(url));
   const int maxTry = 20;
   int i = 0;
-  while (!mqttClient.connect(Config.getMqttBrokerUrl(), 8883)) {
+  while (!mqttClient.connect(url, 8883)) {
     Watchdog.reset();
     if (i == maxTry) {
       logLine(F("Failed to connect, try leter"));
@@ -58,7 +63,7 @@ void MqttClass::connect() {
     i++;
   }
   logLine(F("You're connected to the MQTT broker"));
-  mqttClient.subscribe("$aws/things/" + String(Config.getId()) + "/shadow/update/delta");
+  mqttClient.subscribe("$aws/things/" + id + "/shadow/update/delta");
 }
 
 bool MqttClass::isConnected() {
@@ -73,7 +78,8 @@ void MqttClass::poll() {
 }
 
 void MqttClass::telemeter(const String& reported, const String& desired) {
-  String topic = "$aws/things/" + String(Config.getId()) + "/shadow/update";
+  String id = Config.get()["mqtt"]["id"];
+  String topic = "$aws/things/" + id + "/shadow/update";
   String message = "{\"state\": {" +
                    (reported != "" ? "\"reported\": " + reported : "") +
                    (desired != "" ? "\"desired\": " + desired : "") + "}}";

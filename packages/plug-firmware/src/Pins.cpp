@@ -23,7 +23,7 @@ void PinsClass::setup() {
 
   //Ensure SPI CS Pins are all high to avoid a noisy bus at inits
   digitalWrite(CAN0_CS_PIN, HIGH);
-  //  digitalWrite(CAN1_CS_PIN, HIGH);
+  digitalWrite(CAN1_CS_PIN, HIGH);
   digitalWrite(SD_CS_PIN, HIGH);
   digitalWrite(FL_CS_PIN, HIGH);
   digitalWrite(BLE_CS_PIN, HIGH);

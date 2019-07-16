@@ -5,9 +5,10 @@ class GpsClass {
  public:
   void setup();
   void poll();
+  const String& getData();
 
  private:
-  u_int32_t lastSentTime;
+  String data;
 };
 
 extern GpsClass Gps;
