@@ -50,7 +50,7 @@ static int32_t saveFile(const char* to) {
   SHA256.beginHmac("https failed");
   File file = SD.open(to, FILE_WRITE);
   if (!file) {
-    Logger.logLine("file open failed");
+    logError("file open failed");
     return -1;
   }
   file.seek(0);  // workaround BUG in SD to default to append
@@ -87,7 +87,7 @@ static int32_t verifyFile(const String& file) {
   if (sha256 == computed) {
     return 0;
   } else {
-    Logger.logLine("checksum failed");
+    logError("checksum failed");
     return -1;
   }
 }
@@ -108,7 +108,7 @@ void HttpClass::download(const char* host, const char* from, const char* to) {
     Mqtt.telemeter("", "{\"download\": null}");
     System.reboot();
   } else {
-    Logger.logLine(F("https failed"));
+    logError(F("https failed"));
   }
 }
 

@@ -71,7 +71,7 @@ void CanClass::setup() {
       auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
       const uint32_t errorCode = can.begin(settings, lambda, rxm0, filters, 1);
       if (errorCode != 0) {
-        Logger.logLine("Configuration error " + String(errorCode));
+        logError("Configuration error " + String(errorCode));
       }
     }
   }

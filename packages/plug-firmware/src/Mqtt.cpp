@@ -28,7 +28,7 @@ static unsigned long getTime() {
 
 void MqttClass::setup() {
   if (!ECCX08.begin()) {
-    Logger.logLine(F("No ECCX08 present"));
+    logError(F("No ECCX08 present"));
     while (1)
       ;
   }

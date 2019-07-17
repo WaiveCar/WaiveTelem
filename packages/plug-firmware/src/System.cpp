@@ -74,7 +74,7 @@ void SystemClass::processCommand(const String& json) {
   StaticJsonDocument<512> cmdDoc;
   DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
-    Logger.logLine("Failed to read json: " + String(error.c_str()));
+    logError("Failed to read json: " + String(error.c_str()));
     return;
   }
   logDebug("cmdDoc memory cushion: " + String(512 - cmdDoc.memoryUsage()));
@@ -114,7 +114,7 @@ void SystemClass::processCommand(const String& json) {
     if (strlen(host) > 0 && strlen(from) > 0 && strlen(to) > 0) {
       Http.download(host, from, to);
     } else {
-      Logger.logLine("Error: " + json);
+      logError("Error: " + json);
     }
   } else if (!copy.isNull()) {
     const char* from = copy["from"] | "";
@@ -124,15 +124,15 @@ void SystemClass::processCommand(const String& json) {
       Mqtt.telemeter("", "{\"copy\": null}");
       reboot();
     } else {
-      Logger.logLine("Error: " + json);
+      logError("Error: " + json);
     }
   } else {
-    Logger.logLine("Unknown command: " + json);
+    logError("Unknown command: " + json);
   }
 }
 
 void SystemClass::reboot() {
-  Logger.logLine(F("Rebooting now"));
+  logError(F("Rebooting now"));
   delay(1000);
   Watchdog.enable(1);
   while (true)
@@ -150,12 +150,12 @@ int32_t SystemClass::moveFile(const char* from, const char* to) {
 int32_t SystemClass::copyFile(const char* from, const char* to) {
   File readFile = SD.open(from, FILE_READ);
   if (!readFile) {
-    Logger.logLine("readFile open failed");
+    logError("readFile open failed");
     return -1;
   }
   File writeFile = SD.open(to, FILE_WRITE);
   if (!writeFile) {
-    Logger.logLine("writeFile open failed");
+    logError("writeFile open failed");
     return -1;
   }
   writeFile.seek(0);  // workaround BUG in SD to default to append

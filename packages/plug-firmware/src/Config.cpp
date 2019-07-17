@@ -9,14 +9,14 @@
 
 void ConfigClass::load() {
   while (!SD.begin(SD_CS_PIN)) {
-    Logger.logLine(F("Failed to initialize SD Library"));
+    logError(F("Failed to initialize SD Library"));
     delay(1000);
   }
   File file = SD.open(CONFIG_FILE);
   // go to https://arduinojson.org/v6/assistant/ to find the size
   DeserializationError error = deserializeJson(configDoc, file);
   if (error) {
-    Logger.logLine("Failed to read file: " + String(error.c_str()));
+    logError("Failed to read file: " + String(error.c_str()));
     file.close();
     while (true)
       ;

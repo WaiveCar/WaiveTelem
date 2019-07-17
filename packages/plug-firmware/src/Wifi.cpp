@@ -7,7 +7,7 @@
 
 void InternetClass::connect() {
   if (WiFi.status() == WL_NO_SHIELD) {
-    Logger.logLine(F("WiFi hardware not present"));
+    logError(F("WiFi hardware not present"));
     while (true)
       ;
   }

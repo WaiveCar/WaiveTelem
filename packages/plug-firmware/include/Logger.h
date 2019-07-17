@@ -6,12 +6,14 @@
 #include "Gps.h"
 #include "Mqtt.h"
 
+#define logError(s) Logger.logLine(String("ERROR ") + s)
+
 #ifdef DEBUG
-#define log(...) Serial.print(__VA_ARGS__)
-#define logDebug(...) Logger.logLine(__VA_ARGS__)
+#define log(s) Serial.print(s)
+#define logDebug(s) Logger.logLine(String("DEBUG ") + s)
 #else
-#define log(...)
-#define logDebug(...)
+#define log(s)
+#define logDebug(s)
 #endif
 
 class LoggerClass {
