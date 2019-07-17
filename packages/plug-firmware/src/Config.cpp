@@ -18,9 +18,10 @@ void ConfigClass::load() {
   if (error) {
     Serial.println("Failed to read file: " + String(error.c_str()));
     file.close();
-    return;
+    while (true)
+      ;
   }
-  logLine("configDoc memory usage: " + String(configDoc.memoryUsage()));
+  logLine("configDoc memory cushion: " + String(4096 - configDoc.memoryUsage()));
   logLine(configDoc["can"]["model"].as<char*>());
 
   file.close();

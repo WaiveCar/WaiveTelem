@@ -1,24 +1,16 @@
 #!/bin/bash
 
-mkdir ./config/${PLUG_ID}
+echo "Running generateCSR.sh"
+
+mkdir ./sd/${PLUG_ID}
 pio run -v --target upload
 sleep 3
 
 case "$(uname -s)" in
-
    Darwin)
       CSR=$(./getCSR.sh | head -1) # get first line of the serial port output
       CSR=${CSR%??} # remove last two characters
       ;;
-
-  #  Linux)
-  #    echo 'Linux'
-  #    ;;
-
-  #  CYGWIN*|MINGW32*|MSYS*)
-  #    echo 'MS Windows'
-  #    ;;
-
    *)
       echo 'other OS'
       pio device monitor --quiet > csr.txt &

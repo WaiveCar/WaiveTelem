@@ -11,7 +11,6 @@
 #include "System.h"
 
 #define DOWNLOAD_TIMEOUT 60 * 1000
-#define BUFFER_SIZE 512
 
 static InternetClient client;
 
@@ -45,15 +44,16 @@ static int32_t skipHeaders() {
   return -1;
 }
 
-static int32_t saveFile() {
+static int32_t saveFile(const char* to) {
   unsigned long timeoutStart = millis();
   int counter = 0;
   SHA256.beginHmac("https failed");
-  File file = SD.open("TEMP", FILE_WRITE);
+  File file = SD.open(to, FILE_WRITE);
   if (!file) {
     Serial.println("file open failed");
     return -1;
   }
+  file.seek(0);  // workaround BUG in SD to default to append
   uint8_t buf[BUFFER_SIZE];
   while ((client.connected() || client.available()) && ((millis() - timeoutStart) < DOWNLOAD_TIMEOUT)) {
     if (client.available()) {
@@ -92,47 +92,21 @@ static int32_t verifyFile(const String& file) {
   }
 }
 
-static int32_t moveFile() {
-  File readFile = SD.open("TEMP", FILE_READ);
-  if (!readFile) {
-    Serial.println("readFile open failed");
-    return -1;
-  }
-  File writeFile = SD.open("UPDATE.BIN", FILE_WRITE);
-  if (!writeFile) {
-    Serial.println("writeFile open failed");
-    return -1;
-  }
-  uint8_t buf[BUFFER_SIZE];
-  while (readFile.available()) {
-    int bytesRead = readFile.read(buf, sizeof(buf));
-    writeFile.write(buf, bytesRead);
-    // logLine("write " + String(bytesRead));
-    Watchdog.reset();
-  }
-  readFile.close();
-  writeFile.close();
-  SD.remove((char*)"TEMP");
-  return 0;
-}
-
-void HttpClass::download(const String& host, const String& file) {
-  logLine("host: " + host + ", file: " + file);
+void HttpClass::download(const char* host, const char* from, const char* to) {
+  logLine("host: " + String(host) + ", from: " + from + ", to: " + to);
   int32_t error;
-  if (client.connectSSL(host.c_str(), 443)) {
-    sendGetRequest(host, file);
+  if (client.connectSSL(host, 443)) {
+    sendGetRequest(host, from);
     error = skipHeaders();
     if (error) return;
-    error = saveFile();
+    error = saveFile("TEMP");
     if (error) return;
-    error = verifyFile(file);
+    error = verifyFile(from);
     if (error) return;
-    error = moveFile();
+    error = System.moveFile("TEMP", to);
     if (error) return;
     Mqtt.telemeter("", "{\"download\": null}");
-    // reset
-    Watchdog.enable(1000);
-    delay(10 * 10000);
+    System.reboot();
   } else {
     Serial.println(F("https failed"));
   }

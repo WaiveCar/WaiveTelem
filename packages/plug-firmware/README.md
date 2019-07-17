@@ -47,13 +47,17 @@ e.g. for plug-1
 - click on "Shadow" and edit the Shadow State to have one of the following JSONs:
 
 ```json
+{"desired": {"reboot": "true"}}
 {"desired": {"doors": "unlocked"}}
 {"desired": {"doors": "locked"}}
 {"desired": {"immobilized": "true"}}
 {"desired": {"immobilized": "false"}}
 {"desired": {"inRide": "true"}}
 {"desired": {"inRide": "false"}}
-{"desired": {"firmware": "1.0.3", "download": {"host": "waiveplug.s3.us-east-2.amazonaws.com", "file": "1000_1.0.3_593ae6b91ed7fb5ef3318b0252f9cf50e66de520627eed5092b56de9fa1b5783"}}}
+{"desired": {"download": {"host": "waiveplug.s3.us-east-2.amazonaws.com", "from": "1000_1.0.4_9ccd5d8eb348015145a4df52cd29e7e233768a9d2fc475e4aab4773fc5cccb66", "to": "UPDATE.BIN"}}}
+{"desired": {"download": {"host": "waiveplug.s3.us-east-2.amazonaws.com", "from": "plug1_config_e6cd5276eb396159eebce1005be1b5e6926d394d9cf6bf7e0e7c4c70cad43341", "to": "CONFIG.TXT"}}}
+{"desired": {"copy": {"from": "DEFAULT.BIN", "to": "UPDATE.BIN"}}}
+{"desired": {"copy": {"from": "DEFAULT.CFG", "to": "CONFIG.TXT"}}}
 ```
 
 ### MQTT Device Shadow Reported (Telemetry):
