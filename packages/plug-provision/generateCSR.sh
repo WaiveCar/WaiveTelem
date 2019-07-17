@@ -1,10 +1,10 @@
 #!/bin/bash
 
+echo ""
 echo "Running generateCSR.sh"
 
-mkdir ./sd/${PLUG_ID}
 pio run -v --target upload
-sleep 3
+sleep 5
 
 case "$(uname -s)" in
    Darwin)

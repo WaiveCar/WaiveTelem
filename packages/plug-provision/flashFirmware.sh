@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo ""
 echo "Running flashFirmware.sh"
 
 case "$(uname -s)" in

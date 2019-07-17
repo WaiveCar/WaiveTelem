@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo ""
 echo "Running generateConfig.sh"
 
 MQTT_BROKER=a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com

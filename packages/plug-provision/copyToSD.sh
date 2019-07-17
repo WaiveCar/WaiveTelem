@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo ""
 echo "Running copyToSD.sh"
 
 cp -v $DEFAULT_FIRMWARE $SD_VOLUME/DEFAULT.BIN

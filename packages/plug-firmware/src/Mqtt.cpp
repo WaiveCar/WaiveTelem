@@ -35,6 +35,8 @@ void MqttClass::setup() {
   JsonObject mqtt = Config.get()["mqtt"];
   const char* id = mqtt["id"];
   logLine("id: " + String(id));
+  // const char* cert = mqtt["cert"];
+  // logLine("cert: " + String(cert));
   sslClient.setEccSlot(0, mqtt["cert"]);
   mqttClient.setId(id);
   mqttClient.onMessage(onMessageReceived);

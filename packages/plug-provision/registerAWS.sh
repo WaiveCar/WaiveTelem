@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo ""
 echo "Running registerAWS.sh"
 
 CSR=$(cat csr/${PLUG_ID}.csr)

@@ -12,9 +12,6 @@
       "Type": "AWS::IoT::Thing",
       "Properties": {
         "ThingName": { "Ref": "ThingName" },
-        "AttributePayload": {
-          "vin": "55555"
-        },
         "ThingTypeName": "type-plug-wifi",
         "ThingGroups": ["plug-group"]
       }
