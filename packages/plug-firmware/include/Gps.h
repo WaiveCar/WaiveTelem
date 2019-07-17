@@ -10,9 +10,9 @@ class GpsClass {
   const char* getTime();
 
  private:
-  int latitude;
-  int longitude;
-  char time[32];
+  int latitude = 0;
+  int longitude = 0;
+  char time[32] = "0000-00-00T00:00:00Z";
 };
 
 extern GpsClass Gps;

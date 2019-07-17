@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <NMEAGPS.h>
 
-#include "Console.h"
 #include "Gps.h"
+#include "Logger.h"
 
 #define GPSSerial Serial1
 
@@ -14,8 +14,6 @@ void GpsClass::setup() {
     log(F("G"));
     delay(1000);
   }
-  latitude = 0;
-  longitude = 0;
 }
 
 void GpsClass::poll() {
@@ -27,7 +25,7 @@ void GpsClass::poll() {
       longitude = fix.longitudeL();
       NeoGPS::time_t dt = fix.dateTime;
       sprintf(time, "%04d-%02d-%02dT%02d:%02d:%02dZ", dt.full_year(dt.year), dt.month, dt.date, dt.hours, dt.minutes, dt.seconds);
-      // logLine(time);
+      // logDebug(time);
     }
   }
 }

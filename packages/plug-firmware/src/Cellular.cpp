@@ -3,21 +3,21 @@
 #include <MKRNB.h>
 
 #include "Config.h"
-#include "Console.h"
 #include "Internet.h"
+#include "Logger.h"
 
 static NB nbAccess;
 static GPRS gprs;
 static NBScanner nbScanner;
 
 void InternetClass::connect() {
-  log(F("Attempting to connect to the Internet"));
+  logDebug(F("Attempting to connect to the Internet"));
   JsonObject nb = Config.get()["nb"];
   while ((nbAccess.begin(nb["pin"].as<char*>(), nb["apn"].as<char*>()) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
-    Serial.print(F("."));
+    log(F("."));
     delay(1000);
   }
-  log(F("You're connected to the Internet"));
+  logDebug(F("You're connected to the Internet"));
 }
 
 bool InternetClass::isConnected() {

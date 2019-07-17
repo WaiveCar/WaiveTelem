@@ -4,9 +4,9 @@
 #include <SD.h>
 
 #include "Config.h"
-#include "Console.h"
 #include "Http.h"
 #include "Internet.h"
+#include "Logger.h"
 #include "Mqtt.h"
 #include "System.h"
 
@@ -50,7 +50,7 @@ static int32_t saveFile(const char* to) {
   SHA256.beginHmac("https failed");
   File file = SD.open(to, FILE_WRITE);
   if (!file) {
-    Serial.println("file open failed");
+    Logger.logLine("file open failed");
     return -1;
   }
   file.seek(0);  // workaround BUG in SD to default to append
@@ -66,7 +66,7 @@ static int32_t saveFile(const char* to) {
     }
     Watchdog.reset();
   }
-  logLine("total bytes downloaded: " + String(counter));
+  logDebug("total bytes downloaded: " + String(counter));
   SHA256.endHmac();
   file.close();
   return 0;
@@ -82,18 +82,18 @@ static int32_t verifyFile(const String& file) {
     computed += String(b, HEX);
   }
   String sha256 = file.substring(file.lastIndexOf("_") + 1);
-  logLine(sha256);
-  logLine(computed);
+  logDebug(sha256);
+  logDebug(computed);
   if (sha256 == computed) {
     return 0;
   } else {
-    Serial.println("checksum failed");
+    Logger.logLine("checksum failed");
     return -1;
   }
 }
 
 void HttpClass::download(const char* host, const char* from, const char* to) {
-  logLine("host: " + String(host) + ", from: " + from + ", to: " + to);
+  logDebug("host: " + String(host) + ", from: " + from + ", to: " + to);
   int32_t error;
   if (client.connectSSL(host, 443)) {
     sendGetRequest(host, from);
@@ -108,7 +108,7 @@ void HttpClass::download(const char* host, const char* from, const char* to) {
     Mqtt.telemeter("", "{\"download\": null}");
     System.reboot();
   } else {
-    Serial.println(F("https failed"));
+    Logger.logLine(F("https failed"));
   }
 }
 

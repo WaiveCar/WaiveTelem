@@ -4,9 +4,10 @@
 #include <ArduinoMqttClient.h>
 
 #include "Config.h"
-#include "Console.h"
+#include "Gps.h"
 #include "Http.h"
 #include "Internet.h"
+#include "Logger.h"
 #include "Mqtt.h"
 #include "System.h"
 
@@ -15,9 +16,9 @@ static BearSSLClient sslClient(client);
 static MqttClient mqttClient(sslClient);
 
 static void onMessageReceived(int messageSize) {
-  logLine("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
+  logDebug("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
   String payload = mqttClient.readString();
-  logLine("payload: " + payload);
+  logDebug("payload: " + payload);
   System.processCommand(payload);
 }
 
@@ -27,16 +28,16 @@ static unsigned long getTime() {
 
 void MqttClass::setup() {
   if (!ECCX08.begin()) {
-    Serial.println(F("No ECCX08 present"));
+    Logger.logLine(F("No ECCX08 present"));
     while (1)
       ;
   }
   ArduinoBearSSL.onGetTime(getTime);
   JsonObject mqtt = Config.get()["mqtt"];
   const char* id = mqtt["id"];
-  logLine("id: " + String(id));
+  logDebug("id: " + String(id));
   // const char* cert = mqtt["cert"];
-  // logLine("cert: " + String(cert));
+  // logDebug("cert: " + String(cert));
   sslClient.setEccSlot(0, mqtt["cert"]);
   mqttClient.setId(id);
   mqttClient.onMessage(onMessageReceived);
@@ -50,20 +51,20 @@ void MqttClass::connect() {
   const JsonObject mqtt = Config.get()["mqtt"];
   const char* url = mqtt["url"];
   String id = mqtt["id"];
-  logLine("Attempting to connect to MQTT broker: " + String(url));
+  logDebug("Attempting to connect to MQTT broker: " + String(url));
   const int maxTry = 20;
   int i = 0;
   while (!mqttClient.connect(url, 8883)) {
     Watchdog.reset();
     if (i == maxTry) {
-      logLine(F("Failed to connect, try leter"));
+      logDebug(F("Failed to connect, try leter"));
       return;
     }
     log(F("M"));
     delay(3000);
     i++;
   }
-  logLine(F("You're connected to the MQTT broker"));
+  logDebug(F("You're connected to the MQTT broker"));
   mqttClient.subscribe("$aws/things/" + id + "/shadow/update/delta");
 }
 
@@ -85,7 +86,8 @@ void MqttClass::telemeter(const String& reported, const String& desired) {
                    (reported != "" ? "\"reported\": " + reported : "") +
                    (reported != "" && desired != "" ? ", " : "") +
                    (desired != "" ? "\"desired\": " + desired : "") + "}}";
-  logLine("publish " + topic + " " + message);
+  // Serial.println("publish " + topic + " " + message);
+  Serial.println(Gps.getTime() + String(" ") + message);
   mqttClient.beginMessage(topic);
   mqttClient.print(message);
   mqttClient.endMessage();

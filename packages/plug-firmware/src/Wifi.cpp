@@ -2,21 +2,21 @@
 #include <Arduino.h>
 #include <WiFi101.h>
 
-#include "Console.h"
 #include "Internet.h"
+#include "Logger.h"
 
 void InternetClass::connect() {
   if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println(F("WiFi hardware not present"));
+    Logger.logLine(F("WiFi hardware not present"));
     while (true)
       ;
   }
-  logLine("Attempting to connect to SSID: " + String(WIFI_SSID));
+  logDebug("Attempting to connect to SSID: " + String(WIFI_SSID));
   while (WiFi.begin(WIFI_SSID, WIFI_PASSWORD) != WL_CONNECTED) {
     log(F("."));
     delay(3000);
   }
-  logLine(F("You're connected to the network"));
+  logDebug(F("You're connected to the network"));
 }
 
 bool InternetClass::isConnected() {

@@ -1,7 +1,7 @@
 #include <STBLE.h>
 
 #include "Bluetooth.h"
-#include "Console.h"
+#include "Logger.h"
 
 uint8_t ble_rx_buffer[21];
 uint8_t ble_rx_buffer_len = 0;

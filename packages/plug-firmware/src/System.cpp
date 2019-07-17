@@ -2,13 +2,12 @@
 #include <Arduino.h>
 #define ARDUINOJSON_USE_DOUBLE 1
 #include <ArduinoJson.h>
-#include <SD.h>
 
 #include "Config.h"
-#include "Console.h"
 #include "Gps.h"
 #include "Http.h"
 #include "Internet.h"
+#include "Logger.h"
 #include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
@@ -21,8 +20,6 @@ int freeMemory() {
 }
 
 void SystemClass::setup() {
-  lastHeartbeat = 0;
-  canStatusChanged = false;
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
   statusDoc["heartbeat"].createNestedObject("gps");
@@ -31,9 +28,8 @@ void SystemClass::setup() {
 void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
   int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"];
-  if (Gps.getLatitude() != 0 &&
-      (lastHeartbeat == 0 ||
-       (interval >= 0 && millis() - lastHeartbeat > (uint32_t)interval * 1000))) {
+  if (interval > 0 && Gps.getLatitude() != 0 &&
+      (lastHeartbeat == 0 || millis() - lastHeartbeat > (uint32_t)interval * 1000)) {
     sendHeartbeat();
     lastHeartbeat = millis();
   }
@@ -55,18 +51,8 @@ void SystemClass::sendHeartbeat() {
   // heartbeat["freeMemory"] = freeMemory();
   heartbeat["signalStrength"] = Internet.getSignalStrength();
   Mqtt.telemeter(statusDoc["heartbeat"].as<String>());
-  File writeFile = SD.open("STATUS.TXT", FILE_WRITE);
-  if (!writeFile) {
-    Serial.println("STATUS.TXT open failed");
-    return;
-  }
-  writeFile.seek(0);  // workaround BUG in SD to default to append
-  String json = statusDoc.as<String>();
-  // logLine("json: " + json);
-  writeFile.write(json.c_str(), json.length());
-  writeFile.close();
-  logLine("statusDoc memory cushion: " + String(1024 - statusDoc.memoryUsage()));
-  logLine("Free memory: " + String(freeMemory()));
+  logDebug("statusDoc memory cushion: " + String(1024 - statusDoc.memoryUsage()));
+  logDebug("Free memory: " + String(freeMemory()));
 }
 
 void SystemClass::sendCanStatus() {
@@ -88,10 +74,10 @@ void SystemClass::processCommand(const String& json) {
   StaticJsonDocument<512> cmdDoc;
   DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
-    Serial.println("Failed to read json: " + String(error.c_str()));
+    Logger.logLine("Failed to read json: " + String(error.c_str()));
     return;
   }
-  logLine("cmdDoc memory cushion: " + String(512 - cmdDoc.memoryUsage()));
+  logDebug("cmdDoc memory cushion: " + String(512 - cmdDoc.memoryUsage()));
 
   JsonObject desired = cmdDoc["state"];
   JsonObject download = desired["download"];
@@ -128,8 +114,7 @@ void SystemClass::processCommand(const String& json) {
     if (strlen(host) > 0 && strlen(from) > 0 && strlen(to) > 0) {
       Http.download(host, from, to);
     } else {
-      Serial.print(F("Error: "));
-      Serial.println(json);
+      Logger.logLine("Error: " + json);
     }
   } else if (!copy.isNull()) {
     const char* from = copy["from"] | "";
@@ -139,17 +124,15 @@ void SystemClass::processCommand(const String& json) {
       Mqtt.telemeter("", "{\"copy\": null}");
       reboot();
     } else {
-      Serial.print(F("Error: "));
-      Serial.println(json);
+      Logger.logLine("Error: " + json);
     }
   } else {
-    Serial.print(F("Unknown command: "));
-    Serial.println(json);
+    Logger.logLine("Unknown command: " + json);
   }
 }
 
 void SystemClass::reboot() {
-  Serial.println(F("Rebooting now"));
+  Logger.logLine(F("Rebooting now"));
   delay(1000);
   Watchdog.enable(1);
   while (true)
@@ -167,12 +150,12 @@ int32_t SystemClass::moveFile(const char* from, const char* to) {
 int32_t SystemClass::copyFile(const char* from, const char* to) {
   File readFile = SD.open(from, FILE_READ);
   if (!readFile) {
-    Serial.println("readFile open failed");
+    Logger.logLine("readFile open failed");
     return -1;
   }
   File writeFile = SD.open(to, FILE_WRITE);
   if (!writeFile) {
-    Serial.println("writeFile open failed");
+    Logger.logLine("writeFile open failed");
     return -1;
   }
   writeFile.seek(0);  // workaround BUG in SD to default to append
@@ -180,7 +163,7 @@ int32_t SystemClass::copyFile(const char* from, const char* to) {
   while (readFile.available()) {
     int bytesRead = readFile.read(buf, sizeof(buf));
     writeFile.write(buf, bytesRead);
-    // logLine("write " + String(bytesRead));
+    // logDebug("write " + String(bytesRead));
     Watchdog.reset();
   }
   readFile.close();

@@ -4,8 +4,8 @@
 #include "Bluetooth.h"
 #include "Can.h"
 #include "Config.h"
-#include "Console.h"
 #include "Gps.h"
+#include "Logger.h"
 #include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
@@ -14,7 +14,7 @@ void setup() {
   Watchdog.enable(16 * 1000);
   Pins.setup();
   Config.load();
-  Console.setup();
+  Logger.setup();
   Gps.setup();
   Can.setup();
   Bluetooth.setup();

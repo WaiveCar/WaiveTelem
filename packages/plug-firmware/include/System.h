@@ -17,8 +17,8 @@ class SystemClass {
   int32_t copyFile(const char* from, const char* to);
 
  private:
-  bool canStatusChanged;
-  uint32_t lastHeartbeat;
+  bool canStatusChanged = false;
+  uint32_t lastHeartbeat = 0;
   StaticJsonDocument<1024> statusDoc;
 };
 
