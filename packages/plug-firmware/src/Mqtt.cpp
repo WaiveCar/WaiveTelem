@@ -36,9 +36,9 @@ void MqttClass::setup() {
   JsonObject mqtt = Config.get()["mqtt"];
   const char* id = mqtt["id"];
   logDebug("id: " + String(id));
-  // const char* cert = mqtt["cert"];
-  // logDebug("cert: " + String(cert));
-  sslClient.setEccSlot(0, mqtt["cert"]);
+  const char* cert = mqtt["cert"];
+  logDebug("cert: " + String(cert));
+  sslClient.setEccSlot(0, cert);
   mqttClient.setId(id);
   mqttClient.onMessage(onMessageReceived);
   connect();
@@ -86,7 +86,6 @@ void MqttClass::telemeter(const String& reported, const String& desired) {
                    (reported != "" ? "\"reported\": " + reported : "") +
                    (reported != "" && desired != "" ? ", " : "") +
                    (desired != "" ? "\"desired\": " + desired : "") + "}}";
-  // Serial.println("publish " + topic + " " + message);
   Serial.println(Gps.getTime() + String(" ") + message);
   mqttClient.beginMessage(topic);
   mqttClient.print(message);

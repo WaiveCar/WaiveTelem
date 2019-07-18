@@ -85,22 +85,22 @@ void SystemClass::processCommand(const String& json) {
   if (desired["reboot"] == "true") {
     Mqtt.telemeter("", "{\"reboot\": null}");
     reboot();
-  } else if (desired["doors"] == "unlocked") {
+  } else if (desired["centralLock"] == "open") {
     Pins.unlockDoors();
     // CAN-BUS should update
-    Mqtt.telemeter("{\"doors\": \"unlocked\"}");
-  } else if (desired["doors"] == "locked") {
+    Mqtt.telemeter("{\"centralLock\": \"open\"}");
+  } else if (desired["centralLock"] == "close") {
     Pins.lockDoors();
     // CAN-BUS should update
-    Mqtt.telemeter("{\"doors\": \"locked\"}");
-  } else if (desired["immobilized"] == "true") {
+    Mqtt.telemeter("{\"centralLock\": \"close\"}");
+  } else if (desired["immobilizer"] == "lock") {
     Pins.immobilize();
-    statusDoc["immobilized"] = "true";
-    Mqtt.telemeter("{\"immobilized\": \"true\"}");
-  } else if (desired["immobilized"] == "false") {
+    statusDoc["immobilizer"] = "lock";
+    Mqtt.telemeter("{\"immobilizer\": \"lock\"}");
+  } else if (desired["immobilizer"] == "unlock") {
     Pins.unimmobilize();
-    statusDoc["immobilized"] = "false";
-    Mqtt.telemeter("{\"immobilized\": \"false\"}");
+    statusDoc["immobilizer"] = "unlock";
+    Mqtt.telemeter("{\"immobilizer\": \"unlock\"}");
   } else if (desired["inRide"] == "true") {
     statusDoc["inRide"] = "true";
     Mqtt.telemeter("{\"inRide\": \"true\"}");
