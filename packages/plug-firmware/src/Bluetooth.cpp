@@ -1,24 +1,13 @@
 #include <STBLE.h>
 
 #include "Bluetooth.h"
+#include "Config.h"
 #include "Logger.h"
 
 uint8_t ble_rx_buffer[21];
 uint8_t ble_rx_buffer_len = 0;
 uint8_t ble_connection_state = false;
 #define PIPE_UART_OVER_BTLE_UART_TX_TX 0
-
-#ifdef DEBUG
-#include <stdio.h>
-char sprintbuff[100];
-#define PRINTF(...)                   \
-  {                                   \
-    sprintf(sprintbuff, __VA_ARGS__); \
-    log(sprintbuff);                  \
-  }
-#else
-#define PRINTF(...)
-#endif
 
 void setConnectable(void);
 uint8_t Write_UART_TX(char *TXdata, uint8_t datasize);
@@ -90,7 +79,7 @@ uint8_t Add_UART_Service(void) {
   return BLE_STATUS_SUCCESS;
 
 fail:
-  PRINTF("Error while adding UART service.\n");
+  logError("Error while adding UART service.");
   return BLE_STATUS_ERROR;
 }
 
@@ -104,7 +93,7 @@ uint8_t Write_UART_TX(char *TXdata, uint8_t datasize) {
   ret = aci_gatt_update_char_value(UARTServHandle, UARTRXCharHandle, 0, datasize, (uint8_t *)TXdata);
 
   if (ret != BLE_STATUS_SUCCESS) {
-    PRINTF("Error while updating UART characteristic.\n");
+    logError("Error while updating UART characteristic.");
     return BLE_STATUS_ERROR;
   }
   return BLE_STATUS_SUCCESS;
@@ -128,18 +117,16 @@ void Read_Request_CB(uint16_t handle) {
 void setConnectable(void) {
   tBleStatus ret;
 
-  const char local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME, 'B', 'l', 'u', 'e', 'N', 'R', 'G'};
-
   hci_le_set_scan_resp_data(0, NULL);
-  PRINTF("General Discoverable Mode.\n");
+  logDebug("BLE General Discoverable Mode.");
 
   ret = aci_gap_set_discoverable(ADV_IND,
                                  (ADV_INTERVAL_MIN_MS * 1000) / 625, (ADV_INTERVAL_MAX_MS * 1000) / 625,
                                  STATIC_RANDOM_ADDR, NO_WHITE_LIST_USE,
-                                 sizeof(local_name), local_name, 0, NULL, 0, 0);
+                                 0, NULL, 0, NULL, 0, 0);
 
   if (ret != BLE_STATUS_SUCCESS)
-    PRINTF("%d\n", (uint8_t)ret);
+    logDebug(ret);
 }
 
 void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data) {
@@ -157,16 +144,14 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle) {
   connected = TRUE;
   connection_handle = handle;
 
-  PRINTF("Connected to device:");
-  for (int i = 5; i > 0; i--) {
-    PRINTF("%02X-", addr[i]);
-  }
-  PRINTF("%02X\r\n", addr[0]);
+  char sprintbuff[64];
+  snprintf(sprintbuff, 64, "BLE Connected to device: %02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
+  logInfo(sprintbuff);
 }
 
 void GAP_DisconnectionComplete_CB(void) {
   connected = FALSE;
-  PRINTF("Disconnected\n");
+  logInfo("BLE Disconnected");
   /* Make the device connectable again. */
   set_connectable = TRUE;
 }
@@ -223,18 +208,19 @@ void BluetoothClass::setup() {
   //  Serial.println("BNRG RST");
   BlueNRG_RST();
 
-  uint8_t bdaddr[] = {0x12, 0x34, 0x00, 0xE1, 0x80, 0x02};
+  String uid = Config.get()["id"];
+  uint8_t *bdaddr = (uint8_t *)uid.substring(uid.length() - CONFIG_DATA_PUBADDR_LEN).c_str();
   //  Serial.println("Set BR_ADDR");
   ret = aci_hal_write_config_data(CONFIG_DATA_PUBADDR_OFFSET, CONFIG_DATA_PUBADDR_LEN, bdaddr);
 
   if (ret) {
-    PRINTF("Setting BD_ADDR failed.\n");
+    logError("Setting BD_ADDR failed.");
   }
   //  Serial.println("ACI GATT INIT");
   ret = aci_gatt_init();
 
   if (ret) {
-    PRINTF("GATT_Init failed.\n");
+    logError("GATT_Init failed.");
   }
 
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
@@ -242,32 +228,30 @@ void BluetoothClass::setup() {
   ret = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, 0x07, &service_handle, &dev_name_char_handle, &appearance_char_handle);
 
   if (ret) {
-    PRINTF("GAP_Init failed.\n");
+    logError("GAP_Init failed.");
   }
 
-  const char *name = "LandNRG";
-
+  const char *name = Config.get()["id"];
   //  Serial.println("update char value");
   ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, strlen(name), (uint8_t *)name);
 
   if (ret) {
-    PRINTF("aci_gatt_update_char_value failed.\n");
+    logError("aci_gatt_update_char_value failed.");
   } else {
-    PRINTF("BLE Stack Initialized.\n");
+    logInfo("BLE Stack Initialized.");
   }
 
   //  Serial.println("add uart");
   ret = Add_UART_Service();
 
   if (ret == BLE_STATUS_SUCCESS) {
-    PRINTF("UART service added successfully.\n");
+    logInfo("UART service added successfully.");
   } else {
-    PRINTF("Error while adding UART service.\n");
+    logError("Error while adding UART service.");
   }
 
-  /* +4 dBm output power */
-  //  Serial.println("Set tx power");
-  ret = aci_hal_set_tx_power_level(1, 3);
+  /* +8 dBm output power */
+  ret = aci_hal_set_tx_power_level(1, 7);
 }
 
 void BluetoothClass::poll() {

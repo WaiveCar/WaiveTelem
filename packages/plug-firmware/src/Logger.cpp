@@ -22,6 +22,7 @@ void LoggerClass::logLine(const String& s) {
   }
   if (writeFile) {
     writeFile.println(str);
+    writeFile.flush();
   }
 }
 

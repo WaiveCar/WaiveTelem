@@ -34,10 +34,10 @@ void MqttClass::setup() {
   }
   ArduinoBearSSL.onGetTime(getTime);
   JsonObject mqtt = Config.get()["mqtt"];
-  const char* id = mqtt["id"];
+  const char* id = Config.get()["id"];
   logDebug("id: " + String(id));
   const char* cert = mqtt["cert"];
-  logDebug("cert: " + String(cert));
+  // logDebug("cert: " + String(cert));
   sslClient.setEccSlot(0, cert);
   mqttClient.setId(id);
   mqttClient.onMessage(onMessageReceived);
@@ -50,7 +50,7 @@ void MqttClass::connect() {
   }
   const JsonObject mqtt = Config.get()["mqtt"];
   const char* url = mqtt["url"];
-  String id = mqtt["id"];
+  String id = Config.get()["id"];
   logDebug("Attempting to connect to MQTT broker: " + String(url));
   const int maxTry = 20;
   int i = 0;
@@ -80,7 +80,7 @@ void MqttClass::poll() {
 }
 
 void MqttClass::telemeter(const String& reported, const String& desired) {
-  String id = Config.get()["mqtt"]["id"];
+  String id = Config.get()["id"];
   String topic = "$aws/things/" + id + "/shadow/update";
   String message = "{\"state\": {" +
                    (reported != "" ? "\"reported\": " + reported : "") +

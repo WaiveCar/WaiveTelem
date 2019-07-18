@@ -1,6 +1,6 @@
 {
+  "id": .id,
 	"mqtt": {
-  	"id": .id,
 		"url": .mqttBrokerUrl,
 		"cert": .mqttBrokerCert
 	},
