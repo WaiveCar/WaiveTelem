@@ -3,14 +3,13 @@
 #include "Bluetooth.h"
 #include "Config.h"
 #include "Logger.h"
+#include "System.h"
 
 uint8_t ble_rx_buffer[21];
 uint8_t ble_rx_buffer_len = 0;
 uint8_t ble_connection_state = false;
-#define PIPE_UART_OVER_BTLE_UART_TX_TX 0
 
 void setConnectable(void);
-uint8_t Write_UART_TX(char *TXdata, uint8_t datasize);
 
 volatile uint8_t set_connectable = 1;
 uint16_t connection_handle = 0;
@@ -54,9 +53,8 @@ void aci_loop() {
 
 #define COPY_UART_SERVICE_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x6E, 0x40, 0x00, 0x01, 0xB5, 0xA3, 0xF3, 0x93, 0xE0, 0xA9, 0xE5, 0x0E, 0x24, 0xDC, 0xCA, 0x9E)
 #define COPY_UART_TX_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x6E, 0x40, 0x00, 0x02, 0xB5, 0xA3, 0xF3, 0x93, 0xE0, 0xA9, 0xE5, 0x0E, 0x24, 0xDC, 0xCA, 0x9E)
-#define COPY_UART_RX_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x6E, 0x40, 0x00, 0x03, 0xB5, 0xA3, 0xF3, 0x93, 0xE0, 0xA9, 0xE5, 0x0E, 0x24, 0xDC, 0xCA, 0x9E)
 
-uint16_t UARTServHandle, UARTTXCharHandle, UARTRXCharHandle;
+uint16_t UARTServHandle, UARTTXCharHandle;
 
 uint8_t Add_UART_Service(void) {
   tBleStatus ret;
@@ -71,47 +69,11 @@ uint8_t Add_UART_Service(void) {
                           16, 1, &UARTTXCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
 
-  COPY_UART_RX_CHAR_UUID(uuid);
-  ret = aci_gatt_add_char(UARTServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_NOTIFY, ATTR_PERMISSION_NONE, 0,
-                          16, 1, &UARTRXCharHandle);
-  if (ret != BLE_STATUS_SUCCESS) goto fail;
-
   return BLE_STATUS_SUCCESS;
 
 fail:
   logError("Error while adding UART service.");
   return BLE_STATUS_ERROR;
-}
-
-uint8_t lib_aci_send_data(uint8_t ignore, uint8_t *sendBuffer, uint8_t sendLength) {
-  return !Write_UART_TX((char *)sendBuffer, sendLength);
-}
-
-uint8_t Write_UART_TX(char *TXdata, uint8_t datasize) {
-  tBleStatus ret;
-
-  ret = aci_gatt_update_char_value(UARTServHandle, UARTRXCharHandle, 0, datasize, (uint8_t *)TXdata);
-
-  if (ret != BLE_STATUS_SUCCESS) {
-    logError("Error while updating UART characteristic.");
-    return BLE_STATUS_ERROR;
-  }
-  return BLE_STATUS_SUCCESS;
-}
-
-void Read_Request_CB(uint16_t handle) {
-  /*if(handle == UARTTXCharHandle + 1)
-    {
-
-    }
-    else if(handle == UARTRXCharHandle + 1)
-    {
-
-
-    }*/
-
-  if (connection_handle != 0)
-    aci_gatt_allow_read(connection_handle);
 }
 
 void setConnectable(void) {
@@ -183,11 +145,6 @@ void HCI_Event_CB(void *pckt) {
     case EVT_VENDOR: {
       evt_blue_aci *blue_evt = (evt_blue_aci *)event_pckt->data;
       switch (blue_evt->ecode) {
-        case EVT_BLUE_GATT_READ_PERMIT_REQ: {
-          evt_gatt_read_permit_req *pr = (evt_gatt_read_permit_req *)blue_evt->data;
-          Read_Request_CB(pr->attr_handle);
-        } break;
-
         case EVT_BLUE_GATT_ATTRIBUTE_MODIFIED: {
           evt_gatt_attr_modified_IDB05A1 *evt = (evt_gatt_attr_modified_IDB05A1 *)blue_evt->data;
           Attribute_Modified_CB(evt->attr_handle, evt->data_length, evt->att_data);
@@ -257,36 +214,10 @@ void BluetoothClass::setup() {
 void BluetoothClass::poll() {
   aci_loop();               //must run frequently
   if (ble_rx_buffer_len) {  //Check if data is available
-    Serial.print(ble_rx_buffer_len);
-    Serial.print(" : ");
-    Serial.println((char *)ble_rx_buffer);
-    Serial.println("you just got some BLE data, pushing as a command");
-    //    String buf_str = String(*ble_rx_buffer);
-    // command_handler((char *)ble_rx_buffer);
+    String command = String((char *)ble_rx_buffer);
+    logDebug(command);
+    System.processCommand(command);
     ble_rx_buffer_len = 0;  //clear afer reading
-  }
-  //forward serial port input to BLE output
-  if (Serial.available()) {  //Check if serial input is available to send
-    delay(10);               //should catch input
-    uint8_t sendBuffer[21];
-    uint8_t sendLength = 0;
-    while (Serial.available() && sendLength < 19) {
-      sendBuffer[sendLength] = Serial.read();
-      sendLength++;
-    }
-    if (Serial.available()) {
-      Serial.print(F("Input truncated, dropped: "));
-      if (Serial.available()) {
-        Serial.write(Serial.read());
-      }
-    }
-    sendBuffer[sendLength] = '\0';  //Terminate string
-    sendLength++;
-    if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t *)sendBuffer, sendLength)) {
-      Serial.println(F("TX dropped!"));
-    } else {
-      Serial.println(F("Forwarded serial input to BLE"));
-    }
   }
 }
 

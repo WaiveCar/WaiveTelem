@@ -79,28 +79,28 @@ void SystemClass::processCommand(const String& json) {
   }
   logDebug("cmdDoc memory cushion: " + String(512 - cmdDoc.memoryUsage()));
 
-  JsonObject desired = cmdDoc["state"];
+  JsonObject desired = cmdDoc["state"] | cmdDoc.as<JsonObject>();  // mqtt form | ble form
   JsonObject download = desired["download"];
   JsonObject copy = desired["copy"];
   if (desired["reboot"] == "true") {
     Mqtt.telemeter("", "{\"reboot\": null}");
     reboot();
-  } else if (desired["centralLock"] == "open") {
+  } else if (desired["lock"] == "open") {
     Pins.unlockDoors();
     // CAN-BUS should update
-    Mqtt.telemeter("{\"centralLock\": \"open\"}");
-  } else if (desired["centralLock"] == "close") {
+    Mqtt.telemeter("{\"lock\": \"open\"}");
+  } else if (desired["lock"] == "close") {
     Pins.lockDoors();
     // CAN-BUS should update
-    Mqtt.telemeter("{\"centralLock\": \"close\"}");
-  } else if (desired["immobilizer"] == "lock") {
+    Mqtt.telemeter("{\"lock\": \"close\"}");
+  } else if (desired["immo"] == "lock") {
     Pins.immobilize();
-    statusDoc["immobilizer"] = "lock";
-    Mqtt.telemeter("{\"immobilizer\": \"lock\"}");
-  } else if (desired["immobilizer"] == "unlock") {
+    statusDoc["immo"] = "lock";
+    Mqtt.telemeter("{\"immo\": \"lock\"}");
+  } else if (desired["immo"] == "unlock") {
     Pins.unimmobilize();
-    statusDoc["immobilizer"] = "unlock";
-    Mqtt.telemeter("{\"immobilizer\": \"unlock\"}");
+    statusDoc["immo"] = "unlock";
+    Mqtt.telemeter("{\"immo\": \"unlock\"}");
   } else if (desired["inRide"] == "true") {
     statusDoc["inRide"] = "true";
     Mqtt.telemeter("{\"inRide\": \"true\"}");

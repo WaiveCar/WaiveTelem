@@ -1,17 +1,14 @@
-import { Platform, Alert } from "react-native";
+import { Alert } from "react-native";
 import { BleManager } from "react-native-ble-plx";
 import { Buffer } from "buffer";
 
 export default class BleModule {
   constructor() {
-    this.isConnecting = false; //蓝牙是否连接
+    this.isConnecting = false;
     this.initUUID();
     this.manager = new BleManager();
   }
 
-  /**
-   * 获取蓝牙UUID
-   * */
   async fetchServicesAndCharacteristicsForDevice(device) {
     var servicesMap = {};
     var services = await device.services();
@@ -53,7 +50,6 @@ export default class BleModule {
     this.nofityCharacteristicUUID = [];
   }
 
-  //获取Notify、Read、Write、WriteWithoutResponse的serviceUUID和characteristicUUID
   getUUID(services) {
     this.readServiceUUID = [];
     this.readCharacteristicUUID = [];
@@ -112,16 +108,13 @@ export default class BleModule {
     console.log("nofityCharacteristicUUID", this.nofityCharacteristicUUID);
   }
 
-  /**
-   * 搜索蓝牙
-   * */
   scan() {
     return new Promise((resolve, reject) => {
       this.manager.startDeviceScan(null, null, (error, device) => {
         if (error) {
           console.log("startDeviceScan error:", error);
           if (error.errorCode == 102) {
-            this.alert("请打开手机蓝牙后再搜索");
+            this.alert("turn on bluetooth");
           }
           reject(error);
         } else {
@@ -131,17 +124,11 @@ export default class BleModule {
     });
   }
 
-  /**
-   * 停止搜索蓝牙
-   * */
   stopScan() {
     this.manager.stopDeviceScan();
     console.log("stopDeviceScan");
   }
 
-  /**
-   * 连接蓝牙
-   * */
   connect(id) {
     console.log("isConneting:", id);
     this.isConnecting = true;
@@ -171,9 +158,6 @@ export default class BleModule {
     });
   }
 
-  /**
-   * 断开蓝牙
-   * */
   disconnect() {
     return new Promise((resolve, reject) => {
       this.manager
@@ -189,9 +173,6 @@ export default class BleModule {
     });
   }
 
-  /**
-   * 读取数据
-   * */
   read(index) {
     return new Promise((resolve, reject) => {
       this.manager
@@ -217,18 +198,9 @@ export default class BleModule {
     });
   }
 
-  /**
-   * 写数据
-   * */
   write(value, index) {
-    let formatValue;
-    if (value === "0D0A") {
-      //直接发送小票打印机的结束标志
-      formatValue = value;
-    } else {
-      //发送内容，转换成base64编码
-      formatValue = new Buffer(value, "base64").toString("ascii");
-    }
+    let formatValue = new Buffer(value, "ascii").toString("base64");
+
     let transactionId = "write";
     return new Promise((resolve, reject) => {
       this.manager
@@ -253,18 +225,9 @@ export default class BleModule {
     });
   }
 
-  /**
-   * 写数据 withoutResponse
-   * */
   writeWithoutResponse(value, index) {
-    let formatValue;
-    if (value === "0D0A") {
-      //直接发送小票打印机的结束标志
-      formatValue = value;
-    } else {
-      //发送内容，转换成base64编码
-      formatValue = new Buffer(value, "base64").toString("ascii");
-    }
+    let formatValue = new Buffer(value, "ascii").toString("base64");
+
     let transactionId = "writeWithoutResponse";
     return new Promise((resolve, reject) => {
       this.manager
@@ -289,14 +252,11 @@ export default class BleModule {
     });
   }
 
-  /**
-   * 卸载蓝牙管理器
-   * */
   destroy() {
     this.manager.destroy();
   }
 
   alert(text) {
-    Alert.alert("提示", text, [{ text: "确定", onPress: () => {} }]);
+    Alert.alert("Alert", text, [{ text: "OK", onPress: () => {} }]);
   }
 }

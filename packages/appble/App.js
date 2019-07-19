@@ -4,21 +4,21 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView,
   FlatList,
   TextInput,
   Platform,
   Alert
 } from "react-native";
+import { Buffer } from "buffer";
+
 import BleModule from "./BleModule.js";
-//确保全局只有一个BleManager实例，BleModule类保存着蓝牙的连接信息
 global.BluetoothManager = new BleModule();
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      scaning: false,
+      scanning: false,
       isConnected: false,
       text: "",
       writeData: "",
@@ -27,12 +27,14 @@ export default class App extends Component {
       data: [],
       isMonitoring: false
     };
-    this.bluetoothReceiveData = []; //蓝牙接收的数据缓存
+    this.bluetoothReceiveData = [];
     this.deviceMap = new Map();
+    setTimeout(() => {
+      this.scan();
+    }, 100);
   }
 
   componentWillUnmount() {
-    // 监听蓝牙开关
     this.onStateChangeListener = BluetoothManager.manager.onStateChange(
       state => {
         console.log("onStateChange: ", state);
@@ -48,51 +50,52 @@ export default class App extends Component {
   }
 
   alert(text) {
-    Alert.alert("提示", text, [{ text: "确定", onPress: () => {} }]);
+    Alert.alert("Alert", text, [{ text: "OK", onPress: () => {} }]);
   }
 
   scan() {
-    if (!this.state.scaning) {
-      this.setState({ scaning: true });
+    if (!this.state.scanning) {
+      this.setState({ scanning: true });
       this.deviceMap.clear();
       BluetoothManager.manager.startDeviceScan(null, null, (error, device) => {
         if (error) {
           console.log("startDeviceScan error:", error);
           if (error.errorCode == 102) {
-            this.alert("请打开手机蓝牙后再搜索");
+            this.alert("turn on bluetooth");
           }
-          this.setState({ scaning: false });
+          this.setState({ scanning: false });
         } else {
           console.log(device.id, device.name);
-          this.deviceMap.set(device.id, device); //使用Map类型保存搜索到的蓝牙设备，确保列表不显示重复的设备
-          this.setState({ data: [...this.deviceMap.values()] });
+          if (device.name && device.name.startsWith("waive")) {
+            this.deviceMap.set(device.id, device);
+            this.setState({ data: [...this.deviceMap.values()] });
+          }
         }
       });
       this.scanTimer && clearTimeout(this.scanTimer);
       this.scanTimer = setTimeout(() => {
-        if (this.state.scaning) {
+        if (this.state.scanning) {
           BluetoothManager.stopScan();
-          this.setState({ scaning: false });
+          this.setState({ scanning: false });
         }
-      }, 1000); //1秒后停止搜索
+      }, 1000);
     } else {
       BluetoothManager.stopScan();
-      this.setState({ scaning: false });
+      this.setState({ scanning: false });
     }
   }
 
   connect(item) {
-    if (this.state.scaning) {
-      //连接的时候正在扫描，先停止扫描
+    if (this.state.scanning) {
       BluetoothManager.stopScan();
-      this.setState({ scaning: false });
+      this.setState({ scanning: false });
     }
     if (BluetoothManager.isConnecting) {
-      console.log("当前蓝牙正在连接时不能打开另一个连接进程");
+      console.log("connecting, cannot connect another one");
       return;
     }
     let newData = [...this.deviceMap.values()];
-    newData[item.index].isConnecting = true; //正在连接中
+    newData[item.index].isConnecting = true;
     this.setState({ data: newData });
     BluetoothManager.connect(item.item.id)
       .then(device => {
@@ -117,7 +120,7 @@ export default class App extends Component {
 
   write = (index, type) => {
     if (this.state.text.length == 0) {
-      this.alert("请输入消息");
+      this.alert("enter text");
       return;
     }
     BluetoothManager.write(this.state.text, index, type)
@@ -133,7 +136,7 @@ export default class App extends Component {
 
   writeWithoutResponse = (index, type) => {
     if (this.state.text.length == 0) {
-      this.alert("请输入消息");
+      this.alert("enter text");
       return;
     }
     BluetoothManager.writeWithoutResponse(this.state.text, index, type)
@@ -147,7 +150,6 @@ export default class App extends Component {
       .catch(err => {});
   };
 
-  //监听蓝牙数据
   monitor = index => {
     let transactionId = "monitor";
     this.monitorListener = BluetoothManager.manager.monitorCharacteristicForDevice(
@@ -160,24 +162,24 @@ export default class App extends Component {
           console.log("monitor fail:", error);
           this.alert("monitor fail: " + error.reason);
         } else {
+          let value = new Buffer(characteristic.value, "base64").toString(
+            "ascii"
+          );
           this.setState({ isMonitoring: true });
-          this.bluetoothReceiveData.push(characteristic.value); //数据量多的话会分多次接收
+          this.bluetoothReceiveData.push(value);
           this.setState({ receiveData: this.bluetoothReceiveData.join("") });
-          console.log("monitor success", characteristic.value);
-          // this.alert('开启成功');
+          console.log("monitor success", value);
         }
       },
       transactionId
     );
   };
 
-  //监听蓝牙断开
   onDisconnect() {
     this.disconnectListener = BluetoothManager.manager.onDeviceDisconnected(
       BluetoothManager.peripheralId,
       (error, device) => {
         if (error) {
-          //蓝牙遇到错误自动断开
           console.log("onDeviceDisconnected", "device disconnect", error);
           this.setState({
             data: [...this.deviceMap.values()],
@@ -196,7 +198,6 @@ export default class App extends Component {
     );
   }
 
-  //断开蓝牙连接
   disconnect() {
     BluetoothManager.disconnect()
       .then(res => {
@@ -227,7 +228,7 @@ export default class App extends Component {
         <View style={{ flexDirection: "row" }}>
           <Text style={{ color: "black" }}>{data.name ? data.name : ""}</Text>
           <Text style={{ color: "red", marginLeft: 50 }}>
-            {data.isConnecting ? "连接中..." : ""}
+            {data && data.isConnecting ? "connecting..." : ""}
           </Text>
         </View>
         <Text>{data.id}</Text>
@@ -251,17 +252,13 @@ export default class App extends Component {
           }
         >
           <Text style={styles.buttonText}>
-            {this.state.scaning
-              ? "正在搜索中"
+            {this.state.scanning
+              ? "Scanning"
               : this.state.isConnected
-              ? "断开蓝牙"
-              : "搜索蓝牙"}
+              ? "Disconnect"
+              : "Scan waive*"}
           </Text>
         </TouchableOpacity>
-
-        <Text style={{ marginLeft: 10, marginTop: 10 }}>
-          {this.state.isConnected ? "当前连接的设备" : "可用设备"}
-        </Text>
       </View>
     );
   };
@@ -272,29 +269,29 @@ export default class App extends Component {
         {this.state.isConnected ? (
           <View>
             {this.renderWriteView(
-              "写数据(write)：",
-              "发送",
+              "write：",
+              "send",
               BluetoothManager.writeWithResponseCharacteristicUUID,
               this.write
             )}
             {this.renderWriteView(
-              "写数据(writeWithoutResponse)：",
-              "发送",
+              "writeWithoutResponse：",
+              "send",
               BluetoothManager.writeWithoutResponseCharacteristicUUID,
               this.writeWithoutResponse
             )}
             {this.renderReceiveView(
-              "读取的数据：",
-              "读取",
+              "read：",
+              "read",
               BluetoothManager.readCharacteristicUUID,
               this.read,
               this.state.readData
             )}
             {this.renderReceiveView(
-              `监听接收的数据：${
-                this.state.isMonitoring ? "监听已开启" : "监听未开启"
+              `monitored data：${
+                this.state.isMonitoring ? "monitoring" : "not monitoring"
               }`,
-              "开启监听",
+              "start monitoring",
               BluetoothManager.nofityCharacteristicUUID,
               this.monitor,
               this.state.receiveData
@@ -334,7 +331,7 @@ export default class App extends Component {
         <TextInput
           style={[styles.textInput]}
           value={this.state.text}
-          placeholder="请输入消息"
+          placeholder="enter text"
           onChangeText={text => {
             this.setState({ text: text });
           }}
@@ -387,7 +384,7 @@ export default class App extends Component {
             this.state.readData,
             this.state.writeData,
             this.state.isMonitoring,
-            this.state.scaning
+            this.state.scanning
           ]}
           keyboardShouldPersistTaps="handled"
         />

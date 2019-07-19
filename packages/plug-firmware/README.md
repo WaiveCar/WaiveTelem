@@ -48,10 +48,10 @@ e.g. for plug-1
 
 ```json
 {"desired": {"reboot": "true"}}
-{"desired": {"centralLock": "open"}}
-{"desired": {"centralLock": "close"}}
-{"desired": {"immobilizer": "lock"}}
-{"desired": {"immobilizer": "unlock"}}
+{"desired": {"lock": "open"}}
+{"desired": {"lock": "close"}}
+{"desired": {"immo": "lock"}}
+{"desired": {"immo": "unlock"}}
 {"desired": {"inRide": "true"}}
 {"desired": {"inRide": "false"}}
 {"desired": {"download": {"host": "waiveplug.s3.us-east-2.amazonaws.com", "from": "1000_1.0.4_9ccd5d8eb348015145a4df52cd29e7e233768a9d2fc475e4aab4773fc5cccb66", "to": "UPDATE.BIN"}}}
@@ -66,8 +66,8 @@ e.g. for plug-1
 {
   "inRide":"true",
   "firmware": "1.0.1",
-  "centralLock": "open",
-  "immobilizer": "false",
+  "lock": "open",
+  "immo": "false",
   "gps": {
     "lat": 36.149893,
     "long": -115.027760,
