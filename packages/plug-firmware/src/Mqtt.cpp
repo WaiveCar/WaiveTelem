@@ -40,6 +40,9 @@ void MqttClass::setup() {
   // logDebug("cert: " + String(cert));
   sslClient.setEccSlot(0, cert);
   mqttClient.setId(id);
+  // set a long keep-alive interval as mqttClient won't keep alive for us
+  // since millis() is not accurate as the device is deep sleeping most of the time
+  mqttClient.setKeepAliveInterval((Config.get()["heartbeat"]["notInRide"].as<int>() + 30) * 1000);
   mqttClient.onMessage(onMessageReceived);
   connect();
 }
@@ -80,13 +83,15 @@ void MqttClass::poll() {
 }
 
 void MqttClass::telemeter(const String& reported, const String& desired) {
+  if (reported != "") {
+    Serial.println(Gps.getTime() + String(" ") + reported);
+  }
   String id = Config.get()["id"];
   String topic = "$aws/things/" + id + "/shadow/update";
   String message = "{\"state\": {" +
                    (reported != "" ? "\"reported\": " + reported : "") +
                    (reported != "" && desired != "" ? ", " : "") +
                    (desired != "" ? "\"desired\": " + desired : "") + "}}";
-  Serial.println(Gps.getTime() + String(" ") + message);
   mqttClient.beginMessage(topic);
   mqttClient.print(message);
   mqttClient.endMessage();

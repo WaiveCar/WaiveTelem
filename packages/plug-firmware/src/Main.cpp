@@ -15,19 +15,17 @@ void setup() {
   Pins.setup();
   Config.load();
   Logger.setup();
-  Gps.setup();
+  Mqtt.setup();
   Can.setup();
   Bluetooth.setup();
-  Mqtt.setup();
+  Gps.setup();
   System.setup();
-  System.sendVersion();
 }
 
 void loop() {
-  Watchdog.reset();
-  Gps.poll();
+  System.kickWatchdogAndSleep(1000);
   Mqtt.poll();
   Bluetooth.poll();
+  Gps.poll();
   System.poll();
-  delay(1000);
 }

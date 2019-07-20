@@ -12,6 +12,8 @@
 #include "Pins.h"
 #include "System.h"
 
+#define COMMAND_DOC_SIZE 512
+
 extern "C" char* sbrk(int incr);
 
 int freeMemory() {
@@ -23,15 +25,18 @@ void SystemClass::setup() {
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
   statusDoc["heartbeat"].createNestedObject("gps");
+  statusDoc["heartbeat"].createNestedObject("system");
+
+  sendVersion();
 }
 
 void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
   int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"];
   if (interval > 0 && Gps.getLatitude() != 0 &&
-      (lastHeartbeat == 0 || millis() - lastHeartbeat > (uint32_t)interval * 1000)) {
+      (lastHeartbeat == 0 || getMillis() - lastHeartbeat > (uint32_t)interval * 1000)) {
     sendHeartbeat();
-    lastHeartbeat = millis();
+    lastHeartbeat = getMillis();
   }
 }
 
@@ -45,14 +50,14 @@ void SystemClass::sendVersion() {
 void SystemClass::sendHeartbeat() {
   JsonObject heartbeat = statusDoc["heartbeat"];
   JsonObject gps = heartbeat["gps"];
+  JsonObject system = heartbeat["system"];
   gps["lat"] = Gps.getLatitude() / 1e7;
   gps["long"] = Gps.getLongitude() / 1e7;
   gps["time"] = Gps.getTime();
-  // heartbeat["freeMemory"] = freeMemory();
-  heartbeat["signalStrength"] = Internet.getSignalStrength();
+  system["signalStrength"] = Internet.getSignalStrength();
+  system["heapFreeMem"] = freeMemory();
+  system["statusFreeMem"] = STATUS_DOC_SIZE - statusDoc.memoryUsage();
   Mqtt.telemeter(statusDoc["heartbeat"].as<String>());
-  logDebug("statusDoc memory cushion: " + String(1024 - statusDoc.memoryUsage()));
-  logDebug("Free memory: " + String(freeMemory()));
 }
 
 void SystemClass::sendCanStatus() {
@@ -71,14 +76,12 @@ void SystemClass::setCanStatus(const String& name, const uint64_t value) {
 }
 
 void SystemClass::processCommand(const String& json) {
-  StaticJsonDocument<512> cmdDoc;
+  StaticJsonDocument<COMMAND_DOC_SIZE> cmdDoc;
   DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
     logError("Failed to read json: " + String(error.c_str()));
     return;
   }
-  logDebug("cmdDoc memory cushion: " + String(512 - cmdDoc.memoryUsage()));
-
   JsonObject desired = cmdDoc["state"] | cmdDoc.as<JsonObject>();  // mqtt form | ble form
   JsonObject download = desired["download"];
   JsonObject copy = desired["copy"];
@@ -131,8 +134,26 @@ void SystemClass::processCommand(const String& json) {
   }
 }
 
+uint64_t SystemClass::getMillis() {
+  return millis;
+}
+
+void SystemClass::kickWatchdogAndSleep(int msec) {
+  digitalWrite(PIN_A1, HIGH);
+#if DEBUG
+  // don't use Watchdog.sleep as it disconnects USB
+  Watchdog.reset();
+  delay(msec);
+#else
+  Watchdog.sleep(msec);  // might return early because of external interrupt
+#endif
+  millis += msec;
+  digitalWrite(PIN_A1, LOW);
+  Watchdog.enable(16 * 1000);
+}
+
 void SystemClass::reboot() {
-  logError(F("Rebooting now"));
+  logInfo(F("Rebooting now"));
   delay(1000);
   Watchdog.enable(1);
   while (true)
