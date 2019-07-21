@@ -47,17 +47,17 @@ e.g. for plug-1
 - click on "Shadow" and edit the Shadow State to have one of the following JSONs:
 
 ```json
-{"desired": {"reboot": "true"}}
-{"desired": {"lock": "open"}}
-{"desired": {"lock": "close"}}
-{"desired": {"immo": "lock"}}
-{"desired": {"immo": "unlock"}}
-{"desired": {"inRide": "true"}}
-{"desired": {"inRide": "false"}}
-{"desired": {"download": {"host": "waiveplug.s3.us-east-2.amazonaws.com", "from": "1000_1.0.4_9ccd5d8eb348015145a4df52cd29e7e233768a9d2fc475e4aab4773fc5cccb66", "to": "UPDATE.BIN"}}}
-{"desired": {"download": {"host": "waiveplug.s3.us-east-2.amazonaws.com", "from": "plug1_config_e6cd5276eb396159eebce1005be1b5e6926d394d9cf6bf7e0e7c4c70cad43341", "to": "CONFIG.TXT"}}}
-{"desired": {"copy": {"from": "DEFAULT.BIN", "to": "UPDATE.BIN"}}}
-{"desired": {"copy": {"from": "DEFAULT.CFG", "to": "CONFIG.TXT"}}}
+{"desired":{"reboot":"true"}}
+{"desired":{"lock":"open"}}
+{"desired":{"lock":"close"}}
+{"desired":{"immo":"lock"}}
+{"desired":{"immo":"unlock"}}
+{"desired":{"inRide":"true"}}
+{"desired":{"inRide":"false"}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"1000_1.0.4_9ccd5d8eb348015145a4df52cd29e7e233768a9d2fc475e4aab4773fc5cccb66", "to":"UPDATE.BIN"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"plug1_config_e6cd5276eb396159eebce1005be1b5e6926d394d9cf6bf7e0e7c4c70cad43341", "to":"CONFIG.TXT"}}}
+{"desired":{"copy":{"from":"DEFAULT.BIN", "to":"UPDATE.BIN"}}}
+{"desired":{"copy":{"from":"DEFAULT.CFG", "to":"CONFIG.TXT"}}}
 ```
 
 ### MQTT Device Shadow Reported (Telemetry):
@@ -65,13 +65,13 @@ e.g. for plug-1
 ```json
 {
   "inRide":"true",
-  "firmware": "1.0.1",
-  "lock": "open",
-  "immo": "false",
-  "gps": {
-    "lat": 36.149893,
-    "long": -115.027760,
-    "time": "2019-07-12T18:33:01Z"
+  "firmware":"1.0.1",
+  "lock":"open",
+  "immo":"false",
+  "gps":{
+    "lat":36.149893,
+    "long":-115.027760,
+    "time":"2019-07-12T18:33:01Z"
   },
   ...
 }

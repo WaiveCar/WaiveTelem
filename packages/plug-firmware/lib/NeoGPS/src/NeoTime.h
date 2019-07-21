@@ -282,10 +282,10 @@ protected:
     static uint8_t  s_epoch_offset;
     static uint8_t  s_epoch_weekday;
   #else
-    static const uint16_t s_epoch_year    = Y2K_EPOCH_YEAR;
+    static const uint16_t s_epoch_year    = POSIX_EPOCH_YEAR;
     static const uint8_t  s_pivot_year    = s_epoch_year % 100;
     static const uint8_t  s_epoch_offset  = s_pivot_year;
-    static const uint8_t  s_epoch_weekday = Y2K_EPOCH_WEEKDAY;
+    static const uint8_t  s_epoch_weekday = POSIX_EPOCH_WEEKDAY;
   #endif
 
 } NEOGPS_PACKED;

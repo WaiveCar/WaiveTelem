@@ -43,7 +43,7 @@ void SystemClass::poll() {
 void SystemClass::sendVersion() {
   statusDoc["firmware"] = FIRMWARE_VERSION;
   statusDoc["inRide"] = "false";
-  String version = "{\"inRide\": \"false\", \"firmware\": \"" + String(FIRMWARE_VERSION) + "\"}";
+  String version = "{\"inRide\":\"false\", \"system\":{\"firmware\":\"" + String(FIRMWARE_VERSION) + "\"}}";
   Mqtt.telemeter(version);
 }
 
@@ -53,7 +53,10 @@ void SystemClass::sendHeartbeat() {
   JsonObject system = heartbeat["system"];
   gps["lat"] = Gps.getLatitude() / 1e7;
   gps["long"] = Gps.getLongitude() / 1e7;
-  gps["time"] = Gps.getTime();
+  gps["speed"] = Gps.getSpeed();
+  gps["heading"] = Gps.getHeading();
+  gps["dateTime"] = Gps.getDateTime();
+  system["uptime"] = getMillis() / 1000;
   system["signalStrength"] = Internet.getSignalStrength();
   system["heapFreeMem"] = freeMemory();
   system["statusFreeMem"] = STATUS_DOC_SIZE - statusDoc.memoryUsage();
@@ -85,37 +88,42 @@ void SystemClass::processCommand(const String& json) {
   JsonObject desired = cmdDoc["state"] | cmdDoc.as<JsonObject>();  // mqtt form | ble form
   JsonObject download = desired["download"];
   JsonObject copy = desired["copy"];
+  String json2 = json;
+  json2.replace("\"", "\\\"");
+  String lastCmd = "\"system\":{\"lastCmd\":\"" + json2 + "\"}";
   if (desired["reboot"] == "true") {
-    Mqtt.telemeter("", "{\"reboot\": null}");
+    Mqtt.telemeter("{" + lastCmd + "}", "{\"reboot\":null}");
     reboot();
   } else if (desired["lock"] == "open") {
     Pins.unlockDoors();
     // CAN-BUS should update
-    Mqtt.telemeter("{\"lock\": \"open\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"lock\":\"open\"}");
   } else if (desired["lock"] == "close") {
     Pins.lockDoors();
     // CAN-BUS should update
-    Mqtt.telemeter("{\"lock\": \"close\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"lock\":\"close\"}");
   } else if (desired["immo"] == "lock") {
     Pins.immobilize();
     statusDoc["immo"] = "lock";
-    Mqtt.telemeter("{\"immo\": \"lock\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"immo\":\"lock\"}");
   } else if (desired["immo"] == "unlock") {
     Pins.unimmobilize();
     statusDoc["immo"] = "unlock";
-    Mqtt.telemeter("{\"immo\": \"unlock\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"immo\":\"unlock\"}");
   } else if (desired["inRide"] == "true") {
     statusDoc["inRide"] = "true";
-    Mqtt.telemeter("{\"inRide\": \"true\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"inRide\":\"true\"}");
   } else if (desired["inRide"] == "false") {
     statusDoc["inRide"] = "false";
-    Mqtt.telemeter("{\"inRide\": \"false\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"inRide\":\"false\"}");
   } else if (!download.isNull()) {
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";
     const char* to = download["to"] | "";
     if (strlen(host) > 0 && strlen(from) > 0 && strlen(to) > 0) {
       Http.download(host, from, to);
+      Mqtt.telemeter("{" + lastCmd + "}", "{\"download\":null}");
+      reboot();
     } else {
       logError("Error: " + json);
     }
@@ -124,7 +132,7 @@ void SystemClass::processCommand(const String& json) {
     const char* to = copy["to"] | "";
     if (strlen(from) > 0 && strlen(to) > 0) {
       copyFile(from, to);
-      Mqtt.telemeter("", "{\"copy\": null}");
+      Mqtt.telemeter("{" + lastCmd + "}", "{\"copy\":null}");
       reboot();
     } else {
       logError("Error: " + json);
@@ -138,23 +146,25 @@ uint64_t SystemClass::getMillis() {
   return millis;
 }
 
-void SystemClass::kickWatchdogAndSleep(int msec) {
+void SystemClass::kickWatchdogAndSleep() {
   digitalWrite(PIN_A1, HIGH);
-#if DEBUG
+#ifdef DEBUG
   // don't use Watchdog.sleep as it disconnects USB
   Watchdog.reset();
-  delay(msec);
+  delay(1000);
 #else
-  Watchdog.sleep(msec);  // might return early because of external interrupt
+  Watchdog.sleep(500);
+  Watchdog.sleep(250);
+  Watchdog.sleep(63);
 #endif
-  millis += msec;
+  millis += 1000;  //sleep 813 msec+ above, and gps should take the other 250msec
   digitalWrite(PIN_A1, LOW);
   Watchdog.enable(16 * 1000);
 }
 
 void SystemClass::reboot() {
   logInfo(F("Rebooting now"));
-  delay(1000);
+  delay(3000);
   Watchdog.enable(1);
   while (true)
     ;

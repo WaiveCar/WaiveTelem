@@ -3,7 +3,7 @@
 
 class HttpClass {
  public:
-  void download(const char* host, const char* from, const char* to);
+  int32_t download(const char* host, const char* from, const char* to);
 };
 
 extern HttpClass Http;

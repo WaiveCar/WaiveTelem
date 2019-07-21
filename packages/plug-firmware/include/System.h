@@ -14,7 +14,7 @@ class SystemClass {
   void setCanStatus(const String& name, const uint64_t value);
   void processCommand(const String& json);
   void reboot();
-  void kickWatchdogAndSleep(int msec);
+  void kickWatchdogAndSleep();
   uint64_t getMillis();
   int32_t moveFile(const char* from, const char* to);
   int32_t copyFile(const char* from, const char* to);

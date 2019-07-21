@@ -17,11 +17,13 @@ void LoggerClass::setup() {
 }
 
 void LoggerClass::logLine(const char* type, const String& s) {
-  const String str = Gps.getTime() + String(" ") + s;
+  const String str = Gps.getDateTime() + String(" ") + s;
   if (String(type) != "Debug" && Mqtt.isConnected()) {
-    Mqtt.telemeter(String("{\"last" + String(type) + "\": \"") + s + "\"}");
+    Mqtt.telemeter(String("{\"system\":{\"last" + String(type) + "\":\"") + s + "\"}}");
   } else {
+#ifdef DEBUG
     Serial.println(str);
+#endif
   }
   if (writeFile) {
     writeFile.println(str);

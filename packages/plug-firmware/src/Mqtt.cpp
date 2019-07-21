@@ -83,15 +83,13 @@ void MqttClass::poll() {
 }
 
 void MqttClass::telemeter(const String& reported, const String& desired) {
-  if (reported != "") {
-    Serial.println(Gps.getTime() + String(" ") + reported);
-  }
   String id = Config.get()["id"];
   String topic = "$aws/things/" + id + "/shadow/update";
-  String message = "{\"state\": {" +
-                   (reported != "" ? "\"reported\": " + reported : "") +
-                   (reported != "" && desired != "" ? ", " : "") +
-                   (desired != "" ? "\"desired\": " + desired : "") + "}}";
+  String message = "{\"state\":{" +
+                   (reported != "" ? "\"reported\":" + reported : "") +
+                   (reported != "" && desired != "" ? "," : "") +
+                   (desired != "" ? "\"desired\":" + desired : "") + "}}";
+  Serial.println(Gps.getDateTime() + String(" ") + message);
   mqttClient.beginMessage(topic);
   mqttClient.print(message);
   mqttClient.endMessage();

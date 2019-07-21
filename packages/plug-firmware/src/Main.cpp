@@ -16,16 +16,17 @@ void setup() {
   Config.load();
   Logger.setup();
   Mqtt.setup();
+  System.setup();
   Can.setup();
   Bluetooth.setup();
   Gps.setup();
-  System.setup();
 }
 
 void loop() {
-  System.kickWatchdogAndSleep(1000);
+  Watchdog.reset();
   Mqtt.poll();
   Bluetooth.poll();
   Gps.poll();
   System.poll();
+  System.kickWatchdogAndSleep();
 }

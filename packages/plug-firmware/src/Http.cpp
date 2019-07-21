@@ -92,23 +92,21 @@ static int32_t verifyFile(const String& file) {
   }
 }
 
-void HttpClass::download(const char* host, const char* from, const char* to) {
+int32_t HttpClass::download(const char* host, const char* from, const char* to) {
   logDebug("host: " + String(host) + ", from: " + from + ", to: " + to);
   int32_t error;
   if (client.connectSSL(host, 443)) {
     sendGetRequest(host, from);
     error = skipHeaders();
-    if (error) return;
+    if (error) return error;
     error = saveFile("TEMP");
-    if (error) return;
+    if (error) return error;
     error = verifyFile(from);
-    if (error) return;
-    error = System.moveFile("TEMP", to);
-    if (error) return;
-    Mqtt.telemeter("", "{\"download\": null}");
-    System.reboot();
+    if (error) return error;
+    return System.moveFile("TEMP", to);
   } else {
     logError(F("https failed"));
+    return -10;
   }
 }
 
