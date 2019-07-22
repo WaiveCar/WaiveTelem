@@ -97,25 +97,25 @@ void SystemClass::processCommand(const String& json) {
   } else if (desired["lock"] == "open") {
     Pins.unlockDoors();
     // CAN-BUS should update
-    Mqtt.telemeter("{" + lastCmd + ",\"lock\":\"open\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"lock\":\"open\"}", "{\"lock\":null}");
   } else if (desired["lock"] == "close") {
     Pins.lockDoors();
     // CAN-BUS should update
-    Mqtt.telemeter("{" + lastCmd + ",\"lock\":\"close\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"lock\":\"close\"}", "{\"lock\":null}");
   } else if (desired["immo"] == "lock") {
     Pins.immobilize();
     statusDoc["immo"] = "lock";
-    Mqtt.telemeter("{" + lastCmd + ",\"immo\":\"lock\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"immo\":\"lock\"}", "{\"immo\":null}");
   } else if (desired["immo"] == "unlock") {
     Pins.unimmobilize();
     statusDoc["immo"] = "unlock";
-    Mqtt.telemeter("{" + lastCmd + ",\"immo\":\"unlock\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"immo\":\"unlock\"}", "{\"immo\":null}");
   } else if (desired["inRide"] == "true") {
     statusDoc["inRide"] = "true";
-    Mqtt.telemeter("{" + lastCmd + ",\"inRide\":\"true\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"inRide\":\"true\"}", "{\"inRide\":null}");
   } else if (desired["inRide"] == "false") {
     statusDoc["inRide"] = "false";
-    Mqtt.telemeter("{" + lastCmd + ",\"inRide\":\"false\"}");
+    Mqtt.telemeter("{" + lastCmd + ",\"inRide\":\"false\"}", "{\"inRide\":null}");
   } else if (!download.isNull()) {
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";
@@ -164,7 +164,8 @@ void SystemClass::kickWatchdogAndSleep() {
 
 void SystemClass::reboot() {
   logInfo(F("Rebooting now"));
-  delay(3000);
+  Logger.flush();
+  delay(1000);
   Watchdog.enable(1);
   while (true)
     ;

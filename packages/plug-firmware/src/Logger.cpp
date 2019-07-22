@@ -27,6 +27,11 @@ void LoggerClass::logLine(const char* type, const String& s) {
   }
   if (writeFile) {
     writeFile.println(str);
+  }
+}
+
+void LoggerClass::flush() {
+  if (writeFile) {
     writeFile.flush();
   }
 }

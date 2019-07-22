@@ -1,4 +1,8 @@
 module.exports = {
-  root: true,
-  extends: '@react-native-community',
+  extends: 'prettier',
+  plugins: ['prettier'],
+  parser: 'babel-eslint',
+  rules: {
+    'prettier/prettier': 'error'
+  }
 };

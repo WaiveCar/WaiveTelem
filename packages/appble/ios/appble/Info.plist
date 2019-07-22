@@ -17,11 +17,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -37,8 +39,22 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>To access apple music</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>To access bluetooth</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>To access the calendars</string>
+	<key>NSCameraUsageDescription</key>
+	<string>The camera is accessed for obtaining receiver info</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>To access the location info</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>To access the location info</string>
+	<key>NSMotionUsageDescription</key>
+	<string>To access motion info</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>To access speech</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

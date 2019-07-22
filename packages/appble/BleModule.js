@@ -1,6 +1,6 @@
-import { Alert } from "react-native";
-import { BleManager } from "react-native-ble-plx";
-import { Buffer } from "buffer";
+import { Alert } from 'react-native';
+import { BleManager } from 'react-native-ble-plx';
+import { Buffer } from 'buffer';
 
 export default class BleModule {
   constructor() {
@@ -86,35 +86,35 @@ export default class BleModule {
       }
     }
 
-    console.log("readServiceUUID", this.readServiceUUID);
-    console.log("readCharacteristicUUID", this.readCharacteristicUUID);
+    console.log('readServiceUUID', this.readServiceUUID);
+    console.log('readCharacteristicUUID', this.readCharacteristicUUID);
     console.log(
-      "writeWithResponseServiceUUID",
+      'writeWithResponseServiceUUID',
       this.writeWithResponseServiceUUID
     );
     console.log(
-      "writeWithResponseCharacteristicUUID",
+      'writeWithResponseCharacteristicUUID',
       this.writeWithResponseCharacteristicUUID
     );
     console.log(
-      "writeWithoutResponseServiceUUID",
+      'writeWithoutResponseServiceUUID',
       this.writeWithoutResponseServiceUUID
     );
     console.log(
-      "writeWithoutResponseCharacteristicUUID",
+      'writeWithoutResponseCharacteristicUUID',
       this.writeWithoutResponseCharacteristicUUID
     );
-    console.log("nofityServiceUUID", this.nofityServiceUUID);
-    console.log("nofityCharacteristicUUID", this.nofityCharacteristicUUID);
+    console.log('nofityServiceUUID', this.nofityServiceUUID);
+    console.log('nofityCharacteristicUUID', this.nofityCharacteristicUUID);
   }
 
   scan() {
     return new Promise((resolve, reject) => {
       this.manager.startDeviceScan(null, null, (error, device) => {
         if (error) {
-          console.log("startDeviceScan error:", error);
+          console.log('startDeviceScan error:', error);
           if (error.errorCode == 102) {
-            this.alert("turn on bluetooth");
+            this.alert('turn on bluetooth');
           }
           reject(error);
         } else {
@@ -126,17 +126,17 @@ export default class BleModule {
 
   stopScan() {
     this.manager.stopDeviceScan();
-    console.log("stopDeviceScan");
+    console.log('stopDeviceScan');
   }
 
   connect(id) {
-    console.log("isConneting:", id);
+    console.log('isConneting:', id);
     this.isConnecting = true;
     return new Promise((resolve, reject) => {
       this.manager
         .connectToDevice(id)
         .then(device => {
-          console.log("connect success:", device.name, device.id);
+          console.log('connect success:', device.name, device.id);
           this.peripheralId = device.id;
           // resolve(device);
           return device.discoverAllServicesAndCharacteristics();
@@ -145,14 +145,14 @@ export default class BleModule {
           return this.fetchServicesAndCharacteristicsForDevice(device);
         })
         .then(services => {
-          console.log("fetchServicesAndCharacteristicsForDevice", services);
+          console.log('fetchServicesAndCharacteristicsForDevice', services);
           this.isConnecting = false;
           this.getUUID(services);
           resolve();
         })
         .catch(err => {
           this.isConnecting = false;
-          console.log("connect fail: ", err);
+          console.log('connect fail: ', err);
           reject(err);
         });
     });
@@ -163,12 +163,12 @@ export default class BleModule {
       this.manager
         .cancelDeviceConnection(this.peripheralId)
         .then(res => {
-          console.log("disconnect success", res);
+          console.log('disconnect success', res);
           resolve(res);
         })
         .catch(err => {
           reject(err);
-          console.log("disconnect fail", err);
+          console.log('disconnect fail', err);
         });
     });
   }
@@ -183,15 +183,15 @@ export default class BleModule {
         )
         .then(
           characteristic => {
-            let buffer = Buffer.from(characteristic.value, "base64");
+            let buffer = Buffer.from(characteristic.value, 'base64');
             let value = buffer.toString();
-            console.log("read success", value);
+            console.log('read success', value);
             // console.log('read success',characteristic.value);
             resolve(value);
           },
           error => {
-            console.log("read fail: ", error);
-            this.alert("read fail: " + error.reason);
+            console.log('read fail: ', error);
+            this.alert('read fail: ' + error.reason);
             reject(error);
           }
         );
@@ -199,9 +199,9 @@ export default class BleModule {
   }
 
   write(value, index) {
-    let formatValue = new Buffer(value, "ascii").toString("base64");
+    let formatValue = new Buffer(value, 'ascii').toString('base64');
 
-    let transactionId = "write";
+    let transactionId = 'write';
     return new Promise((resolve, reject) => {
       this.manager
         .writeCharacteristicWithResponseForDevice(
@@ -213,12 +213,12 @@ export default class BleModule {
         )
         .then(
           characteristic => {
-            console.log("write success", value);
+            console.log('write success', value);
             resolve(characteristic);
           },
           error => {
-            console.log("write fail: ", error);
-            this.alert("write fail: ", error.reason);
+            console.log('write fail: ', error);
+            this.alert('write fail: ', error.reason);
             reject(error);
           }
         );
@@ -226,9 +226,9 @@ export default class BleModule {
   }
 
   writeWithoutResponse(value, index) {
-    let formatValue = new Buffer(value, "ascii").toString("base64");
+    let formatValue = new Buffer(value, 'ascii').toString('base64');
 
-    let transactionId = "writeWithoutResponse";
+    let transactionId = 'writeWithoutResponse';
     return new Promise((resolve, reject) => {
       this.manager
         .writeCharacteristicWithoutResponseForDevice(
@@ -240,12 +240,12 @@ export default class BleModule {
         )
         .then(
           characteristic => {
-            console.log("writeWithoutResponse success", value);
+            console.log('writeWithoutResponse success', value);
             resolve(characteristic);
           },
           error => {
-            console.log("writeWithoutResponse fail: ", error);
-            this.alert("writeWithoutResponse fail: ", error.reason);
+            console.log('writeWithoutResponse fail: ', error);
+            this.alert('writeWithoutResponse fail: ', error.reason);
             reject(error);
           }
         );
@@ -257,6 +257,6 @@ export default class BleModule {
   }
 
   alert(text) {
-    Alert.alert("Alert", text, [{ text: "OK", onPress: () => {} }]);
+    Alert.alert('Alert', text, [{ text: 'OK', onPress: () => {} }]);
   }
 }
