@@ -34,7 +34,7 @@ void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
   int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"];
   if (interval > 0 && Gps.getLatitude() != 0 &&
-      (lastHeartbeat == 0 || getMillis() - lastHeartbeat > (uint32_t)interval * 1000)) {
+      (lastHeartbeat == 0 || getMillis() - lastHeartbeat >= (uint32_t)interval * 1000)) {
     sendHeartbeat();
     lastHeartbeat = getMillis();
   }
