@@ -21,7 +21,7 @@ class SystemClass {
 
  private:
   bool canStatusChanged = false;
-  uint32_t lastHeartbeat = 0;
+  int32_t lastHeartbeat = -1;
   uint64_t millis = 0;
   StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
 };

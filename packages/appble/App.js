@@ -66,7 +66,7 @@ export default class App extends Component {
           this.setState({ scanning: false });
         } else {
           console.log(device.id, device.name);
-          if (device.name && device.name.startsWith('waive')) {
+          if (true || (device.name && device.name.startsWith('waive'))) {
             this.deviceMap.set(device.id, device);
             this.setState({ data: [...this.deviceMap.values()] });
           }
@@ -242,7 +242,7 @@ export default class App extends Component {
               ? 'Scanning'
               : this.state.isConnected
               ? 'Disconnect'
-              : 'Scan waive*'}
+              : 'Scan for waive*'}
           </Text>
         </TouchableOpacity>
       </View>

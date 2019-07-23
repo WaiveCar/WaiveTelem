@@ -13,8 +13,8 @@
 void setup() {
   Watchdog.enable(16 * 1000);
   Pins.setup();
-  Config.load();
   Logger.setup();
+  Config.load();
   Mqtt.setup();
   System.setup();
   Can.setup();

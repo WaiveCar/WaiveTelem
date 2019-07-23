@@ -21,7 +21,7 @@ void ConfigClass::load() {
     while (true)
       ;
   }
-  logDebug("configDoc memory cushion: " + String(CONFIG_DOC_SIZE - configDoc.memoryUsage()));
+  logInfo("configDoc memory cushion: " + String(CONFIG_DOC_SIZE - configDoc.memoryUsage()));
   // logDebug(configDoc["can"]["model"].as<char*>());
 
   file.close();

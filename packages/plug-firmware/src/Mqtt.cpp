@@ -89,7 +89,7 @@ void MqttClass::telemeter(const String& reported, const String& desired) {
                    (reported != "" ? "\"reported\":" + reported : "") +
                    (reported != "" && desired != "" ? "," : "") +
                    (desired != "" ? "\"desired\":" + desired : "") + "}}";
-  Serial.println(Gps.getDateTime() + String(" ") + message);
+  Logger.logLine("Debug", message);
   mqttClient.beginMessage(topic);
   mqttClient.print(message);
   mqttClient.endMessage();
