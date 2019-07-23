@@ -4,13 +4,15 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
+#define CONFIG_DOC_SIZE 4096
+
 class ConfigClass {
  public:
   void load();
   JsonDocument& get();
 
  private:
-  StaticJsonDocument<4096> configDoc;
+  StaticJsonDocument<CONFIG_DOC_SIZE> configDoc;
 };
 
 extern ConfigClass Config;

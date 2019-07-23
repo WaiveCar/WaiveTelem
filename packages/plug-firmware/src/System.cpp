@@ -21,6 +21,14 @@ int freeMemory() {
   return &top - reinterpret_cast<char*>(sbrk(0));
 }
 
+// see https://github.com/nogoegst/bearssl/blob/master/test/test_crypto.c
+// #include "bearssl/bearssl_ssl.h"
+
+// br_aes_gen_cbcenc_keys v_ec;
+// br_aes_gen_cbcdec_keys v_dc;
+// const br_block_cbcenc_class** ec;
+// const br_block_cbcdec_class** dc;
+
 void SystemClass::setup() {
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
