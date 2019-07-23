@@ -5,7 +5,7 @@
 #include "Pins.h"
 #include "System.h"
 
-#define CONFIG_FILE "/config.txt"
+#define CONFIG_FILE "/CONFIG.TXT"
 
 void ConfigClass::load() {
   while (!SD.begin(SD_CS_PIN)) {

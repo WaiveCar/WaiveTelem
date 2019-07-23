@@ -12,7 +12,7 @@
       "Type": "AWS::IoT::Thing",
       "Properties": {
         "ThingName": { "Ref": "ThingName" },
-        "ThingTypeName": "type-plug-wifi",
+        "ThingTypeName": "type-plug-nb",
         "ThingGroups": ["plug-group"]
       }
     },

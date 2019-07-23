@@ -155,24 +155,24 @@ uint64_t SystemClass::getMillis() {
 }
 
 void SystemClass::kickWatchdogAndSleep() {
-  digitalWrite(PIN_A1, HIGH);
+  digitalWrite(PIN_LED, HIGH);
 #ifdef DEBUG
   // don't use Watchdog.sleep as it disconnects USB
   Watchdog.reset();
   delay(1000);
 #else
+  //sleep 813 msec+ and gps should take the other 187-msec
   Watchdog.sleep(500);
   Watchdog.sleep(250);
   Watchdog.sleep(63);
 #endif
-  millis += 1000;  //sleep 813 msec+ above, and gps should take the other 250msec
-  digitalWrite(PIN_A1, LOW);
+  millis += 1000;
+  digitalWrite(PIN_LED, LOW);
   Watchdog.enable(16 * 1000);
 }
 
 void SystemClass::reboot() {
   logInfo(F("Rebooting now"));
-  Logger.flush();
   delay(1000);
   Watchdog.enable(1);
   while (true)

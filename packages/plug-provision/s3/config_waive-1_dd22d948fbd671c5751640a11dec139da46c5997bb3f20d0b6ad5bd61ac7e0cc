@@ -1,0 +1,108 @@
+{
+  "id": "waive-1",
+  "mqtt": {
+    "url": "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com",
+    "cert": "-----BEGIN CERTIFICATE-----\nMIIC5zCCAc+gAwIBAgIVAPsYPqm3XrC5+rmdgCCSYwBuj4rfMA0GCSqGSIb3DQEB\nCwUAME0xSzBJBgNVBAsMQkFtYXpvbiBXZWIgU2VydmljZXMgTz1BbWF6b24uY29t\nIEluYy4gTD1TZWF0dGxlIFNUPVdhc2hpbmd0b24gQz1VUzAeFw0xOTA3MTgyMTEz\nMTlaFw00OTEyMzEyMzU5NTlaMHYxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEU\nMBIGA1UEBxMLTG9zIEFuZ2VsZXMxETAPBgNVBAoTCFdhaXZlQ2FyMRQwEgYDVQQL\nEwtFbmdpbmVlcmluZzEbMBkGA1UEAxMSMDEyM0MwMUI4RDBGRURENUFGMFkwEwYH\nKoZIzj0CAQYIKoZIzj0DAQcDQgAEcYA3zKpyyjnvSAe28VVQquZHB3na1lENq8qs\n+T4iqm3QwtPukfGLt2tAbriulKCa7gJWH8bKrTZ0vrwFdB/UI6NgMF4wHwYDVR0j\nBBgwFoAUnIUoTtswV3hhDiw/z8A1Kf1891EwHQYDVR0OBBYEFGZMcDewe5Jv/hOo\nFirfLX+5wTICMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMA0GCSqGSIb3\nDQEBCwUAA4IBAQCf2KhCIZamgEplBE/o9+bk4REPLrj+7/6eVtHyLoIRzO3ciug0\n6N4pYdSGrrygRFc/FE8/sPga9CTgKJEmBP2XafbGUeKlqQ0bRthRKbiCuZDt07JO\nNFBC8XjaTGFEHFDOrYSO3MUN5o0UrwpTiG2lg2BRCWSzkDAeT8ew6rbh4z/0zPBH\nI7evxsm2FPtVez+uUmALwISyzwhIxJuEjDi2Zm1RWllwh1HNJMkSg1cmyJg/HzAr\nZ3KnlQK0pJccZz+nwkBONorADWt/G0EJSF6D3azIJgTw+KK0ZRfApL2vT1ok98D3\nn+rjwl/hPWimmNoQ8f9uXv+j1bgNFltXh67z\n-----END CERTIFICATE-----\n"
+  },
+  "heartbeat": {
+    "inRide": 30,
+    "notInRide": 900
+  },
+  "nb": {
+    "pin": null,
+    "apn": "hologram"
+  },
+  "can": {
+    "make": "Hyundai",
+    "model": "Generic",
+    "bus": [
+      {
+        "baud": 500,
+        "status": [
+          {
+            "name": "fuel_level",
+            "id": 1292,
+            "bit": 18,
+            "len": 5
+          },
+          {
+            "name": "car_speed",
+            "id": 1322,
+            "bit": 0,
+            "len": 8
+          },
+          {
+            "name": "ignition",
+            "id": 1345,
+            "bit": 0,
+            "len": 3
+          },
+          {
+            "name": "door_front_left",
+            "id": 1345,
+            "bit": 8,
+            "len": 2
+          },
+          {
+            "name": "door_front_right",
+            "id": 1345,
+            "bit": 35,
+            "len": 1
+          },
+          {
+            "name": "charging",
+            "id": 1353,
+            "bit": 16,
+            "len": 8
+          },
+          {
+            "name": "door_back_left",
+            "id": 1363,
+            "bit": 23,
+            "len": 1
+          },
+          {
+            "name": "door_back_right",
+            "id": 1363,
+            "bit": 24,
+            "len": 1
+          },
+          {
+            "name": "window_front_left",
+            "id": 1369,
+            "bit": 8,
+            "len": 1
+          },
+          {
+            "name": "window_front_right",
+            "id": 1369,
+            "bit": 9,
+            "len": 1
+          },
+          {
+            "name": "window_back_left",
+            "id": 1369,
+            "bit": 10,
+            "len": 1
+          },
+          {
+            "name": "window_back_right",
+            "id": 1369,
+            "bit": 11,
+            "len": 1
+          },
+          {
+            "name": "mileage",
+            "id": 1456,
+            "bit": 0,
+            "len": 24
+          }
+        ]
+      },
+      {
+        "baud": 125,
+        "status": []
+      }
+    ]
+  }
+}

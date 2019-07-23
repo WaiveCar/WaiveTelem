@@ -23,7 +23,6 @@ class LoggerClass {
   void setup();
   void logFreeMemory();
   void logLine(const char* type, const String& s);
-  void flush();
 
  private:
   File writeFile;

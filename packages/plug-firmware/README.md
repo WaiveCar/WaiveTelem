@@ -54,8 +54,8 @@ e.g. for plug-1
 {"desired":{"immo":"unlock"}}
 {"desired":{"inRide":"true"}}
 {"desired":{"inRide":"false"}}
-{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"1000_1.0.4_9ccd5d8eb348015145a4df52cd29e7e233768a9d2fc475e4aab4773fc5cccb66", "to":"UPDATE.BIN"}}}
-{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"plug1_config_e6cd5276eb396159eebce1005be1b5e6926d394d9cf6bf7e0e7c4c70cad43341", "to":"CONFIG.TXT"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"1500_1.0.5_b824c05bbd9ebd19c5eb9546ef46615607a7da4f3e435c97fbb286969d8fc2d8", "to":"UPDATE.BIN"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "to":"CONFIG.TXT"}}}
 {"desired":{"copy":{"from":"DEFAULT.BIN", "to":"UPDATE.BIN"}}}
 {"desired":{"copy":{"from":"DEFAULT.CFG", "to":"CONFIG.TXT"}}}
 ```
@@ -64,15 +64,24 @@ e.g. for plug-1
 
 ```json
 {
-  "inRide":"true",
-  "firmware":"1.0.1",
-  "lock":"open",
-  "immo":"false",
-  "gps":{
-    "lat":36.149893,
-    "long":-115.027760,
-    "time":"2019-07-12T18:33:01Z"
+  "inRide": "false",
+  "system": {
+    "firmware": "1.0.5",
+    "lastInfo": "BLE Disconnected",
+    "signalStrength": -46,
+    "heapFreeMem": 6655,
+    "statusFreeMem": 768,
+    "lastCmd": "{\"immo\":\"lock\"}",
+    "uptime": 14401
   },
-  ...
+  "gps": {
+    "lat": 34.1499433,
+    "long": -118.0278233,
+    "speed": 0.023015579,
+    "heading": 207.3500061,
+    "dateTime": "2019-07-23T00:01:21Z"
+  },
+  "lock": "open",
+  "immo": "lock"
 }
 ```

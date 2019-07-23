@@ -21,17 +21,10 @@ void LoggerClass::logLine(const char* type, const String& s) {
   if (String(type) != "Debug" && Mqtt.isConnected()) {
     Mqtt.telemeter(String("{\"system\":{\"last" + String(type) + "\":\"") + s + "\"}}");
   } else {
-#ifdef DEBUG
     Serial.println(str);
-#endif
   }
   if (writeFile) {
     writeFile.println(str);
-  }
-}
-
-void LoggerClass::flush() {
-  if (writeFile) {
     writeFile.flush();
   }
 }

@@ -6,17 +6,14 @@
 SHA=$(openssl dgst -sha256 -hmac "https failed" .pio/build/mkr1000USB/firmware.bin)
 SHA=${SHA/* }
 FILENAME="1000_${FIRMWARE_VERSION}_${SHA}"
-cp -v .pio/build/mkr1000USB/firmware.bin bin/$FILENAME
-echo ""
-echo '{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"'"${FILENAME}"'", "to":"UPDATE.BIN"}}}'
-echo ""
+cp .pio/build/mkr1000USB/firmware.bin s3/$FILENAME
+echo '{"desired":{"download":{"host":"'"${S3_HOST}"'", "from":"'"${FILENAME}"'", "to":"UPDATE.BIN"}}}'
 
 SHA=$(openssl dgst -sha256 -hmac "https failed" .pio/build/mkrnb1500/firmware.bin)
 SHA=${SHA/* }
 FILENAME="1500_${FIRMWARE_VERSION}_${SHA}"
-cp -v .pio/build/mkrnb1500/firmware.bin bin/$FILENAME
-echo ""
-echo '{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"'"${FILENAME}"'", "to":"UPDATE.BIN"}}}'
-echo ""
+cp .pio/build/mkrnb1500/firmware.bin s3/$FILENAME
+echo '{"desired":{"download":{"host":"'"${S3_HOST}"'", "from":"'"${FILENAME}"'", "to":"UPDATE.BIN"}}}'
 
-aws s3 sync bin s3://waiveplug
+echo ""
+aws s3 sync s3 s3://waiveplug
