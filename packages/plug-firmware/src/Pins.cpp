@@ -9,6 +9,7 @@ void PinsClass::setup() {
   pinMode(VIN_SENSE, INPUT);
   pinMode(IMMO_ON, OUTPUT);
   pinMode(IMMO_OFF, OUTPUT);
+  pinMode(GPS_RESET, OUTPUT);
 #else
   pinMode(RELAY_2_PIN, OUTPUT);
 #endif

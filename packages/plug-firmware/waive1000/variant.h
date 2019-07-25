@@ -66,6 +66,7 @@ extern "C" unsigned int PINCOUNT_fn();
 #define VIN_SENSE   (2u)
 #define IMMO_ON     (28u)
 #define IMMO_OFF    (29u)
+#define GPS_RESET   (30u)
 
 //SARA
 #define SARA_RESETN (31u)

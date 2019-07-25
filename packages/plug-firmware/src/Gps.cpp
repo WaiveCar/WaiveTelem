@@ -39,17 +39,22 @@ boolean Adafruit_GPS::wakeup(void) {
 */
 
 void GpsClass::setup() {
+  digitalWrite(GPS_RESET, LOW);
   delay(1000);
   GPSSerial.begin(9600);
-  GPSSerial.println(PMTK_SET_NMEA_OUTPUT_RMCGGA);
-  GPSSerial.println(PMTK_SET_BAUD_57600);
-  delay(200);
-  GPSSerial.end();
-  delay(200);
-  GPSSerial.begin(57600);
+  // GPSSerial.println(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  // GPSSerial.println(PMTK_SET_BAUD_57600);
+  // delay(200);
+  // GPSSerial.end();
+  // delay(200);
+  // GPSSerial.begin(57600);
 }
 
 void GpsClass::poll() {
+  while (GPSSerial.available()) {
+    logDebug((char*)GPSSerial.read());
+  }
+  return;
   int start = millis();
   gps_fix fix;
   bool noData = true;

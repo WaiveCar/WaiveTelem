@@ -3,7 +3,7 @@
 #include "Logger.h"
 
 void LoggerClass::setup() {
-#if DEBUG
+#if 0
   // the following cause cause the firmware to only run if serial-monitored
   Serial.begin(9600);
   while (!Serial)
