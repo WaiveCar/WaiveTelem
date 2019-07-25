@@ -63,19 +63,18 @@ extern "C" unsigned int PINCOUNT_fn();
  */
 // #define digitalPinToTimer(P)
 
-//Battery
-#define ADC_BATTERY	(32u)
+#define VIN_SENSE   (2u)
+#define IMMO_ON     (28u)
+#define IMMO_OFF    (29u)
 
 //SARA
-#define SARA_RTS    (28u)
-#define SARA_CTS    (29u)
 #define SARA_RESETN (31u)
 #define SARA_DTR    (-1)
 #define SARA_PWR_ON (35u)
 
 // LEDs
 // ----
-#define PIN_LED     (6u)
+#define PIN_LED     (32u)
 #define LED_BUILTIN PIN_LED
 
 // Analog pins
@@ -167,8 +166,6 @@ extern Uart Serial2;
 #define PIN_SERIAL2_TX (26ul)
 #define PAD_SERIAL2_TX (UART_TX_PAD_0)
 #define PAD_SERIAL2_RX (SERCOM_RX_PAD_1)
-#define PIN_SERIAL2_RTS (28u)
-#define PIN_SERIAL2_CTS (29u)
 
 #endif // __cplusplus
 

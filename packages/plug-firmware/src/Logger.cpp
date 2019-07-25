@@ -3,8 +3,8 @@
 #include "Logger.h"
 
 void LoggerClass::setup() {
-#if 0
-// the following cause cause the firmware to only run if serial-monitored
+#if DEBUG
+  // the following cause cause the firmware to only run if serial-monitored
   Serial.begin(9600);
   while (!Serial)
     ;  // wait for serial port to connect. Needed for native USB

@@ -11,7 +11,9 @@
 #include "System.h"
 
 void setup() {
+#ifndef DEBUG
   Watchdog.enable(16 * 1000);
+#endif
   Pins.setup();
   Logger.setup();
   Config.load();

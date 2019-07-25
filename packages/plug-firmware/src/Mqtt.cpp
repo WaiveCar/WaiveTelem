@@ -4,7 +4,6 @@
 #include <ArduinoMqttClient.h>
 
 #include "Config.h"
-#include "Gps.h"
 #include "Http.h"
 #include "Internet.h"
 #include "Logger.h"
@@ -35,9 +34,8 @@ void MqttClass::setup() {
   ArduinoBearSSL.onGetTime(getTime);
   JsonObject mqtt = Config.get()["mqtt"];
   const char* id = Config.get()["id"];
-  logDebug("id: " + String(id));
   const char* cert = mqtt["cert"];
-  // logDebug("cert: " + String(cert));
+  logDebug("cert: " + String(cert));
   sslClient.setEccSlot(0, cert);
   mqttClient.setId(id);
   // set a long keep-alive interval as mqttClient won't keep alive for us
@@ -50,10 +48,27 @@ void MqttClass::setup() {
 void MqttClass::connect() {
   if (!Internet.isConnected()) {
     Internet.connect();
+    // test internect connection
+    // Http.download("reelgood.com", "/", "TEMP");  // weird binary stuff
+    // Http.download("www.pivotaltracker.com", "/", "TEMP");
+    // Http.download("workflowy.com", "/", "TEMP");  // very long timeout
+    // Http.download("community.libra.org", "/", "TEMP");
+    // Http.download("trello.com", "/", "TEMP");     // very long timeout
+    // Http.download("www.apple.com", "/", "TEMP");  // very long timeout
+    // Http.download("news.ycombinator.com", "/", "TEMP");
+    // Http.download("waiveplug.s3.us-east-2.amazonaws.com", "config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP");
+    // Http.download("www.amazon.com", "/", "TEMP");  // very long timeout
+    // Http.download("www.wikipedia.org", "/", "TEMP");
+    // Http.download("discordapp.com", "/", "TEMP");  //works, cloudflare
+    // Http.download("www.producthunt.com", "/", "TEMP");  //works
+    // Http.download("gmail.com", "/", "TEMP");  // works
+    // Http.download("www.google.com", "/", "TEMP"); //works
+    // Http.download("www.bing.com", "/", "TEMP");  //works
   }
   const JsonObject mqtt = Config.get()["mqtt"];
   const char* url = mqtt["url"];
   String id = Config.get()["id"];
+  logDebug("id: " + id);
   logDebug("Attempting to connect to MQTT broker: " + String(url));
   const int maxTry = 20;
   int i = 0;
@@ -63,7 +78,7 @@ void MqttClass::connect() {
       logDebug(F("Failed to connect, try leter"));
       return;
     }
-    log(F("M"));
+    logDebug("MQTT connect error: " + String(mqttClient.connectError()));
     delay(3000);
     i++;
   }
