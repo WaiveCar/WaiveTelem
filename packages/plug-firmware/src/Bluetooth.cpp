@@ -179,7 +179,7 @@ void BluetoothClass::setup() {
   ret = AddWaiveService();
 
   if (ret == BLE_STATUS_SUCCESS) {
-    logInfo(F("BLE Service added successfully."));
+    logDebug(F("BLE Service added successfully."));
   } else {
     logError(F("BLE Error while adding service."));
   }

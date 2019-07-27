@@ -15,7 +15,7 @@ void setup() {
   Pins.setup();
   Logger.setup();
   Config.load();
-  // Mqtt.setup();
+  Mqtt.setup();
   System.setup();
   Can.setup();
   Bluetooth.setup();
