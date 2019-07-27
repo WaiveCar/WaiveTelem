@@ -2,6 +2,7 @@
 
 #include "Logger.h"
 #include "Pins.h"
+#include "System.h"
 
 void LoggerClass::setup() {
 #if DEBUG
@@ -23,8 +24,8 @@ void LoggerClass::setup() {
 
 void LoggerClass::logLine(const char* type, const String& s) {
   const String str = Gps.getDateTime() + String(" ") + s;
-  if (String(type) != "Debug" && Mqtt.isConnected()) {
-    Mqtt.telemeter(String("{\"system\":{\"last" + String(type) + "\":\"") + s + "\"}}");
+  if (String(type) != "Debug") {
+    System.telemeter(String("{\"system\":{\"last" + String(type) + "\":\"") + s + "\"}}");
   } else {
     Serial.println(str);
   }

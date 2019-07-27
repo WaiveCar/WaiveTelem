@@ -14,14 +14,17 @@ void ConfigClass::load() {
     while (true)
       ;
   }
-  logInfo("configDoc memory cushion: " + String(CONFIG_DOC_SIZE - configDoc.memoryUsage()));
-  // logDebug(configDoc["can"]["model"].as<char*>());
+  configFreeMem = CONFIG_DOC_SIZE - configDoc.memoryUsage();
 
   file.close();
 }
 
 JsonDocument& ConfigClass::get() {
   return configDoc;
+}
+
+int32_t ConfigClass::getConfigFreeMem() {
+  return configFreeMem;
 }
 
 ConfigClass Config;
