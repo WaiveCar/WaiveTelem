@@ -10,6 +10,8 @@ void PinsClass::setup() {
   pinMode(IMMO_ON, OUTPUT);
   pinMode(IMMO_OFF, OUTPUT);
   pinMode(GPS_RESET, OUTPUT);
+
+  digitalWrite(GPS_RESET, LOW);
 #else
   pinMode(RELAY_2_PIN, OUTPUT);
 #endif

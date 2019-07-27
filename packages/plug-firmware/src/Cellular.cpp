@@ -6,8 +6,8 @@
 #include "Internet.h"
 #include "Logger.h"
 
-// static NB nbAccess(true);  // turn on debug
-static NB nbAccess;
+static NB nbAccess(true);  // turn on debug
+// static NB nbAccess;
 static GPRS gprs;
 static NBScanner nbScanner;
 
@@ -33,7 +33,11 @@ unsigned long InternetClass::getTime() {
 }
 
 int InternetClass::getSignalStrength() {
-  return nbScanner.getSignalStrength().toInt();
+  if (isConnected()) {
+    return nbScanner.getSignalStrength().toInt();
+  } else {
+    return 0;
+  }
 }
 
 InternetClass Internet;

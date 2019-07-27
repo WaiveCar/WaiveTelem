@@ -26,10 +26,9 @@ static unsigned long getTime() {
 }
 
 void MqttClass::setup() {
-  if (!ECCX08.begin()) {
+  while (!ECCX08.begin()) {
     logError(F("No ECCX08 present"));
-    while (1)
-      ;
+    delay(5000);
   }
   ArduinoBearSSL.onGetTime(getTime);
   JsonObject mqtt = Config.get()["mqtt"];
@@ -49,21 +48,21 @@ void MqttClass::connect() {
   if (!Internet.isConnected()) {
     Internet.connect();
     // test internect connection
-    // Http.download("reelgood.com", "/", "TEMP");  // weird binary stuff
     // Http.download("www.pivotaltracker.com", "/", "TEMP");
-    // Http.download("workflowy.com", "/", "TEMP");  // very long timeout
     // Http.download("community.libra.org", "/", "TEMP");
-    // Http.download("trello.com", "/", "TEMP");     // very long timeout
-    // Http.download("www.apple.com", "/", "TEMP");  // very long timeout
     // Http.download("news.ycombinator.com", "/", "TEMP");
-    // Http.download("waiveplug.s3.us-east-2.amazonaws.com", "config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP");
-    // Http.download("www.amazon.com", "/", "TEMP");  // very long timeout
     // Http.download("www.wikipedia.org", "/", "TEMP");
-    // Http.download("discordapp.com", "/", "TEMP");  //works, cloudflare
+    // Http.download("waiveplug.s3.us-east-2.amazonaws.com", "config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP");
+    // Http.download("workflowy.com", "/", "TEMP");        // very long timeout
+    // Http.download("trello.com", "/", "TEMP");           // very long timeout
+    // Http.download("www.apple.com", "/", "TEMP");        // very long timeout
+    // Http.download("www.amazon.com", "/", "TEMP");       // very long timeout
+    // Http.download("discordapp.com", "/", "TEMP");       //works, cloudflare
     // Http.download("www.producthunt.com", "/", "TEMP");  //works
-    // Http.download("gmail.com", "/", "TEMP");  // works
-    // Http.download("www.google.com", "/", "TEMP"); //works
-    // Http.download("www.bing.com", "/", "TEMP");  //works
+    // Http.download("gmail.com", "/", "TEMP");            // works
+    // Http.download("www.google.com", "/", "TEMP");       //works
+    // Http.download("www.bing.com", "/", "TEMP");         //works
+    // Http.download("reelgood.com", "/", "TEMP");         // weird binary stuff, but seems to work
   }
   const JsonObject mqtt = Config.get()["mqtt"];
   const char* url = mqtt["url"];

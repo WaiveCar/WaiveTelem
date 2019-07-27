@@ -1,14 +1,19 @@
 #include <Arduino.h>
 
 #include "Logger.h"
+#include "Pins.h"
 
 void LoggerClass::setup() {
-#if 0
+#if DEBUG
   // the following cause cause the firmware to only run if serial-monitored
   Serial.begin(9600);
   while (!Serial)
     ;  // wait for serial port to connect. Needed for native USB
 #endif
+  while (!SD.begin(SD_CS_PIN)) {
+    logError(F("Failed to initialize SD Library"));
+    delay(5000);
+  }
   writeFile = SD.open("LOG.TXT", FILE_WRITE);
   if (!writeFile) {
     logError("LOG.TXT open failed");

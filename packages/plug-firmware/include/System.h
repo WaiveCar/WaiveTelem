@@ -1,6 +1,8 @@
 #ifndef Status_h
 #define Status_h
 
+#define WATCHDOG_TIMEOUT 16 * 1000
+
 #define STATUS_DOC_SIZE 1024
 #define BUFFER_SIZE 512
 

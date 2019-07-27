@@ -50,8 +50,8 @@ void SystemClass::poll() {
 
 void SystemClass::sendVersion() {
   statusDoc["firmware"] = FIRMWARE_VERSION;
-  statusDoc["inRide"] = "false";
-  String version = "{\"inRide\":\"false\", \"system\":{\"firmware\":\"" + String(FIRMWARE_VERSION) + "\"}}";
+  statusDoc["inRide"] = "true";
+  String version = "{\"inRide\":\"" + String(statusDoc["inRide"].as<char*>()) + "\", \"system\":{\"firmware\":\"" + FIRMWARE_VERSION + "\"}}";
   Mqtt.telemeter(version);
 }
 
@@ -61,8 +61,8 @@ void SystemClass::sendHeartbeat() {
   JsonObject system = heartbeat["system"];
   gps["lat"] = Gps.getLatitude() / 1e7;
   gps["long"] = Gps.getLongitude() / 1e7;
+  gps["hdop"] = Gps.getHdop();
   gps["speed"] = Gps.getSpeed();
-  gps["heading"] = Gps.getHeading();
   gps["dateTime"] = Gps.getDateTime();
   system["uptime"] = getMillis() / 1000;
   system["signalStrength"] = Internet.getSignalStrength();
@@ -158,18 +158,16 @@ void SystemClass::kickWatchdogAndSleep() {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
   // don't use Watchdog.sleep as it disconnects USB
-  delay(1000);
+  delay(950);
 #else
-  //sleep 813 msec+ and gps should take the other 187-msec
+  //sleep most and gps should take the other in 1 second
   Watchdog.sleep(500);
   Watchdog.sleep(250);
-  Watchdog.sleep(63);
+  Watchdog.sleep(125);
 #endif
   millis += 1000;
   digitalWrite(LED_BUILTIN, HIGH);
-#ifndef DEBUG
-  Watchdog.enable(16 * 1000);
-#endif
+  Watchdog.enable(WATCHDOG_TIMEOUT);
 }
 
 void SystemClass::reboot() {

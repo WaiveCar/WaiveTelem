@@ -27,13 +27,13 @@
 // will be completely ignored.  (See also NMEAGPS_RECOGNIZE_ALL, below)
 //
 // FYI: Only RMC and ZDA contain date information.  Other
-// sentences contain time information.  Both date and time are 
+// sentences contain time information.  Both date and time are
 // required if you will be doing time_t-to-clock_t operations.
 
 #define NMEAGPS_PARSE_GGA
 //#define NMEAGPS_PARSE_GLL
 //#define NMEAGPS_PARSE_GSA
-//#define NMEAGPS_PARSE_GSV
+#define NMEAGPS_PARSE_GSV
 //#define NMEAGPS_PARSE_GST
 #define NMEAGPS_PARSE_RMC
 //#define NMEAGPS_PARSE_VTG
@@ -45,7 +45,7 @@
 // to determine when the GPS quiet time begins, and thus
 // when you can perform "some" time-consuming operations.
 
-#define LAST_SENTENCE_IN_INTERVAL NMEAGPS::NMEA_RMC
+#define LAST_SENTENCE_IN_INTERVAL NMEAGPS::NMEA_GSV
 
 // NOTE: For PUBX-only, PGRM and UBX configs, use
 //          (NMEAGPS::nmea_msg_t)(NMEAGPS::NMEA_LAST_MSG+1)
@@ -129,7 +129,7 @@
 #define NMEAGPS_FIX_MAX 1
 
 #if defined(NMEAGPS_EXPLICIT_MERGING) && (NMEAGPS_FIX_MAX == 0)
-  #error You must define FIX_MAX >= 1 to allow EXPLICIT merging in NMEAGPS_cfg.h
+#error You must define FIX_MAX >= 1 to allow EXPLICIT merging in NMEAGPS_cfg.h
 #endif
 
 //------------------------------------------------------
@@ -162,7 +162,7 @@
 //      "tt" is the talker ID, and
 //      "ccc" is the variable-length sentence type (i.e., command).
 //
-//    For example, "$GPGLL,..." is a GLL sentence (Geographic Lat/Long) 
+//    For example, "$GPGLL,..." is a GLL sentence (Geographic Lat/Long)
 //    transmitted by talker "GP".  This is the most common talker ID.  Some
 //    devices may report "$GNGLL,..." when a mix of GPS and non-GPS
 //    satellites have been used to determine the GLL data.
@@ -199,10 +199,10 @@
 //#define NMEAGPS_SAVE_TALKER_ID
 //#define NMEAGPS_PARSE_TALKER_ID
 
-//#define NMEAGPS_PARSE_PROPRIETARY
+#define NMEAGPS_PARSE_PROPRIETARY
 #ifdef NMEAGPS_PARSE_PROPRIETARY
-  //#define NMEAGPS_SAVE_MFR_ID
-  #define NMEAGPS_PARSE_MFR_ID
+//#define NMEAGPS_SAVE_MFR_ID
+#define NMEAGPS_PARSE_MFR_ID
 #endif
 
 //------------------------------------------------------
@@ -214,17 +214,17 @@
 //#define NMEAGPS_PARSE_SATELLITE_INFO
 
 #ifdef NMEAGPS_PARSE_SATELLITES
-  #define NMEAGPS_MAX_SATELLITES (20)
+#define NMEAGPS_MAX_SATELLITES (20)
 
-  #ifndef GPS_FIX_SATELLITES
-    #error GPS_FIX_SATELLITES must be defined in GPSfix.h!
-  #endif
+#ifndef GPS_FIX_SATELLITES
+#error GPS_FIX_SATELLITES must be defined in GPSfix.h!
+#endif
 
 #endif
 
 #if defined(NMEAGPS_PARSE_SATELLITE_INFO) & \
     !defined(NMEAGPS_PARSE_SATELLITES)
-  #error NMEAGPS_PARSE_SATELLITES must be defined!
+#error NMEAGPS_PARSE_SATELLITES must be defined!
 #endif
 
 //------------------------------------------------------
@@ -236,15 +236,15 @@
 //------------------------------------------------------
 // Configuration item for allowing derived types of NMEAGPS.
 // If you derive classes from NMEAGPS, you *must* define NMEAGPS_DERIVED_TYPES.
-// If not defined, virtuals are not used, with a slight size (2 bytes) and 
+// If not defined, virtuals are not used, with a slight size (2 bytes) and
 // execution time savings.
 
-//#define NMEAGPS_DERIVED_TYPES
+#define NMEAGPS_DERIVED_TYPES
 
 #ifdef NMEAGPS_DERIVED_TYPES
-  #define NMEAGPS_VIRTUAL virtual
+#define NMEAGPS_VIRTUAL virtual
 #else
-  #define NMEAGPS_VIRTUAL
+#define NMEAGPS_VIRTUAL
 #endif
 
 //-----------------------------------
@@ -255,47 +255,47 @@
 #endif
 
 //------------------------------------------------------
-//  Becase the NMEA checksum is not very good at error detection, you can 
-//    choose to enable additional validity checks.  This trades a little more 
+//  Becase the NMEA checksum is not very good at error detection, you can
+//    choose to enable additional validity checks.  This trades a little more
 //    code and execution time for more reliability.
 //
-//  Validation at the character level is a syntactic check only.  For 
-//    example, integer fields must contain characters in the range 0..9, 
-//    latitude hemisphere letters can be 'N' or 'S'.  Characters that are not 
-//    valid for a particular field will cause the entire sentence to be 
+//  Validation at the character level is a syntactic check only.  For
+//    example, integer fields must contain characters in the range 0..9,
+//    latitude hemisphere letters can be 'N' or 'S'.  Characters that are not
+//    valid for a particular field will cause the entire sentence to be
 //    rejected as an error, *regardless* of whether the checksum would pass.
 #define NMEAGPS_VALIDATE_CHARS false
 
-//  Validation at the field level is a semantic check.  For 
+//  Validation at the field level is a semantic check.  For
 //    example, latitude degrees must be in the range -90..+90.
-//    Values that are not valid for a particular field will cause the 
-//    entire sentence to be rejected as an error, *regardless* of whether the 
+//    Values that are not valid for a particular field will cause the
+//    entire sentence to be rejected as an error, *regardless* of whether the
 //    checksum would pass.
 #define NMEAGPS_VALIDATE_FIELDS false
 
 //------------------------------------------------------
-// Some devices may omit trailing commas at the end of some 
-// sentences.  This may prevent the last field from being 
-// parsed correctly, because the parser for some types keep 
-// the value in an intermediate state until the complete 
-// field is received (e.g., parseDDDMM, parseFloat and 
+// Some devices may omit trailing commas at the end of some
+// sentences.  This may prevent the last field from being
+// parsed correctly, because the parser for some types keep
+// the value in an intermediate state until the complete
+// field is received (e.g., parseDDDMM, parseFloat and
 // parseZDA).
 //
-// Enabling this will inject a simulated comma when the end 
-// of a sentence is received and the last field parser 
+// Enabling this will inject a simulated comma when the end
+// of a sentence is received and the last field parser
 // indicated that it still needs one.
 
-#define NMEAGPS_COMMA_NEEDED
+//#define NMEAGPS_COMMA_NEEDED
 
 //------------------------------------------------------
 //  Some applications may want to recognize a sentence type
 //  without actually parsing any of the fields.  Uncommenting
 //  this define will allow the nmeaMessage member to be set
-//  when *any* standard message is seen, even though that 
+//  when *any* standard message is seen, even though that
 //  message is not enabled by a NMEAGPS_PARSE_xxx define above.
 //  No valid flags will be true for those sentences.
 
-#define NMEAGPS_RECOGNIZE_ALL
+//#define NMEAGPS_RECOGNIZE_ALL
 
 //------------------------------------------------------
 // Sometimes, a little extra space is needed to parse an intermediate form.
