@@ -1,4 +1,5 @@
 #include <STBLE.h>
+#include <bearssl/bearssl_ssl.h>
 
 #include "Bluetooth.h"
 #include "Config.h"
@@ -179,7 +180,7 @@ void BluetoothClass::setup() {
   ret = AddWaiveService();
 
   if (ret == BLE_STATUS_SUCCESS) {
-    logInfo(F("BLE Service added successfully."));
+    logDebug(F("BLE Service added successfully."));
   } else {
     logError(F("BLE Error while adding service."));
   }
@@ -190,8 +191,69 @@ void BluetoothClass::setup() {
   setConnectable();
 }
 
+static size_t hextobin(unsigned char *dst, const char *src) {
+  size_t num;
+  unsigned acc;
+  int z;
+
+  num = 0;
+  z = 0;
+  acc = 0;
+  while (*src != 0) {
+    int c = *src++;
+    if (c >= '0' && c <= '9') {
+      c -= '0';
+    } else if (c >= 'A' && c <= 'F') {
+      c -= ('A' - 10);
+    } else if (c >= 'a' && c <= 'f') {
+      c -= ('a' - 10);
+    } else {
+      continue;
+    }
+    if (z) {
+      *dst++ = (acc << 4) + c;
+      num++;
+    } else {
+      acc = c;
+    }
+    z = !z;
+  }
+  return num;
+}
+
 void BluetoothClass::poll() {
   HCI_Process();
+}
+
+void BluetoothClass::readToken() {
+  // see https://github.com/nogoegst/bearssl/blob/master/test/test_crypto.c
+
+  br_aes_gen_cbcdec_keys v_dc;
+  const br_block_cbcdec_class **dc;
+
+  //openssl enc -A -base64 -v -aes-256-ecb -K abcdef -in run.sh -out a.base64
+
+  //cat plain_hex.txt | openssl enc -v -aes-128-ecb -K 00000000000000000000000000000000 | xxd -p -c 1000000
+  const char *inkey = "00000000000000000000000000000000";
+  const char *token = "92c15ca3662759d8b2f1007b2f8f66c65d2f16d19f99406d9aa4a680acacb895e3990ce7445fcd27be0cbcf5baac165577ae2028b94c5383729d6f5a8a7fe10eafd74477c677dccc1924a205b7f9efc88d6de2e32e332a2715af01bc6eba950f6054911b448826a25771f9b47b71bafdaef3d41fe41b9d3cf9f0c0ceba896ab3d86fec92fcfabc593ce125bd70c1be5186e9078b1ec9a376a59ed89076a6fcd274145eeeeac8f20b43dd9b9dee6b7d23df50cc4deae85ccec3a699d76a108a06";
+
+  unsigned char key[16];
+  unsigned char cipher[192];
+  unsigned char buf[192];
+  unsigned char iv[16];
+  size_t key_len;
+  const br_block_cbcdec_class *vd = &br_aes_big_cbcdec_vtable;
+
+  dc = &v_dc.vtable;
+  key_len = hextobin(key, inkey);
+  hextobin(cipher, token);
+  vd->init(dc, key, key_len);
+  memcpy(buf, cipher, sizeof(cipher));
+  memset(iv, 0, sizeof(iv));
+  vd->run(dc, iv, buf, sizeof(buf));
+  for (int i = 0; i < 192; i++) {
+    Serial.print((char *)buf[i]);
+  }
 }
 
 BluetoothClass Bluetooth;

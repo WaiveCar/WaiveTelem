@@ -1,55 +1,43 @@
 #include <Arduino.h>
 #include <NMEAGPS.h>
+#include <ublox/ubxGPS.h>
 
 #include "Gps.h"
 #include "Logger.h"
 
 #define GPSSerial Serial1
 
-static NMEAGPS gps;
+#define COMMAND_DELAY 250
 
-#define PMTK_SET_BAUD_115200 "$PMTK251,115200*1F"                                        ///< 115200 bps
-#define PMTK_SET_BAUD_57600 "$PMTK251,57600*2C"                                          ///<  57600 bps
-#define PMTK_SET_NMEA_OUTPUT_RMCGGA "$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28"  ///< turn on GPRMC and GPGGA
-
-/*
-#define PMTK_STANDBY "$PMTK161,0*28"  ///< standby command & boot successful message
-#define PMTK_AWAKE "$PMTK010,002*2D"  ///< Wake up
-
-boolean Adafruit_GPS::standby(void) {
-  if (inStandbyMode) {
-    return false;  // Returns false if already in standby mode, so that you do not wake it up by sending commands to GPS
-  } else {
-    inStandbyMode = true;
-    sendCommand(PMTK_STANDBY);
-    //return waitForSentence(PMTK_STANDBY_SUCCESS);  // don't seem to be fast enough to catch the message, or something else just is not working
-    return true;
-  }
-}
-
-boolean Adafruit_GPS::wakeup(void) {
-  if (inStandbyMode) {
-    inStandbyMode = false;
-    sendCommand("");  // send byte to wake it up
-    return waitForSentence(PMTK_AWAKE);
-  } else {
-    return false;  // Returns false if not in standby mode, nothing to wakeup
-  }
-}
-*/
+static ubloxGPS gps(&GPSSerial);
+// static NMEAGPS gps;
 
 void GpsClass::setup() {
-  delay(1000);
+  const char baud115200[] PROGMEM = "PUBX,41,1,3,3,115200,0";
+  // we only want RMC, GGA and GSV
+  const char disableGLL[] PROGMEM = "PUBX,40,GLL,0,0,0,0,0,0";
+  const char disableGSA[] PROGMEM = "PUBX,40,GSA,0,0,0,0,0,0";
+  const char disableVTG[] PROGMEM = "PUBX,40,VTG,0,0,0,0,0,0";
+
   GPSSerial.begin(9600);
-  GPSSerial.println(PMTK_SET_NMEA_OUTPUT_RMCGGA);
-  GPSSerial.println(PMTK_SET_BAUD_57600);
-  delay(200);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);
+  delay(COMMAND_DELAY);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGSA);
+  delay(COMMAND_DELAY);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableVTG);
+  delay(COMMAND_DELAY);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)baud115200);
+  GPSSerial.flush();
   GPSSerial.end();
-  delay(200);
-  GPSSerial.begin(57600);
+  delay(COMMAND_DELAY);
+  GPSSerial.begin(115200);
 }
 
 void GpsClass::poll() {
+  // if (GPSSerial.available()) {       // If anything comes in GPSSerial
+  //   Serial.write(GPSSerial.read());  // read it and send it out Serial (USB)
+  // }
+  // return;
   int start = millis();
   gps_fix fix;
   bool noData = true;
@@ -57,15 +45,15 @@ void GpsClass::poll() {
   while (noData && millis() - start < 1000) {
     while (gps.available(GPSSerial)) {
       fix = gps.read();
-      if (fix.valid.location && fix.valid.date && fix.valid.time && fix.valid.speed && fix.valid.heading) {
+      if (fix.valid.location && fix.valid.date && fix.valid.time && fix.valid.speed && fix.valid.hdop) {
         latitude = fix.latitudeL();
         longitude = fix.longitudeL();
+        hdop = fix.hdop;
         time = fix.dateTime;
         speed = fix.speed_mph();
-        heading = fix.heading();
         NeoGPS::time_t dt = fix.dateTime;
         sprintf(dateTime, "%04d-%02d-%02dT%02d:%02d:%02dZ", dt.full_year(dt.year), dt.month, dt.date, dt.hours, dt.minutes, dt.seconds);
-        // logDebug(time);
+        // logDebug(dateTime);
         noData = false;
         break;
       }
@@ -81,18 +69,17 @@ int GpsClass::getLongitude() {
   return longitude;
 }
 
+int GpsClass::getHdop() {
+  return hdop;
+}
 float GpsClass::getSpeed() {
   return speed;
-}
-
-float GpsClass::getHeading() {
-  return heading;
 }
 
 int GpsClass::getTime() {
   return time;
 }
-const char* GpsClass::getDateTime() {
+const char *GpsClass::getDateTime() {
   return dateTime;
 }
 

@@ -1,4 +1,4 @@
-#ifdef ARDUINO_SAMD_MKRNB1500
+#ifndef ARDUINO_SAMD_MKR1000
 #include <Arduino.h>
 #include <MKRNB.h>
 
@@ -6,7 +6,8 @@
 #include "Internet.h"
 #include "Logger.h"
 
-static NB nbAccess;
+static NB nbAccess(true);  // turn on debug
+// static NB nbAccess;
 static GPRS gprs;
 static NBScanner nbScanner;
 
@@ -18,6 +19,9 @@ void InternetClass::connect() {
     delay(1000);
   }
   logDebug(F("You're connected to the Internet"));
+  logDebug("Signal Strength: " + String(getSignalStrength()));
+  logDebug("Current Carrier: " + nbScanner.getCurrentCarrier());
+  // logDebug("IP Address: " + String(gprs.getIPAddress(), 16));
 }
 
 bool InternetClass::isConnected() {
@@ -29,7 +33,11 @@ unsigned long InternetClass::getTime() {
 }
 
 int InternetClass::getSignalStrength() {
-  return nbScanner.getSignalStrength().toInt();
+  if (isConnected()) {
+    return nbScanner.getSignalStrength().toInt();
+  } else {
+    return 0;
+  }
 }
 
 InternetClass Internet;

@@ -4,9 +4,11 @@
 #ifdef ARDUINO_SAMD_MKR1000
 #include <WiFi101.h>
 #define InternetClient WiFiClient
-#elif defined(ARDUINO_SAMD_MKRNB1500)
+#define InternetSslClient WiFiSSLClient
+#else
 #include <MKRNB.h>
 #define InternetClient NBClient
+#define InternetSslClient NBSSLClient
 #endif
 
 class InternetClass {

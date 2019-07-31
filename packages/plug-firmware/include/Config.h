@@ -10,9 +10,11 @@ class ConfigClass {
  public:
   void load();
   JsonDocument& get();
+  int32_t getConfigFreeMem();
 
  private:
   StaticJsonDocument<CONFIG_DOC_SIZE> configDoc;
+  int32_t configFreeMem;
 };
 
 extern ConfigClass Config;

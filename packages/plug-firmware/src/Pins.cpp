@@ -5,7 +5,17 @@
 #include "Pins.h"
 
 void PinsClass::setup() {
+#ifdef ARDUINO_SAMD_WAIVE1000
+  pinMode(VIN_SENSE, INPUT);
+  pinMode(IMMO_ON, OUTPUT);
+  pinMode(IMMO_OFF, OUTPUT);
+  pinMode(GPS_RESET, OUTPUT);
+
+  digitalWrite(GPS_RESET, LOW);
+#else
   pinMode(RELAY_2_PIN, OUTPUT);
+#endif
+  pinMode(LED_BUILTIN, OUTPUT);
   pinMode(CAN0_CS_PIN, OUTPUT);
   pinMode(CAN0_INT_PIN, INPUT);
   pinMode(CAN1_CS_PIN, OUTPUT);
@@ -45,11 +55,23 @@ void PinsClass::lockDoors() {
 }
 
 void PinsClass::immobilize() {
+#ifdef ARDUINO_SAMD_WAIVE1000
+  digitalWrite(IMMO_ON, HIGH);
+  delay(100);
+  digitalWrite(IMMO_ON, LOW);
+#else
   digitalWrite(RELAY_2_PIN, LOW);
+#endif
 }
 
 void PinsClass::unimmobilize() {
+#ifdef ARDUINO_SAMD_WAIVE1000
+  digitalWrite(IMMO_OFF, HIGH);
+  delay(100);
+  digitalWrite(IMMO_OFF, LOW);
+#else
   digitalWrite(RELAY_2_PIN, HIGH);
+#endif
 }
 
 PinsClass Pins;

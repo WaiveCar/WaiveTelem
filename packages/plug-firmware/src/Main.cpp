@@ -1,6 +1,8 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 
+#include <ACAN2515.h>
+
 #include "Bluetooth.h"
 #include "Can.h"
 #include "Config.h"
@@ -11,7 +13,7 @@
 #include "System.h"
 
 void setup() {
-  Watchdog.enable(16 * 1000);
+  // Watchdog.enable(WATCHDOG_TIMEOUT);
   Pins.setup();
   Logger.setup();
   Config.load();
@@ -27,6 +29,8 @@ void loop() {
   Mqtt.poll();
   Bluetooth.poll();
   Gps.poll();
+  Can.poll();
   System.poll();
   System.kickWatchdogAndSleep();
+  // Bluetooth.readToken();
 }

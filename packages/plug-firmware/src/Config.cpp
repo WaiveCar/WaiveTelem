@@ -2,17 +2,10 @@
 
 #include "Config.h"
 #include "Logger.h"
-#include "Pins.h"
 #include "System.h"
 
-#define CONFIG_FILE "/CONFIG.TXT"
-
 void ConfigClass::load() {
-  while (!SD.begin(SD_CS_PIN)) {
-    logError(F("Failed to initialize SD Library"));
-    delay(1000);
-  }
-  File file = SD.open(CONFIG_FILE);
+  File file = SD.open("CONFIG.TXT");
   // go to https://arduinojson.org/v6/assistant/ to find the size
   DeserializationError error = deserializeJson(configDoc, file);
   if (error) {
@@ -21,14 +14,17 @@ void ConfigClass::load() {
     while (true)
       ;
   }
-  logInfo("configDoc memory cushion: " + String(CONFIG_DOC_SIZE - configDoc.memoryUsage()));
-  // logDebug(configDoc["can"]["model"].as<char*>());
+  configFreeMem = CONFIG_DOC_SIZE - configDoc.memoryUsage();
 
   file.close();
 }
 
 JsonDocument& ConfigClass::get() {
   return configDoc;
+}
+
+int32_t ConfigClass::getConfigFreeMem() {
+  return configFreeMem;
 }
 
 ConfigClass Config;

@@ -66,7 +66,7 @@ void CanClass::setup() {
       logDebug("maxCanId: " + String(maxCanId));
       const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
       const ACAN2515AcceptanceFilter filters[] = {
-          {standard2515Filter(minCanId, 0, 0), (i == 0 ? onCanReceive0 : onCanReceive1)}};
+          {standard2515Filter(minCanId, 0, 0), NULL}};
       auto& can = (i == 0 ? can0 : can1);
       auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
       const uint32_t errorCode = can.begin(settings, lambda, rxm0, filters, 1);
@@ -74,6 +74,18 @@ void CanClass::setup() {
         logError("Configuration error " + String(errorCode));
       }
     }
+  }
+}
+
+void CanClass::poll() {
+  CANMessage frame;
+  while (can0.available()) {
+    can0.receive(frame);
+    onCanReceive0(frame);
+  }
+  while (can1.available()) {
+    can1.receive(frame);
+    onCanReceive1(frame);
   }
 }
 
