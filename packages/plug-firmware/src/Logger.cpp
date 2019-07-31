@@ -5,9 +5,9 @@
 #include "System.h"
 
 void LoggerClass::setup() {
+  Serial.begin(115200);
 #if DEBUG
   // the following cause cause the firmware to only run if serial-monitored
-  Serial.begin(9600);
   while (!Serial)
     ;  // wait for serial port to connect. Needed for native USB
 #endif
@@ -15,11 +15,11 @@ void LoggerClass::setup() {
     logError(F("Failed to initialize SD Library"));
     delay(5000);
   }
-  writeFile = SD.open("LOG.TXT", FILE_WRITE);
-  if (!writeFile) {
-    logError("LOG.TXT open failed");
-    return;
-  }
+  // writeFile = SD.open("LOG.TXT", FILE_WRITE);
+  // if (!writeFile) {
+  //   logError("LOG.TXT open failed");
+  //   return;
+  // }
 }
 
 void LoggerClass::logLine(const char* type, const String& s) {

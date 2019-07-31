@@ -1,11 +1,11 @@
-#ifndef Http_h
-#define Http_h
+#ifndef Https_h
+#define Https_h
 
-class HttpClass {
+class HttpsClass {
  public:
   int32_t download(const char* host, const char* from, const char* to);
 };
 
-extern HttpClass Http;
+extern HttpsClass Https;
 
-#endif  // Http_h
+#endif  // Https_h

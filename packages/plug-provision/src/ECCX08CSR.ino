@@ -30,14 +30,12 @@
 #include <utility/ECCX08CSR.h>
 #include <utility/ECCX08DefaultTLSConfig.h>
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
   while (!Serial)
     ;
 
-  if (!ECCX08.begin())
-  {
+  if (!ECCX08.begin()) {
     Serial.println("No ECCX08 present!");
     while (1)
       ;
@@ -49,8 +47,7 @@ void setup()
   // Serial.println(serialNumber);
   // Serial.println();
 
-  if (!ECCX08.locked())
-  {
+  if (!ECCX08.locked()) {
     // String lock = promptAndReadLine("The ECCX08 on your board is not locked, would you like to PERMANENTLY configure and lock it now? (y/N)", "N");
     // lock.toLowerCase();
 
@@ -59,15 +56,13 @@ void setup()
     //   while (1);
     // }
 
-    if (!ECCX08.writeConfiguration(ECCX08_DEFAULT_TLS_CONFIG))
-    {
+    if (!ECCX08.writeConfiguration(ECCX08_DEFAULT_TLS_CONFIG)) {
       Serial.println("Writing ECCX08 configuration failed!");
       while (1)
         ;
     }
 
-    if (!ECCX08.lock())
-    {
+    if (!ECCX08.lock()) {
       Serial.println("Locking ECCX08 configuration failed!");
       while (1)
         ;
@@ -106,8 +101,7 @@ void setup()
   String common = serialNumber;
   String slot = "0";
 
-  if (!ECCX08CSR.begin(slot.toInt(), true))
-  {
+  if (!ECCX08CSR.begin(slot.toInt(), true)) {
     Serial.println("Error starting CSR generation!");
     while (1)
       ;
@@ -122,8 +116,7 @@ void setup()
 
   String csr = ECCX08CSR.end();
 
-  if (!csr)
-  {
+  if (!csr) {
     Serial.println("Error generating CSR!");
     while (1)
       ;
@@ -133,16 +126,14 @@ void setup()
 
   // Serial.println("Here's your CSR, enjoy!");
   // Serial.println();
-  Serial.println(csr);
+  Serial.println("{\"serial\": \"" + serialNumber + "\",\"csr\": \"" + csr + "\"}");
 }
 
-void loop()
-{
+void loop() {
   // do nothing
 }
 
-String promptAndReadLine(const char *prompt, const char *defaultValue)
-{
+String promptAndReadLine(const char *prompt, const char *defaultValue) {
   Serial.print(prompt);
   Serial.print(" [");
   Serial.print(defaultValue);
@@ -150,8 +141,7 @@ String promptAndReadLine(const char *prompt, const char *defaultValue)
 
   String s = readLine();
 
-  if (s.length() == 0)
-  {
+  if (s.length() == 0) {
     s = defaultValue;
   }
 
@@ -160,23 +150,17 @@ String promptAndReadLine(const char *prompt, const char *defaultValue)
   return s;
 }
 
-String readLine()
-{
+String readLine() {
   String line;
 
-  while (1)
-  {
-    if (Serial.available())
-    {
+  while (1) {
+    if (Serial.available()) {
       char c = Serial.read();
 
-      if (c == '\r')
-      {
+      if (c == '\r') {
         // ignore
         continue;
-      }
-      else if (c == '\n')
-      {
+      } else if (c == '\n') {
         break;
       }
 

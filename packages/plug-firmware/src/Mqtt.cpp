@@ -47,24 +47,24 @@ void MqttClass::setup() {
 void MqttClass::connect() {
   if (!Internet.isConnected()) {
     Internet.connect();
-    logDebug(String(Internet.getTime()));
+    // logDebug(String(Internet.getTime()));
     // test internect connection
-    // Http.download("www.pivotaltracker.com", "/", "TEMP");
-    // Http.download("community.libra.org", "/", "TEMP");
-    // Http.download("news.ycombinator.com", "/", "TEMP");
-    // Http.download("www.wikipedia.org", "/", "TEMP");
-    // Http.download("waiveplug.s3.us-east-2.amazonaws.com", "config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP"); // connect sometimes works with DigiCertBaltimoreCA_2G2, but WR failed
-    // Http.download("storage.googleapis.com", "www.swiperweb.com/privacy.html", "TEMP"); //works
-    // Http.download("workflowy.com", "/", "TEMP");  // very long timeout
-    // Http.download("trello.com", "/", "TEMP");     // very long timeout
-    // Http.download("www.apple.com", "/", "TEMP");  // very long timeout
-    // Http.download("www.amazon.com", "/", "TEMP");  // very long timeout
-    // Http.download("discordapp.com", "/", "TEMP");  //works, cloudflare, doesn't need any RootCerts
-    // Http.download("www.producthunt.com", "/", "TEMP");  //works
-    // Http.download("gmail.com", "/", "TEMP");            // works
-    // Http.download("www.google.com", "/", "TEMP");       //works
-    // Http.download("www.bing.com", "/", "TEMP");         //works
-    // Http.download("reelgood.com", "/", "TEMP");         // weird binary stuff, but seems to work
+    // Https.download("www.pivotaltracker.com", "/", "TEMP");
+    // Https.download("community.libra.org", "/", "TEMP");
+    // Https.download("news.ycombinator.com", "/", "TEMP");
+    // Https.download("www.wikipedia.org", "/", "TEMP");
+    // Https.download("waiveplug.s3.us-east-2.amazonaws.com", "config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP"); // connect sometimes works with DigiCertBaltimoreCA_2G2, but WR failed
+    // Https.download("storage.googleapis.com", "www.swiperweb.com/privacy.html", "TEMP");  //works
+    // Https.download("workflowy.com", "/", "TEMP");   // very long timeout
+    // Https.download("trello.com", "/", "TEMP");      // very long timeout
+    // Https.download("www.apple.com", "/", "TEMP");   // very long timeout
+    // Https.download("www.amazon.com", "/", "TEMP");  // very long timeout
+    // Https.download("discordapp.com", "/", "TEMP");  //works, cloudflare, doesn't need any RootCerts
+    // Https.download("www.producthunt.com", "/", "TEMP");  //works
+    // Https.download("gmail.com", "/", "TEMP");            // works
+    // Https.download("www.google.com", "/", "TEMP");       //works
+    // Https.download("www.bing.com", "/", "TEMP");         //works
+    // Https.download("reelgood.com", "/", "TEMP");         // weird binary stuff, but seems to work
   }
   const JsonObject mqtt = Config.get()["mqtt"];
   const char* url = mqtt["url"];

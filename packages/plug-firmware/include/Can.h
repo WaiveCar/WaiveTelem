@@ -4,6 +4,7 @@
 class CanClass {
  public:
   void setup();
+  void poll();
 };
 
 extern CanClass Can;

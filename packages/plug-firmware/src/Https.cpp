@@ -94,7 +94,7 @@ static int32_t verifyFile(const String& file) {
   }
 }
 
-int32_t HttpClass::download(const char* host, const char* from, const char* to) {
+int32_t HttpsClass::download(const char* host, const char* from, const char* to) {
   logDebug("host: " + String(host) + ", from: " + from + ", to: " + to);
   int32_t error;
   if (client.connect(host, 443)) {
@@ -112,4 +112,4 @@ int32_t HttpClass::download(const char* host, const char* from, const char* to) 
   }
 }
 
-HttpClass Http;
+HttpsClass Https;
