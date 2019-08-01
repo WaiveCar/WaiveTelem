@@ -5,5 +5,7 @@ docker run --rm -v $HOME/.platformio:/.platformio -v `pwd`:/workspace -u `id -u 
 ~/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-size .pioenvs/mkr1000USB/firmware.elf
 ~/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-readelf -a .pioenvs/mkr1000USB/firmware.elf
 
-ln -s $PWD/boards ~/.platformio
-ln -s $PWD/waive1000 ~/.platformio/packages/framework-arduinosam/variants
+ln -F -s $PWD/bsp/boards ~/.platformio
+ln -F -s $PWD/bsp/waive1000 ~/.platformio/packages/framework-arduinosam/variants
+sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/tool-openocd/scripts/target/at91samdXX.cfg
+
