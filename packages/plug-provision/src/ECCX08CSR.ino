@@ -31,7 +31,7 @@
 #include <utility/ECCX08DefaultTLSConfig.h>
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial)
     ;
 
@@ -126,7 +126,7 @@ void setup() {
 
   // Serial.println("Here's your CSR, enjoy!");
   // Serial.println();
-  Serial.println("{\"serial\": \"" + serialNumber + "\",\"csr\": \"" + csr + "\"}");
+  Serial.println("{\"serial\":\"" + serialNumber + "\",\"csr\":\"" + csr + "\"}");
 }
 
 void loop() {

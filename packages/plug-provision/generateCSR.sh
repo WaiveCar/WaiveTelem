@@ -8,8 +8,7 @@ sleep 5
 
 case "$(uname -s)" in
    Darwin)
-      CSR=$(./getCSR.sh | head -1) # get first line of the serial port output
-      CSR=${CSR%??} # remove last two characters
+      JSON=$(./getCSR.sh | head -1) # get first line of the serial port output
       ;;
    *)
       echo 'other OS'
@@ -17,12 +16,12 @@ case "$(uname -s)" in
       PID=$!
       sleep 2
       kill $PID
-      CSR=$(cat csr.txt)
-      CSR=${CSR%???}
+      JSON=$(cat csr.txt)
       rm -rf csr.txt
       ;;
 esac
 
-echo ${CSR}
-echo ${CSR} > ./csr/${PLUG_ID}.csr
+echo $JSON
+export DEVICE_ID=$(echo $JSON | jq --raw-output ".serial")
+echo $JSON | jq ".csr" | sed -e 's/^"//' -e 's/"$//' > ./csr/${DEVICE_ID}.csr
 
