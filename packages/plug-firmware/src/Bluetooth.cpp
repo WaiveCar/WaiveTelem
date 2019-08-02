@@ -30,57 +30,84 @@
     uuid_struct[15] = uuid_15;                                                                                                                                           \
   } while (0)
 
-#define COPY_WAIVE_SERVICE_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x6E, 0x40, 0x00, 0x01, 0xB5, 0xA3, 0xF3, 0x93, 0xE0, 0xA9, 0xE5, 0x0E, 0x24, 0xDC, 0xCA, 0x9E)
-#define COPY_WAIVE_CMD_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x6E, 0x40, 0x00, 0x02, 0xB5, 0xA3, 0xF3, 0x93, 0xE0, 0xA9, 0xE5, 0x0E, 0x24, 0xDC, 0xCA, 0x9E)
+#define COPY_SERVICE_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+#define COPY_AUTH_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+#define COPY_CMD_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
-uint16_t WaiveServHandle, WaiveCmdCharHandle;
+uint16_t ServHandle, AuthCharHandle, CmdCharHandle;
 
-uint8_t AddWaiveService(void) {
+uint8_t AddService(void) {
   tBleStatus ret;
   uint8_t uuid[16];
 
-  COPY_WAIVE_SERVICE_UUID(uuid);
-  ret = aci_gatt_add_serv(UUID_TYPE_128, uuid, PRIMARY_SERVICE, 7, &WaiveServHandle);
+  COPY_SERVICE_UUID(uuid);
+  ret = aci_gatt_add_serv(UUID_TYPE_128, uuid, PRIMARY_SERVICE, 7, &ServHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
 
-  COPY_WAIVE_CMD_CHAR_UUID(uuid);
-  ret = aci_gatt_add_char(WaiveServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_WRITE_WITHOUT_RESP, ATTR_PERMISSION_NONE, GATT_NOTIFY_ATTRIBUTE_WRITE,
-                          16, 1, &WaiveCmdCharHandle);
+  COPY_AUTH_CHAR_UUID(uuid);
+  // try ATTR_PERMISSION_AUTHEN_WRITE doesn't work
+  ret = aci_gatt_add_char(ServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_WRITE_WITHOUT_RESP, ATTR_PERMISSION_NONE, GATT_NOTIFY_ATTRIBUTE_WRITE,
+                          16, 1, &AuthCharHandle);
+  if (ret != BLE_STATUS_SUCCESS) goto fail;
+
+  COPY_CMD_CHAR_UUID(uuid);
+  ret = aci_gatt_add_char(ServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_WRITE_WITHOUT_RESP, ATTR_PERMISSION_NONE, GATT_NOTIFY_ATTRIBUTE_WRITE,
+                          16, 1, &CmdCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
 
   return BLE_STATUS_SUCCESS;
 
 fail:
-  logError(F("Error while adding Waive service."));
+  logError(F("Error while adding  service."));
   return BLE_STATUS_ERROR;
 }
 
 void setConnectable(void) {
-  tBleStatus ret;
-
   hci_le_set_scan_resp_data(0, NULL);
 
-  ret = aci_gap_set_discoverable(ADV_IND,
-                                 (ADV_INTERVAL_MIN_MS * 1000) / 625, (ADV_INTERVAL_MAX_MS * 1000) / 625,
-                                 STATIC_RANDOM_ADDR, NO_WHITE_LIST_USE,
-                                 0, NULL, 0, NULL, 0, 0);
-
+  String localName = String((char)AD_TYPE_COMPLETE_LOCAL_NAME) + Bluetooth.getName();
+  tBleStatus ret = aci_gap_set_discoverable(ADV_IND,
+                                            (ADV_INTERVAL_MIN_MS * 1000) / 625, (ADV_INTERVAL_MAX_MS * 1000) / 625,
+                                            STATIC_RANDOM_ADDR, NO_WHITE_LIST_USE,
+                                            localName.length(), localName.c_str(), 0, NULL, 0, 0);
   if (ret != BLE_STATUS_SUCCESS) {
     logDebug((String)ret);
   }
 }
 
+String command = "";
+uint8_t continueLength = 0;
+// BLE actually only supports sending 20 bytes of data per characteristic. We need a little "protocol" to support longer array.
+// You split the array in 20 bytes arrays where the first byte contain the total length of data to come, including the data in this array.
+// Example:
+// You start with an array like this:
+// [72, 101, 108, 108, 111, 32, 109, 121, 32, 108, 111, 118, 101, 108, 121, 32, 119, 111, 114, 108, 100, 44, 32, 105, 32, 108, 111, 118, 101, 32, 121, 111, 117, 32, 97, 110, 100, 32, 97, 108, 108, 32, 97, 114, 111, 117, 110, 100, 32, 121, 111, 117]
+
+// Then you generate the following 3 arrays:
+// [52, 72, 101, 108, 108, 111, 32, 109, 121, 32, 108, 111, 118, 101, 108, 121, 32, 119, 111, 114]
+// [33, 108, 100, 44, 32, 105, 32, 108, 111, 118, 101, 32, 121, 111, 117, 32, 97, 110, 100, 32]
+// [14, 97, 108, 108, 32, 97, 114, 111, 117, 110, 100, 32, 121, 111, 117]
 void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data) {
-  if (handle == WaiveCmdCharHandle + 1) {
-    uint8_t bleCmdBuffer[21];
-    int i;
-    for (i = 0; i < data_length; i++) {
-      bleCmdBuffer[i] = att_data[i];
+  if (handle == AuthCharHandle + 1) {
+  } else if (handle == CmdCharHandle + 1) {
+    uint8_t bleCmdBuffer[20];
+    uint8_t messageLength = att_data[0];
+    int i = 0;
+    for (; i < data_length - 1; i++) {
+      bleCmdBuffer[i] = att_data[i + 1];
     }
     bleCmdBuffer[i] = '\0';
-    String command = String((char *)bleCmdBuffer);
-    logDebug(command);
-    System.processCommand(command);
+    // logDebug(String(messageLength));
+    if (messageLength != continueLength) {
+      command = "";
+    }
+    continueLength = messageLength - data_length + 1;
+    command += String((char *)bleCmdBuffer);
+    // logDebug(String(continueLength));
+    // logDebug(command);
+    if (continueLength == 0) {
+      System.processCommand(command);
+    }
   }
 }
 
@@ -95,7 +122,6 @@ void GAP_DisconnectionComplete_CB(void) {
   setConnectable();
 }
 
-// called by HCI_Process() in BluetoothClass::poll()
 void HCI_Event_CB(void *pckt) {
   hci_uart_pckt *hci_pckt = (hci_uart_pckt *)pckt;
   hci_event_pckt *event_pckt = (hci_event_pckt *)hci_pckt->data;
@@ -138,28 +164,20 @@ void BluetoothClass::setup() {
   BlueNRG_RST();
 
   const char *id = Config.get()["id"];
-
-  // there is no need for this unless BD_ADDR are the same for different devices
-  // uint8_t bdaddr[CONFIG_DATA_PUBADDR_LEN];
-  // hextobin(bdaddr, &id[6]);
-  // ret = aci_hal_write_config_data(CONFIG_DATA_PUBADDR_OFFSET, CONFIG_DATA_PUBADDR_LEN, bdaddr);
-  // if (ret) {
-  //   logError(F("BLE Setting BD_ADDR failed."));
-  // }
+  name = String("W-") + id;
+  logDebug("Bluetooth name: " + name);
 
   ret = aci_gatt_init();
   if (ret) {
     logError(F("BLE GATT_Init failed."));
   }
 
-  String name = String("W-") + id;
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
   ret = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, name.length(), &service_handle, &dev_name_char_handle, &appearance_char_handle);
   if (ret) {
     logError(F("BLE GAP_Init failed."));
   }
 
-  //  Serial.println("update char value");
   ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, name.length(), name.c_str());
   if (ret) {
     logError(F("BLE aci_gatt_update_char_value failed."));
@@ -170,14 +188,14 @@ void BluetoothClass::setup() {
                                      NULL,
                                      7,
                                      16,
-                                     USE_FIXED_PIN_FOR_PAIRING,
-                                     71764,
+                                     DONOT_USE_FIXED_PIN_FOR_PAIRING,
+                                     0,
                                      BONDING);
   if (ret == BLE_STATUS_SUCCESS) {
     logDebug(F("BLE Stack Initialized."));
   }
 
-  ret = AddWaiveService();
+  ret = AddService();
   if (ret == BLE_STATUS_SUCCESS) {
     logDebug(F("BLE Service added successfully."));
   } else {
@@ -192,6 +210,10 @@ void BluetoothClass::setup() {
 
 void BluetoothClass::poll() {
   HCI_Process();
+}
+
+String &BluetoothClass::getName() {
+  return name;
 }
 
 void BluetoothClass::readToken() {

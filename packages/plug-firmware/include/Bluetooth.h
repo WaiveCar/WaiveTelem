@@ -6,6 +6,10 @@ class BluetoothClass {
   void setup();
   void poll();
   void readToken();
+  String& getName();
+
+ private:
+  String name;
 };
 
 extern BluetoothClass Bluetooth;

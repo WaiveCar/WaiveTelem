@@ -65,8 +65,8 @@ export default class App extends Component {
           }
           this.setState({ scanning: false });
         } else {
-          console.log(device.id, device.name);
-          if (true || (device.name && device.name.startsWith('waive'))) {
+          console.log(device.localName);
+          if (device.localName && device.localName.startsWith('W-')) {
             this.deviceMap.set(device.id, device);
             this.setState({ data: [...this.deviceMap.values()] });
           }
@@ -134,20 +134,41 @@ export default class App extends Component {
       .catch(err => {});
   };
 
-  writeWithoutResponse = (index, type) => {
+  writeWithoutResponse = async (index, type) => {
     if (this.state.text.length == 0) {
       this.alert('enter text');
       return;
     }
-    BluetoothManager.writeWithoutResponse(this.state.text, index, type)
-      .then(characteristic => {
-        this.bluetoothReceiveData = [];
-        this.setState({
-          writeData: this.state.text,
-          text: ''
-        });
-      })
-      .catch(err => {});
+    let remainBytesToSend = this.state.text.length;
+    let start = 0;
+    while (remainBytesToSend > 0) {
+      const subStringSize = remainBytesToSend > 19 ? 19 : remainBytesToSend;
+      const start = this.state.text.length - remainBytesToSend;
+      const subString = this.state.text.slice(start, start + subStringSize);
+      const data = Buffer.from(subString, 'ascii');
+      console.log('TCL: App -> writeWithoutResponse -> data', data);
+      const lengthByte = Buffer.from([remainBytesToSend]);
+      console.log('TCL: App -> writeWithoutResponse -> lengthByte', lengthByte);
+      const dataBuffer = Buffer.concat([lengthByte, data]);
+      console.log('TCL: App -> writeWithoutResponse -> dataBuffer', dataBuffer);
+      await BluetoothManager.writeWithoutResponse(dataBuffer.toString('base64'), index, type);
+      remainBytesToSend -= subStringSize;
+    }
+    this.bluetoothReceiveData = [];
+    this.setState({
+      writeData: this.state.text,
+      text: ''
+    });
+    //let formatValue = new Buffer(value, 'ascii').toString('base64');
+    // BluetoothManager.writeWithoutResponse(this.state.text, index, type)
+    //   .then(characteristic => {
+    //     this.bluetoothReceiveData = [];
+    //     this.setState({
+    //       writeData: this.state.text,
+    //       text: ''
+    //     });
+    //   })
+    //   .catch(err => {});
   };
 
   monitor = index => {
@@ -219,7 +240,7 @@ export default class App extends Component {
         style={styles.item}
       >
         <View style={{ flexDirection: 'row' }}>
-          <Text style={{ color: 'black' }}>{data.name ? data.name : ''}</Text>
+          <Text style={{ color: 'black' }}>{data.localName ? data.localName : ''}</Text>
           <Text style={{ color: 'red', marginLeft: 50 }}>
             {data && data.isConnecting ? 'connecting...' : ''}
           </Text>
@@ -242,7 +263,7 @@ export default class App extends Component {
               ? 'Scanning'
               : this.state.isConnected
               ? 'Disconnect'
-              : 'Scan for waive*'}
+              : 'Scan for W-*'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -327,7 +348,7 @@ export default class App extends Component {
             onPress={() => {
               this.setState({ text: '{"lock":"open"}' });
               setTimeout(() => {
-                onPress(0);
+                onPress(1);
               }, 10);
             }}
           >
@@ -341,7 +362,7 @@ export default class App extends Component {
             onPress={() => {
               this.setState({ text: '{"lock":"close"}' });
               setTimeout(() => {
-                onPress(0);
+                onPress(1);
               }, 10);
             }}
           >
@@ -358,7 +379,7 @@ export default class App extends Component {
             onPress={() => {
               this.setState({ text: '{"immo":"lock"}' });
               setTimeout(() => {
-                onPress(0);
+                onPress(1);
               }, 10);
             }}
           >
@@ -372,7 +393,7 @@ export default class App extends Component {
             onPress={() => {
               this.setState({ text: '{"immo":"unlock"}' });
               setTimeout(() => {
-                onPress(0);
+                onPress(1);
               }, 10);
             }}
           >
@@ -389,7 +410,7 @@ export default class App extends Component {
             onPress={() => {
               this.setState({ text: '{"inRide":"true"}}' });
               setTimeout(() => {
-                onPress(0);
+                onPress(1);
               }, 10);
             }}
           >
@@ -403,7 +424,7 @@ export default class App extends Component {
             onPress={() => {
               this.setState({ text: '{"inRide":"false"}' });
               setTimeout(() => {
-                onPress(0);
+                onPress(1);
               }, 10);
             }}
           >
@@ -420,7 +441,7 @@ export default class App extends Component {
             onPress={() => {
               this.setState({ text: '{"reboot":"true"}}' });
               setTimeout(() => {
-                onPress(0);
+                onPress(1);
               }, 10);
             }}
           >
@@ -432,9 +453,12 @@ export default class App extends Component {
           <TouchableHighlight
             style={styles.button}
             onPress={() => {
-              this.setState({ text: '{"?":"?"}' });
+              this.setState({
+                text:
+                  '{"state":{"reported":{"gps":{"lat":34.1500243,"long":-118.0278115,"hdop":660,"speed":0.0437296,"dateTime":"2019-08-02T23:38:40Z"},"system":{"uptime":3240,"signalStrength":0,"heapFreeMem":9411,"statusFreeMem":784}}}}'
+              });
               setTimeout(() => {
-                onPress(0);
+                onPress(1);
               }, 10);
             }}
           >

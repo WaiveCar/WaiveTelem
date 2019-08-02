@@ -75,9 +75,7 @@ export default class BleModule {
         }
         if (charchteristic[j].isWritableWithoutResponse) {
           this.writeWithoutResponseServiceUUID.push(services[i].uuid);
-          this.writeWithoutResponseCharacteristicUUID.push(
-            charchteristic[j].uuid
-          );
+          this.writeWithoutResponseCharacteristicUUID.push(charchteristic[j].uuid);
         }
         if (charchteristic[j].isNotifiable) {
           this.nofityServiceUUID.push(services[i].uuid);
@@ -88,18 +86,9 @@ export default class BleModule {
 
     console.log('readServiceUUID', this.readServiceUUID);
     console.log('readCharacteristicUUID', this.readCharacteristicUUID);
-    console.log(
-      'writeWithResponseServiceUUID',
-      this.writeWithResponseServiceUUID
-    );
-    console.log(
-      'writeWithResponseCharacteristicUUID',
-      this.writeWithResponseCharacteristicUUID
-    );
-    console.log(
-      'writeWithoutResponseServiceUUID',
-      this.writeWithoutResponseServiceUUID
-    );
+    console.log('writeWithResponseServiceUUID', this.writeWithResponseServiceUUID);
+    console.log('writeWithResponseCharacteristicUUID', this.writeWithResponseCharacteristicUUID);
+    console.log('writeWithoutResponseServiceUUID', this.writeWithoutResponseServiceUUID);
     console.log(
       'writeWithoutResponseCharacteristicUUID',
       this.writeWithoutResponseCharacteristicUUID
@@ -225,9 +214,7 @@ export default class BleModule {
     });
   }
 
-  writeWithoutResponse(value, index) {
-    let formatValue = new Buffer(value, 'ascii').toString('base64');
-
+  writeWithoutResponse(formatValue, index) {
     let transactionId = 'writeWithoutResponse';
     return new Promise((resolve, reject) => {
       this.manager
@@ -240,7 +227,7 @@ export default class BleModule {
         )
         .then(
           characteristic => {
-            console.log('writeWithoutResponse success', value);
+            console.log('writeWithoutResponse success');
             resolve(characteristic);
           },
           error => {

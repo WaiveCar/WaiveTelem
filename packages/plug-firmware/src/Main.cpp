@@ -32,5 +32,4 @@ void loop() {
   Gps.poll();
   System.poll();
   System.kickWatchdogAndSleep();
-  Bluetooth.readToken();
 }
