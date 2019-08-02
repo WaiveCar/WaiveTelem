@@ -35,7 +35,8 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
         uint64_t mask = pow(2, len) - 1;
         value = (value >> bit) & mask;
         String name = status["name"];
-        System.setCanStatus(name, value);
+        uint32_t delta = status["delta"];
+        System.setCanStatus(name, value, delta);
       }
     }
     System.sendCanStatus();

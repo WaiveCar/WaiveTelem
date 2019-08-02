@@ -1,5 +1,6 @@
 #include <STBLE.h>
 #include <bearssl/bearssl_ssl.h>
+#include <rBase64.h>
 
 #include "Bluetooth.h"
 #include "Config.h"
@@ -136,31 +137,30 @@ void BluetoothClass::setup() {
   BNRG_SPI_Init();
   BlueNRG_RST();
 
-  String uid = Config.get()["id"];
-  uint8_t *bdaddr = (uint8_t *)uid.substring(uid.length() - CONFIG_DATA_PUBADDR_LEN).c_str();
-  ret = aci_hal_write_config_data(CONFIG_DATA_PUBADDR_OFFSET, CONFIG_DATA_PUBADDR_LEN, bdaddr);
+  const char *id = Config.get()["id"];
 
-  if (ret) {
-    logError(F("BLE Setting BD_ADDR failed."));
-  }
+  // there is no need for this unless BD_ADDR are the same for different devices
+  // uint8_t bdaddr[CONFIG_DATA_PUBADDR_LEN];
+  // hextobin(bdaddr, &id[6]);
+  // ret = aci_hal_write_config_data(CONFIG_DATA_PUBADDR_OFFSET, CONFIG_DATA_PUBADDR_LEN, bdaddr);
+  // if (ret) {
+  //   logError(F("BLE Setting BD_ADDR failed."));
+  // }
+
   ret = aci_gatt_init();
-
   if (ret) {
     logError(F("BLE GATT_Init failed."));
   }
 
+  String name = String("W-") + id;
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
-  //  Serial.println("GAP Init");
-  ret = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, 0x07, &service_handle, &dev_name_char_handle, &appearance_char_handle);
-
+  ret = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, name.length(), &service_handle, &dev_name_char_handle, &appearance_char_handle);
   if (ret) {
     logError(F("BLE GAP_Init failed."));
   }
 
-  const char *name = Config.get()["id"];
   //  Serial.println("update char value");
-  ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, strlen(name), (uint8_t *)name);
-
+  ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, name.length(), name.c_str());
   if (ret) {
     logError(F("BLE aci_gatt_update_char_value failed."));
   }
@@ -178,7 +178,6 @@ void BluetoothClass::setup() {
   }
 
   ret = AddWaiveService();
-
   if (ret == BLE_STATUS_SUCCESS) {
     logDebug(F("BLE Service added successfully."));
   } else {
@@ -191,36 +190,6 @@ void BluetoothClass::setup() {
   setConnectable();
 }
 
-static size_t hextobin(unsigned char *dst, const char *src) {
-  size_t num;
-  unsigned acc;
-  int z;
-
-  num = 0;
-  z = 0;
-  acc = 0;
-  while (*src != 0) {
-    int c = *src++;
-    if (c >= '0' && c <= '9') {
-      c -= '0';
-    } else if (c >= 'A' && c <= 'F') {
-      c -= ('A' - 10);
-    } else if (c >= 'a' && c <= 'f') {
-      c -= ('a' - 10);
-    } else {
-      continue;
-    }
-    if (z) {
-      *dst++ = (acc << 4) + c;
-      num++;
-    } else {
-      acc = c;
-    }
-    z = !z;
-  }
-  return num;
-}
-
 void BluetoothClass::poll() {
   HCI_Process();
 }
@@ -228,32 +197,28 @@ void BluetoothClass::poll() {
 void BluetoothClass::readToken() {
   // see https://github.com/nogoegst/bearssl/blob/master/test/test_crypto.c
 
+  // openssl enc -A -base64 -v -aes-256-ecb -nosalt -K $(hexdump -v -e '/1 "%02X"' < nosave/key.txt) -in nosave/plain.txt -out nosave/encrypted.txt
+  char token[] = "ZVR1tnLANhC4qWSFpsCfJ1dFcNvgyJrG3rr+eI6hceP7gxd9O8ZIPJgZx683GzZHvYeqA8bKpiTOKAR4CnxvpHzyf/Q/ugjpfj5TrUN3TZfUhWrK3zc22ObBtI/JXeOfpUG/XOtXqu4uavGG+kl6UUAzKHvv9xbcpZ2QC6CzxK4PfI/Lp0f0Mrt4FOB723V0MNFjULHX6ep2i2iI/SQVM4Jl6yB7bkG2K6QXGBoqrTTBV7HijyjFP1b2kBujXZUc";
+
+  unsigned char iv[16];
   br_aes_gen_cbcdec_keys v_dc;
   const br_block_cbcdec_class **dc;
-
-  //openssl enc -A -base64 -v -aes-256-ecb -K abcdef -in run.sh -out a.base64
-
-  //cat plain_hex.txt | openssl enc -v -aes-128-ecb -K 00000000000000000000000000000000 | xxd -p -c 1000000
-  const char *inkey = "00000000000000000000000000000000";
-  const char *token = "92c15ca3662759d8b2f1007b2f8f66c65d2f16d19f99406d9aa4a680acacb895e3990ce7445fcd27be0cbcf5baac165577ae2028b94c5383729d6f5a8a7fe10eafd74477c677dccc1924a205b7f9efc88d6de2e32e332a2715af01bc6eba950f6054911b448826a25771f9b47b71bafdaef3d41fe41b9d3cf9f0c0ceba896ab3d86fec92fcfabc593ce125bd70c1be5186e9078b1ec9a376a59ed89076a6fcd274145eeeeac8f20b43dd9b9dee6b7d23df50cc4deae85ccec3a699d76a108a06";
-
-  unsigned char key[16];
-  unsigned char cipher[192];
-  unsigned char buf[192];
-  unsigned char iv[16];
-  size_t key_len;
   const br_block_cbcdec_class *vd = &br_aes_big_cbcdec_vtable;
-
   dc = &v_dc.vtable;
-  key_len = hextobin(key, inkey);
-  hextobin(cipher, token);
-  vd->init(dc, key, key_len);
-  memcpy(buf, cipher, sizeof(cipher));
-  memset(iv, 0, sizeof(iv));
-  vd->run(dc, iv, buf, sizeof(buf));
-  for (int i = 0; i < 192; i++) {
-    Serial.print((char *)buf[i]);
+  const char *cert = Config.get()["mqtt"]["cert"];
+  // start at byte 28, right after -----\n
+  vd->init(dc, &cert[28], 32);
+  size_t length = rbase64_dec_len(token, sizeof(token));
+  char *buf = (char *)malloc(length);
+  rbase64_decode(buf, token, sizeof(token));
+  for (size_t v = 0; v < length; v += 16) {
+    memset(iv, 0, sizeof(iv));
+    vd->run(dc, iv, buf + v, 16);
   }
+  size_t numberOfPadding = buf[length - 1];
+  buf[length - numberOfPadding] = '\0';
+  Serial.print(buf);
+  free(buf);
 }
 
 BluetoothClass Bluetooth;

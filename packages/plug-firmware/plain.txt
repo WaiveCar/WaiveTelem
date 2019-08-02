@@ -1,1 +1,0 @@
-{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"1500_1.0.5_b824c05bbd9ebd19c5eb9546ef46615607a7da4f3e435c97fbb286969d8fc2d8", "to":"UPDATE.BIN"}}}

@@ -71,11 +71,14 @@ void SystemClass::sendCanStatus() {
   }
 }
 
-void SystemClass::setCanStatus(const String& name, const uint64_t value) {
+void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delta) {
   JsonObject can = statusDoc["can"];
-  if (can[name] != value) {
-    canStatusChanged = true;
+  uint64_t oldValue = can[name];
+  if (oldValue != value) {
     can[name] = value;
+    if (abs(oldValue - value) >= delta) {
+      canStatusChanged = true;
+    }
   }
 }
 
@@ -114,9 +117,13 @@ void SystemClass::processCommand(const String& json) {
   } else if (desired["inRide"] == "true") {
     statusDoc["inRide"] = "true";
     telemeter("{" + lastCmd + ",\"inRide\":\"true\"}", "{\"inRide\":null}");
+    canStatusChanged = true;
+    sendCanStatus();
   } else if (desired["inRide"] == "false") {
     statusDoc["inRide"] = "false";
     telemeter("{" + lastCmd + ",\"inRide\":\"false\"}", "{\"inRide\":null}");
+    canStatusChanged = true;
+    sendCanStatus();
   } else if (!download.isNull()) {
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";

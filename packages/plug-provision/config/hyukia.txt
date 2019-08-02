@@ -95,7 +95,8 @@
 						"name": "mileage",
 						"id": 1456,
 						"bit": 0,
-						"len": 24
+						"len": 24,
+						"delta": 100,
 					}
 				]				
 			},

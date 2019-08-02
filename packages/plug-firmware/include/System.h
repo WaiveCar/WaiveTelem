@@ -16,7 +16,7 @@ class SystemClass {
   void sendInfo();
   void sendHeartbeat();
   void sendCanStatus();
-  void setCanStatus(const String& name, const uint64_t value);
+  void setCanStatus(const String& name, uint64_t value, uint32_t delta);
   void processCommand(const String& json);
   void reboot();
   void kickWatchdogAndSleep();

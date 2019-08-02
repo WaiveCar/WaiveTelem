@@ -1,9 +1,4 @@
 #!/bin/bash
 
-PORT=$(pio device list --json-output | jq '.[] | select(.description | contains("Arduino")) | .port ')
-PORT="${PORT%\"}"
-PORT="${PORT#\"}"
-
-stty -f ${PORT} 1200 \
-  && sleep 3 \
-  && ~/.platformio/packages/tool-bossac/bossac --info --debug --port "${PORT}" --erase --write --verify --reset -U true $1
+~/.platformio/packages/tool-openocd/bin/openocd -d2 -s ~/.platformio/packages/tool-openocd/scripts -f interface/cmsis-dap.cfg \
+   -c "set CHIPNAME at91samd21g18" -f target/at91samdXX.cfg -c "program {${1}} 0x2000 verify reset; shutdown;"

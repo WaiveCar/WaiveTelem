@@ -14,7 +14,7 @@
 
 // static InternetClient _client;
 // static BearSSLClient client(_client);
-static InternetSslClient client;
+static InternetClient client;
 
 static void sendGetRequest(const String& host, const String& file) {
   client.println("GET /" + file + " HTTP/1.0");
@@ -97,7 +97,7 @@ static int32_t verifyFile(const String& file) {
 int32_t HttpsClass::download(const char* host, const char* from, const char* to) {
   logDebug("host: " + String(host) + ", from: " + from + ", to: " + to);
   int32_t error;
-  if (client.connect(host, 443)) {
+  if (client.connect(host, 80)) {
     sendGetRequest(host, from);
     error = skipHeaders();
     if (error) return error;

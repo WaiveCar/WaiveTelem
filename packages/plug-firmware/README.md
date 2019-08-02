@@ -2,21 +2,31 @@
 
 ### Preparation:
 
+### Step 1: (this step is the same for plug-provision as well)
 - Install git (or git bash for windows, https://gitforwindows.org/)
 - Install Python 3.7 https://www.python.org (on Windows, check Add python 3.7 when using the installer)
 - Install Visual Studio Code (https://code.visualstudio.com/download)
 - In VSCode, install PlatformIO IDE extension (File -> Preferences -> Extensions)
 - In VSCode Terminal (on Windows, make sure Default Shell is bash)
+  - install jq `curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe --output ~/bin/jq.exe`
+  - install aws-cli `pip3 install awscli`
+  - login aws `aws configure`
+  - Git clone WaiveTelem `git clone git@github.com:WaiveCar/WaiveTelem.git`
+- In VSCode, File -> Open Folder WaiveTelem/packages/plug-firmware
+- Open VSCode Terminal, allow this workspace to modifiy the terminal shell if prompted, exit Terminal.
+- Open VSCode Terminal again, type 'pio' and make sure it is runnable
+- Add waive1000 BSP and increase binary upload speed:
 ```bash
-git clone git@github.com:WaiveCar/WaiveTelem.git
+pio run -e mkrnb1500
+ln -s -f $PWD/bsp/boards ~/.platformio
+ln -s -f $PWD/bsp/waive1000 ~/.platformio/packages/framework-arduinosam/variants
+sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/tool-openocd/scripts/target/at91samdXX.cfg
 ```
-- In VSCode, File -> Open folder WaiveCar/packages/plug-firmware
-- Open VSCode Terminal, allow this workspace to modifiy the terminal shell when prompted, exit Terminal
-- Open VSCode Terminal again, pio CLI should be available now
+### Step 2:
 - Update and run setEnv.sh in terminal shell to export env variables:
-- Connect to the plug via USB
+- Connect to device via USB and Atmel-Ice
 
-### Run Binary and Start Serial Monitoring (default mkr1000USB):
+### Run Binary and Start Serial Monitoring (default waive1000):
 
 ```bash
 ./run.sh
@@ -25,19 +35,13 @@ git clone git@github.com:WaiveCar/WaiveTelem.git
 ### Flash firmware binary:
 
 ```bash
-./flash.sh bin/1000_1.0.3_06cdba4ab3c940d63f7ca4b2689e34003c18efbbaa5a7c2849d9df9661153ab8
+./flash.sh s3/1000_1.0.3_06cdba4ab3c940d63f7ca4b2689e34003c18efbbaa5a7c2849d9df9661153ab8
 ```
 
 ### Upload firmware binaries and sync it with S3 bucket:
 
 ```bash
 ./uploadRelease.sh
-```
-
-### Building, Flash and Run Binary for mkrnb1500:
-
-```bash
-pio run -v -e mkrnb1500 -t upload
 ```
 
 ### MQTT Device Shadow Desired (Command):
