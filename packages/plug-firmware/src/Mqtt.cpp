@@ -53,7 +53,7 @@ void MqttClass::connect() {
     // Https.download("community.libra.org", "/", "TEMP");
     // Https.download("news.ycombinator.com", "/", "TEMP");
     // Https.download("www.wikipedia.org", "/", "TEMP");
-    // Https.download("waiveplug.s3.us-east-2.amazonaws.com", "config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP");  // connect sometimes works with DigiCertBaltimoreCA_2G2, but WR failed
+    Https.download("waiveplug.s3.us-east-2.amazonaws.com", "config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP");  // connect sometimes works with DigiCertBaltimoreCA_2G2, but WR failed
     // Https.download("storage.googleapis.com", "www.swiperweb.com/privacy.html", "TEMP");  //works
     // Https.download("workflowy.com", "/", "TEMP");   // very long timeout
     // Https.download("trello.com", "/", "TEMP");      // very long timeout

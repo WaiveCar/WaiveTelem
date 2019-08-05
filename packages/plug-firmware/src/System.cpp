@@ -2,6 +2,8 @@
 #include <Arduino.h>
 #define ARDUINOJSON_USE_DOUBLE 1
 #include <ArduinoJson.h>
+#include <bearssl/bearssl_ssl.h>
+#include <rBase64.h>
 
 #include "Config.h"
 #include "Gps.h"
@@ -12,6 +14,7 @@
 #include "Pins.h"
 #include "System.h"
 
+#define AUTH_DOC_SIZE 128
 #define COMMAND_DOC_SIZE 512
 
 extern "C" char* sbrk(int incr);
@@ -82,14 +85,39 @@ void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delt
   }
 }
 
-void SystemClass::processCommand(const String& json) {
+void SystemClass::authorizeCommand(const String& encrypted) {
+  String json = decryptToken(encrypted);
+  StaticJsonDocument<AUTH_DOC_SIZE> authDoc;
+  DeserializationError error = deserializeJson(authDoc, json);
+  if (error) {
+    logError("Failed to read json: " + String(error.c_str()));
+    return;
+  }
+  authCmds = authDoc["cmds"] | "";
+  authStart = authDoc["start"] | 0;
+  authEnd = authDoc["end"] | 0xffffffff;
+}
+
+void SystemClass::processCommand(const String& json, bool isBluetooth) {
   StaticJsonDocument<COMMAND_DOC_SIZE> cmdDoc;
   DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
     logError("Failed to read json: " + String(error.c_str()));
     return;
   }
-  JsonObject desired = cmdDoc["state"] | cmdDoc.as<JsonObject>();  // mqtt form | ble form
+  JsonObject desired = isBluetooth ? cmdDoc.as<JsonObject>() : cmdDoc["state"];
+  if (isBluetooth) {
+    //TODO handle authCmds
+    uint32_t time = Gps.getTime();
+    if (authStart > time) {
+      logError("No authorization, authStart: " + String(authStart));
+      return;
+    }
+    if (authEnd < time) {
+      logError("No authorization, authEnd: " + String(authEnd));
+      return;
+    }
+  }
   JsonObject download = desired["download"];
   JsonObject copy = desired["copy"];
   String json2 = json;
@@ -219,6 +247,35 @@ void SystemClass::telemeter(const String& reported, const String& desired) {
   if (Mqtt.isConnected()) {
     Mqtt.send(message);
   }
+}
+
+String SystemClass::decryptToken(const String& encrypted) {
+  // see https://github.com/nogoegst/bearssl/blob/master/test/test_crypto.c
+
+  // openssl enc -A -base64 -v -aes-256-ecb -nosalt -K $(hexdump -v -e '/1 "%02X"' < nosave/key.txt) -in nosave/plain.txt -out nosave/encrypted.txt
+  // char token[] = "ZVR1tnLANhC4qWSFpsCfJ1dFcNvgyJrG3rr+eI6hceP7gxd9O8ZIPJgZx683GzZHvYeqA8bKpiTOKAR4CnxvpHzyf/Q/ugjpfj5TrUN3TZfUhWrK3zc22ObBtI/JXeOfpUG/XOtXqu4uavGG+kl6UUAzKHvv9xbcpZ2QC6CzxK4PfI/Lp0f0Mrt4FOB723V0MNFjULHX6ep2i2iI/SQVM4Jl6yB7bkG2K6QXGBoqrTTBV7HijyjFP1b2kBujXZUc";
+
+  unsigned char iv[16];
+  br_aes_gen_cbcdec_keys v_dc;
+  const br_block_cbcdec_class** dc;
+  const br_block_cbcdec_class* vd = &br_aes_big_cbcdec_vtable;
+  dc = &v_dc.vtable;
+  const char* cert = Config.get()["mqtt"]["cert"];
+  // start at byte 28, right after -----\n
+  vd->init(dc, &cert[28], 32);
+  size_t length = rbase64_dec_len((char*)encrypted.c_str(), encrypted.length());
+  char* buf = (char*)malloc(length);
+  rbase64_decode(buf, (char*)encrypted.c_str(), encrypted.length());
+  for (size_t v = 0; v < length; v += 16) {
+    memset(iv, 0, sizeof(iv));
+    vd->run(dc, iv, buf + v, 16);
+  }
+  size_t numberOfPadding = buf[length - 1];
+  buf[length - numberOfPadding] = '\0';
+  Serial.print(buf);
+  String token(buf);
+  free(buf);
+  return token;
 }
 
 SystemClass System;

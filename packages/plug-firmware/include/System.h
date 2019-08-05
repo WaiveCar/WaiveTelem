@@ -17,7 +17,9 @@ class SystemClass {
   void sendHeartbeat();
   void sendCanStatus();
   void setCanStatus(const String& name, uint64_t value, uint32_t delta);
-  void processCommand(const String& json);
+  void authorizeCommand(const String& encrypted);
+  String decryptToken(const String& encrypted);
+  void processCommand(const String& json, bool isBluetooth = false);
   void reboot();
   void kickWatchdogAndSleep();
   uint32_t getUptime();
@@ -29,6 +31,9 @@ class SystemClass {
   int32_t lastHeartbeat = -1;
   uint32_t uptime = 0;
   StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
+  String authCmds;
+  uint32_t authStart;
+  uint32_t authEnd;
 };
 
 extern SystemClass System;

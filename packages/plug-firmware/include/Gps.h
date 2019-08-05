@@ -9,7 +9,7 @@ class GpsClass {
   int getLongitude();
   int getHdop();
   float getSpeed();
-  int getTime();
+  uint32_t getTime();
   const char* getDateTime();
 
  private:
@@ -17,7 +17,7 @@ class GpsClass {
   int longitude = 0;
   int hdop = 0;
   float speed = 0;
-  int time = 0;
+  uint32_t time = 0;
   char dateTime[32] = "0000-00-00T00:00:00Z";
 };
 

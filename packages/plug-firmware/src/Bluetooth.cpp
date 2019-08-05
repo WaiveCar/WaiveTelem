@@ -1,6 +1,4 @@
 #include <STBLE.h>
-#include <bearssl/bearssl_ssl.h>
-#include <rBase64.h>
 
 #include "Bluetooth.h"
 #include "Config.h"
@@ -75,7 +73,7 @@ void setConnectable(void) {
   }
 }
 
-String command = "";
+String message = "";
 uint8_t continueLength = 0;
 // BLE actually only supports sending 20 bytes of data per characteristic. We need a little "protocol" to support longer array.
 // You split the array in 20 bytes arrays where the first byte contain the total length of data to come, including the data in this array.
@@ -88,8 +86,7 @@ uint8_t continueLength = 0;
 // [33, 108, 100, 44, 32, 105, 32, 108, 111, 118, 101, 32, 121, 111, 117, 32, 97, 110, 100, 32]
 // [14, 97, 108, 108, 32, 97, 114, 111, 117, 110, 100, 32, 121, 111, 117]
 void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data) {
-  if (handle == AuthCharHandle + 1) {
-  } else if (handle == CmdCharHandle + 1) {
+  if (handle == AuthCharHandle + 1 || handle == CmdCharHandle + 1) {
     uint8_t bleCmdBuffer[20];
     uint8_t messageLength = att_data[0];
     int i = 0;
@@ -97,16 +94,21 @@ void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_da
       bleCmdBuffer[i] = att_data[i + 1];
     }
     bleCmdBuffer[i] = '\0';
-    // logDebug(String(messageLength));
+    logDebug(String(messageLength));
     if (messageLength != continueLength) {
-      command = "";
+      message = "";
     }
     continueLength = messageLength - data_length + 1;
-    command += String((char *)bleCmdBuffer);
-    // logDebug(String(continueLength));
-    // logDebug(command);
+    message += String((char *)bleCmdBuffer);
+    logDebug(String(continueLength));
+    logDebug(message);
     if (continueLength == 0) {
-      System.processCommand(command);
+      if (handle == AuthCharHandle + 1) {
+        System.authorizeCommand(message);
+      } else if (handle == CmdCharHandle + 1) {
+        System.processCommand(message, true);
+      }
+      message = "";
     }
   }
 }
@@ -214,33 +216,6 @@ void BluetoothClass::poll() {
 
 String &BluetoothClass::getName() {
   return name;
-}
-
-void BluetoothClass::readToken() {
-  // see https://github.com/nogoegst/bearssl/blob/master/test/test_crypto.c
-
-  // openssl enc -A -base64 -v -aes-256-ecb -nosalt -K $(hexdump -v -e '/1 "%02X"' < nosave/key.txt) -in nosave/plain.txt -out nosave/encrypted.txt
-  char token[] = "ZVR1tnLANhC4qWSFpsCfJ1dFcNvgyJrG3rr+eI6hceP7gxd9O8ZIPJgZx683GzZHvYeqA8bKpiTOKAR4CnxvpHzyf/Q/ugjpfj5TrUN3TZfUhWrK3zc22ObBtI/JXeOfpUG/XOtXqu4uavGG+kl6UUAzKHvv9xbcpZ2QC6CzxK4PfI/Lp0f0Mrt4FOB723V0MNFjULHX6ep2i2iI/SQVM4Jl6yB7bkG2K6QXGBoqrTTBV7HijyjFP1b2kBujXZUc";
-
-  unsigned char iv[16];
-  br_aes_gen_cbcdec_keys v_dc;
-  const br_block_cbcdec_class **dc;
-  const br_block_cbcdec_class *vd = &br_aes_big_cbcdec_vtable;
-  dc = &v_dc.vtable;
-  const char *cert = Config.get()["mqtt"]["cert"];
-  // start at byte 28, right after -----\n
-  vd->init(dc, &cert[28], 32);
-  size_t length = rbase64_dec_len(token, sizeof(token));
-  char *buf = (char *)malloc(length);
-  rbase64_decode(buf, token, sizeof(token));
-  for (size_t v = 0; v < length; v += 16) {
-    memset(iv, 0, sizeof(iv));
-    vd->run(dc, iv, buf + v, 16);
-  }
-  size_t numberOfPadding = buf[length - 1];
-  buf[length - numberOfPadding] = '\0';
-  Serial.print(buf);
-  free(buf);
 }
 
 BluetoothClass Bluetooth;

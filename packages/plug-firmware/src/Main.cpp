@@ -13,11 +13,11 @@
 #include "System.h"
 
 void setup() {
-  Watchdog.enable(WATCHDOG_TIMEOUT);
+  // Watchdog.enable(WATCHDOG_TIMEOUT);
   Pins.setup();
   Logger.setup();
   Config.load();
-  // Mqtt.setup();
+  Mqtt.setup();
   System.setup();
   Can.setup();
   Bluetooth.setup();
@@ -26,7 +26,7 @@ void setup() {
 
 void loop() {
   Watchdog.reset();
-  // Mqtt.poll();
+  Mqtt.poll();
   Bluetooth.poll();
   Can.poll();
   Gps.poll();

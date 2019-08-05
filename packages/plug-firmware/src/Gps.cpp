@@ -76,7 +76,7 @@ float GpsClass::getSpeed() {
   return speed;
 }
 
-int GpsClass::getTime() {
+uint32_t GpsClass::getTime() {
   return time;
 }
 const char *GpsClass::getDateTime() {

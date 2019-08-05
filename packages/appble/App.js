@@ -455,15 +455,15 @@ export default class App extends Component {
             onPress={() => {
               this.setState({
                 text:
-                  '{"state":{"reported":{"gps":{"lat":34.1500243,"long":-118.0278115,"hdop":660,"speed":0.0437296,"dateTime":"2019-08-02T23:38:40Z"},"system":{"uptime":3240,"signalStrength":0,"heapFreeMem":9411,"statusFreeMem":784}}}}'
+                  'ZVR1tnLANhC4qWSFpsCfJ1dFcNvgyJrG3rr+eI6hceP7gxd9O8ZIPJgZx683GzZHvYeqA8bKpiTOKAR4CnxvpHzyf/Q/ugjpfj5TrUN3TZfUhWrK3zc22ObBtI/JXeOfpUG/XOtXqu4uavGG+kl6UUAzKHvv9xbcpZ2QC6CzxK4PfI/Lp0f0Mrt4FOB723V0MNFjULHX6ep2i2iI/SQVM4Jl6yB7bkG2K6QXGBoqrTTBV7HijyjFP1b2kBujXZUc'
               });
               setTimeout(() => {
-                onPress(1);
+                onPress(0);
               }, 10);
             }}
           >
             <Button style={styles.button} mode="contained">
-              ?: ?
+              TOKEN
             </Button>
           </TouchableHighlight>
           <View style={styles.columnGap} />

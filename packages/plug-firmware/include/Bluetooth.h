@@ -5,7 +5,6 @@ class BluetoothClass {
  public:
   void setup();
   void poll();
-  void readToken();
   String& getName();
 
  private:
