@@ -17,19 +17,22 @@ void setup() {
   Pins.setup();
   Logger.setup();
   Config.load();
-  Mqtt.setup();
+  // Mqtt.setup();
   System.setup();
-  Can.setup();
   Bluetooth.setup();
+#ifdef ARDUINO_SAMD_WAIVE1000
+  Can.setup();
   Gps.setup();
+#endif
 }
 
 void loop() {
-  Watchdog.reset();
-  Mqtt.poll();
+  // Mqtt.poll();
+  System.sleep();  // shouuld be after Gps.poll() and Mqtt.poll() to have time available
+  System.poll();   // should be after System.sleep() to have time available
   Bluetooth.poll();
+#ifdef ARDUINO_SAMD_WAIVE1000
   Can.poll();
   Gps.poll();
-  System.poll();
-  System.kickWatchdogAndSleep();
+#endif
 }

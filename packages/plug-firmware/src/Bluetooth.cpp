@@ -94,14 +94,14 @@ void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_da
       bleCmdBuffer[i] = att_data[i + 1];
     }
     bleCmdBuffer[i] = '\0';
-    logDebug(String(messageLength));
+    // logDebug(String(messageLength));
     if (messageLength != continueLength) {
       message = "";
     }
     continueLength = messageLength - data_length + 1;
     message += String((char *)bleCmdBuffer);
-    logDebug(String(continueLength));
-    logDebug(message);
+    // logDebug(String(continueLength));
+    // logDebug(message);
     if (continueLength == 0) {
       if (handle == AuthCharHandle + 1) {
         System.authorizeCommand(message);
@@ -117,6 +117,7 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle) {
   char sprintbuff[64];
   snprintf(sprintbuff, 64, "BLE Connected to device: %02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
   logInfo(sprintbuff);
+  System.unauthorize();
 }
 
 void GAP_DisconnectionComplete_CB(void) {

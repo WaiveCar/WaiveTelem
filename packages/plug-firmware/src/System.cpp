@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #define ARDUINOJSON_USE_DOUBLE 1
 #include <ArduinoJson.h>
+#include <NMEAGPS.h>
 #include <bearssl/bearssl_ssl.h>
 #include <rBase64.h>
 
@@ -18,6 +19,7 @@
 #define COMMAND_DOC_SIZE 512
 
 extern "C" char* sbrk(int incr);
+extern volatile uint32_t _ulTickCount;
 
 int freeMemory() {
   char top;
@@ -30,22 +32,36 @@ void SystemClass::setup() {
   statusDoc["heartbeat"].createNestedObject("gps");
   statusDoc["heartbeat"].createNestedObject("system");
 
+  // set bluetooth token key and iv
+  const char* cert = Config.get()["mqtt"]["cert"];
+  size_t length = rbase64_dec_len((char*)&cert[743], 64);
+  char* buf = (char*)malloc(length);
+  rbase64_decode(buf, (char*)&cert[743], 64);
+  memcpy(tokenIv, buf, 16);
+  memcpy(tokenKey, &buf[16], 32);
+  free(buf);
+
   sendInfo();
 }
 
 void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
   int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"];
-  if (interval > 0 && Gps.getLatitude() != 0 &&
-      (lastHeartbeat == -1 || uptime - lastHeartbeat >= (uint32_t)interval)) {
+  if (interval > 0 && (lastHeartbeat == -1 || time - lastHeartbeat >= (uint32_t)interval)) {
     sendHeartbeat();
-    lastHeartbeat = uptime;
+    lastHeartbeat = time;
   }
+}
+
+const char* SystemClass::getDateTime() {
+  NeoGPS::time_t dt = time;
+  sprintf(dateTime, "%04d-%02d-%02dT%02d:%02d:%02dZ", dt.full_year(dt.year), dt.month, dt.date, dt.hours, dt.minutes, dt.seconds);
+  return dateTime;
 }
 
 void SystemClass::sendInfo() {
   statusDoc["firmware"] = FIRMWARE_VERSION;
-  statusDoc["inRide"] = "true";
+  statusDoc["inRide"] = "false";
   String version = "{\"inRide\":\"" + String(statusDoc["inRide"].as<char*>()) + "\", \"system\":{\"firmware\":\"" +
                    FIRMWARE_VERSION + "\",\"configFreeMem\":" + Config.getConfigFreeMem() + "}}";
   telemeter(version);
@@ -59,8 +75,8 @@ void SystemClass::sendHeartbeat() {
   gps["long"] = Gps.getLongitude() / 1e7;
   gps["hdop"] = Gps.getHdop();
   gps["speed"] = Gps.getSpeed();
-  gps["dateTime"] = Gps.getDateTime();
-  system["uptime"] = uptime;
+  system["dateTime"] = System.getDateTime();
+  system["uptime"] = time - bootTime;
   system["signalStrength"] = Internet.getSignalStrength();
   system["heapFreeMem"] = freeMemory();
   system["statusFreeMem"] = STATUS_DOC_SIZE - statusDoc.memoryUsage();
@@ -69,7 +85,7 @@ void SystemClass::sendHeartbeat() {
 
 void SystemClass::sendCanStatus() {
   if (canStatusChanged) {
-    telemeter(statusDoc["can"].as<String>());
+    telemeter("{\"can\":" + statusDoc["can"].as<String>() + "}");
     canStatusChanged = false;
   }
 }
@@ -95,7 +111,14 @@ void SystemClass::authorizeCommand(const String& encrypted) {
   }
   authCmds = authDoc["cmds"] | "";
   authStart = authDoc["start"] | 0;
-  authEnd = authDoc["end"] | 0xffffffff;
+  authEnd = authDoc["end"] | 0;
+}
+
+void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& cmdValue) {
+  String escapedJson = json;
+  escapedJson.replace("\"", "\\\"");
+  String lastCmd = "\"system\":{\"lastCmd\":\"" + escapedJson + "\"}";
+  telemeter("{" + lastCmd + +",\"" + cmdKey + "\":\"" + cmdValue + "\"}", "{\"" + cmdKey + "\":null}");
 }
 
 void SystemClass::processCommand(const String& json, bool isBluetooth) {
@@ -106,94 +129,96 @@ void SystemClass::processCommand(const String& json, bool isBluetooth) {
     return;
   }
   JsonObject desired = isBluetooth ? cmdDoc.as<JsonObject>() : cmdDoc["state"];
+  String cmdKey, cmdValue;
+  for (JsonPair p : desired) {
+    cmdKey = p.key().c_str();
+    cmdValue = p.value().as<String>();
+  }
   if (isBluetooth) {
-    //TODO handle authCmds
-    uint32_t time = Gps.getTime();
+    if (authCmds.indexOf(cmdKey) == -1) {
+      logError("authCmds: " + authCmds + ", cmdKey: " + cmdKey);
+      return;
+    }
     if (authStart > time) {
-      logError("No authorization, authStart: " + String(authStart));
+      logError("authStart: " + String(authStart) + ", time: " + cmdKey);
       return;
     }
     if (authEnd < time) {
-      logError("No authorization, authEnd: " + String(authEnd));
+      logError("authEnd: " + String(authEnd) + ", time: " + cmdKey);
       return;
     }
   }
   JsonObject download = desired["download"];
   JsonObject copy = desired["copy"];
-  String json2 = json;
-  json2.replace("\"", "\\\"");
-  String lastCmd = "\"system\":{\"lastCmd\":\"" + json2 + "\"}";
-  if (desired["reboot"] == "true") {
-    telemeter("{" + lastCmd + "}", "{\"reboot\":null}");
-    reboot();
-  } else if (desired["lock"] == "open") {
+  if (cmdKey == "lock" && cmdValue == "open") {
     Pins.unlockDoors();
-    // CAN-BUS should update
-    telemeter("{" + lastCmd + ",\"lock\":\"open\"}", "{\"lock\":null}");
-  } else if (desired["lock"] == "close") {
+  } else if (cmdKey == "lock" && cmdValue == "close") {
     Pins.lockDoors();
-    // CAN-BUS should update
-    telemeter("{" + lastCmd + ",\"lock\":\"close\"}", "{\"lock\":null}");
-  } else if (desired["immo"] == "lock") {
+  } else if (cmdKey == "immo" && cmdValue == "lock") {
     Pins.immobilize();
-    statusDoc["immo"] = "lock";
-    telemeter("{" + lastCmd + ",\"immo\":\"lock\"}", "{\"immo\":null}");
-  } else if (desired["immo"] == "unlock") {
+  } else if (cmdKey == "immo" && cmdValue == "unlock") {
     Pins.unimmobilize();
-    statusDoc["immo"] = "unlock";
-    telemeter("{" + lastCmd + ",\"immo\":\"unlock\"}", "{\"immo\":null}");
-  } else if (desired["inRide"] == "true") {
-    statusDoc["inRide"] = "true";
-    telemeter("{" + lastCmd + ",\"inRide\":\"true\"}", "{\"inRide\":null}");
+  } else if (cmdKey == "inRide" && (cmdValue == "true" || cmdValue == "false")) {
     canStatusChanged = true;
-    sendCanStatus();
-  } else if (desired["inRide"] == "false") {
-    statusDoc["inRide"] = "false";
-    telemeter("{" + lastCmd + ",\"inRide\":\"false\"}", "{\"inRide\":null}");
-    canStatusChanged = true;
-    sendCanStatus();
+  } else if (cmdKey == "reboot" && cmdValue == "true") {
+    reportCommandDone(json, cmdKey, cmdValue);
+    reboot();
+    return;
   } else if (!download.isNull()) {
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";
     const char* to = download["to"] | "";
     if (strlen(host) > 0 && strlen(from) > 0 && strlen(to) > 0) {
       Https.download(host, from, to);
-      telemeter("{" + lastCmd + "}", "{\"download\":null}");
+      reportCommandDone(json, cmdKey, cmdValue);
       reboot();
     } else {
       logError("Error: " + json);
     }
+    return;
   } else if (!copy.isNull()) {
     const char* from = copy["from"] | "";
     const char* to = copy["to"] | "";
     if (strlen(from) > 0 && strlen(to) > 0) {
       copyFile(from, to);
-      telemeter("{" + lastCmd + "}", "{\"copy\":null}");
+      reportCommandDone(json, cmdKey, cmdValue);
       reboot();
     } else {
       logError("Error: " + json);
     }
+    return;
   } else {
     logError("Unknown command: " + json);
+    return;
   }
+  statusDoc[cmdKey] = cmdValue;
+  reportCommandDone(json, cmdKey, cmdValue);
 }
 
-uint32_t SystemClass::getUptime() {
-  return uptime;
-}
-
-void SystemClass::kickWatchdogAndSleep() {
+void SystemClass::sleep() {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
   // don't use Watchdog.sleep as it disconnects USB
-  delay(950);
+  delay(875);
 #else
   //sleep most and gps should take the other in 1 second
   Watchdog.sleep(500);
   Watchdog.sleep(250);
   Watchdog.sleep(125);
+  _ulTickCount = _ulTickCount + 875;
 #endif
-  uptime += 1;
+  if (Internet.isConnected()) {
+    time = Internet.getTime();
+    if (bootTime == 0) {
+      bootTime = time;
+    }
+  } else if (Gps.isConnected()) {
+    if (bootTime == 0) {
+      bootTime = time;
+    }
+  } else {
+    time = millis() / 1000;
+  }
   digitalWrite(LED_BUILTIN, HIGH);
   Watchdog.enable(WATCHDOG_TIMEOUT);
 }
@@ -238,6 +263,10 @@ int32_t SystemClass::copyFile(const char* from, const char* to) {
   return 0;
 }
 
+void SystemClass::setTime(uint32_t in) {
+  time = in;
+}
+
 void SystemClass::telemeter(const String& reported, const String& desired) {
   String message = "{\"state\":{" +
                    (reported != "" ? "\"reported\":" + reported : "") +
@@ -251,31 +280,31 @@ void SystemClass::telemeter(const String& reported, const String& desired) {
 
 String SystemClass::decryptToken(const String& encrypted) {
   // see https://github.com/nogoegst/bearssl/blob/master/test/test_crypto.c
-
-  // openssl enc -A -base64 -v -aes-256-ecb -nosalt -K $(hexdump -v -e '/1 "%02X"' < nosave/key.txt) -in nosave/plain.txt -out nosave/encrypted.txt
-  // char token[] = "ZVR1tnLANhC4qWSFpsCfJ1dFcNvgyJrG3rr+eI6hceP7gxd9O8ZIPJgZx683GzZHvYeqA8bKpiTOKAR4CnxvpHzyf/Q/ugjpfj5TrUN3TZfUhWrK3zc22ObBtI/JXeOfpUG/XOtXqu4uavGG+kl6UUAzKHvv9xbcpZ2QC6CzxK4PfI/Lp0f0Mrt4FOB723V0MNFjULHX6ep2i2iI/SQVM4Jl6yB7bkG2K6QXGBoqrTTBV7HijyjFP1b2kBujXZUc";
-
   unsigned char iv[16];
   br_aes_gen_cbcdec_keys v_dc;
   const br_block_cbcdec_class** dc;
   const br_block_cbcdec_class* vd = &br_aes_big_cbcdec_vtable;
   dc = &v_dc.vtable;
-  const char* cert = Config.get()["mqtt"]["cert"];
-  // start at byte 28, right after -----\n
-  vd->init(dc, &cert[28], 32);
+  vd->init(dc, tokenKey, 32);
+  memcpy(iv, tokenIv, 16);
   size_t length = rbase64_dec_len((char*)encrypted.c_str(), encrypted.length());
   char* buf = (char*)malloc(length);
   rbase64_decode(buf, (char*)encrypted.c_str(), encrypted.length());
   for (size_t v = 0; v < length; v += 16) {
-    memset(iv, 0, sizeof(iv));
     vd->run(dc, iv, buf + v, 16);
   }
   size_t numberOfPadding = buf[length - 1];
   buf[length - numberOfPadding] = '\0';
-  Serial.print(buf);
+  logDebug(buf);
   String token(buf);
   free(buf);
   return token;
+}
+
+void SystemClass::unauthorize() {
+  authCmds = "";
+  authStart = 0;
+  authEnd = 0;
 }
 
 SystemClass System;

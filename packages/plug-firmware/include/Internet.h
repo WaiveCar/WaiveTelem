@@ -13,7 +13,7 @@
 
 class InternetClass {
  public:
-  void connect();
+  bool connect();
   bool isConnected();
   unsigned long getTime();
   int getSignalStrength();

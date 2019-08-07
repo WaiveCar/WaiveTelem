@@ -4,13 +4,13 @@
 
 #include "Gps.h"
 #include "Logger.h"
+#include "System.h"
 
 #define GPSSerial Serial1
 
 #define COMMAND_DELAY 250
 
 static ubloxGPS gps(&GPSSerial);
-// static NMEAGPS gps;
 
 void GpsClass::setup() {
   const char baud115200[] PROGMEM = "PUBX,41,1,3,3,115200,0";
@@ -31,6 +31,8 @@ void GpsClass::setup() {
   GPSSerial.end();
   delay(COMMAND_DELAY);
   GPSSerial.begin(115200);
+
+  poll();
 }
 
 void GpsClass::poll() {
@@ -40,25 +42,27 @@ void GpsClass::poll() {
   // return;
   int start = millis();
   gps_fix fix;
-  bool noData = true;
+  connected = false;
   // try at most 1 second
-  while (noData && millis() - start < 1000) {
+  while (!connected && millis() - start < 1000) {
     while (gps.available(GPSSerial)) {
       fix = gps.read();
       if (fix.valid.location && fix.valid.date && fix.valid.time && fix.valid.speed && fix.valid.hdop) {
         latitude = fix.latitudeL();
         longitude = fix.longitudeL();
         hdop = fix.hdop;
-        time = fix.dateTime;
         speed = fix.speed_mph();
-        NeoGPS::time_t dt = fix.dateTime;
-        sprintf(dateTime, "%04d-%02d-%02dT%02d:%02d:%02dZ", dt.full_year(dt.year), dt.month, dt.date, dt.hours, dt.minutes, dt.seconds);
-        // logDebug(dateTime);
-        noData = false;
+        time = fix.dateTime;
+        System.setTime(time);
+        connected = true;
         break;
       }
     }
   }
+}
+
+bool GpsClass::isConnected() {
+  return connected;
 }
 
 int GpsClass::getLatitude() {
@@ -78,9 +82,6 @@ float GpsClass::getSpeed() {
 
 uint32_t GpsClass::getTime() {
   return time;
-}
-const char *GpsClass::getDateTime() {
-  return dateTime;
 }
 
 GpsClass Gps;

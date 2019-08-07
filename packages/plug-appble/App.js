@@ -55,9 +55,11 @@ export default class App extends Component {
 
   scan() {
     if (!this.state.scanning) {
+      console.log('start DeviceScan');
       this.setState({ scanning: true });
       this.deviceMap.clear();
       BluetoothManager.manager.startDeviceScan(null, null, (error, device) => {
+        console.log('startDeviceScan done');
         if (error) {
           alert('startDeviceScan error:' + JSON.stringify(error));
           if (error.errorCode == 102) {
@@ -65,7 +67,7 @@ export default class App extends Component {
           }
           this.setState({ scanning: false });
         } else {
-          console.log(device.localName);
+          console.log(device);
           if (device.localName && device.localName.startsWith('W-')) {
             this.deviceMap.set(device.id, device);
             this.setState({ data: [...this.deviceMap.values()] });
@@ -454,7 +456,7 @@ export default class App extends Component {
             style={styles.button}
             onPress={() => {
               this.setState({
-                text: 'VRhn/Zpdz2hLchKacRjQYumzWZibuVF1N1Wg80/nIiDWrj3Fkaj3dKIy9ova836t'
+                text: 'N1LL1IGuJR7jGNll7otqSVP1lU5UBmJFIW5NnGICMjtwfWQiPf2jhj7+79lObA4q'
               });
               setTimeout(() => {
                 onPress(0);

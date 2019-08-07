@@ -8,7 +8,7 @@ void LoggerClass::setup() {
   Serial.begin(115200);
 #if DEBUG
   // the following cause cause the firmware to only run if serial-monitored
-  delay(7000);
+  delay(5000);
 #endif
   while (!SD.begin(SD_CS_PIN)) {
     logError(F("Failed to initialize SD Library"));
@@ -22,7 +22,7 @@ void LoggerClass::setup() {
 }
 
 void LoggerClass::logLine(const char* type, const String& s) {
-  const String str = Gps.getDateTime() + String(" ") + s;
+  const String str = System.getDateTime() + String(" ") + s;
   if (String(type) != "Debug") {
     System.telemeter(String("{\"system\":{\"last" + String(type) + "\":\"") + s + "\"}}");
   } else {

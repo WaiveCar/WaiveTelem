@@ -51,13 +51,13 @@ e.g. for plug-1
 - click on "Shadow" and edit the Shadow State to have one of the following JSONs:
 
 ```json
-{"desired":{"reboot":"true"}}
 {"desired":{"lock":"open"}}
 {"desired":{"lock":"close"}}
 {"desired":{"immo":"lock"}}
 {"desired":{"immo":"unlock"}}
 {"desired":{"inRide":"true"}}
 {"desired":{"inRide":"false"}}
+{"desired":{"reboot":"true"}}
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"1500_1.0.5_b824c05bbd9ebd19c5eb9546ef46615607a7da4f3e435c97fbb286969d8fc2d8", "to":"UPDATE.BIN"}}}
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "to":"CONFIG.TXT"}}}
 {"desired":{"copy":{"from":"DEFAULT.BIN", "to":"UPDATE.BIN"}}}
