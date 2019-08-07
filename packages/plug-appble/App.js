@@ -454,8 +454,7 @@ export default class App extends Component {
             style={styles.button}
             onPress={() => {
               this.setState({
-                text:
-                  'ZVR1tnLANhC4qWSFpsCfJ1dFcNvgyJrG3rr+eI6hceP7gxd9O8ZIPJgZx683GzZHvYeqA8bKpiTOKAR4CnxvpHzyf/Q/ugjpfj5TrUN3TZfUhWrK3zc22ObBtI/JXeOfpUG/XOtXqu4uavGG+kl6UUAzKHvv9xbcpZ2QC6CzxK4PfI/Lp0f0Mrt4FOB723V0MNFjULHX6ep2i2iI/SQVM4Jl6yB7bkG2K6QXGBoqrTTBV7HijyjFP1b2kBujXZUc'
+                text: 'VRhn/Zpdz2hLchKacRjQYumzWZibuVF1N1Wg80/nIiDWrj3Fkaj3dKIy9ova836t'
               });
               setTimeout(() => {
                 onPress(0);
