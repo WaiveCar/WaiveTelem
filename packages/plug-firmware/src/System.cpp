@@ -140,11 +140,11 @@ void SystemClass::processCommand(const String& json, bool isBluetooth) {
       return;
     }
     if (authStart > time) {
-      logError("authStart: " + String(authStart) + ", time: " + cmdKey);
+      logError("authStart: " + String(authStart) + ", time: " + time);
       return;
     }
     if (authEnd < time) {
-      logError("authEnd: " + String(authEnd) + ", time: " + cmdKey);
+      logError("authEnd: " + String(authEnd) + ", time: " + time);
       return;
     }
   }

@@ -2,13 +2,45 @@
   "name": "plug-admin",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lambda.js",
+  "config": {
+    "s3BucketName": "waiveplug",
+    "region": "us-east-2",
+    "cloudFormationStackName": "PlugAdminStack",
+    "functionName": "PlugAdmin",
+    "accountId": "179944132799"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.local.js",
+    "config": "node ./scripts/configure.js",
+    "deconfig": "node ./scripts/deconfigure.js",
+    "local": "node scripts/local",
+    "invoke-lambda": "aws lambda invoke --function-name $npm_package_config_functionName --region $npm_package_config_region --payload file://api-gateway-event.json lambda-invoke-response.json && cat lambda-invoke-response.json",
+    "create-bucket": "aws s3 mb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
+    "delete-bucket": "aws s3 rb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
+    "package": "aws cloudformation package --template ./cloudformation.yaml --s3-bucket $npm_package_config_s3BucketName --output-template packaged-sam.yaml --region $npm_package_config_region",
+    "deploy": "aws cloudformation deploy --template-file packaged-sam.yaml --stack-name $npm_package_config_cloudFormationStackName --capabilities CAPABILITY_IAM --region $npm_package_config_region",
+    "package-deploy": "npm run package && npm run deploy",
+    "delete-stack": "aws cloudformation delete-stack --stack-name $npm_package_config_cloudFormationStackName --region $npm_package_config_region",
+    "setup": "npm install && (aws s3api get-bucket-location --bucket $npm_package_config_s3BucketName --region $npm_package_config_region || npm run create-bucket) && npm run package-deploy",
+    "win-config": "npm run config",
+    "win-deconfig": "npm run deconfig",
+    "win-local": "npm run local",
+    "win-invoke-lambda": "aws lambda invoke --function-name %npm_package_config_functionName% --region %npm_package_config_region% --payload file://api-gateway-event.json lambda-invoke-response.json && cat lambda-invoke-response.json",
+    "win-create-bucket": "aws s3 mb s3://%npm_package_config_s3BucketName% --region %npm_package_config_region%",
+    "win-delete-bucket": "aws s3 rb s3://%npm_package_config_s3BucketName% --region %npm_package_config_region%",
+    "win-package": "aws cloudformation package --template ./cloudformation.yaml --s3-bucket %npm_package_config_s3BucketName% --output-template packaged-sam.yaml --region %npm_package_config_region%",
+    "win-deploy": "aws cloudformation deploy --template-file packaged-sam.yaml --stack-name %npm_package_config_cloudFormationStackName% --capabilities CAPABILITY_IAM --region %npm_package_config_region%",
+    "win-package-deploy": "npm run win-package && npm run win-deploy",
+    "win-delete-stack": "aws cloudformation delete-stack --stack-name %npm_package_config_cloudFormationStackName% --region %npm_package_config_region%",
+    "win-setup": "npm install && (aws s3api get-bucket-location --bucket %npm_package_config_s3BucketName% --region %npm_package_config_region% || npm run win-create-bucket) && npm run win-package-deploy"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.504.0"
+    "aws-sdk": "^2.504.0",
+    "aws-serverless-express": "^3.3.6",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
   }
 }

@@ -16,6 +16,8 @@ import { Buffer } from 'buffer';
 import BleModule from './BleModule.js';
 global.BluetoothManager = new BleModule();
 
+const API_END_POINT = 'https://4lreu3z4m8.execute-api.us-east-2.amazonaws.com/prod/';
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -100,9 +102,11 @@ export default class App extends Component {
     newData[item.index].isConnecting = true;
     this.setState({ data: newData });
     BluetoothManager.connect(item.item.id)
-      .then(device => {
+      .then(() => {
         newData[item.index].isConnecting = false;
-        this.setState({ data: [newData[item.index]], isConnected: true });
+        const tokens = newData[item.index].localName.split('-');
+        const thingName = tokens[tokens.length - 1];
+        this.setState({ data: [newData[item.index]], isConnected: true, thingName });
         this.onDisconnect();
       })
       .catch(err => {
@@ -454,9 +458,15 @@ export default class App extends Component {
           <View style={styles.columnGap} />
           <TouchableHighlight
             style={styles.button}
-            onPress={() => {
+            onPress={async () => {
+              console.log(this.state.data);
+              const response = await fetch(
+                API_END_POINT + 'token?thingName=' + this.state.thingName
+              );
+              const data = await response.json();
+              const { token } = data;
               this.setState({
-                text: 'N1LL1IGuJR7jGNll7otqSVP1lU5UBmJFIW5NnGICMjtwfWQiPf2jhj7+79lObA4q'
+                text: token
               });
               setTimeout(() => {
                 onPress(0);

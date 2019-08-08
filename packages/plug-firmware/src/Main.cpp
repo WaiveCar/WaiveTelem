@@ -27,9 +27,9 @@ void setup() {
 }
 
 void loop() {
+  System.sleep();
   // Mqtt.poll();
-  System.sleep();  // shouuld be after Gps.poll() and Mqtt.poll() to have time available
-  System.poll();   // should be after System.sleep() to have time available
+  System.poll();
   Bluetooth.poll();
 #ifdef ARDUINO_SAMD_WAIVE1000
   Can.poll();
