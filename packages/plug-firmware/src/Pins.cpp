@@ -15,6 +15,7 @@ void PinsClass::setup() {
 #else
   pinMode(RELAY_2_PIN, OUTPUT);
 #endif
+
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(CAN0_CS_PIN, OUTPUT);
   pinMode(CAN0_INT_PIN, INPUT);

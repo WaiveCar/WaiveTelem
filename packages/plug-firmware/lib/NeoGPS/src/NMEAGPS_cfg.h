@@ -45,7 +45,11 @@
 // to determine when the GPS quiet time begins, and thus
 // when you can perform "some" time-consuming operations.
 
-#define LAST_SENTENCE_IN_INTERVAL NMEAGPS::NMEA_GSV
+#ifdef ARDUINO_SAMD_WAIVE1000
+  #define LAST_SENTENCE_IN_INTERVAL NMEAGPS::NMEA_GSV
+#else
+  #define LAST_SENTENCE_IN_INTERVAL NMEAGPS::NMEA_RMC
+#endif
 
 // NOTE: For PUBX-only, PGRM and UBX configs, use
 //          (NMEAGPS::nmea_msg_t)(NMEAGPS::NMEA_LAST_MSG+1)
@@ -129,7 +133,7 @@
 #define NMEAGPS_FIX_MAX 1
 
 #if defined(NMEAGPS_EXPLICIT_MERGING) && (NMEAGPS_FIX_MAX == 0)
-#error You must define FIX_MAX >= 1 to allow EXPLICIT merging in NMEAGPS_cfg.h
+ #error You must define FIX_MAX >= 1 to allow EXPLICIT merging in NMEAGPS_cfg.h
 #endif
 
 //------------------------------------------------------
@@ -199,10 +203,12 @@
 //#define NMEAGPS_SAVE_TALKER_ID
 //#define NMEAGPS_PARSE_TALKER_ID
 
-#define NMEAGPS_PARSE_PROPRIETARY
+#ifdef ARDUINO_SAMD_WAIVE1000
+  #define NMEAGPS_PARSE_PROPRIETARY
+#endif
 #ifdef NMEAGPS_PARSE_PROPRIETARY
-//#define NMEAGPS_SAVE_MFR_ID
-#define NMEAGPS_PARSE_MFR_ID
+  //#define NMEAGPS_SAVE_MFR_ID
+  #define NMEAGPS_PARSE_MFR_ID
 #endif
 
 //------------------------------------------------------
@@ -214,17 +220,17 @@
 //#define NMEAGPS_PARSE_SATELLITE_INFO
 
 #ifdef NMEAGPS_PARSE_SATELLITES
-#define NMEAGPS_MAX_SATELLITES (20)
+  #define NMEAGPS_MAX_SATELLITES (20)
 
-#ifndef GPS_FIX_SATELLITES
-#error GPS_FIX_SATELLITES must be defined in GPSfix.h!
-#endif
+  #ifndef GPS_FIX_SATELLITES
+    #error GPS_FIX_SATELLITES must be defined in GPSfix.h!
+  #endif
 
 #endif
 
 #if defined(NMEAGPS_PARSE_SATELLITE_INFO) & \
     !defined(NMEAGPS_PARSE_SATELLITES)
-#error NMEAGPS_PARSE_SATELLITES must be defined!
+  #error NMEAGPS_PARSE_SATELLITES must be defined!
 #endif
 
 //------------------------------------------------------
@@ -239,12 +245,14 @@
 // If not defined, virtuals are not used, with a slight size (2 bytes) and
 // execution time savings.
 
-#define NMEAGPS_DERIVED_TYPES
+#ifdef ARDUINO_SAMD_WAIVE1000
+  #define NMEAGPS_DERIVED_TYPES
+#endif
 
 #ifdef NMEAGPS_DERIVED_TYPES
-#define NMEAGPS_VIRTUAL virtual
+  #define NMEAGPS_VIRTUAL virtual
 #else
-#define NMEAGPS_VIRTUAL
+  #define NMEAGPS_VIRTUAL
 #endif
 
 //-----------------------------------

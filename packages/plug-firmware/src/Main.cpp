@@ -13,26 +13,26 @@
 #include "System.h"
 
 void setup() {
-  // Watchdog.enable(WATCHDOG_TIMEOUT);
+  Watchdog.enable(WATCHDOG_TIMEOUT);
   Pins.setup();
   Logger.setup();
   Config.load();
-  // Mqtt.setup();
+#ifdef ARDUINO_SAMD_MKR1000
+  Mqtt.setup();
+#endif
   System.setup();
   Bluetooth.setup();
-#ifdef ARDUINO_SAMD_WAIVE1000
   Can.setup();
   Gps.setup();
-#endif
 }
 
 void loop() {
   System.sleep();
-  // Mqtt.poll();
+#ifdef ARDUINO_SAMD_MKR1000
+  Mqtt.poll();
+#endif
   System.poll();
   Bluetooth.poll();
-#ifdef ARDUINO_SAMD_WAIVE1000
   Can.poll();
   Gps.poll();
-#endif
 }
