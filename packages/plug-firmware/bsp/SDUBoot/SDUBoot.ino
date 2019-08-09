@@ -32,7 +32,7 @@
 #define SDCARD_SS_PIN 4
 #endif
 
-#define UPDATE_FILE "UPDATE.BIN"
+#define UPDATE_FILE "ETADPU.BIN"
 
 FlashClass flash;
 
