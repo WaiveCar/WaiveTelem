@@ -10,17 +10,6 @@ export FIRMWARE_VERSION=1.0.6
 # export WIFI_SSID=??
 # export WIFI_PASSWORD=??
 
-DEVICE=$(pio device list --json-output | jq '.[] | select(.description | contains("00")) | .description ')
-echo "Connected device is $DEVICE"
-if [ "$DEVICE" == '"Arduino MKR1000"' ]
-then
-  export DEFAULT_BOARD=mkr1000USB
-elif [ "$DEVICE" == '"Arduino MKR NB 1500"' ]
-then
-  export DEFAULT_BOARD=mkrnb1500
-else
-  export DEFAULT_BOARD=waive1000
-fi
-
 export S3_HOST=waiveplug.s3.us-east-2.amazonaws.com
 
+. detectDevice.sh

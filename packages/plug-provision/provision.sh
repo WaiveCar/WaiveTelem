@@ -8,6 +8,8 @@ export SD_VOLUME=/Volumes/SDCARD
 echo ""
 echo "Connect Atmel-Ice to the device, and insert SD to the PC/MAC"
 
+.  ../plug-firmware/detectDevice.sh
+
 . generateCSR.sh
 . registerAWS.sh
 . generateConfig.sh
