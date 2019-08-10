@@ -1,8 +1,6 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 
-#include <ACAN2515.h>
-
 #include "Bluetooth.h"
 #include "Can.h"
 #include "Config.h"
@@ -19,11 +17,13 @@ void setup() {
   Config.load();
 #ifdef ARDUINO_SAMD_MKR1000
   Mqtt.setup();
+  Mqtt.poll();
 #endif
   System.setup();
   Bluetooth.setup();
   Can.setup();
   Gps.setup();
+  Gps.poll();
 }
 
 void loop() {
@@ -34,5 +34,4 @@ void loop() {
   System.poll();
   Bluetooth.poll();
   Can.poll();
-  Gps.poll();
 }

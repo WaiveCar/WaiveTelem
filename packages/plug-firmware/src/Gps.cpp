@@ -10,8 +10,29 @@
 #define COMMAND_DELAY 250
 
 #ifdef ARDUINO_SAMD_WAIVE1000
+
 #include <ublox/ubxGPS.h>
+
+#define UBX_MSG_LEN(msg) (sizeof(msg) - sizeof(ublox::msg_t))
 static ubloxGPS gps(&GPSSerial);
+
+void sendUBX(const unsigned char *progmemBytes, size_t len) {
+  GPSSerial.write(0xB5);  // SYNC1
+  GPSSerial.write(0x62);  // SYNC2
+
+  uint8_t a = 0, b = 0;
+  while (len-- > 0) {
+    uint8_t c = pgm_read_byte(progmemBytes++);
+    a += c;
+    b += a;
+    GPSSerial.write(c);
+  }
+
+  GPSSerial.write(a);  // CHECKSUM A
+  GPSSerial.write(b);  // CHECKSUM B
+
+}  // sendUBX
+
 #else
 #define PMTK_SET_BAUD_57600 "$PMTK251,57600*2C"                                             ///<  57600 bps
 #define PMTK_SET_NMEA_OUTPUT_RMCGGAGSV "$PMTK314,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0*29"  ///< turn on GPRMC, GPGGA and GPGSV
@@ -27,6 +48,8 @@ void GpsClass::setup() {
   const char disableGSA[] PROGMEM = "PUBX,40,GSA,0,0,0,0,0,0";
   const char disableVTG[] PROGMEM = "PUBX,40,VTG,0,0,0,0,0,0";
 
+  reset();
+  delay(COMMAND_DELAY);
   gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);
   delay(COMMAND_DELAY);
   gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGSA);
@@ -46,8 +69,6 @@ void GpsClass::setup() {
   delay(COMMAND_DELAY);
   GPSSerial.begin(57600);
 #endif
-
-  poll();
 }
 
 void GpsClass::poll() {
@@ -58,7 +79,6 @@ void GpsClass::poll() {
   int start = millis();
   gps_fix fix;
   connected = false;
-  // try at most 1 second
   while (!connected && millis() - start < 1000) {
     while (gps.available(GPSSerial)) {
       fix = gps.read();
@@ -67,8 +87,7 @@ void GpsClass::poll() {
         longitude = fix.longitudeL();
         hdop = fix.hdop;
         speed = fix.speed_mph();
-        time = fix.dateTime;
-        System.setTime(time);
+        System.setTime(fix.dateTime);
         connected = true;
         break;
       }
@@ -95,8 +114,26 @@ float GpsClass::getSpeed() {
   return speed;
 }
 
-uint32_t GpsClass::getTime() {
-  return time;
+void GpsClass::sleep(uint32_t sec) {
+#ifdef ARDUINO_SAMD_WAIVE1000
+  uint32_t msec = sec * 1000;
+  const unsigned char ubxPMREQ[] PROGMEM = {0x02, 0x41, 0x08, 0x00, (unsigned char)(msec >> 0), (unsigned char)(msec >> 8), (unsigned char)(msec >> 16), (unsigned char)(msec >> 24), 0x02};
+  sendUBX(ubxPMREQ, sizeof(ubxPMREQ));
+#endif
+}
+
+void GpsClass::reset() {
+#ifdef ARDUINO_SAMD_WAIVE1000
+  static const uint8_t ubxReset[] __PROGMEM =
+      {
+          ublox::UBX_CFG, ublox::UBX_CFG_RST,
+          UBX_MSG_LEN(ublox::cfg_reset_t), 0,                // word length MSB is 0
+          0, 0,                                              // clear bbr section
+          ublox::cfg_reset_t::CONTROLLED_SW_RESET_GPS_ONLY,  // reset mode
+          0x00                                               // reserved
+      };
+  sendUBX(ubxReset, sizeof(ubxReset));
+#endif
 }
 
 GpsClass Gps;

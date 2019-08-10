@@ -29,8 +29,17 @@
 #include <ArduinoECCX08.h>
 #include <utility/ECCX08CSR.h>
 #include <utility/ECCX08DefaultTLSConfig.h>
+#ifndef ARDUINO_SAMD_MKR1000
+#include <Modem.h>
+#endif
 
 void setup() {
+#ifndef ARDUINO_SAMD_MKR1000
+  MODEM.begin(false);
+  delay(2000);
+  MODEM.send("AT+UGPIOC=16,2");
+#endif
+
   Serial.begin(115200);
   while (!Serial)
     ;

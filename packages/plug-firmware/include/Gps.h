@@ -10,7 +10,8 @@ class GpsClass {
   int getLongitude();
   int getHdop();
   float getSpeed();
-  uint32_t getTime();
+  void sleep(uint32_t sec);
+  void reset();
 
  private:
   bool connected = false;
@@ -18,7 +19,6 @@ class GpsClass {
   int longitude = 0;
   int hdop = 0;
   float speed = 0;
-  uint32_t time = 0;
 };
 
 extern GpsClass Gps;

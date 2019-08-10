@@ -70,7 +70,7 @@ void CanClass::setup() {
           {standard2515Filter(minCanId, 0, 0), NULL}};
       auto& can = (i == 0 ? can0 : can1);
       auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
-      const uint32_t errorCode = can.begin(settings, lambda, rxm0, filters, 1);
+      const uint32_t errorCode = can.begin(settings, lambda, rxm0, filters, 1);  // does soft reset
       if (errorCode != 0) {
         logError("Configuration error " + String(errorCode));
       }

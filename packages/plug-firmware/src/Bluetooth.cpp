@@ -161,16 +161,15 @@ void HCI_Event_CB(void *pckt) {
 }
 
 void BluetoothClass::setup() {
-  int ret;
   HCI_Init();
   BNRG_SPI_Init();
-  BlueNRG_RST();
+  reset();
 
   const char *id = Config.get()["id"];
   name = String("W-") + id;
   logDebug("Bluetooth name: " + name);
 
-  ret = aci_gatt_init();
+  int ret = aci_gatt_init();
   if (ret) {
     logError(F("BLE GATT_Init failed."));
   }
@@ -213,6 +212,10 @@ void BluetoothClass::setup() {
 
 void BluetoothClass::poll() {
   HCI_Process();
+}
+
+void BluetoothClass::reset() {
+  BlueNRG_RST();
 }
 
 String &BluetoothClass::getName() {

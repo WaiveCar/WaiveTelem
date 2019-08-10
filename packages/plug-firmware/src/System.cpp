@@ -46,8 +46,14 @@ void SystemClass::setup() {
 
 void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
-  int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"];
-  if (interval > 0 && (lastHeartbeat == -1 || time - lastHeartbeat >= (uint32_t)interval)) {
+  int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"] | 60;
+  // logInfo("time: " + String(time));
+  // logInfo("lastHeartbeat: " + String(lastHeartbeat));
+  if (lastHeartbeat == -1 || time - lastHeartbeat >= (uint32_t)interval - 1) {
+    Gps.poll();
+    if (Gps.isConnected()) {
+      Gps.sleep(interval);
+    }
     sendHeartbeat();
     lastHeartbeat = time;
   }
@@ -61,7 +67,11 @@ const char* SystemClass::getDateTime() {
 
 void SystemClass::sendInfo() {
   statusDoc["firmware"] = FIRMWARE_VERSION;
-  statusDoc["inRide"] = "false";
+#ifdef DEBUG
+  statusDoc["inRide"] = "true";
+#else
+  statusDoc["inRide"] = "true";
+#endif
   String version = "{\"inRide\":\"" + String(statusDoc["inRide"].as<char*>()) + "\", \"system\":{\"firmware\":\"" +
                    FIRMWARE_VERSION + "\",\"configFreeMem\":" + Config.getConfigFreeMem() + "}}";
   telemeter(version);
@@ -199,25 +209,15 @@ void SystemClass::sleep() {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
   // don't use Watchdog.sleep as it disconnects USB
-  delay(875);
+  delay(1000);
 #else
-  //sleep most and gps should take the other in 1 second
-  Watchdog.sleep(500);
-  Watchdog.sleep(250);
-  Watchdog.sleep(125);
-  _ulTickCount = _ulTickCount + 875;
+  Watchdog.sleep(1000);  // if USB monitoring, it won't sleep
+  _ulTickCount = _ulTickCount + 1000;
 #endif
   if (Internet.isConnected()) {
-    time = Internet.getTime();
-    if (bootTime == 0) {
-      bootTime = time;
-    }
-  } else if (Gps.isConnected()) {
-    if (bootTime == 0) {
-      bootTime = time;
-    }
+    setTime(Internet.getTime());
   } else {
-    time = millis() / 1000;
+    time += 1;
   }
   digitalWrite(LED_BUILTIN, HIGH);
   Watchdog.enable(WATCHDOG_TIMEOUT);
@@ -265,6 +265,9 @@ int32_t SystemClass::copyFile(const char* from, const char* to) {
 
 void SystemClass::setTime(uint32_t in) {
   time = in;
+  if (bootTime == 0) {
+    bootTime = in;
+  }
 }
 
 void SystemClass::telemeter(const String& reported, const String& desired) {

@@ -7,8 +7,12 @@
 #include "Internet.h"
 #include "Logger.h"
 
+#ifdef DEBUG
 static NB nbAccess(true);  // turn on debug
-// static NB nbAccess;
+#else
+static NB nbAccess;
+#endif
+
 static GPRS gprs;
 static NBScanner nbScanner;
 

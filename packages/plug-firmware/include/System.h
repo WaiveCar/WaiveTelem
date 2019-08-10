@@ -33,7 +33,7 @@ class SystemClass {
   bool canStatusChanged = false;
   int32_t lastHeartbeat = -1;
   uint32_t bootTime = 0;
-  uint32_t time = 0;
+  volatile uint32_t time = 0;
   StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
   unsigned char tokenKey[32];
   unsigned char tokenIv[16];
