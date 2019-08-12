@@ -12,31 +12,15 @@
 #ifdef ARDUINO_SAMD_WAIVE1000
 
 #include <ublox/ubxGPS.h>
-
 #define UBX_MSG_LEN(msg) (sizeof(msg) - sizeof(ublox::msg_t))
 static ubloxGPS gps(&GPSSerial);
 
-void sendUBX(const unsigned char *progmemBytes, size_t len) {
-  GPSSerial.write(0xB5);  // SYNC1
-  GPSSerial.write(0x62);  // SYNC2
-
-  uint8_t a = 0, b = 0;
-  while (len-- > 0) {
-    uint8_t c = pgm_read_byte(progmemBytes++);
-    a += c;
-    b += a;
-    GPSSerial.write(c);
-  }
-
-  GPSSerial.write(a);  // CHECKSUM A
-  GPSSerial.write(b);  // CHECKSUM B
-
-}  // sendUBX
-
 #else
+
 #define PMTK_SET_BAUD_57600 "$PMTK251,57600*2C"                                             ///<  57600 bps
 #define PMTK_SET_NMEA_OUTPUT_RMCGGAGSV "$PMTK314,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0*29"  ///< turn on GPRMC, GPGGA and GPGSV
 static NMEAGPS gps;
+
 #endif
 
 void GpsClass::setup() {
@@ -48,8 +32,8 @@ void GpsClass::setup() {
   const char disableGSA[] PROGMEM = "PUBX,40,GSA,0,0,0,0,0,0";
   const char disableVTG[] PROGMEM = "PUBX,40,VTG,0,0,0,0,0,0";
 
-  reset();
-  delay(COMMAND_DELAY);
+  // reset();
+  // delay(1000);
   gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);
   delay(COMMAND_DELAY);
   gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGSA);
@@ -114,25 +98,27 @@ float GpsClass::getSpeed() {
   return speed;
 }
 
-void GpsClass::sleep(uint32_t sec) {
+void GpsClass::sleep() {
 #ifdef ARDUINO_SAMD_WAIVE1000
-  uint32_t msec = sec * 1000;
-  const unsigned char ubxPMREQ[] PROGMEM = {0x02, 0x41, 0x08, 0x00, (unsigned char)(msec >> 0), (unsigned char)(msec >> 8), (unsigned char)(msec >> 16), (unsigned char)(msec >> 24), 0x02};
-  sendUBX(ubxPMREQ, sizeof(ubxPMREQ));
+  const unsigned char ubxPMREQ[] PROGMEM = {0x02, 0x41, 0x08, 0x00, 0, 0, 0, 0, 0x02};
+  const ublox::msg_t *cfg_ptr = (const ublox::msg_t *)ubxPMREQ;
+  gps.send_request_P(*cfg_ptr);
 #endif
 }
 
+// crashes the system for some reason
 void GpsClass::reset() {
 #ifdef ARDUINO_SAMD_WAIVE1000
   static const uint8_t ubxReset[] __PROGMEM =
       {
           ublox::UBX_CFG, ublox::UBX_CFG_RST,
-          UBX_MSG_LEN(ublox::cfg_reset_t), 0,                // word length MSB is 0
-          0, 0,                                              // clear bbr section
-          ublox::cfg_reset_t::CONTROLLED_SW_RESET_GPS_ONLY,  // reset mode
-          0x00                                               // reserved
+          UBX_MSG_LEN(ublox::cfg_reset_t), 0,  // word length MSB is 0
+          0, 0,                                // clear bbr section
+          ublox::cfg_reset_t::HW_RESET,        // reset mode
+          0x00                                 // reserved
       };
-  sendUBX(ubxReset, sizeof(ubxReset));
+  const ublox::cfg_reset_t *cfg_cold_ptr = (const ublox::cfg_reset_t *)ubxReset;
+  gps.send_request_P(*cfg_cold_ptr);
 #endif
 }
 

@@ -10,7 +10,7 @@ class GpsClass {
   int getLongitude();
   int getHdop();
   float getSpeed();
-  void sleep(uint32_t sec);
+  void sleep();
   void reset();
 
  private:

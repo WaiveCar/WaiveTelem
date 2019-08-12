@@ -204,8 +204,7 @@ void BluetoothClass::setup() {
     logError(F("BLE Error while adding service."));
   }
 
-  /* +8 dBm output power */
-  ret = aci_hal_set_tx_power_level(1, 7);
+  ret = aci_hal_set_tx_power_level(1, 0);  // 0 is lowest, prevents eavesdropping
 
   setConnectable();
 }

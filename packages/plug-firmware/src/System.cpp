@@ -40,22 +40,22 @@ void SystemClass::setup() {
   memcpy(tokenIv, buf, 16);
   memcpy(tokenKey, &buf[16], 32);
   free(buf);
-
-  sendInfo();
 }
 
 void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
-  int interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"] | 60;
+  uint32_t interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"] | 60;
   // logInfo("time: " + String(time));
   // logInfo("lastHeartbeat: " + String(lastHeartbeat));
-  if (lastHeartbeat == -1 || time - lastHeartbeat >= (uint32_t)interval - 1) {
+  if (Gps.isConnected() && time - lastHeartbeat == interval * 29 / 30 - 15) {
+    Gps.setup();  // to wake GPS up
+  } else if (lastHeartbeat == -1 || time - lastHeartbeat >= interval - 2) {
     Gps.poll();
-    if (Gps.isConnected()) {
-      Gps.sleep(interval);
-    }
     sendHeartbeat();
     lastHeartbeat = time;
+    if (Gps.isConnected()) {
+      Gps.sleep();
+    }
   }
 }
 
@@ -70,7 +70,7 @@ void SystemClass::sendInfo() {
 #ifdef DEBUG
   statusDoc["inRide"] = "true";
 #else
-  statusDoc["inRide"] = "true";
+  statusDoc["inRide"] = "false";
 #endif
   String version = "{\"inRide\":\"" + String(statusDoc["inRide"].as<char*>()) + "\", \"system\":{\"firmware\":\"" +
                    FIRMWARE_VERSION + "\",\"configFreeMem\":" + Config.getConfigFreeMem() + "}}";
@@ -205,19 +205,19 @@ void SystemClass::processCommand(const String& json, bool isBluetooth) {
   reportCommandDone(json, cmdKey, cmdValue);
 }
 
-void SystemClass::sleep() {
+void SystemClass::sleep(uint32_t sec) {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
   // don't use Watchdog.sleep as it disconnects USB
-  delay(1000);
+  delay(sec * 1000);
 #else
-  Watchdog.sleep(1000);  // if USB monitoring, it won't sleep
-  _ulTickCount = _ulTickCount + 1000;
+  Watchdog.sleep(sec * 1000);  // if USB monitoring, it won't sleep
+  _ulTickCount = _ulTickCount + sec * 1000;
 #endif
   if (Internet.isConnected()) {
     setTime(Internet.getTime());
   } else {
-    time += 1;
+    time += sec;  // not very accurate about 1.5% longer
   }
   digitalWrite(LED_BUILTIN, HIGH);
   Watchdog.enable(WATCHDOG_TIMEOUT);

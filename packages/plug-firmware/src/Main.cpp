@@ -19,15 +19,16 @@ void setup() {
   Mqtt.setup();
   Mqtt.poll();
 #endif
-  System.setup();
-  Bluetooth.setup();
-  Can.setup();
   Gps.setup();
   Gps.poll();
+  Bluetooth.setup();
+  Can.setup();
+  System.setup();
+  System.sendInfo();
 }
 
 void loop() {
-  System.sleep();
+  System.sleep(1);
 #ifdef ARDUINO_SAMD_MKR1000
   Mqtt.poll();
 #endif

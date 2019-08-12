@@ -25,7 +25,7 @@ class SystemClass {
   void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
   void processCommand(const String& json, bool isBluetooth = false);
   void reboot();
-  void sleep();
+  void sleep(uint32_t sec);
   int32_t moveFile(const char* from, const char* to);
   int32_t copyFile(const char* from, const char* to);
 

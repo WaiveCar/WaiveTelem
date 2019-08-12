@@ -15,7 +15,7 @@ const getToken = thingName => {
     '{"cmds":"lock,immo","start":' +
     Math.round(now / 1000) +
     ',"end":' +
-    Math.round((now + 10 * 60 * 60) / 1000) +
+    Math.round(now / 1000 + 10 * 60 * 60) +
     '}';
   return new Promise((resolve, reject) => {
     iot.listThingPrincipals({ thingName }, (err, data) => {

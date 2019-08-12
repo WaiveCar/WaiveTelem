@@ -2,7 +2,6 @@
 #define Logger_h
 
 #include <SD.h>
-#include <stdio.h>
 
 #include "Gps.h"
 #include "Mqtt.h"
