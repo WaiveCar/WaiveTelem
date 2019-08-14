@@ -27,6 +27,9 @@ int freeMemory() {
 }
 
 void SystemClass::setup() {
+  rtc.begin();
+  rtc.enableAlarm(rtc.MATCH_SS);
+
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
   statusDoc["heartbeat"].createNestedObject("gps");
@@ -217,9 +220,10 @@ void SystemClass::sleep(uint32_t sec) {
   // don't use Watchdog.sleep as it disconnects USB
   delay(sec * 1000);
 #else
-  // Watchdog.sleep(sec * 1000);  // if USB monitoring, it won't sleep
-  // _ulTickCount = _ulTickCount + sec * 1000;
-  delay(sec * 1000);
+  rtc.setSeconds(0);
+  rtc.setAlarmSeconds(0);
+  rtc.standbyMode();
+  _ulTickCount = _ulTickCount + sec * 1000;
 #endif
   if (time % 30 == 0 && Internet.isConnected()) {  // don't get time from modem too often; only every 30 secs
     setTime(Internet.getTime());

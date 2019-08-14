@@ -2,6 +2,7 @@
 #define Status_h
 
 #include <ArduinoJson.h>
+#include <RTCZero.h>
 
 #define AUTH_SECRET_LENGTH 15
 #define WATCHDOG_TIMEOUT 16 * 1000
@@ -47,6 +48,7 @@ class SystemClass {
   uint8_t authSecret[AUTH_SECRET_LENGTH];
   char dateTime[32] = "";
   bool stayAwake = false;
+  RTCZero rtc;
 };
 
 extern SystemClass System;
