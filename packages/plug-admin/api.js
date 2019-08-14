@@ -11,8 +11,11 @@ const iot = new AWS.Iot({
 
 const getToken = thingName => {
   const now = new Date().getTime();
+  const secret = crypto.randomBytes(12).toString('base64');
   const token =
-    '{"cmds":"lock,immo","start":' +
+    '{"secret":"' +
+    secret +
+    '","cmds":"lock,immo","start":' +
     Math.round(now / 1000) +
     ',"end":' +
     Math.round(now / 1000 + 10 * 60 * 60) +
@@ -31,14 +34,14 @@ const getToken = thingName => {
         const iv = buf.slice(0, 16);
         // console.log('iv: ', iv);
         const key = buf.slice(16, 48);
-        // console.log('key: ', key);
+        // console.log('key: ', k);
         const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
         let encrypted = cipher.update(token);
         encrypted = Buffer.concat([encrypted, cipher.final()]);
         // console.log(encrypted);
         encrypted = encrypted.toString('base64');
         // console.log(encrypted);
-        resolve(encrypted);
+        resolve({ token: encrypted, secret });
       });
     });
   });
@@ -47,8 +50,8 @@ const getToken = thingName => {
 // curl -X GET localhost:8080/token?thingName=0123B5829E389548EE
 router.get('/token', async (req, res) => {
   const { thingName } = req.query;
-  const token = await getToken(thingName);
-  res.status(200).send({ token });
+  const jso = await getToken(thingName);
+  res.status(200).send(jso);
 });
 
 module.exports = router;

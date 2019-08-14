@@ -3,6 +3,7 @@
 
 #include <ArduinoJson.h>
 
+#define AUTH_SECRET_LENGTH 15
 #define WATCHDOG_TIMEOUT 16 * 1000
 
 #define STATUS_DOC_SIZE 1024
@@ -20,6 +21,7 @@ class SystemClass {
   void sendCanStatus();
   void setCanStatus(const String& name, uint64_t value, uint32_t delta);
   void authorizeCommand(const String& encrypted);
+  uint8_t* getAuthSecret();
   void unauthorize();
   String decryptToken(const String& encrypted);
   void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
@@ -28,6 +30,8 @@ class SystemClass {
   void sleep(uint32_t sec);
   int32_t moveFile(const char* from, const char* to);
   int32_t copyFile(const char* from, const char* to);
+  bool getStayAwake();
+  void setStayAwake(bool stay);
 
  private:
   bool canStatusChanged = false;
@@ -35,12 +39,14 @@ class SystemClass {
   uint32_t bootTime = 0;
   volatile uint32_t time = 0;
   StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
-  unsigned char tokenKey[32];
-  unsigned char tokenIv[16];
+  uint8_t tokenKey[32];
+  uint8_t tokenIv[16];
   String authCmds = "";
   uint32_t authStart = 0;
   uint32_t authEnd = 0;
+  uint8_t authSecret[AUTH_SECRET_LENGTH];
   char dateTime[32] = "";
+  bool stayAwake = false;
 };
 
 extern SystemClass System;

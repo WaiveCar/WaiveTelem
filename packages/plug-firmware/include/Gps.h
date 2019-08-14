@@ -4,21 +4,21 @@
 class GpsClass {
  public:
   void setup();
-  void poll();
-  bool isConnected();
+  bool poll();
   int getLatitude();
   int getLongitude();
   int getHdop();
   float getSpeed();
+  float getHeading();
   void sleep();
   void reset();
 
  private:
-  bool connected = false;
   int latitude = 0;
   int longitude = 0;
   int hdop = 0;
-  float speed = 0;
+  float speed = 0.0;
+  float heading = 0.0;
 };
 
 extern GpsClass Gps;

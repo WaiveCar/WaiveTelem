@@ -47,13 +47,12 @@ void SystemClass::poll() {
   uint32_t interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"] | 60;
   // logInfo("time: " + String(time));
   // logInfo("lastHeartbeat: " + String(lastHeartbeat));
-  if (Gps.isConnected() && time - lastHeartbeat == interval * 29 / 30 - 15) {
+  if (time - lastHeartbeat == interval * 29 / 30 - 15) {
     Gps.setup();  // to wake GPS up
-  } else if (lastHeartbeat == -1 || time - lastHeartbeat >= interval - 2) {
-    Gps.poll();
-    sendHeartbeat();
-    lastHeartbeat = time;
-    if (Gps.isConnected()) {
+  } else if (lastHeartbeat == -1 || time - lastHeartbeat >= interval) {
+    if (Gps.poll()) {
+      sendHeartbeat();
+      lastHeartbeat = time;
       Gps.sleep();
     }
   }
@@ -85,6 +84,7 @@ void SystemClass::sendHeartbeat() {
   gps["long"] = Gps.getLongitude() / 1e7;
   gps["hdop"] = Gps.getHdop();
   gps["speed"] = Gps.getSpeed();
+  gps["heading"] = Gps.getHeading();
   system["dateTime"] = System.getDateTime();
   system["uptime"] = time - bootTime;
   system["signalStrength"] = Internet.getSignalStrength();
@@ -122,6 +122,12 @@ void SystemClass::authorizeCommand(const String& encrypted) {
   authCmds = authDoc["cmds"] | "";
   authStart = authDoc["start"] | 0;
   authEnd = authDoc["end"] | 0;
+  const char* secret = authDoc["secret"] | "";
+  rbase64_decode((char*)authSecret, (char*)secret, 20);
+}
+
+uint8_t* SystemClass::getAuthSecret() {
+  return authSecret;
 }
 
 void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& cmdValue) {
@@ -211,16 +217,16 @@ void SystemClass::sleep(uint32_t sec) {
   // don't use Watchdog.sleep as it disconnects USB
   delay(sec * 1000);
 #else
-  Watchdog.sleep(sec * 1000);  // if USB monitoring, it won't sleep
-  _ulTickCount = _ulTickCount + sec * 1000;
+  // Watchdog.sleep(sec * 1000);  // if USB monitoring, it won't sleep
+  // _ulTickCount = _ulTickCount + sec * 1000;
+  delay(sec * 1000);
 #endif
-  if (Internet.isConnected()) {
+  if (time % 30 == 0 && Internet.isConnected()) {  // don't get time from modem too often; only every 30 secs
     setTime(Internet.getTime());
   } else {
     time += sec;  // not very accurate about 1.5% longer
   }
   digitalWrite(LED_BUILTIN, HIGH);
-  Watchdog.enable(WATCHDOG_TIMEOUT);
 }
 
 void SystemClass::reboot() {
@@ -308,6 +314,14 @@ void SystemClass::unauthorize() {
   authCmds = "";
   authStart = 0;
   authEnd = 0;
+}
+
+bool SystemClass::getStayAwake() {
+  return stayAwake;
+}
+
+void SystemClass::setStayAwake(bool stay) {
+  stayAwake = stay;
 }
 
 SystemClass System;

@@ -1,3 +1,5 @@
+#include <ArduinoBearSSL.h>
+#include <ArduinoECCX08.h>
 #include <STBLE.h>
 
 #include "Bluetooth.h"
@@ -8,122 +10,30 @@
 #define ADV_INTERVAL_MIN_MS 50
 #define ADV_INTERVAL_MAX_MS 100
 
-#define COPY_UUID_128(uuid_struct, uuid_15, uuid_14, uuid_13, uuid_12, uuid_11, uuid_10, uuid_9, uuid_8, uuid_7, uuid_6, uuid_5, uuid_4, uuid_3, uuid_2, uuid_1, uuid_0) \
-  do {                                                                                                                                                                   \
-    uuid_struct[0] = uuid_0;                                                                                                                                             \
-    uuid_struct[1] = uuid_1;                                                                                                                                             \
-    uuid_struct[2] = uuid_2;                                                                                                                                             \
-    uuid_struct[3] = uuid_3;                                                                                                                                             \
-    uuid_struct[4] = uuid_4;                                                                                                                                             \
-    uuid_struct[5] = uuid_5;                                                                                                                                             \
-    uuid_struct[6] = uuid_6;                                                                                                                                             \
-    uuid_struct[7] = uuid_7;                                                                                                                                             \
-    uuid_struct[8] = uuid_8;                                                                                                                                             \
-    uuid_struct[9] = uuid_9;                                                                                                                                             \
-    uuid_struct[10] = uuid_10;                                                                                                                                           \
-    uuid_struct[11] = uuid_11;                                                                                                                                           \
-    uuid_struct[12] = uuid_12;                                                                                                                                           \
-    uuid_struct[13] = uuid_13;                                                                                                                                           \
-    uuid_struct[14] = uuid_14;                                                                                                                                           \
-    uuid_struct[15] = uuid_15;                                                                                                                                           \
+#define UUID_128(uuid_struct, uuid_15, uuid_14, uuid_13, uuid_12, uuid_11, uuid_10, uuid_9, uuid_8, uuid_7, uuid_6, uuid_5, uuid_4, uuid_3, uuid_2, uuid_1, uuid_0) \
+  do {                                                                                                                                                              \
+    uuid_struct[0] = uuid_0;                                                                                                                                        \
+    uuid_struct[1] = uuid_1;                                                                                                                                        \
+    uuid_struct[2] = uuid_2;                                                                                                                                        \
+    uuid_struct[3] = uuid_3;                                                                                                                                        \
+    uuid_struct[4] = uuid_4;                                                                                                                                        \
+    uuid_struct[5] = uuid_5;                                                                                                                                        \
+    uuid_struct[6] = uuid_6;                                                                                                                                        \
+    uuid_struct[7] = uuid_7;                                                                                                                                        \
+    uuid_struct[8] = uuid_8;                                                                                                                                        \
+    uuid_struct[9] = uuid_9;                                                                                                                                        \
+    uuid_struct[10] = uuid_10;                                                                                                                                      \
+    uuid_struct[11] = uuid_11;                                                                                                                                      \
+    uuid_struct[12] = uuid_12;                                                                                                                                      \
+    uuid_struct[13] = uuid_13;                                                                                                                                      \
+    uuid_struct[14] = uuid_14;                                                                                                                                      \
+    uuid_struct[15] = uuid_15;                                                                                                                                      \
   } while (0)
 
-#define COPY_SERVICE_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
-#define COPY_AUTH_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
-#define COPY_CMD_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
-
-uint16_t ServHandle, AuthCharHandle, CmdCharHandle;
-
-uint8_t AddService(void) {
-  tBleStatus ret;
-  uint8_t uuid[16];
-
-  COPY_SERVICE_UUID(uuid);
-  ret = aci_gatt_add_serv(UUID_TYPE_128, uuid, PRIMARY_SERVICE, 7, &ServHandle);
-  if (ret != BLE_STATUS_SUCCESS) goto fail;
-
-  COPY_AUTH_CHAR_UUID(uuid);
-  // try ATTR_PERMISSION_AUTHEN_WRITE doesn't work
-  ret = aci_gatt_add_char(ServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_WRITE_WITHOUT_RESP, ATTR_PERMISSION_NONE, GATT_NOTIFY_ATTRIBUTE_WRITE,
-                          16, 1, &AuthCharHandle);
-  if (ret != BLE_STATUS_SUCCESS) goto fail;
-
-  COPY_CMD_CHAR_UUID(uuid);
-  ret = aci_gatt_add_char(ServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_WRITE_WITHOUT_RESP, ATTR_PERMISSION_NONE, GATT_NOTIFY_ATTRIBUTE_WRITE,
-                          16, 1, &CmdCharHandle);
-  if (ret != BLE_STATUS_SUCCESS) goto fail;
-
-  return BLE_STATUS_SUCCESS;
-
-fail:
-  logError(F("Error while adding  service."));
-  return BLE_STATUS_ERROR;
-}
-
-void setConnectable(void) {
-  hci_le_set_scan_resp_data(0, NULL);
-
-  String localName = String((char)AD_TYPE_COMPLETE_LOCAL_NAME) + Bluetooth.getName();
-  tBleStatus ret = aci_gap_set_discoverable(ADV_IND,
-                                            (ADV_INTERVAL_MIN_MS * 1000) / 625, (ADV_INTERVAL_MAX_MS * 1000) / 625,
-                                            STATIC_RANDOM_ADDR, NO_WHITE_LIST_USE,
-                                            localName.length(), localName.c_str(), 0, NULL, 0, 0);
-  if (ret != BLE_STATUS_SUCCESS) {
-    logDebug((String)ret);
-  }
-}
-
-String message = "";
-uint8_t continueLength = 0;
-// BLE actually only supports sending 20 bytes of data per characteristic. We need a little "protocol" to support longer array.
-// You split the array in 20 bytes arrays where the first byte contain the total length of data to come, including the data in this array.
-// Example:
-// You start with an array like this:
-// [72, 101, 108, 108, 111, 32, 109, 121, 32, 108, 111, 118, 101, 108, 121, 32, 119, 111, 114, 108, 100, 44, 32, 105, 32, 108, 111, 118, 101, 32, 121, 111, 117, 32, 97, 110, 100, 32, 97, 108, 108, 32, 97, 114, 111, 117, 110, 100, 32, 121, 111, 117]
-
-// Then you generate the following 3 arrays:
-// [52, 72, 101, 108, 108, 111, 32, 109, 121, 32, 108, 111, 118, 101, 108, 121, 32, 119, 111, 114]
-// [33, 108, 100, 44, 32, 105, 32, 108, 111, 118, 101, 32, 121, 111, 117, 32, 97, 110, 100, 32]
-// [14, 97, 108, 108, 32, 97, 114, 111, 117, 110, 100, 32, 121, 111, 117]
-void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data) {
-  if (handle == AuthCharHandle + 1 || handle == CmdCharHandle + 1) {
-    uint8_t bleCmdBuffer[20];
-    uint8_t messageLength = att_data[0];
-    int i = 0;
-    for (; i < data_length - 1; i++) {
-      bleCmdBuffer[i] = att_data[i + 1];
-    }
-    bleCmdBuffer[i] = '\0';
-    // logDebug(String(messageLength));
-    if (messageLength != continueLength) {
-      message = "";
-    }
-    continueLength = messageLength - data_length + 1;
-    message += String((char *)bleCmdBuffer);
-    // logDebug(String(continueLength));
-    // logDebug(message);
-    if (continueLength == 0) {
-      if (handle == AuthCharHandle + 1) {
-        System.authorizeCommand(message);
-      } else if (handle == CmdCharHandle + 1) {
-        System.processCommand(message, true);
-      }
-      message = "";
-    }
-  }
-}
-
-void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle) {
-  char sprintbuff[64];
-  snprintf(sprintbuff, 64, "BLE Connected to device: %02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
-  logInfo(sprintbuff);
-  System.unauthorize();
-}
-
-void GAP_DisconnectionComplete_CB(void) {
-  logInfo(F("BLE Disconnected"));
-  setConnectable();
-}
+#define SERVICE_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+#define AUTH_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+#define CMD_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+#define CHALLENGE_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
 void HCI_Event_CB(void *pckt) {
   hci_uart_pckt *hci_pckt = (hci_uart_pckt *)pckt;
@@ -135,7 +45,7 @@ void HCI_Event_CB(void *pckt) {
   switch (event_pckt->evt) {
     case EVT_DISCONN_COMPLETE: {
       //evt_disconn_complete *evt = (void *)event_pckt->data;
-      GAP_DisconnectionComplete_CB();
+      Bluetooth.GAP_DisconnectionComplete_CB();
     } break;
 
     case EVT_LE_META_EVENT: {
@@ -143,7 +53,7 @@ void HCI_Event_CB(void *pckt) {
       switch (evt->subevent) {
         case EVT_LE_CONN_COMPLETE: {
           evt_le_connection_complete *cc = (evt_le_connection_complete *)evt->data;
-          GAP_ConnectionComplete_CB(cc->peer_bdaddr, cc->handle);
+          Bluetooth.GAP_ConnectionComplete_CB(cc->peer_bdaddr, cc->handle);
         } break;
       }
     } break;
@@ -151,9 +61,13 @@ void HCI_Event_CB(void *pckt) {
     case EVT_VENDOR: {
       evt_blue_aci *blue_evt = (evt_blue_aci *)event_pckt->data;
       switch (blue_evt->ecode) {
+        case EVT_BLUE_GATT_READ_PERMIT_REQ: {
+          evt_gatt_read_permit_req *pr = (evt_gatt_read_permit_req *)blue_evt->data;
+          Bluetooth.Read_Request_CB(pr->attr_handle);
+        } break;
         case EVT_BLUE_GATT_ATTRIBUTE_MODIFIED: {
           evt_gatt_attr_modified_IDB05A1 *evt = (evt_gatt_attr_modified_IDB05A1 *)blue_evt->data;
-          Attribute_Modified_CB(evt->attr_handle, evt->data_length, evt->att_data);
+          Bluetooth.Attribute_Modified_CB(evt->attr_handle, evt->data_length, evt->att_data);
         } break;
       }
     } break;
@@ -197,7 +111,7 @@ void BluetoothClass::setup() {
     logDebug(F("BLE Stack Initialized."));
   }
 
-  ret = AddService();
+  ret = addService();
   if (ret == BLE_STATUS_SUCCESS) {
     logDebug(F("BLE Service added successfully."));
   } else {
@@ -209,6 +123,36 @@ void BluetoothClass::setup() {
   setConnectable();
 }
 
+uint8_t BluetoothClass::addService() {
+  tBleStatus ret;
+  uint8_t uuid[16];
+
+  SERVICE_UUID(uuid);
+  ret = aci_gatt_add_serv(UUID_TYPE_128, uuid, PRIMARY_SERVICE, 7, &ServHandle);
+  if (ret != BLE_STATUS_SUCCESS) goto fail;
+
+  AUTH_CHAR_UUID(uuid);
+  ret = aci_gatt_add_char(ServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_WRITE_WITHOUT_RESP, ATTR_PERMISSION_NONE, GATT_NOTIFY_ATTRIBUTE_WRITE,
+                          16, 1, &AuthCharHandle);
+  if (ret != BLE_STATUS_SUCCESS) goto fail;
+
+  CMD_CHAR_UUID(uuid);
+  ret = aci_gatt_add_char(ServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_WRITE_WITHOUT_RESP, ATTR_PERMISSION_NONE, GATT_NOTIFY_ATTRIBUTE_WRITE,
+                          16, 1, &CmdCharHandle);
+  if (ret != BLE_STATUS_SUCCESS) goto fail;
+
+  CHALLENGE_CHAR_UUID(uuid);
+  ret = aci_gatt_add_char(ServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_READ, ATTR_PERMISSION_NONE, GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
+                          16, 1, &ChallengeCharHandle);
+  if (ret != BLE_STATUS_SUCCESS) goto fail;
+
+  return BLE_STATUS_SUCCESS;
+
+fail:
+  logError(F("Error while adding  service."));
+  return BLE_STATUS_ERROR;
+}
+
 void BluetoothClass::poll() {
   HCI_Process();
 }
@@ -217,8 +161,99 @@ void BluetoothClass::reset() {
   BlueNRG_RST();
 }
 
-String &BluetoothClass::getName() {
-  return name;
+uint8_t BluetoothClass::setChallenge() {
+  ECCX08.random(challenge, sizeof(challenge));
+  tBleStatus ret = aci_gatt_update_char_value(ServHandle, ChallengeCharHandle, 0, sizeof(challenge), challenge);
+  if (ret != BLE_STATUS_SUCCESS) {
+    logError("Error while updating UART characteristic.");
+    return BLE_STATUS_ERROR;
+  }
+  return BLE_STATUS_SUCCESS;
+}
+
+void BluetoothClass::setConnectable() {
+  hci_le_set_scan_resp_data(0, NULL);
+
+  String localName = String((char)AD_TYPE_COMPLETE_LOCAL_NAME) + name;
+  tBleStatus ret = aci_gap_set_discoverable(ADV_IND,
+                                            (ADV_INTERVAL_MIN_MS * 1000) / 625, (ADV_INTERVAL_MAX_MS * 1000) / 625,
+                                            STATIC_RANDOM_ADDR, NO_WHITE_LIST_USE,
+                                            localName.length(), localName.c_str(), 0, NULL, 0, 0);
+  if (ret != BLE_STATUS_SUCCESS) {
+    logDebug((String)ret);
+  }
+}
+
+// BLE actually only supports sending 20 bytes of data per characteristic. We need a little "protocol" to support longer array.
+// You split the array in 20 bytes arrays where the first byte contain the total length of data to come, including the data in this array.
+// Example:
+// You start with an array like this:
+// [72, 101, 108, 108, 111, 32, 109, 121, 32, 108, 111, 118, 101, 108, 121, 32, 119, 111, 114, 108, 100, 44, 32, 105, 32, 108, 111, 118, 101, 32, 121, 111, 117, 32, 97, 110, 100, 32, 97, 108, 108, 32, 97, 114, 111, 117, 110, 100, 32, 121, 111, 117]
+
+// Then you generate the following 3 arrays:
+// [52, 72, 101, 108, 108, 111, 32, 109, 121, 32, 108, 111, 118, 101, 108, 121, 32, 119, 111, 114]
+// [33, 108, 100, 44, 32, 105, 32, 108, 111, 118, 101, 32, 121, 111, 117, 32, 97, 110, 100, 32]
+// [14, 97, 108, 108, 32, 97, 114, 111, 117, 110, 100, 32, 121, 111, 117]
+void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data) {
+  if (handle == AuthCharHandle + 1 || handle == CmdCharHandle + 1) {
+    char strBuffer[20];
+    uint8_t messageLength = att_data[0];
+    uint8_t strBegin = 1;
+    // logDebug(String(messageLength));
+    if (messageLength != continueLength) {  // first message
+      message = "";
+      if (handle == CmdCharHandle + 1) {
+        memcpy(hmac, &att_data[1], HMAC_LENGTH);
+        strBegin += HMAC_LENGTH;
+      }
+      System.setStayAwake(true);
+    }
+    uint8_t strLength = data_length - strBegin;
+    strncpy(strBuffer, (const char *)&att_data[strBegin], strLength);
+    strBuffer[strLength] = '\0';
+    continueLength = messageLength - data_length + 1;  // + 1 because att_data[0] is not data
+    message += String(strBuffer);
+    // logDebug(String(continueLength));
+    // logDebug(message);
+    if (continueLength == 0) {  // last message
+      if (handle == AuthCharHandle + 1) {
+        System.authorizeCommand(message);
+        Bluetooth.setChallenge();
+      } else if (handle == CmdCharHandle + 1) {
+        SHA256.beginHmac(System.getAuthSecret(), 15);
+        SHA256.write((const uint8_t *)message.c_str(), message.length());
+        SHA256.write(challenge, sizeof(challenge));
+        SHA256.endHmac();
+        uint8_t computedHmac[HMAC_LENGTH];
+        SHA256.readBytes(computedHmac, HMAC_LENGTH);
+        if (memcmp(computedHmac, hmac, HMAC_LENGTH)) {
+          System.processCommand(message, true);
+          Bluetooth.setChallenge();
+        }
+      }
+      message = "";
+      System.setStayAwake(false);
+    }
+  }
+}
+
+void BluetoothClass::GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle) {
+  connection_handle = handle;
+  char sprintbuff[64];
+  snprintf(sprintbuff, 64, "BLE Connected to device: %02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
+  logInfo(sprintbuff);
+  System.unauthorize();
+}
+
+void BluetoothClass::GAP_DisconnectionComplete_CB() {
+  logInfo(F("BLE Disconnected"));
+  setConnectable();
+}
+
+void BluetoothClass::Read_Request_CB(uint16_t handle) {
+  if (connection_handle != 0) {
+    aci_gatt_allow_read(connection_handle);
+  }
 }
 
 BluetoothClass Bluetooth;

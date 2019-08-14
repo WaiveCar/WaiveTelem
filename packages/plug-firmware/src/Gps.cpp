@@ -2,6 +2,7 @@
 #include <NMEAGPS.h>
 
 #include "Gps.h"
+#include "Internet.h"
 #include "Logger.h"
 #include "System.h"
 
@@ -55,15 +56,15 @@ void GpsClass::setup() {
 #endif
 }
 
-void GpsClass::poll() {
+bool GpsClass::poll() {
   // while (GPSSerial.available()) {    // If anything comes in GPSSerial
   //   Serial.write(GPSSerial.read());  // read it and send it out Serial (USB)
   // }
-  // return;
+  // return false;
   int start = millis();
   gps_fix fix;
-  connected = false;
-  while (!connected && millis() - start < 1000) {
+  bool hasData = false;
+  while (!hasData && millis() - start < 2000) {
     while (gps.available(GPSSerial)) {
       fix = gps.read();
       if (fix.valid.location && fix.valid.date && fix.valid.time && fix.valid.speed && fix.valid.hdop) {
@@ -71,16 +72,18 @@ void GpsClass::poll() {
         longitude = fix.longitudeL();
         hdop = fix.hdop;
         speed = fix.speed_mph();
-        System.setTime(fix.dateTime);
-        connected = true;
+        if (fix.valid.heading) {
+          heading = fix.heading();
+        }
+        if (!Internet.isConnected()) {
+          System.setTime(fix.dateTime);
+        }
+        hasData = true;
         break;
       }
     }
   }
-}
-
-bool GpsClass::isConnected() {
-  return connected;
+  return hasData;
 }
 
 int GpsClass::getLatitude() {
@@ -94,8 +97,13 @@ int GpsClass::getLongitude() {
 int GpsClass::getHdop() {
   return hdop;
 }
+
 float GpsClass::getSpeed() {
   return speed;
+}
+
+float GpsClass::getHeading() {
+  return heading;
 }
 
 void GpsClass::sleep() {

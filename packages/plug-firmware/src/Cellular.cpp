@@ -6,12 +6,10 @@
 #include "Config.h"
 #include "Internet.h"
 #include "Logger.h"
+#include "System.h"
 
-#ifdef DEBUG
-static NB nbAccess(true);  // turn on debug
-#else
+// static NB nbAccess(true);  // turn on debug
 static NB nbAccess;
-#endif
 
 static GPRS gprs;
 static NBScanner nbScanner;
@@ -21,8 +19,8 @@ bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
   const int maxTry = 10;
   int i = 1;
+  Watchdog.disable();  // nbAccess.begin() can take hours to register SIM
   while ((nbAccess.begin(nb["pin"].as<char*>(), nb["apn"].as<char*>()) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
-    Watchdog.reset();
     log(F("."));
     delay(3000);
     if (i == maxTry) {
@@ -31,6 +29,7 @@ bool InternetClass::connect() {
     }
     i++;
   }
+  Watchdog.enable(WATCHDOG_TIMEOUT);
   logDebug(F("You're connected to the Internet"));
   logDebug("Signal Strength: " + String(getSignalStrength()));
   logDebug("Current Carrier: " + nbScanner.getCurrentCarrier());

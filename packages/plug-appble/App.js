@@ -12,11 +12,68 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Buffer } from 'buffer';
+import CryptoJS from 'crypto-js';
 
 import BleModule from './BleModule.js';
 global.BluetoothManager = new BleModule();
 
 const API_END_POINT = 'https://4lreu3z4m8.execute-api.us-east-2.amazonaws.com/prod/';
+
+CryptoJS.enc.u8array = {
+  /**
+   * Converts a word array to a Uint8Array.
+   *
+   * @param {WordArray} wordArray The word array.
+   *
+   * @return {Uint8Array} The Uint8Array.
+   *
+   * @static
+   *
+   * @example
+   *
+   *     var u8arr = CryptoJS.enc.u8array.stringify(wordArray);
+   */
+  stringify: function(wordArray) {
+    // Shortcuts
+    var words = wordArray.words;
+    var sigBytes = wordArray.sigBytes;
+
+    // Convert
+    var u8 = new Uint8Array(sigBytes);
+    for (var i = 0; i < sigBytes; i++) {
+      var byte = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+      u8[i] = byte;
+    }
+
+    return u8;
+  },
+
+  /**
+   * Converts a Uint8Array to a word array.
+   *
+   * @param {string} u8Str The Uint8Array.
+   *
+   * @return {WordArray} The word array.
+   *
+   * @static
+   *
+   * @example
+   *
+   *     var wordArray = CryptoJS.enc.u8array.parse(u8arr);
+   */
+  parse: function(u8arr) {
+    // Shortcut
+    var len = u8arr.length;
+
+    // Convert
+    var words = [];
+    for (var i = 0; i < len; i++) {
+      words[i >>> 2] |= (u8arr[i] & 0xff) << (24 - (i % 4) * 8);
+    }
+
+    return CryptoJS.lib.WordArray.create(words, len);
+  }
+};
 
 export default class App extends Component {
   constructor(props) {
@@ -145,13 +202,19 @@ export default class App extends Component {
       this.alert('enter text');
       return;
     }
+    const challenge = await BluetoothManager.read(index);
+    const valueBuffer = Buffer.concat([Buffer.from(this.state.text), challenge]);
+    const value = CryptoJS.enc.u8array.parse(valueBuffer);
+    const secret = CryptoJS.enc.Base64.parse(this.state.secret);
+    const hmac = CryptoJS.enc.u8array.stringify(CryptoJS.HmacSHA256(value, secret));
+    const payload = command.concat(b642array(responseb64)).slice(0, 20);
     let remainBytesToSend = this.state.text.length;
     let start = 0;
     while (remainBytesToSend > 0) {
       const subStringSize = remainBytesToSend > 19 ? 19 : remainBytesToSend;
       const start = this.state.text.length - remainBytesToSend;
       const subString = this.state.text.slice(start, start + subStringSize);
-      const data = Buffer.from(subString, 'ascii');
+      const data = Buffer.from(subString);
       console.log('TCL: App -> writeWithoutResponse -> data', data);
       const lengthByte = Buffer.from([remainBytesToSend]);
       console.log('TCL: App -> writeWithoutResponse -> lengthByte', lengthByte);
@@ -464,9 +527,10 @@ export default class App extends Component {
                 API_END_POINT + 'token?thingName=' + this.state.thingName
               );
               const data = await response.json();
-              const { token } = data;
+              const { token, secret } = data;
               this.setState({
-                text: token
+                text: token,
+                secret
               });
               setTimeout(() => {
                 onPress(0);
