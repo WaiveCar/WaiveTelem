@@ -8,31 +8,32 @@
 
 #define GPSSerial Serial1
 
-#define COMMAND_DELAY 250
+#define COMMAND_DELAY 200
 
 #ifdef ARDUINO_SAMD_WAIVE1000
 
 #include <ublox/ubxGPS.h>
 #define UBX_MSG_LEN(msg) (sizeof(msg) - sizeof(ublox::msg_t))
 static ubloxGPS gps(&GPSSerial);
+const char baud115200[] PROGMEM = "PUBX,41,1,3,3,115200,0";
+// we only want RMC, GGA and GSV
+const char disableGLL[] PROGMEM = "PUBX,40,GLL,0,0,0,0,0,0";
+const char disableGSA[] PROGMEM = "PUBX,40,GSA,0,0,0,0,0,0";
+const char disableVTG[] PROGMEM = "PUBX,40,VTG,0,0,0,0,0,0";
 
 #else
 
 #define PMTK_SET_BAUD_57600 "$PMTK251,57600*2C"                                             ///<  57600 bps
 #define PMTK_SET_NMEA_OUTPUT_RMCGGAGSV "$PMTK314,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0*29"  ///< turn on GPRMC, GPGGA and GPGSV
+#define PMTK_STANDBY "$PMTK161,0*28"
 static NMEAGPS gps;
 
 #endif
 
 void GpsClass::setup() {
+  logFunc();
   GPSSerial.begin(9600);
 #ifdef ARDUINO_SAMD_WAIVE1000
-  const char baud115200[] PROGMEM = "PUBX,41,1,3,3,115200,0";
-  // we only want RMC, GGA and GSV
-  const char disableGLL[] PROGMEM = "PUBX,40,GLL,0,0,0,0,0,0";
-  const char disableGSA[] PROGMEM = "PUBX,40,GSA,0,0,0,0,0,0";
-  const char disableVTG[] PROGMEM = "PUBX,40,VTG,0,0,0,0,0,0";
-
   // reset();
   // delay(1000);
   gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);
@@ -61,7 +62,8 @@ bool GpsClass::poll() {
   //   Serial.write(GPSSerial.read());  // read it and send it out Serial (USB)
   // }
   // return false;
-  int start = millis();
+  logFunc();
+  uint32_t start = millis();
   gps_fix fix;
   bool hasData = false;
   while (!hasData && millis() - start < 2000) {
@@ -76,12 +78,15 @@ bool GpsClass::poll() {
           heading = fix.heading();
         }
         if (!Internet.isConnected()) {
-          System.setTime(fix.dateTime);
+          System.setTimes(fix.dateTime);
         }
         hasData = true;
         break;
       }
     }
+  }
+  if (!hasData) {
+    wakeup();
   }
   return hasData;
 }
@@ -107,15 +112,35 @@ float GpsClass::getHeading() {
 }
 
 void GpsClass::sleep() {
+  logFunc();
 #ifdef ARDUINO_SAMD_WAIVE1000
   const unsigned char ubxPMREQ[] PROGMEM = {0x02, 0x41, 0x08, 0x00, 0, 0, 0, 0, 0x02};
   const ublox::msg_t *cfg_ptr = (const ublox::msg_t *)ubxPMREQ;
   gps.send_request_P(*cfg_ptr);
+#else
+  GPSSerial.println(PMTK_STANDBY);
+#endif
+}
+
+void GpsClass::wakeup() {
+  logFunc();
+#ifdef ARDUINO_SAMD_WAIVE1000
+  GPSSerial.begin(9600);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGSA);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableVTG);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)baud115200);
+  GPSSerial.flush();
+  GPSSerial.end();
+  GPSSerial.begin(115200);
+#else
+  GPSSerial.println("");
 #endif
 }
 
 // crashes the system for some reason
 void GpsClass::reset() {
+  logFunc();
 #ifdef ARDUINO_SAMD_WAIVE1000
   static const uint8_t ubxReset[] __PROGMEM =
       {

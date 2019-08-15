@@ -24,12 +24,20 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 ```
 ### Step 2:
 - Update and run setEnv.sh in terminal shell to export env variables:
-- Connect to device via USB and Atmel-Ice
+- Connect to device via micro-USB
+- Connect Atmel-Ice if you want to use the debugger
 
-### Run Binary and Start Serial Monitoring (default waive1000):
+### Run Release Binary and Start Serial Monitoring:
 
 ```bash
 ./run.sh
+```
+note: Since release binary is sleeping most of the time in loop(), you might want to upload binary during setup(), right after reset.
+
+### Run Debug Binary and Start Serial Monitoring:
+
+```bash
+./debug.sh
 ```
 
 ### Flash firmware binary:

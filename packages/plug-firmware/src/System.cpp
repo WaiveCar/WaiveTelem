@@ -6,6 +6,7 @@
 #include <bearssl/bearssl_ssl.h>
 #include <rBase64.h>
 
+#include "Can.h"
 #include "Config.h"
 #include "Gps.h"
 #include "Https.h"
@@ -27,6 +28,7 @@ int freeMemory() {
 }
 
 void SystemClass::setup() {
+  logFunc();
 #ifndef DEBUG
   rtc.begin();
   rtc.setAlarmSeconds(0);
@@ -40,8 +42,7 @@ void SystemClass::setup() {
 
   // set bluetooth token key and iv
   const char* cert = Config.get()["mqtt"]["cert"];
-  size_t length = rbase64_dec_len((char*)&cert[743], 64);
-  char* buf = (char*)malloc(length);
+  char* buf = (char*)malloc(48);
   rbase64_decode(buf, (char*)&cert[743], 64);
   memcpy(tokenIv, buf, 16);
   memcpy(tokenKey, &buf[16], 32);
@@ -50,11 +51,12 @@ void SystemClass::setup() {
 
 void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
-  uint32_t interval = Config.get()["heartbeat"][inRide ? "inRide" : "notInRide"] | 60;
+  JsonObject heartbeat = Config.get()["heartbeat"];
+  uint32_t interval = inRide ? heartbeat["inRide"] | 30 : heartbeat["notInRide"] | 900;
   // logInfo("time: " + String(time));
   // logInfo("lastHeartbeat: " + String(lastHeartbeat));
   if (time - lastHeartbeat == interval * 29 / 30 - 15) {
-    Gps.setup();  // to wake GPS up
+    Gps.wakeup();
   } else if (lastHeartbeat == -1 || time - lastHeartbeat >= interval) {
     if (Gps.poll()) {
       sendHeartbeat();
@@ -71,6 +73,7 @@ const char* SystemClass::getDateTime() {
 }
 
 void SystemClass::sendInfo() {
+  logFunc();
   statusDoc["firmware"] = FIRMWARE_VERSION;
 #ifdef DEBUG
   statusDoc["inRide"] = "true";
@@ -83,6 +86,7 @@ void SystemClass::sendInfo() {
 }
 
 void SystemClass::sendHeartbeat() {
+  logFunc();
   JsonObject heartbeat = statusDoc["heartbeat"];
   JsonObject gps = heartbeat["gps"];
   JsonObject system = heartbeat["system"];
@@ -100,6 +104,7 @@ void SystemClass::sendHeartbeat() {
 }
 
 void SystemClass::sendCanStatus() {
+  logFunc();
   if (canStatusChanged) {
     telemeter("{\"can\":" + statusDoc["can"].as<String>() + "}");
     canStatusChanged = false;
@@ -107,6 +112,7 @@ void SystemClass::sendCanStatus() {
 }
 
 void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delta) {
+  logFunc();
   JsonObject can = statusDoc["can"];
   uint64_t oldValue = can[name];
   if (oldValue != value) {
@@ -118,6 +124,7 @@ void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delt
 }
 
 void SystemClass::authorizeCommand(const String& encrypted) {
+  logFunc();
   String json = decryptToken(encrypted);
   StaticJsonDocument<AUTH_DOC_SIZE> authDoc;
   DeserializationError error = deserializeJson(authDoc, json);
@@ -133,10 +140,12 @@ void SystemClass::authorizeCommand(const String& encrypted) {
 }
 
 uint8_t* SystemClass::getAuthSecret() {
+  logFunc();
   return authSecret;
 }
 
 void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& cmdValue) {
+  logFunc();
   String escapedJson = json;
   escapedJson.replace("\"", "\\\"");
   String lastCmd = "\"system\":{\"lastCmd\":\"" + escapedJson + "\"}";
@@ -144,6 +153,7 @@ void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& 
 }
 
 void SystemClass::processCommand(const String& json, bool isBluetooth) {
+  logFunc();
   StaticJsonDocument<COMMAND_DOC_SIZE> cmdDoc;
   DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
@@ -180,8 +190,12 @@ void SystemClass::processCommand(const String& json, bool isBluetooth) {
     Pins.immobilize();
   } else if (cmdKey == "immo" && cmdValue == "unlock") {
     Pins.unimmobilize();
-  } else if (cmdKey == "inRide" && (cmdValue == "true" || cmdValue == "false")) {
+  } else if (cmdKey == "inRide" && cmdValue == "true") {
     canStatusChanged = true;
+    Can.wakeup();
+  } else if (cmdKey == "inRide" && cmdValue == "false") {
+    canStatusChanged = true;
+    Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
     reportCommandDone(json, cmdKey, cmdValue);
     reboot();
@@ -227,15 +241,22 @@ void SystemClass::sleep(uint32_t sec) {
   rtc.standbyMode();
   _ulTickCount = _ulTickCount + sec * 1000;
 #endif
-  if (time % 30 == 0 && Internet.isConnected()) {  // don't get time from modem too often; only every 30 secs
-    setTime(Internet.getTime());
-  } else {
-    time += sec;  // not very accurate about 1.5% longer
-  }
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
+void SystemClass::keepTime() {
+  if (time % 20 == 0 && Internet.isConnected()) {  // don't get time from modem too often; only every 20 secs
+    setTimes(Internet.getTime());
+  } else {
+    int32_t elapsed = millis() - lastMillis;
+    if (elapsed >= 1000) {
+      setTimes(time + elapsed / 1000);
+    }
+  }
+}
+
 void SystemClass::reboot() {
+  logFunc();
   logInfo(F("Rebooting now"));
   delay(1000);
   Watchdog.enable(1);
@@ -244,6 +265,7 @@ void SystemClass::reboot() {
 }
 
 int32_t SystemClass::moveFile(const char* from, const char* to) {
+  logFunc();
   int32_t error = copyFile(from, to);
   if (!error) {
     SD.remove((char*)from);
@@ -252,6 +274,7 @@ int32_t SystemClass::moveFile(const char* from, const char* to) {
 }
 
 int32_t SystemClass::copyFile(const char* from, const char* to) {
+  logFunc();
   File readFile = SD.open(from, FILE_READ);
   if (!readFile) {
     logError("readFile open failed");
@@ -275,14 +298,16 @@ int32_t SystemClass::copyFile(const char* from, const char* to) {
   return 0;
 }
 
-void SystemClass::setTime(uint32_t in) {
+void SystemClass::setTimes(uint32_t in) {
   time = in;
   if (bootTime == 0) {
     bootTime = in;
   }
+  lastMillis = millis();
 }
 
 void SystemClass::telemeter(const String& reported, const String& desired) {
+  logFunc();
   String message = "{\"state\":{" +
                    (reported != "" ? "\"reported\":" + reported : "") +
                    (reported != "" && desired != "" ? "," : "") +
@@ -294,6 +319,7 @@ void SystemClass::telemeter(const String& reported, const String& desired) {
 }
 
 String SystemClass::decryptToken(const String& encrypted) {
+  logFunc();
   // see https://github.com/nogoegst/bearssl/blob/master/test/test_crypto.c
   unsigned char iv[16];
   br_aes_gen_cbcdec_keys v_dc;
@@ -317,6 +343,7 @@ String SystemClass::decryptToken(const String& encrypted) {
 }
 
 void SystemClass::unauthorize() {
+  logFunc();
   authCmds = "";
   authStart = 0;
   authEnd = 0;
@@ -327,6 +354,7 @@ bool SystemClass::getStayAwake() {
 }
 
 void SystemClass::setStayAwake(bool stay) {
+  logFunc();
   stayAwake = stay;
 }
 

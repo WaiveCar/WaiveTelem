@@ -26,6 +26,7 @@ static unsigned long getTime() {
 }
 
 void MqttClass::setup() {
+  logFunc();
   while (!ECCX08.begin()) {
     logError(F("No ECCX08 present"));
     delay(5000);
@@ -40,6 +41,7 @@ void MqttClass::setup() {
 }
 
 void MqttClass::connect() {
+  logFunc();
   if (!Internet.isConnected()) {
     if (!Internet.connect()) {
       return;
@@ -52,7 +54,7 @@ void MqttClass::connect() {
   }
   Watchdog.reset();
   const JsonObject mqtt = Config.get()["mqtt"];
-  const char* url = mqtt["url"];
+  const char* url = mqtt["url"] | "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com";  // "waive.azure-devices.net";
 
   logDebug("Attempting to connect to MQTT broker: " + String(url));
   const int maxTry = 10;
@@ -86,6 +88,7 @@ void MqttClass::poll() {
 }
 
 void MqttClass::send(const String& message) {
+  logFunc();
   mqttClient.beginMessage(topic);
   mqttClient.print(message);
   mqttClient.endMessage();

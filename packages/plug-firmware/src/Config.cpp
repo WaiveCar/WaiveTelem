@@ -5,6 +5,7 @@
 #include "System.h"
 
 void ConfigClass::load() {
+  logFunc();
   File file = SD.open("CONFIG.TXT");
   // go to https://arduinojson.org/v6/assistant/ to find the size
   DeserializationError error = deserializeJson(configDoc, file);

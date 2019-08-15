@@ -11,6 +11,7 @@ class GpsClass {
   float getSpeed();
   float getHeading();
   void sleep();
+  void wakeup();
   void reset();
 
  private:

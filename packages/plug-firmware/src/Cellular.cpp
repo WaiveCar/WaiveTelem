@@ -15,12 +15,13 @@ static GPRS gprs;
 static NBScanner nbScanner;
 
 bool InternetClass::connect() {
-  logDebug(F("Attempting to connect to the Internet"));
+  logFunc();
   const int maxTry = 10;
   int i = 1;
   JsonObject nb = Config.get()["nb"];
+  const char* apn = nb["apn"] | "hologram";
   Watchdog.disable();  // nbAccess.begin() can take hours to register SIM
-  while ((nbAccess.begin(nb["pin"].as<char*>(), nb["apn"].as<char*>()) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
+  while ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
     log(F("."));
     delay(3000);
     if (i == maxTry) {

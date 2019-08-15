@@ -14,7 +14,7 @@ class SystemClass {
  public:
   void setup();
   void poll();
-  void setTime(uint32_t in);
+  void setTimes(uint32_t in);
   const char* getDateTime();
   void telemeter(const String& reported, const String& desired = "");
   void sendInfo();
@@ -29,6 +29,7 @@ class SystemClass {
   void processCommand(const String& json, bool isBluetooth = false);
   void reboot();
   void sleep(uint32_t sec);
+  void keepTime();
   int32_t moveFile(const char* from, const char* to);
   int32_t copyFile(const char* from, const char* to);
   bool getStayAwake();
@@ -49,6 +50,7 @@ class SystemClass {
   char dateTime[32] = "";
   bool stayAwake = false;
   RTCZero rtc;
+  uint32_t lastMillis = 0;
 };
 
 extern SystemClass System;

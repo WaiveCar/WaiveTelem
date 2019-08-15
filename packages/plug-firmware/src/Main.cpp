@@ -13,6 +13,12 @@
 #include "System.h"
 
 void setup() {
+  Serial.begin(115200);
+#if DEBUG
+  // the following cause cause the firmware to only run if serial-monitored
+  delay(5000);
+#endif
+  logFunc();
   Watchdog.enable(WATCHDOG_TIMEOUT);
   Pins.setup();
   Logger.setup();
@@ -23,9 +29,7 @@ void setup() {
 #else
   Internet.connect();
 #endif
-  if (Internet.isConnected()) {
-    System.setTime(Internet.getTime());
-  }
+  System.keepTime();
   Gps.setup();
   Bluetooth.setup();
   Can.setup();
@@ -35,14 +39,10 @@ void setup() {
 
 void loop() {
   Watchdog.enable(WATCHDOG_TIMEOUT);
-  if (System.getStayAwake()) {
-    if (Internet.isConnected()) {
-      System.setTime(Internet.getTime());
-      delay(100);
-    }
-  } else {
+  if (!System.getStayAwake()) {
     System.sleep(1);
   }
+  System.keepTime();
 #ifdef ARDUINO_SAMD_MKR1000
   Mqtt.poll();
 #endif

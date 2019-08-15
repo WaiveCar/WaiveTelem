@@ -6,10 +6,8 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 sed -i'.bak' -e 's/static\ volatile\ uint32_t\ _ulTickCount/volatile\ uint32_t\ _ulTickCount/g' ~/.platformio/packages/framework-arduinosam/cores/samd/delay.c
 
 export FIRMWARE_VERSION=1.0.7
-# add the following to your ~/.bash_profile
-# export WIFI_SSID=??
-# export WIFI_PASSWORD=??
 
 export S3_HOST=waiveplug.s3.us-east-2.amazonaws.com
+export DEBUG=
 
-. detectDevice.sh
+. getDevice.sh

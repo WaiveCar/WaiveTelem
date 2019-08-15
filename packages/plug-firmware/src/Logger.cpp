@@ -5,11 +5,7 @@
 #include "System.h"
 
 void LoggerClass::setup() {
-  Serial.begin(115200);
-#if DEBUG
-  // the following cause cause the firmware to only run if serial-monitored
-  delay(5000);
-#endif
+  logFunc();
   while (!SD.begin(SD_CS_PIN)) {
     logError(F("Failed to initialize SD Library"));
     delay(5000);

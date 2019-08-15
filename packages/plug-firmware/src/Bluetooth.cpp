@@ -47,6 +47,7 @@ void HCI_Event_CB(void *pckt) {
 }
 
 void BluetoothClass::setup() {
+  logFunc();
   while (!ECCX08.begin()) {
     logError(F("No ECCX08 present"));
     delay(5000);
@@ -56,7 +57,7 @@ void BluetoothClass::setup() {
   reset();
 
   name = "W-" + ECCX08.serialNumber();
-  logDebug("Bluetooth name: " + name);
+  logDebug("BLE name: " + name);
 
   int ret = aci_gatt_init();
   if (ret) {
@@ -124,6 +125,7 @@ void BluetoothClass::setup() {
 #define CHALLENGE_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
 uint8_t BluetoothClass::addService() {
+  logFunc();
   tBleStatus ret;
   uint8_t uuid[16];
 
@@ -158,10 +160,12 @@ void BluetoothClass::poll() {
 }
 
 void BluetoothClass::reset() {
+  logFunc();
   BlueNRG_RST();
 }
 
 uint8_t BluetoothClass::setChallenge() {
+  logFunc();
   ECCX08.random(challenge, sizeof(challenge));
   tBleStatus ret = aci_gatt_update_char_value(ServHandle, ChallengeCharHandle, 0, sizeof(challenge), challenge);
   if (ret != BLE_STATUS_SUCCESS) {
@@ -175,6 +179,7 @@ uint8_t BluetoothClass::setChallenge() {
 #define ADV_INTERVAL_MAX_MS 100
 
 void BluetoothClass::setConnectable() {
+  logFunc();
   hci_le_set_scan_resp_data(0, NULL);
 
   String localName = String((char)AD_TYPE_COMPLETE_LOCAL_NAME) + name;
@@ -200,6 +205,7 @@ void BluetoothClass::setConnectable() {
 #define IS(a) handle == a + 1
 
 void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data) {
+  logFunc();
   if (IS(AuthCharHandle) || IS(CmdCharHandle)) {
     char strBuffer[19];
     uint16_t messageLength = att_data[0] | (att_data[1] << 8);
@@ -222,7 +228,6 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
     if (continueLength == 0) {  // last message
       if (IS(AuthCharHandle)) {
         System.authorizeCommand(message);
-        Bluetooth.setChallenge();
       } else if (IS(CmdCharHandle)) {
         SHA256.beginHmac(System.getAuthSecret(), AUTH_SECRET_LENGTH);
         SHA256.write((const uint8_t *)message.c_str(), message.length());
@@ -241,21 +246,24 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
 }
 
 void BluetoothClass::GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle) {
+  logFunc();
   connection_handle = handle;
   char sprintbuff[64];
   snprintf(sprintbuff, 64, "BLE Connected to device: %02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
   logInfo(sprintbuff);
   System.unauthorize();
+  Bluetooth.setChallenge();
   System.setStayAwake(true);
 }
 
 void BluetoothClass::GAP_DisconnectionComplete_CB() {
-  logInfo(F("BLE Disconnected"));
+  logFunc();
   setConnectable();
   System.setStayAwake(false);
 }
 
 void BluetoothClass::Read_Request_CB(uint16_t handle) {
+  logFunc();
   if (connection_handle != 0) {
     aci_gatt_allow_read(connection_handle);
   }

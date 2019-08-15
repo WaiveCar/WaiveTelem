@@ -2,9 +2,11 @@
 #include <SPI.h>
 #include <wiring_private.h>
 
+#include "Logger.h"
 #include "Pins.h"
 
 void PinsClass::setup() {
+  logFunc();
 #ifdef ARDUINO_SAMD_WAIVE1000
   pinMode(VIN_SENSE, INPUT);
   pinMode(IMMO_ON, OUTPUT);
@@ -44,18 +46,21 @@ void PinsClass::setup() {
 }
 
 void PinsClass::unlockDoors() {
+  logFunc();
   digitalWrite(DOOR_UNLOCK_PIN, HIGH);
   delay(100);
   digitalWrite(DOOR_UNLOCK_PIN, LOW);
 }
 
 void PinsClass::lockDoors() {
+  logFunc();
   digitalWrite(DOOR_LOCK_PIN, HIGH);
   delay(100);
   digitalWrite(DOOR_LOCK_PIN, LOW);
 }
 
 void PinsClass::immobilize() {
+  logFunc();
 #ifdef ARDUINO_SAMD_WAIVE1000
   digitalWrite(IMMO_ON, HIGH);
   delay(100);
@@ -66,6 +71,7 @@ void PinsClass::immobilize() {
 }
 
 void PinsClass::unimmobilize() {
+  logFunc();
 #ifdef ARDUINO_SAMD_WAIVE1000
   digitalWrite(IMMO_OFF, HIGH);
   delay(100);

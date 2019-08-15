@@ -1,5 +1,4 @@
 {
-  "id": .id,
 	"mqtt": {
 		"url": .mqttBrokerUrl,
 		"cert": .mqttBrokerCert
@@ -46,8 +45,7 @@
 					{
 						"name": "door_front_right",
 						"id": 1345,
-						"bit": 35,
-						"len": 1
+						"bit": 35
 					},
 					{
 						"name": "charging",
@@ -58,38 +56,32 @@
 					{
 						"name": "door_back_left",
 						"id": 1363,
-						"bit": 23,
-						"len": 1
+						"bit": 23
 					},
 					{
 						"name": "door_back_right",
 						"id": 1363,
-						"bit": 24,
-						"len": 1
+						"bit": 24
 					},
 					{
 						"name": "window_front_left",
 						"id": 1369,
-						"bit": 8,
-						"len": 1
+						"bit": 8
 					},
 					{
 						"name": "window_front_right",
 						"id": 1369,
-						"bit": 9,
-						"len": 1
+						"bit": 9
 					},
 					{
 						"name": "window_back_left",
 						"id": 1369,
-						"bit": 10,
-						"len": 1
+						"bit": 10
 					},
 					{
 						"name": "window_back_right",
 						"id": 1369,
-						"bit": 11,
-						"len": 1
+						"bit": 11
 					},
 					{
 						"name": "mileage",

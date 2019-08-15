@@ -12,9 +12,11 @@
 #ifdef DEBUG
 #define log(s) Serial.print(s)
 #define logDebug(s) Logger.logLine("Debug", s)
+#define logFunc() Logger.logLine("Debug", String(__FILE__) + ":" + __LINE__ + " " + __func__ + "()")
 #else
 #define log(s)
 #define logDebug(s)
+#define logFunc(s)
 #endif
 
 class LoggerClass {

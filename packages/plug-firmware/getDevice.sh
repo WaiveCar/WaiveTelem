@@ -12,4 +12,4 @@ else
   export DEFAULT_BOARD=waive1000
 fi
 
-export DEFAULT_BOARD=waive1000
+#export DEFAULT_BOARD=mkr1000USB

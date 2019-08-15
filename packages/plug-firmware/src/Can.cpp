@@ -22,7 +22,7 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
       JsonObject status = statusArray[i];
       if (inMessage.id == status["id"]) {
         int bit = status["bit"];
-        int len = status["len"];
+        int len = status["len"] | 1;
         uint64_t value =
             static_cast<uint64_t>(inMessage.data[0]) |
             static_cast<uint64_t>(inMessage.data[1]) << 8 |
@@ -52,41 +52,71 @@ static void onCanReceive1(const CANMessage& inMessage) {
 }
 
 void CanClass::setup() {
+  logFunc();
   JsonObject can = Config.get()["can"];
   JsonArray bus = can["bus"];
-  logDebug(F("Configure ACAN2515"));
+  logDebug(F("CAN BUS configure ACAN2515"));
   for (uint32_t i = 0; i < bus.size(); i++) {
     int baud = bus[i]["baud"];
     logDebug("CAN BUS #" + String(i) + ", baud: " + baud);
-    ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
     JsonArray status = bus[i]["status"];
     if (status.size() > 0) {
+      numberOfCanBuses = i;
       const int minCanId = status[0]["id"].as<int>();
       logDebug("minCanId: " + String(minCanId));
       const int maxCanId = status[status.size() - 1]["id"].as<int>();
       logDebug("maxCanId: " + String(maxCanId));
       const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
-      const ACAN2515AcceptanceFilter filters[] = {
-          {standard2515Filter(minCanId, 0, 0), NULL}};
-      auto& can = (i == 0 ? can0 : can1);
+      const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
+      ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
+      auto& canbus = (i == 0 ? can0 : can1);
       auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
-      const uint32_t errorCode = can.begin(settings, lambda, rxm0, filters, 1);  // does soft reset
+      // canbus.changeModeOnTheFly(ACAN2515Settings::NormalMode);
+      const uint32_t errorCode = canbus.begin(settings, lambda, rxm0, filters, 1);  // does soft reset
       if (errorCode != 0) {
-        logError("Configuration error " + String(errorCode));
+        logError("CANBUS configuration error " + String(errorCode));
+      }
+    }
+  }
+  sleep();
+}
+
+void CanClass::poll() {
+  CANMessage frame;
+  if (numberOfCanBuses > 0) {
+    while (can0.available()) {
+      can0.receive(frame);
+      onCanReceive0(frame);
+    }
+
+    if (numberOfCanBuses > 1) {
+      while (can1.available()) {
+        can1.receive(frame);
+        onCanReceive1(frame);
       }
     }
   }
 }
 
-void CanClass::poll() {
-  CANMessage frame;
-  while (can0.available()) {
-    can0.receive(frame);
-    onCanReceive0(frame);
+void CanClass::sleep() {
+  logFunc();
+  if (numberOfCanBuses > 0) {
+    can0.changeModeOnTheFly(ACAN2515Settings::SleepMode);
+
+    if (numberOfCanBuses > 1) {
+      can1.changeModeOnTheFly(ACAN2515Settings::SleepMode);
+    }
   }
-  while (can1.available()) {
-    can1.receive(frame);
-    onCanReceive1(frame);
+}
+
+void CanClass::wakeup() {
+  logFunc();
+  if (numberOfCanBuses > 0) {
+    can0.changeModeOnTheFly(ACAN2515Settings::NormalMode);
+
+    if (numberOfCanBuses > 1) {
+      can1.changeModeOnTheFly(ACAN2515Settings::NormalMode);
+    }
   }
 }
 
