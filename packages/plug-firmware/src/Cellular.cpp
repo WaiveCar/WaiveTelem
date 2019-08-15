@@ -16,9 +16,9 @@ static NBScanner nbScanner;
 
 bool InternetClass::connect() {
   logDebug(F("Attempting to connect to the Internet"));
-  JsonObject nb = Config.get()["nb"];
   const int maxTry = 10;
   int i = 1;
+  JsonObject nb = Config.get()["nb"];
   Watchdog.disable();  // nbAccess.begin() can take hours to register SIM
   while ((nbAccess.begin(nb["pin"].as<char*>(), nb["apn"].as<char*>()) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
     log(F("."));

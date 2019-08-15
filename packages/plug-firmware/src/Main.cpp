@@ -22,12 +22,10 @@ void setup() {
   Mqtt.poll();
 #else
   Internet.connect();
-  while (!ECCX08.begin()) {
-    logError(F("No ECCX08 present"));
-    delay(5000);
-  }
 #endif
-  System.setTime(Internet.getTime());
+  if (Internet.isConnected()) {
+    System.setTime(Internet.getTime());
+  }
   Gps.setup();
   Bluetooth.setup();
   Can.setup();
@@ -37,7 +35,12 @@ void setup() {
 
 void loop() {
   Watchdog.enable(WATCHDOG_TIMEOUT);
-  if (!System.getStayAwake()) {
+  if (System.getStayAwake()) {
+    if (Internet.isConnected()) {
+      System.setTime(Internet.getTime());
+      delay(100);
+    }
+  } else {
     System.sleep(1);
   }
 #ifdef ARDUINO_SAMD_MKR1000

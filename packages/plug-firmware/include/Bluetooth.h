@@ -22,7 +22,7 @@ class BluetoothClass {
   uint16_t connection_handle = 0;
   uint16_t ServHandle, AuthCharHandle, CmdCharHandle, ChallengeCharHandle;
   String message = "";
-  uint8_t continueLength = 0;
+  uint16_t continueLength = 0;
   uint8_t challenge[CHALLENGE_LENGTH];
   uint8_t hmac[HMAC_LENGTH];
 };

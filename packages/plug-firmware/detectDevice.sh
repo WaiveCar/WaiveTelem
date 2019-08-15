@@ -12,3 +12,4 @@ else
   export DEFAULT_BOARD=waive1000
 fi
 
+export DEFAULT_BOARD=waive1000

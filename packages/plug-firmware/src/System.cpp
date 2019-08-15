@@ -27,8 +27,11 @@ int freeMemory() {
 }
 
 void SystemClass::setup() {
+#ifndef DEBUG
   rtc.begin();
+  rtc.setAlarmSeconds(0);
   rtc.enableAlarm(rtc.MATCH_SS);
+#endif
 
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
@@ -126,7 +129,7 @@ void SystemClass::authorizeCommand(const String& encrypted) {
   authStart = authDoc["start"] | 0;
   authEnd = authDoc["end"] | 0;
   const char* secret = authDoc["secret"] | "";
-  rbase64_decode((char*)authSecret, (char*)secret, 20);
+  rbase64_decode((char*)authSecret, (char*)secret, 16);
 }
 
 uint8_t* SystemClass::getAuthSecret() {
@@ -221,7 +224,6 @@ void SystemClass::sleep(uint32_t sec) {
   delay(sec * 1000);
 #else
   rtc.setSeconds(0);
-  rtc.setAlarmSeconds(0);
   rtc.standbyMode();
   _ulTickCount = _ulTickCount + sec * 1000;
 #endif

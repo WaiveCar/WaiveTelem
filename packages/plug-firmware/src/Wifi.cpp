@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <WiFi101.h>
 
+#include "Config.h"
 #include "Internet.h"
 #include "Logger.h"
 
@@ -11,10 +12,13 @@ bool InternetClass::connect() {
     logError(F("WiFi hardware not present"));
     return false;
   }
-  logDebug("Attempting to connect to SSID: " + String(WIFI_SSID));
   const int maxTry = 5;
   int i = 1;
-  while (WiFi.begin(WIFI_SSID, WIFI_PASSWORD) != WL_CONNECTED) {
+  JsonObject wifi = Config.get()["wifi"];
+  const char* ssid = wifi["ssid"];
+  const char* password = wifi["password"];
+  logDebug("Attempting to connect to SSID: " + String(ssid));
+  while (WiFi.begin(ssid, password) != WL_CONNECTED) {
     Watchdog.reset();
     log(F("."));
     if (i == maxTry) {

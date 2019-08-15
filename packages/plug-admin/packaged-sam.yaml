@@ -54,7 +54,7 @@ Resources:
   PlugAdmin:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://waiveplug/2d039b3c2d9de86bd692a59f3f2c3a04
+      CodeUri: s3://waiveplug/99df3118baac150dd75fd634dc6bc00d
       Handler: lambda.handler
       MemorySize: 1024
       Role:

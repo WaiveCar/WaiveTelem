@@ -8,6 +8,9 @@ class MqttClass {
   bool isConnected();
   void poll();
   void send(const String& message);
+
+ private:
+  String topic;
 };
 
 extern MqttClass Mqtt;

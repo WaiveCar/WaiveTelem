@@ -159,11 +159,20 @@ export default class App extends Component {
     newData[item.index].isConnecting = true;
     this.setState({ data: newData });
     BluetoothManager.connect(item.item.id)
-      .then(() => {
+      .then(async () => {
         newData[item.index].isConnecting = false;
         const tokens = newData[item.index].localName.split('-');
         const thingName = tokens[tokens.length - 1];
         this.setState({ data: [newData[item.index]], isConnected: true, thingName });
+
+        const response = await fetch(API_END_POINT + 'token?thingName=' + thingName);
+        const data = await response.json();
+        const { token, secret } = data;
+        this.setState({
+          token,
+          secret
+        });
+
         this.onDisconnect();
       })
       .catch(err => {
@@ -198,27 +207,31 @@ export default class App extends Component {
   };
 
   writeWithoutResponse = async (index, type) => {
-    if (this.state.text.length == 0) {
-      this.alert('enter text');
-      return;
+    let binary;
+    // index 0 is AUTH_CHAR, 1 is CMD_CHAR
+    if (index == 0) {
+      binary = Buffer.from(this.state.token);
+    } else if (index == 1) {
+      binary = Buffer.from(this.state.text);
+      const challenge = await BluetoothManager.read(0);
+      const valueBuffer = Buffer.concat([binary, Buffer.from(challenge)]);
+      const value = CryptoJS.enc.u8array.parse(valueBuffer);
+      const secret = CryptoJS.enc.Base64.parse(this.state.secret);
+      const hmac = CryptoJS.enc.u8array.stringify(CryptoJS.HmacSHA256(value, secret));
+      binary = Buffer.concat([hmac.slice(0, 16), binary]);
     }
-    const challenge = await BluetoothManager.read(index);
-    const valueBuffer = Buffer.concat([Buffer.from(this.state.text), challenge]);
-    const value = CryptoJS.enc.u8array.parse(valueBuffer);
-    const secret = CryptoJS.enc.Base64.parse(this.state.secret);
-    const hmac = CryptoJS.enc.u8array.stringify(CryptoJS.HmacSHA256(value, secret));
-    const payload = command.concat(b642array(responseb64)).slice(0, 20);
-    let remainBytesToSend = this.state.text.length;
     let start = 0;
+    let remainBytesToSend = binary.length;
     while (remainBytesToSend > 0) {
-      const subStringSize = remainBytesToSend > 19 ? 19 : remainBytesToSend;
-      const start = this.state.text.length - remainBytesToSend;
-      const subString = this.state.text.slice(start, start + subStringSize);
-      const data = Buffer.from(subString);
-      console.log('TCL: App -> writeWithoutResponse -> data', data);
-      const lengthByte = Buffer.from([remainBytesToSend]);
-      console.log('TCL: App -> writeWithoutResponse -> lengthByte', lengthByte);
-      const dataBuffer = Buffer.concat([lengthByte, data]);
+      const subStringSize = remainBytesToSend > 18 ? 18 : remainBytesToSend;
+      const start = binary.length - remainBytesToSend;
+      const data = binary.slice(start, start + subStringSize);
+      // console.log('TCL: App -> writeWithoutResponse -> data', data);
+      const dataBuffer = Buffer.concat([
+        new Buffer([remainBytesToSend & 0xff]),
+        new Buffer([remainBytesToSend >> 8]),
+        data
+      ]);
       console.log('TCL: App -> writeWithoutResponse -> dataBuffer', dataBuffer);
       await BluetoothManager.writeWithoutResponse(dataBuffer.toString('base64'), index, type);
       remainBytesToSend -= subStringSize;
@@ -523,15 +536,6 @@ export default class App extends Component {
             style={styles.button}
             onPress={async () => {
               console.log(this.state.data);
-              const response = await fetch(
-                API_END_POINT + 'token?thingName=' + this.state.thingName
-              );
-              const data = await response.json();
-              const { token, secret } = data;
-              this.setState({
-                text: token,
-                secret
-              });
               setTimeout(() => {
                 onPress(0);
               }, 10);

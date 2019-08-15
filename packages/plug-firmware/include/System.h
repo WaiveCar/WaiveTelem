@@ -4,7 +4,7 @@
 #include <ArduinoJson.h>
 #include <RTCZero.h>
 
-#define AUTH_SECRET_LENGTH 15
+#define AUTH_SECRET_LENGTH 12
 #define WATCHDOG_TIMEOUT 16 * 1000
 
 #define STATUS_DOC_SIZE 1024
