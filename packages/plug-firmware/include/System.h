@@ -1,53 +1,40 @@
-#ifndef Status_h
-#define Status_h
+#ifndef System_h
+#define System_h
 
 #include <ArduinoJson.h>
 #include <RTCZero.h>
 
-#define AUTH_SECRET_LENGTH 12
 #define WATCHDOG_TIMEOUT 16 * 1000
-
 #define STATUS_DOC_SIZE 1024
-#define BUFFER_SIZE 512
 
 class SystemClass {
  public:
+  String& getId();
   void setup();
   void poll();
   void setTimes(uint32_t in);
+  uint32_t getTime();
   const char* getDateTime();
+  void keepTime();
   void telemeter(const String& reported, const String& desired = "");
   void sendInfo();
   void sendHeartbeat();
   void sendCanStatus();
   void setCanStatus(const String& name, uint64_t value, uint32_t delta);
-  void authorizeCommand(const String& encrypted);
-  uint8_t* getAuthSecret();
-  void unauthorize();
-  String decryptToken(const String& encrypted);
-  void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
-  void processCommand(const String& json, bool isBluetooth = false);
-  void reboot();
   void sleep(uint32_t sec);
-  void keepTime();
-  int32_t moveFile(const char* from, const char* to);
-  int32_t copyFile(const char* from, const char* to);
   bool getStayAwake();
   void setStayAwake(bool stay);
+  void setCanStatusChanged();
+  void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
 
  private:
+  String id;
   bool canStatusChanged = false;
   int32_t lastHeartbeat = -1;
   uint32_t bootTime = 0;
-  volatile uint32_t time = 0;
-  StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
-  uint8_t tokenKey[32];
-  uint8_t tokenIv[16];
-  String authCmds = "";
-  uint32_t authStart = 0;
-  uint32_t authEnd = 0;
-  uint8_t authSecret[AUTH_SECRET_LENGTH];
+  uint32_t time = 0;
   char dateTime[32] = "";
+  StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
   bool stayAwake = false;
   RTCZero rtc;
   uint32_t lastMillis = 0;
@@ -55,4 +42,4 @@ class SystemClass {
 
 extern SystemClass System;
 
-#endif  // Status_h
+#endif  // System_h

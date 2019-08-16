@@ -3,6 +3,7 @@
 #include <STBLE.h>
 
 #include "Bluetooth.h"
+#include "Command.h"
 #include "Config.h"
 #include "Logger.h"
 #include "System.h"
@@ -48,15 +49,12 @@ void HCI_Event_CB(void *pckt) {
 
 void BluetoothClass::setup() {
   logFunc();
-  while (!ECCX08.begin()) {
-    logError(F("No ECCX08 present"));
-    delay(5000);
-  }
+
   HCI_Init();
   BNRG_SPI_Init();
   reset();
 
-  name = "W-" + ECCX08.serialNumber();
+  name = "W-" + System.getId();
   logDebug("BLE name: " + name);
 
   int ret = aci_gatt_init();
@@ -227,16 +225,16 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
     // logDebug(message);
     if (continueLength == 0) {  // last message
       if (IS(AuthCharHandle)) {
-        System.authorizeCommand(message);
+        Command.authorize(message);
       } else if (IS(CmdCharHandle)) {
-        SHA256.beginHmac(System.getAuthSecret(), AUTH_SECRET_LENGTH);
+        SHA256.beginHmac(Command.getAuthSecret(), AUTH_SECRET_LENGTH);
         SHA256.write((const uint8_t *)message.c_str(), message.length());
         SHA256.write(challenge, sizeof(challenge));
         SHA256.endHmac();
         uint8_t computedHmac[HMAC_LENGTH];
         SHA256.readBytes(computedHmac, HMAC_LENGTH);
         if (memcmp(computedHmac, hmac, HMAC_LENGTH)) {
-          System.processCommand(message, true);
+          Command.processJson(message, true);
           Bluetooth.setChallenge();
         }
       }
@@ -251,7 +249,7 @@ void BluetoothClass::GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
   char sprintbuff[64];
   snprintf(sprintbuff, 64, "BLE Connected to device: %02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
   logInfo(sprintbuff);
-  System.unauthorize();
+  Command.unauthorize();
   Bluetooth.setChallenge();
   System.setStayAwake(true);
 }

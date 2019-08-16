@@ -14,15 +14,20 @@
 
 void setup() {
   Serial.begin(115200);
+
+  logFunc();
 #if DEBUG
   // the following cause cause the firmware to only run if serial-monitored
   delay(5000);
 #endif
-  logFunc();
+  if (!ECCX08.begin()) {
+    logError(F("No ECCX08 present"));
+  }
   Watchdog.enable(WATCHDOG_TIMEOUT);
   Pins.setup();
   Logger.setup();
   Config.load();
+  System.setup();
   Mqtt.setup();
 #ifdef ARDUINO_SAMD_MKR1000
   Mqtt.poll();
@@ -33,7 +38,6 @@ void setup() {
   Gps.setup();
   Bluetooth.setup();
   Can.setup();
-  System.setup();
   System.sendInfo();
 }
 

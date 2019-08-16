@@ -3,12 +3,10 @@
 #include <ArduinoBearSSL.h>
 #include <SD.h>
 
-#include "Config.h"
+#include "Command.h"
 #include "Https.h"
 #include "Internet.h"
 #include "Logger.h"
-#include "Mqtt.h"
-#include "System.h"
 
 #define DOWNLOAD_TIMEOUT 60 * 1000
 
@@ -105,7 +103,7 @@ int32_t HttpsClass::download(const char* host, const char* from, const char* to)
     if (error) return error;
     error = verifyFile(from);
     if (error) return error;
-    return System.moveFile("TEMP", to);
+    return Command.moveFile("TEMP", to);
   } else {
     logError(F("https failed"));
     return -10;

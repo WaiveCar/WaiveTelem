@@ -1,23 +1,16 @@
-#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
+#include <ArduinoECCX08.h>
 #define ARDUINOJSON_USE_DOUBLE 1
 #include <ArduinoJson.h>
 #include <NMEAGPS.h>
-#include <bearssl/bearssl_ssl.h>
-#include <rBase64.h>
 
 #include "Can.h"
 #include "Config.h"
 #include "Gps.h"
-#include "Https.h"
 #include "Internet.h"
 #include "Logger.h"
 #include "Mqtt.h"
-#include "Pins.h"
 #include "System.h"
-
-#define AUTH_DOC_SIZE 128
-#define COMMAND_DOC_SIZE 512
 
 extern "C" char* sbrk(int incr);
 extern volatile uint32_t _ulTickCount;
@@ -25,6 +18,10 @@ extern volatile uint32_t _ulTickCount;
 int freeMemory() {
   char top;
   return &top - reinterpret_cast<char*>(sbrk(0));
+}
+
+String& SystemClass::getId() {
+  return id;
 }
 
 void SystemClass::setup() {
@@ -35,18 +32,13 @@ void SystemClass::setup() {
   rtc.enableAlarm(rtc.MATCH_SS);
 #endif
 
+  id = ECCX08.serialNumber();
+  logDebug("id: " + id);
+
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
   statusDoc["heartbeat"].createNestedObject("gps");
   statusDoc["heartbeat"].createNestedObject("system");
-
-  // set bluetooth token key and iv
-  const char* cert = Config.get()["mqtt"]["cert"];
-  char* buf = (char*)malloc(48);
-  rbase64_decode(buf, (char*)&cert[743], 64);
-  memcpy(tokenIv, buf, 16);
-  memcpy(tokenKey, &buf[16], 32);
-  free(buf);
 }
 
 void SystemClass::poll() {
@@ -60,10 +52,14 @@ void SystemClass::poll() {
   } else if (lastHeartbeat == -1 || time - lastHeartbeat >= interval) {
     if (Gps.poll()) {
       sendHeartbeat();
-      lastHeartbeat = time;
+      lastHeartbeat = getTime();
       Gps.sleep();
     }
   }
+}
+
+uint32_t SystemClass::getTime() {
+  return time;
 }
 
 const char* SystemClass::getDateTime() {
@@ -123,114 +119,6 @@ void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delt
   }
 }
 
-void SystemClass::authorizeCommand(const String& encrypted) {
-  logFunc();
-  String json = decryptToken(encrypted);
-  StaticJsonDocument<AUTH_DOC_SIZE> authDoc;
-  DeserializationError error = deserializeJson(authDoc, json);
-  if (error) {
-    logError("Failed to read json: " + String(error.c_str()));
-    return;
-  }
-  authCmds = authDoc["cmds"] | "";
-  authStart = authDoc["start"] | 0;
-  authEnd = authDoc["end"] | 0;
-  const char* secret = authDoc["secret"] | "";
-  rbase64_decode((char*)authSecret, (char*)secret, 16);
-}
-
-uint8_t* SystemClass::getAuthSecret() {
-  logFunc();
-  return authSecret;
-}
-
-void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& cmdValue) {
-  logFunc();
-  String escapedJson = json;
-  escapedJson.replace("\"", "\\\"");
-  String lastCmd = "\"system\":{\"lastCmd\":\"" + escapedJson + "\"}";
-  telemeter("{" + lastCmd + +",\"" + cmdKey + "\":\"" + cmdValue + "\"}", "{\"" + cmdKey + "\":null}");
-}
-
-void SystemClass::processCommand(const String& json, bool isBluetooth) {
-  logFunc();
-  StaticJsonDocument<COMMAND_DOC_SIZE> cmdDoc;
-  DeserializationError error = deserializeJson(cmdDoc, json);
-  if (error) {
-    logError("Failed to read json: " + String(error.c_str()));
-    return;
-  }
-  JsonObject desired = isBluetooth ? cmdDoc.as<JsonObject>() : cmdDoc["state"];
-  String cmdKey, cmdValue;
-  for (JsonPair p : desired) {
-    cmdKey = p.key().c_str();
-    cmdValue = p.value().as<String>();
-  }
-  if (isBluetooth) {
-    if (authCmds.indexOf(cmdKey) == -1) {
-      logError("authCmds: " + authCmds + ", cmdKey: " + cmdKey);
-      return;
-    }
-    if (authStart > time) {
-      logError("authStart: " + String(authStart) + ", time: " + time);
-      return;
-    }
-    if (authEnd < time) {
-      logError("authEnd: " + String(authEnd) + ", time: " + time);
-      return;
-    }
-  }
-  JsonObject download = desired["download"];
-  JsonObject copy = desired["copy"];
-  if (cmdKey == "lock" && cmdValue == "open") {
-    Pins.unlockDoors();
-  } else if (cmdKey == "lock" && cmdValue == "close") {
-    Pins.lockDoors();
-  } else if (cmdKey == "immo" && cmdValue == "lock") {
-    Pins.immobilize();
-  } else if (cmdKey == "immo" && cmdValue == "unlock") {
-    Pins.unimmobilize();
-  } else if (cmdKey == "inRide" && cmdValue == "true") {
-    canStatusChanged = true;
-    Can.wakeup();
-  } else if (cmdKey == "inRide" && cmdValue == "false") {
-    canStatusChanged = true;
-    Can.sleep();
-  } else if (cmdKey == "reboot" && cmdValue == "true") {
-    reportCommandDone(json, cmdKey, cmdValue);
-    reboot();
-    return;
-  } else if (!download.isNull()) {
-    const char* host = download["host"] | "";
-    const char* from = download["from"] | "";
-    const char* to = download["to"] | "";
-    if (strlen(host) > 0 && strlen(from) > 0 && strlen(to) > 0) {
-      Https.download(host, from, to);
-      reportCommandDone(json, cmdKey, cmdValue);
-      reboot();
-    } else {
-      logError("Error: " + json);
-    }
-    return;
-  } else if (!copy.isNull()) {
-    const char* from = copy["from"] | "";
-    const char* to = copy["to"] | "";
-    if (strlen(from) > 0 && strlen(to) > 0) {
-      copyFile(from, to);
-      reportCommandDone(json, cmdKey, cmdValue);
-      reboot();
-    } else {
-      logError("Error: " + json);
-    }
-    return;
-  } else {
-    logError("Unknown command: " + json);
-    return;
-  }
-  statusDoc[cmdKey] = cmdValue;
-  reportCommandDone(json, cmdKey, cmdValue);
-}
-
 void SystemClass::sleep(uint32_t sec) {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
@@ -242,60 +130,6 @@ void SystemClass::sleep(uint32_t sec) {
   _ulTickCount = _ulTickCount + sec * 1000;
 #endif
   digitalWrite(LED_BUILTIN, HIGH);
-}
-
-void SystemClass::keepTime() {
-  if (time % 20 == 0 && Internet.isConnected()) {  // don't get time from modem too often; only every 20 secs
-    setTimes(Internet.getTime());
-  } else {
-    int32_t elapsed = millis() - lastMillis;
-    if (elapsed >= 1000) {
-      setTimes(time + elapsed / 1000);
-    }
-  }
-}
-
-void SystemClass::reboot() {
-  logFunc();
-  logInfo(F("Rebooting now"));
-  delay(1000);
-  Watchdog.enable(1);
-  while (true)
-    ;
-}
-
-int32_t SystemClass::moveFile(const char* from, const char* to) {
-  logFunc();
-  int32_t error = copyFile(from, to);
-  if (!error) {
-    SD.remove((char*)from);
-  }
-  return error;
-}
-
-int32_t SystemClass::copyFile(const char* from, const char* to) {
-  logFunc();
-  File readFile = SD.open(from, FILE_READ);
-  if (!readFile) {
-    logError("readFile open failed");
-    return -1;
-  }
-  File writeFile = SD.open(to, FILE_WRITE);
-  if (!writeFile) {
-    logError("writeFile open failed");
-    return -1;
-  }
-  writeFile.seek(0);  // workaround BUG in SD to default to append
-  uint8_t buf[BUFFER_SIZE];
-  while (readFile.available()) {
-    int bytesRead = readFile.read(buf, sizeof(buf));
-    writeFile.write(buf, bytesRead);
-    // logDebug("write " + String(bytesRead));
-    Watchdog.reset();
-  }
-  readFile.close();
-  writeFile.close();
-  return 0;
 }
 
 void SystemClass::setTimes(uint32_t in) {
@@ -318,37 +152,6 @@ void SystemClass::telemeter(const String& reported, const String& desired) {
   }
 }
 
-String SystemClass::decryptToken(const String& encrypted) {
-  logFunc();
-  // see https://github.com/nogoegst/bearssl/blob/master/test/test_crypto.c
-  unsigned char iv[16];
-  br_aes_gen_cbcdec_keys v_dc;
-  const br_block_cbcdec_class** dc;
-  const br_block_cbcdec_class* vd = &br_aes_big_cbcdec_vtable;
-  dc = &v_dc.vtable;
-  vd->init(dc, tokenKey, 32);
-  memcpy(iv, tokenIv, 16);
-  size_t length = rbase64_dec_len((char*)encrypted.c_str(), encrypted.length());
-  char* buf = (char*)malloc(length);
-  rbase64_decode(buf, (char*)encrypted.c_str(), encrypted.length());
-  for (size_t v = 0; v < length; v += 16) {
-    vd->run(dc, iv, buf + v, 16);
-  }
-  size_t numberOfPadding = buf[length - 1];
-  buf[length - numberOfPadding] = '\0';
-  logDebug(buf);
-  String token(buf);
-  free(buf);
-  return token;
-}
-
-void SystemClass::unauthorize() {
-  logFunc();
-  authCmds = "";
-  authStart = 0;
-  authEnd = 0;
-}
-
 bool SystemClass::getStayAwake() {
   return stayAwake;
 }
@@ -356,6 +159,30 @@ bool SystemClass::getStayAwake() {
 void SystemClass::setStayAwake(bool stay) {
   logFunc();
   stayAwake = stay;
+}
+
+void SystemClass::keepTime() {
+  if (time % 20 == 0 && Internet.isConnected()) {  // don't get time from modem too often; only every 20 secs
+    setTimes(Internet.getTime());
+  } else {
+    int32_t elapsed = millis() - lastMillis;
+    if (elapsed >= 1000) {
+      setTimes(time + elapsed / 1000);
+    }
+  }
+}
+
+void SystemClass::setCanStatusChanged() {
+  canStatusChanged = true;
+}
+
+void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& cmdValue) {
+  logFunc();
+  statusDoc[cmdKey] = cmdValue;
+  String escapedJson = json;
+  escapedJson.replace("\"", "\\\"");
+  String lastCmd = "\"system\":{\"lastCmd\":\"" + escapedJson + "\"}";
+  System.telemeter("{" + lastCmd + +",\"" + cmdKey + "\":\"" + cmdValue + "\"}", "{\"" + cmdKey + "\":null}");
 }
 
 SystemClass System;

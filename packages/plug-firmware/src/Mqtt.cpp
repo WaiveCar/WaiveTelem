@@ -1,8 +1,8 @@
 #include <Adafruit_SleepyDog.h>
 #include <ArduinoBearSSL.h>
-#include <ArduinoECCX08.h>
 #include <ArduinoMqttClient.h>
 
+#include "Command.h"
 #include "Config.h"
 #include "Https.h"
 #include "Internet.h"
@@ -18,7 +18,7 @@ static void onMessageReceived(int messageSize) {
   logDebug("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
   String payload = mqttClient.readString();
   logDebug("payload: " + payload);
-  System.processCommand(payload);
+  Command.processJson(payload);
 }
 
 static unsigned long getTime() {
@@ -27,16 +27,12 @@ static unsigned long getTime() {
 
 void MqttClass::setup() {
   logFunc();
-  while (!ECCX08.begin()) {
-    logError(F("No ECCX08 present"));
-    delay(5000);
-  }
   ArduinoBearSSL.onGetTime(getTime);
   JsonObject mqtt = Config.get()["mqtt"];
   const char* cert = mqtt["cert"];
   logDebug("cert: " + String(cert));
   sslClient.setEccSlot(0, cert);
-  mqttClient.setId(ECCX08.serialNumber());
+  mqttClient.setId(System.getId());
   mqttClient.onMessage(onMessageReceived);
 }
 
@@ -69,8 +65,7 @@ void MqttClass::connect() {
     i++;
   }
   logDebug(F("You're connected to the MQTT broker"));
-  String id = ECCX08.serialNumber();
-  logDebug("id: " + id);
+  String id = System.getId();
   mqttClient.subscribe("$aws/things/" + id + "/shadow/update/delta");
   topic = "$aws/things/" + id + "/shadow/update";
 }

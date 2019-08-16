@@ -18,6 +18,8 @@ void LoggerClass::setup() {
 }
 
 void LoggerClass::logLine(const char* type, const String& s) {
+  // id, time, level, file, func, key1, value1, key2, value2... msg
+  //const String json = String("{\"time\":\"") + System.getDateTime() + "\",\"level\":\"" + type + "\",\"file\":\"" + type + "\",\"func\":\"" + type += "\",\"";
   const String str = System.getDateTime() + String(" ") + s;
   if (String(type) != "Debug") {
     System.telemeter(String("{\"system\":{\"last" + String(type) + "\":\"") + s + "\"}}");
