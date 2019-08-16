@@ -151,7 +151,7 @@ uint8_t BluetoothClass::addService() {
   return BLE_STATUS_SUCCESS;
 
 fail:
-  logError(F("Error while adding  service."));
+  logError(F("Error while adding service."));
   return BLE_STATUS_ERROR;
 }
 

@@ -52,7 +52,6 @@ void MqttClass::connect() {
     // Https.download("storage.googleapis.com", "www.swiperweb.com/privacy.html", "TEMP");  //works
     // Https.download("waive.blob.core.windows.net", "plug/config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP");
   }
-  Watchdog.reset();
   const JsonObject mqtt = Config.get()["mqtt"];
   const char* url = mqtt["url"] | "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com";  // "waive.azure-devices.net";
 

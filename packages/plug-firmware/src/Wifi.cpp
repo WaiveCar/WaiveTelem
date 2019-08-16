@@ -8,6 +8,7 @@
 #include "Logger.h"
 
 bool InternetClass::connect() {
+  logFunc();
   if (WiFi.status() == WL_NO_SHIELD) {
     logError(F("WiFi hardware not present"));
     return false;

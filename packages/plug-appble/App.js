@@ -357,12 +357,12 @@ export default class App extends Component {
       <View style={{ marginBottom: 30 }}>
         {this.state.isConnected ? (
           <View>
-            {this.renderWriteView(
+            {/* {this.renderWriteView(
               'write：',
               'send',
               BluetoothManager.writeWithResponseCharacteristicUUID,
               this.write
-            )}
+            )} */}
             {this.renderWriteView(
               'writeWithoutResponse：',
               'send',
@@ -376,13 +376,13 @@ export default class App extends Component {
               this.read,
               this.state.readData
             )}
-            {this.renderReceiveView(
+            {/* {this.renderReceiveView(
               `monitored data：${this.state.isMonitoring ? 'monitoring' : 'not monitoring'}`,
               'start monitoring',
               BluetoothManager.nofityCharacteristicUUID,
               this.monitor,
               this.state.receiveData
-            )}
+            )} */}
           </View>
         ) : (
           <View style={{ marginBottom: 20 }} />

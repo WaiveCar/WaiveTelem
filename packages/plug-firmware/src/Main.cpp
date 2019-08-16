@@ -23,8 +23,8 @@ void setup() {
   Pins.setup();
   Logger.setup();
   Config.load();
-#ifdef ARDUINO_SAMD_MKR1000
   Mqtt.setup();
+#ifdef ARDUINO_SAMD_MKR1000
   Mqtt.poll();
 #else
   Internet.connect();
