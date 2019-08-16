@@ -18,7 +18,7 @@ class BluetoothClass {
   void Read_Request_CB(uint16_t handle);
 
  private:
-  String name;
+  char name[21];
   uint16_t connection_handle = 0;
   uint16_t ServHandle, AuthCharHandle, CmdCharHandle, ChallengeCharHandle;
   String message = "";

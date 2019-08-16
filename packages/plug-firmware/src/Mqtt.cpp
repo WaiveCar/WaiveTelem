@@ -15,9 +15,9 @@ static BearSSLClient sslClient(client);
 static MqttClient mqttClient(sslClient);
 
 static void onMessageReceived(int messageSize) {
-  logDebug("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
+  log("DEBUG", "Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
   String payload = mqttClient.readString();
-  logDebug("payload: " + payload);
+  log("DEBUG", "payload: " + payload);
   Command.processJson(payload);
 }
 
@@ -26,18 +26,17 @@ static unsigned long getTime() {
 }
 
 void MqttClass::setup() {
-  logFunc();
+  log("DEBUG");
   ArduinoBearSSL.onGetTime(getTime);
   JsonObject mqtt = Config.get()["mqtt"];
   const char* cert = mqtt["cert"];
-  logDebug("cert: " + String(cert));
+  // log("DEBUG", "cert: " + cert);
   sslClient.setEccSlot(0, cert);
   mqttClient.setId(System.getId());
   mqttClient.onMessage(onMessageReceived);
 }
 
 void MqttClass::connect() {
-  logFunc();
   if (!Internet.isConnected()) {
     if (!Internet.connect()) {
       return;
@@ -51,21 +50,21 @@ void MqttClass::connect() {
   const JsonObject mqtt = Config.get()["mqtt"];
   const char* url = mqtt["url"] | "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com";  // "waive.azure-devices.net";
 
-  logDebug("Attempting to connect to MQTT broker: " + String(url));
+  log("DEBUG", "broker", url);
   const int maxTry = 10;
   int i = 1;
   while (!mqttClient.connect(url, 8883)) {
     Watchdog.reset();
     if (i == maxTry) {
-      logDebug(F("Failed to connect, try later"));
+      log("WARN_", "Failed to connect, try later");
       return;
     }
-    logDebug("MQTT connect error: " + String(mqttClient.connectError()));
+    log("WARN_", "error", String(mqttClient.connectError()).c_str());
     delay(5000);
     i++;
   }
-  logDebug(F("You're connected to the MQTT broker"));
-  String id = System.getId();
+  log("DEBUG", "You're connected to the MQTT broker");
+  String id = String(System.getId());
   mqttClient.subscribe("$aws/things/" + id + "/shadow/update/delta");
   topic = "$aws/things/" + id + "/shadow/update";
 }
@@ -82,7 +81,7 @@ void MqttClass::poll() {
 }
 
 void MqttClass::send(const String& message) {
-  logFunc();
+  // log("DEBUG");
   mqttClient.beginMessage(topic);
   mqttClient.print(message);
   mqttClient.endMessage();

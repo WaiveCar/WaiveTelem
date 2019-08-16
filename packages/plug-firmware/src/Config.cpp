@@ -5,18 +5,14 @@
 #include "System.h"
 
 void ConfigClass::load() {
-  logFunc();
+  log("DEBUG");
   File file = SD.open("CONFIG.TXT");
   // go to https://arduinojson.org/v6/assistant/ to find the size
   DeserializationError error = deserializeJson(configDoc, file);
   if (error) {
-    logError("Failed to read file: " + String(error.c_str()));
-    file.close();
-    while (true)
-      ;
+    log("ERROR", error.c_str());
   }
   configFreeMem = CONFIG_DOC_SIZE - configDoc.memoryUsage();
-
   file.close();
 }
 

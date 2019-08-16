@@ -52,20 +52,19 @@ static void onCanReceive1(const CANMessage& inMessage) {
 }
 
 void CanClass::setup() {
-  logFunc();
+  log("DEBUG");
   JsonObject can = Config.get()["can"];
   JsonArray bus = can["bus"];
-  logDebug(F("CAN BUS configure ACAN2515"));
   for (uint32_t i = 0; i < bus.size(); i++) {
     int baud = bus[i]["baud"];
-    logDebug("CAN BUS #" + String(i) + ", baud: " + baud);
+    log("DEBUG", "canBusNum", String(i).c_str(), "baud", String(baud).c_str());
     JsonArray status = bus[i]["status"];
     if (status.size() > 0) {
       numberOfCanBuses = i;
       const int minCanId = status[0]["id"].as<int>();
-      logDebug("minCanId: " + String(minCanId));
+      log("DEBUG", "minCanId", String(minCanId).c_str());
       const int maxCanId = status[status.size() - 1]["id"].as<int>();
-      logDebug("maxCanId: " + String(maxCanId));
+      log("DEBUG", "maxCanId", String(maxCanId).c_str());
       const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
       const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
       ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
@@ -74,7 +73,7 @@ void CanClass::setup() {
       // canbus.changeModeOnTheFly(ACAN2515Settings::NormalMode);
       const uint32_t errorCode = canbus.begin(settings, lambda, rxm0, filters, 1);  // does soft reset
       if (errorCode != 0) {
-        logError("CANBUS configuration error " + String(errorCode));
+        log("ERROR", "error", String(errorCode).c_str(), "CANBUS configuration error ");
       }
     }
   }
@@ -99,7 +98,7 @@ void CanClass::poll() {
 }
 
 void CanClass::sleep() {
-  logFunc();
+  log("DEBUG");
   if (numberOfCanBuses > 0) {
     can0.changeModeOnTheFly(ACAN2515Settings::SleepMode);
 
@@ -110,7 +109,7 @@ void CanClass::sleep() {
 }
 
 void CanClass::wakeup() {
-  logFunc();
+  log("DEBUG");
   if (numberOfCanBuses > 0) {
     can0.changeModeOnTheFly(ACAN2515Settings::NormalMode);
 

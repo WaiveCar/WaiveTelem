@@ -15,6 +15,8 @@ void HCI_Event_CB(void *pckt) {
   if (hci_pckt->type != HCI_EVENT_PKT)
     return;
 
+  log("DEBUG", "evt", String(event_pckt->evt).c_str());
+
   switch (event_pckt->evt) {
     case EVT_DISCONN_COMPLETE: {
       //evt_disconn_complete *evt = (void *)event_pckt->data;
@@ -48,29 +50,27 @@ void HCI_Event_CB(void *pckt) {
 }
 
 void BluetoothClass::setup() {
-  logFunc();
-
   HCI_Init();
   BNRG_SPI_Init();
   reset();
 
-  name = "W-" + System.getId();
-  logDebug("BLE name: " + name);
+  sprintf(name, "W-%s", System.getId());
+  log("DEBUG", "name", name);
 
   int ret = aci_gatt_init();
   if (ret) {
-    logError(F("BLE GATT_Init failed."));
+    log("ERROR", "BLE GATT_Init failed.");
   }
 
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
-  ret = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, name.length(), &service_handle, &dev_name_char_handle, &appearance_char_handle);
+  ret = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, 20, &service_handle, &dev_name_char_handle, &appearance_char_handle);
   if (ret) {
-    logError(F("BLE GAP_Init failed."));
+    log("ERROR", "BLE GAP_Init failed.");
   }
 
-  ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, name.length(), name.c_str());
+  ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, 20, name);
   if (ret) {
-    logError(F("BLE aci_gatt_update_char_value failed."));
+    log("ERROR", "BLE aci_gatt_update_char_value failed.");
   }
 
   ret = aci_gap_set_auth_requirement(MITM_PROTECTION_REQUIRED,
@@ -82,14 +82,14 @@ void BluetoothClass::setup() {
                                      0,
                                      BONDING);
   if (ret == BLE_STATUS_SUCCESS) {
-    logDebug(F("BLE Stack Initialized."));
+    log("DEBUG", "BLE Stack Initialized.");
   }
 
   ret = addService();
   if (ret == BLE_STATUS_SUCCESS) {
-    logDebug(F("BLE Service added successfully."));
+    log("DEBUG", "BLE Service added successfully.");
   } else {
-    logError(F("BLE Error while adding service."));
+    log("ERROR", "BLE Error while adding service.");
   }
 
   ret = aci_hal_set_tx_power_level(1, 0);  // 0 is lowest, prevents eavesdropping
@@ -123,7 +123,6 @@ void BluetoothClass::setup() {
 #define CHALLENGE_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
 uint8_t BluetoothClass::addService() {
-  logFunc();
   tBleStatus ret;
   uint8_t uuid[16];
 
@@ -149,7 +148,7 @@ uint8_t BluetoothClass::addService() {
   return BLE_STATUS_SUCCESS;
 
 fail:
-  logError(F("Error while adding service."));
+  log("ERROR", "Error while adding service.");
   return BLE_STATUS_ERROR;
 }
 
@@ -158,16 +157,14 @@ void BluetoothClass::poll() {
 }
 
 void BluetoothClass::reset() {
-  logFunc();
   BlueNRG_RST();
 }
 
 uint8_t BluetoothClass::setChallenge() {
-  logFunc();
   ECCX08.random(challenge, sizeof(challenge));
   tBleStatus ret = aci_gatt_update_char_value(ServHandle, ChallengeCharHandle, 0, sizeof(challenge), challenge);
   if (ret != BLE_STATUS_SUCCESS) {
-    logError("Error while set challenge: " + String(ret));
+    log("ERROR", "error", String(ret).c_str(), "Error while set challenge");
     return BLE_STATUS_ERROR;
   }
   return BLE_STATUS_SUCCESS;
@@ -177,7 +174,6 @@ uint8_t BluetoothClass::setChallenge() {
 #define ADV_INTERVAL_MAX_MS 100
 
 void BluetoothClass::setConnectable() {
-  logFunc();
   hci_le_set_scan_resp_data(0, NULL);
 
   String localName = String((char)AD_TYPE_COMPLETE_LOCAL_NAME) + name;
@@ -186,7 +182,7 @@ void BluetoothClass::setConnectable() {
                                             STATIC_RANDOM_ADDR, NO_WHITE_LIST_USE,
                                             localName.length(), localName.c_str(), 0, NULL, 0, 0);
   if (ret != BLE_STATUS_SUCCESS) {
-    logDebug((String)ret);
+    log("ERROR", (String)ret);
   }
 }
 
@@ -203,12 +199,11 @@ void BluetoothClass::setConnectable() {
 #define IS(a) handle == a + 1
 
 void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data) {
-  logFunc();
   if (IS(AuthCharHandle) || IS(CmdCharHandle)) {
     char strBuffer[19];
     uint16_t messageLength = att_data[0] | (att_data[1] << 8);
     uint8_t strBegin = 2;
-    // logDebug(String(messageLength));
+    // log("DEBUG", String(messageLength));
     if (messageLength != continueLength) {  // first message
       message = "";
       if (IS(CmdCharHandle)) {
@@ -221,8 +216,8 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
     strBuffer[strLength] = '\0';
     continueLength = messageLength - data_length + 2;  // + 2 because att_data[0] and att_data[1] are not data
     message += String(strBuffer);
-    // logDebug(String(continueLength));
-    // logDebug(message);
+    // log("DEBUG", String(continueLength));
+    // log("DEBUG", message);
     if (continueLength == 0) {  // last message
       if (IS(AuthCharHandle)) {
         Command.authorize(message);
@@ -244,24 +239,22 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
 }
 
 void BluetoothClass::GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle) {
-  logFunc();
   connection_handle = handle;
   char sprintbuff[64];
   snprintf(sprintbuff, 64, "BLE Connected to device: %02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
-  logInfo(sprintbuff);
+  log("INFO_", sprintbuff);
   Command.unauthorize();
   Bluetooth.setChallenge();
   System.setStayAwake(true);
 }
 
 void BluetoothClass::GAP_DisconnectionComplete_CB() {
-  logFunc();
+  log("DEBUG");
   setConnectable();
   System.setStayAwake(false);
 }
 
 void BluetoothClass::Read_Request_CB(uint16_t handle) {
-  logFunc();
   if (connection_handle != 0) {
     aci_gatt_allow_read(connection_handle);
   }

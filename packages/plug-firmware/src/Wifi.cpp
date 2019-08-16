@@ -8,9 +8,8 @@
 #include "Logger.h"
 
 bool InternetClass::connect() {
-  logFunc();
   if (WiFi.status() == WL_NO_SHIELD) {
-    logError(F("WiFi hardware not present"));
+    log("ERROR", "WiFi hardware not present");
     return false;
   }
   const int maxTry = 5;
@@ -18,17 +17,17 @@ bool InternetClass::connect() {
   JsonObject wifi = Config.get()["wifi"];
   const char* ssid = wifi["ssid"];
   const char* password = wifi["password"];
-  logDebug("Attempting to connect to SSID: " + String(ssid));
+  log("DEBUG", "ssid", ssid);
   while (WiFi.begin(ssid, password) != WL_CONNECTED) {
     Watchdog.reset();
-    log(F("."));
+    Serial.print(".");
     if (i == maxTry) {
-      logDebug(F("Failed to connect, try later"));
+      log("DEBUG", "Failed to connect, try later");
       return false;
     }
     i++;
   }
-  logDebug(F("You're connected to the network"));
+  log("DEBUG", "You're connected to the network");
   return true;
 }
 

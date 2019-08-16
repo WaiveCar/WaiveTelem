@@ -1,35 +1,58 @@
 #include <Arduino.h>
+#include <cstdarg>
 
 #include "Logger.h"
 #include "Pins.h"
 #include "System.h"
 
 void LoggerClass::setup() {
-  logFunc();
-  while (!SD.begin(SD_CS_PIN)) {
-    logError(F("Failed to initialize SD Library"));
-    delay(5000);
-  }
+  log("DEBUG");
   writeFile = SD.open("LOG.TXT", FILE_WRITE);
   if (!writeFile) {
-    logError("LOG.TXT open failed");
+    log("ERROR", "LOG.TXT open failed");
     return;
   }
 }
 
-void LoggerClass::logLine(const char* type, const String& s) {
-  // id, time, level, file, func, key1, value1, key2, value2... msg
-  //const String json = String("{\"time\":\"") + System.getDateTime() + "\",\"level\":\"" + type + "\",\"file\":\"" + type + "\",\"func\":\"" + type += "\",\"";
-  const String str = System.getDateTime() + String(" ") + s;
-  if (String(type) != "Debug") {
-    System.telemeter(String("{\"system\":{\"last" + String(type) + "\":\"") + s + "\"}}");
-  } else {
-    Serial.println(str);
+void LoggerClass::logKeyValueJson(const char* key, ...) {
+  String json = (char*)NULL;
+  json.reserve(256);
+  va_list arg;
+  va_start(arg, key);
+  bool isFirst = true;
+  bool isNoMore = false;
+  while (key) {
+    const char* value = va_arg(arg, const char*);
+    if (!value) {
+      value = key;
+      key = "msg";
+      isNoMore = true;
+    }
+    json += (isFirst ? "{\"" : "\",\"") + String(key) + "\":\"" + value;
+    if (isNoMore) {
+      break;
+    }
+    key = va_arg(arg, const char*);
+    isFirst = false;
   }
+  va_end(arg);
+  json += "\"}";
+
+  // TODO log to mqtt
   if (writeFile) {
-    writeFile.println(str);
+    writeFile.println(json);
     writeFile.flush();
   }
+
+#if DEBUG
+  json.replace("{\"t\":\"", "");
+  json.replace("\",\"l\":\"", " ");
+  json.replace("\",\"s\":\"", " ");
+  json.replace("\",\"f\":\"", " ");
+  json.replace("\"", " ");
+#endif
+
+  Serial.println(json);
 }
 
 LoggerClass Logger;

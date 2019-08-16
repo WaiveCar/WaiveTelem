@@ -3,27 +3,20 @@
 
 #include <SD.h>
 
-#include "Gps.h"
 #include "Mqtt.h"
+#include "System.h"
 
-#define logError(s) Logger.logLine("Error", s)
-#define logInfo(s) Logger.logLine("Info", s)
-
-#ifdef DEBUG
-#define log(s) Serial.print(s)
-#define logDebug(s) Logger.logLine("Debug", s)
-#define logFunc() Logger.logLine("Debug", String(__FILE__) + ":" + __LINE__ + " " + __func__ + "()")
-#else
-#define log(s)
-#define logDebug(s)
-#define logFunc(s)
-#endif
+#define log(...) logKv(__VA_ARGS__, NULL)
+#define logKv(l, ...)                                                                     \
+  Logger.logKeyValueJson("t", System.getDateTime(), "l", l,                               \
+                         "s", (String(__FILE__) + ":" + __LINE__).c_str(), "f", __func__, \
+                         __VA_ARGS__)
 
 class LoggerClass {
  public:
   void setup();
   void logFreeMemory();
-  void logLine(const char* type, const String& s);
+  void logKeyValueJson(const char* key, ...);
 
  private:
   File writeFile;

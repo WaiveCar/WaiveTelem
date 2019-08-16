@@ -32,7 +32,7 @@ static int32_t skipHeaders() {
       prevPrevC = prevC;
       prevC = c;
       c = client.read();
-      log(String(c));
+      Serial.print(String(c));
       if (prevPrevC == '\n' && prevC == '\r' && c == '\n') {
         return 0;
       }
@@ -50,7 +50,7 @@ static int32_t saveFile(const char* to) {
   SHA256.beginHmac("https failed");
   File file = SD.open(to, FILE_WRITE);
   if (!file) {
-    logError("file open failed");
+    log("ERROR", "file open failed");
     return -1;
   }
   file.seek(0);  // workaround BUG in SD to default to append
@@ -66,7 +66,7 @@ static int32_t saveFile(const char* to) {
     }
     Watchdog.reset();
   }
-  logDebug("total bytes downloaded: " + String(counter));
+  log("DEBUG", "totalBytes", String(counter).c_str());
   SHA256.endHmac();
   file.close();
   return 0;
@@ -82,18 +82,17 @@ static int32_t verifyFile(const String& file) {
     computed += String(b, HEX);
   }
   String sha256 = file.substring(file.lastIndexOf("_") + 1);
-  logDebug(sha256);
-  logDebug(computed);
+  log("DEBUG", "computed", computed.c_str());
   if (sha256 == computed) {
     return 0;
   } else {
-    logError("checksum failed");
+    log("ERROR", "checksum failed");
     return -1;
   }
 }
 
 int32_t HttpsClass::download(const char* host, const char* from, const char* to) {
-  logDebug("host: " + String(host) + ", from: " + from + ", to: " + to);
+  log("DEBUG", "host: " + String(host) + ", from: " + from + ", to: " + to);
   int32_t error;
   if (client.connect(host, 80)) {
     sendGetRequest(host, from);
@@ -105,7 +104,7 @@ int32_t HttpsClass::download(const char* host, const char* from, const char* to)
     if (error) return error;
     return Command.moveFile("TEMP", to);
   } else {
-    logError(F("https failed"));
+    log("ERROR", "https failed");
     return -10;
   }
 }

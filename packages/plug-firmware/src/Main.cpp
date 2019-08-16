@@ -4,6 +4,7 @@
 
 #include "Bluetooth.h"
 #include "Can.h"
+#include "Command.h"
 #include "Config.h"
 #include "Gps.h"
 #include "Internet.h"
@@ -14,19 +15,22 @@
 
 void setup() {
   Serial.begin(115200);
-
-  logFunc();
 #if DEBUG
-  // the following cause cause the firmware to only run if serial-monitored
-  delay(5000);
+  delay(5000);  // to see beginning of the login
 #endif
-  if (!ECCX08.begin()) {
-    logError(F("No ECCX08 present"));
-  }
   Watchdog.enable(WATCHDOG_TIMEOUT);
+
+  log("DEBUG");
   Pins.setup();
+  if (!ECCX08.begin()) {
+    log("ERROR", "No ECCX08 present");
+  }
+  if (!SD.begin(SD_CS_PIN)) {
+    log("ERROR", "Failed to initialize SD Library");
+  }
   Logger.setup();
   Config.load();
+  Command.setup();
   System.setup();
   Mqtt.setup();
 #ifdef ARDUINO_SAMD_MKR1000

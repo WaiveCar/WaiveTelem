@@ -15,7 +15,7 @@
 #define COMMAND_DOC_SIZE 512
 
 void CommandClass::setup() {
-  logFunc();
+  log("DEBUG");
   // set bluetooth token key and iv
   const char* cert = Config.get()["mqtt"]["cert"];
   char* buf = (char*)malloc(48);
@@ -26,12 +26,12 @@ void CommandClass::setup() {
 }
 
 void CommandClass::authorize(const String& encrypted) {
-  logFunc();
+  log("DEBUG");
   String json = decryptToken(encrypted);
   StaticJsonDocument<AUTH_DOC_SIZE> authDoc;
   DeserializationError error = deserializeJson(authDoc, json);
   if (error) {
-    logError("Failed to read json: " + String(error.c_str()));
+    log("ERROR", "error", error.c_str(), "Failed to read json");
     return;
   }
   authCmds = authDoc["cmds"] | "";
@@ -42,16 +42,17 @@ void CommandClass::authorize(const String& encrypted) {
 }
 
 uint8_t* CommandClass::getAuthSecret() {
-  logFunc();
   return authSecret;
 }
 
 void CommandClass::processJson(const String& json, bool isBluetooth) {
-  logFunc();
+  log("DEBUG");
   StaticJsonDocument<COMMAND_DOC_SIZE> cmdDoc;
   DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
-    logError("Failed to read json: " + String(error.c_str()));
+    log("ERROR",
+        "Failed to read json: " +
+            String(error.c_str()));
     return;
   }
   JsonObject desired = isBluetooth ? cmdDoc.as<JsonObject>() : cmdDoc["state"];
@@ -62,16 +63,16 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
   }
   if (isBluetooth) {
     if (authCmds.indexOf(cmdKey) == -1) {
-      logError("authCmds: " + authCmds + ", cmdKey: " + cmdKey);
+      log("ERROR", "authCmds", authCmds.c_str(), "cmdKey", cmdKey.c_str());
       return;
     }
     uint32_t time = System.getTime();
     if (authStart > time) {
-      logError("authStart: " + String(authStart) + ", time: " + time);
+      log("ERROR", "authStart", String(authStart).c_str(), "time", String(time).c_str());
       return;
     }
     if (authEnd < time) {
-      logError("authEnd: " + String(authEnd) + ", time: " + time);
+      log("ERROR", "authEnd", String(authEnd).c_str(), "time", String(time).c_str());
       return;
     }
   }
@@ -104,7 +105,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
       System.reportCommandDone(json, cmdKey, cmdValue);
       reboot();
     } else {
-      logError("Error: " + json);
+      log("ERROR", json.c_str());
     }
     return;
   } else if (!copy.isNull()) {
@@ -115,19 +116,18 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
       System.reportCommandDone(json, cmdKey, cmdValue);
       reboot();
     } else {
-      logError("Error: " + json);
+      log("ERROR", json.c_str());
     }
     return;
   } else {
-    logError("Unknown command: " + json);
+    log("ERROR", json.c_str());
     return;
   }
   System.reportCommandDone(json, cmdKey, cmdValue);
 }
 
 void CommandClass::reboot() {
-  logFunc();
-  logInfo(F("Rebooting now"));
+  log("INFO_", "Rebooting now");
   delay(1000);
   Watchdog.enable(1);
   while (true)
@@ -135,7 +135,7 @@ void CommandClass::reboot() {
 }
 
 int32_t CommandClass::moveFile(const char* from, const char* to) {
-  logFunc();
+  log("DEBUG", "from", from, "to", to);
   int32_t error = copyFile(from, to);
   if (!error) {
     SD.remove((char*)from);
@@ -144,15 +144,15 @@ int32_t CommandClass::moveFile(const char* from, const char* to) {
 }
 
 int32_t CommandClass::copyFile(const char* from, const char* to) {
-  logFunc();
+  log("DEBUG", "from", from, "to", to);
   File readFile = SD.open(from, FILE_READ);
   if (!readFile) {
-    logError("readFile open failed");
+    log("ERROR", "readFile open failed");
     return -1;
   }
   File writeFile = SD.open(to, FILE_WRITE);
   if (!writeFile) {
-    logError("writeFile open failed");
+    log("ERROR", "writeFile open failed");
     return -1;
   }
   writeFile.seek(0);  // workaround BUG in SD to default to append
@@ -160,7 +160,7 @@ int32_t CommandClass::copyFile(const char* from, const char* to) {
   while (readFile.available()) {
     int bytesRead = readFile.read(buf, sizeof(buf));
     writeFile.write(buf, bytesRead);
-    // logDebug("write " + String(bytesRead));
+    // log("DEBUG", "write " + String(bytesRead));
     Watchdog.reset();
   }
   readFile.close();
@@ -169,7 +169,6 @@ int32_t CommandClass::copyFile(const char* from, const char* to) {
 }
 
 String CommandClass::decryptToken(const String& encrypted) {
-  logFunc();
   // see https://github.com/nogoegst/bearssl/blob/master/test/test_crypto.c
   unsigned char iv[16];
   br_aes_gen_cbcdec_keys v_dc;
@@ -186,14 +185,14 @@ String CommandClass::decryptToken(const String& encrypted) {
   }
   size_t numberOfPadding = buf[length - 1];
   buf[length - numberOfPadding] = '\0';
-  logDebug(buf);
+  log("DEBUG", buf);
   String token(buf);
   free(buf);
   return token;
 }
 
 void CommandClass::unauthorize() {
-  logFunc();
+  log("DEBUG");
   authCmds = "";
   authStart = 0;
   authEnd = 0;

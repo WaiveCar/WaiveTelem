@@ -20,20 +20,19 @@ int freeMemory() {
   return &top - reinterpret_cast<char*>(sbrk(0));
 }
 
-String& SystemClass::getId() {
+const char* SystemClass::getId() {
   return id;
 }
 
 void SystemClass::setup() {
-  logFunc();
 #ifndef DEBUG
   rtc.begin();
   rtc.setAlarmSeconds(0);
   rtc.enableAlarm(rtc.MATCH_SS);
 #endif
 
-  id = ECCX08.serialNumber();
-  logDebug("id: " + id);
+  sprintf(id, "%s", ECCX08.serialNumber().c_str());
+  log("DEBUG", "id", id);
 
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
@@ -45,8 +44,8 @@ void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
   JsonObject heartbeat = Config.get()["heartbeat"];
   uint32_t interval = inRide ? heartbeat["inRide"] | 30 : heartbeat["notInRide"] | 900;
-  // logInfo("time: " + String(time));
-  // logInfo("lastHeartbeat: " + String(lastHeartbeat));
+  // log("INFO_", "time: " + String(time));
+  // log("INFO_", "lastHeartbeat: " + String(lastHeartbeat));
   if (time - lastHeartbeat == interval * 29 / 30 - 15) {
     Gps.wakeup();
   } else if (lastHeartbeat == -1 || time - lastHeartbeat >= interval) {
@@ -69,7 +68,6 @@ const char* SystemClass::getDateTime() {
 }
 
 void SystemClass::sendInfo() {
-  logFunc();
   statusDoc["firmware"] = FIRMWARE_VERSION;
 #ifdef DEBUG
   statusDoc["inRide"] = "true";
@@ -78,11 +76,11 @@ void SystemClass::sendInfo() {
 #endif
   String version = "{\"inRide\":\"" + String(statusDoc["inRide"].as<char*>()) + "\", \"system\":{\"firmware\":\"" +
                    FIRMWARE_VERSION + "\",\"configFreeMem\":" + Config.getConfigFreeMem() + "}}";
-  telemeter(version);
+  report(version);
 }
 
 void SystemClass::sendHeartbeat() {
-  logFunc();
+  // log("DEBUG");
   JsonObject heartbeat = statusDoc["heartbeat"];
   JsonObject gps = heartbeat["gps"];
   JsonObject system = heartbeat["system"];
@@ -96,19 +94,19 @@ void SystemClass::sendHeartbeat() {
   system["signalStrength"] = Internet.getSignalStrength();
   system["heapFreeMem"] = freeMemory();
   system["statusFreeMem"] = STATUS_DOC_SIZE - statusDoc.memoryUsage();
-  telemeter(statusDoc["heartbeat"].as<String>());
+  report(statusDoc["heartbeat"].as<String>());
 }
 
 void SystemClass::sendCanStatus() {
-  logFunc();
+  log("DEBUG");
   if (canStatusChanged) {
-    telemeter("{\"can\":" + statusDoc["can"].as<String>() + "}");
+    report("{\"can\":" + statusDoc["can"].as<String>() + "}");
     canStatusChanged = false;
   }
 }
 
 void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delta) {
-  logFunc();
+  log("DEBUG");
   JsonObject can = statusDoc["can"];
   uint64_t oldValue = can[name];
   if (oldValue != value) {
@@ -140,13 +138,12 @@ void SystemClass::setTimes(uint32_t in) {
   lastMillis = millis();
 }
 
-void SystemClass::telemeter(const String& reported, const String& desired) {
-  logFunc();
+void SystemClass::report(const String& reported, const String& desired) {
   String message = "{\"state\":{" +
                    (reported != "" ? "\"reported\":" + reported : "") +
                    (reported != "" && desired != "" ? "," : "") +
                    (desired != "" ? "\"desired\":" + desired : "") + "}}";
-  Logger.logLine("Debug", message);
+  log("DEBUG", "report", message.c_str());
   if (Mqtt.isConnected()) {
     Mqtt.send(message);
   }
@@ -157,7 +154,6 @@ bool SystemClass::getStayAwake() {
 }
 
 void SystemClass::setStayAwake(bool stay) {
-  logFunc();
   stayAwake = stay;
 }
 
@@ -177,12 +173,12 @@ void SystemClass::setCanStatusChanged() {
 }
 
 void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& cmdValue) {
-  logFunc();
+  // log("DEBUG");
   statusDoc[cmdKey] = cmdValue;
   String escapedJson = json;
   escapedJson.replace("\"", "\\\"");
   String lastCmd = "\"system\":{\"lastCmd\":\"" + escapedJson + "\"}";
-  System.telemeter("{" + lastCmd + +",\"" + cmdKey + "\":\"" + cmdValue + "\"}", "{\"" + cmdKey + "\":null}");
+  System.report("{" + lastCmd + +",\"" + cmdKey + "\":\"" + cmdValue + "\"}", "{\"" + cmdKey + "\":null}");
 }
 
 SystemClass System;

@@ -9,14 +9,14 @@
 
 class SystemClass {
  public:
-  String& getId();
+  const char* getId();
   void setup();
   void poll();
   void setTimes(uint32_t in);
   uint32_t getTime();
   const char* getDateTime();
   void keepTime();
-  void telemeter(const String& reported, const String& desired = "");
+  void report(const String& reported, const String& desired = "");
   void sendInfo();
   void sendHeartbeat();
   void sendCanStatus();
@@ -28,7 +28,7 @@ class SystemClass {
   void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
 
  private:
-  String id;
+  char id[19];
   bool canStatusChanged = false;
   int32_t lastHeartbeat = -1;
   uint32_t bootTime = 0;
