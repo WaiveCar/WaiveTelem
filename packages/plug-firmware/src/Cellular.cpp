@@ -15,23 +15,14 @@ static GPRS gprs;
 static NBScanner nbScanner;
 
 bool InternetClass::connect() {
-  const int maxTry = 10;
-  int i = 1;
   JsonObject nb = Config.get()["nb"];
   const char* apn = nb["apn"] | "hologram";
-  Watchdog.disable();  // nbAccess.begin() can take hours to register SIM
-  while ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
-    Serial.print(".");
-    delay(3000);
-    if (i == maxTry) {
-      log("DEBUG", "Failed to connect, try later");
-      return false;
-    }
-    i++;
+  if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
+    log("WARN ", "Failed to connect, try later");
+    return false;
   }
-  Watchdog.enable(WATCHDOG_TIMEOUT);
-  log("DEBUG", "ss", getSignalStrength());
-  log("DEBUG", "carrier", nbScanner.getCurrentCarrier());
+  log("DEBUG", "ss", String(getSignalStrength()).c_str());
+  log("INFO ", "carrier", nbScanner.getCurrentCarrier().c_str());
   // log("DEBUG", "IP Address: " + String(gprs.getIPAddress(), 16));
   return true;
 }

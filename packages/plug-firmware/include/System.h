@@ -22,7 +22,7 @@ class SystemClass {
   void sendCanStatus();
   void setCanStatus(const String& name, uint64_t value, uint32_t delta);
   void sleep(uint32_t sec);
-  bool getStayAwake();
+  bool stayAwake();
   void setStayAwake(bool stay);
   void setCanStatusChanged();
   void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
@@ -35,7 +35,7 @@ class SystemClass {
   uint32_t time = 0;
   char dateTime[32] = "";
   StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
-  bool stayAwake = false;
+  bool stayawake = false;
   RTCZero rtc;
   uint32_t lastMillis = 0;
 };

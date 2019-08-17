@@ -33,12 +33,7 @@ void setup() {
   Command.setup();
   System.setup();
   Mqtt.setup();
-#ifdef ARDUINO_SAMD_MKR1000
   Mqtt.poll();
-#else
-  Internet.connect();
-#endif
-  System.keepTime();
   Gps.setup();
   Bluetooth.setup();
   Can.setup();
@@ -47,13 +42,11 @@ void setup() {
 
 void loop() {
   Watchdog.enable(WATCHDOG_TIMEOUT);
-  if (!System.getStayAwake()) {
+  if (!System.stayAwake()) {
     System.sleep(1);
   }
   System.keepTime();
-#ifdef ARDUINO_SAMD_MKR1000
-  Mqtt.poll();
-#endif
+  // Mqtt.poll();
   System.poll();
   Bluetooth.poll();
   Can.poll();

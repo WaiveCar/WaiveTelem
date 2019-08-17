@@ -16,7 +16,7 @@ void LoggerClass::setup() {
 
 void LoggerClass::logKeyValueJson(const char* key, ...) {
   String json = (char*)NULL;
-  json.reserve(256);
+  json.reserve(512);
   va_list arg;
   va_start(arg, key);
   bool isFirst = true;
@@ -38,21 +38,23 @@ void LoggerClass::logKeyValueJson(const char* key, ...) {
   va_end(arg);
   json += "\"}";
 
-  // TODO log to mqtt
+  if (Mqtt.isConnected()) {
+    Mqtt.logMsg(json);
+  }
   if (writeFile) {
     writeFile.println(json);
     writeFile.flush();
   }
 
-#if DEBUG
+  // #if DEBUG
+  // make log more readible for human, but no longer json
   json.replace("{\"t\":\"", "");
   json.replace("\",\"l\":\"", " ");
   json.replace("\",\"s\":\"", " ");
   json.replace("\",\"f\":\"", " ");
-  json.replace("\"", " ");
-#endif
-
   Serial.println(json);
+  // #endif
+  json.replace("\"", " ");
 }
 
 LoggerClass Logger;

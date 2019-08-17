@@ -7,10 +7,12 @@ class MqttClass {
   void connect();
   bool isConnected();
   void poll();
-  void send(const String& message);
+  void updateShadow(const String& message);
+  void logMsg(const String& message);
 
  private:
-  String topic;
+  String updateTopic;
+  String logTopic;
 };
 
 extern MqttClass Mqtt;

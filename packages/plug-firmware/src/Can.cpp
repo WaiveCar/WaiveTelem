@@ -77,7 +77,7 @@ void CanClass::setup() {
       }
     }
   }
-  sleep();
+  // sleep();
 }
 
 void CanClass::poll() {

@@ -26,7 +26,6 @@ void CommandClass::setup() {
 }
 
 void CommandClass::authorize(const String& encrypted) {
-  log("DEBUG");
   String json = decryptToken(encrypted);
   StaticJsonDocument<AUTH_DOC_SIZE> authDoc;
   DeserializationError error = deserializeJson(authDoc, json);
@@ -37,6 +36,7 @@ void CommandClass::authorize(const String& encrypted) {
   authCmds = authDoc["cmds"] | "";
   authStart = authDoc["start"] | 0;
   authEnd = authDoc["end"] | 0;
+  log("INFO ", "authCmds", authCmds.c_str(), "authStart", String(authStart).c_str(), "authEnd", String(authEnd).c_str());
   const char* secret = authDoc["secret"] | "";
   rbase64_decode((char*)authSecret, (char*)secret, 16);
 }
@@ -88,10 +88,10 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     Pins.unimmobilize();
   } else if (cmdKey == "inRide" && cmdValue == "true") {
     System.setCanStatusChanged();
-    Can.wakeup();
+    // Can.wakeup();
   } else if (cmdKey == "inRide" && cmdValue == "false") {
     System.setCanStatusChanged();
-    Can.sleep();
+    // Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
     System.reportCommandDone(json, cmdKey, cmdValue);
     reboot();
@@ -127,7 +127,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
 }
 
 void CommandClass::reboot() {
-  log("INFO_", "Rebooting now");
+  log("INFO ", "Rebooting now");
   delay(1000);
   Watchdog.enable(1);
   while (true)
@@ -185,7 +185,7 @@ String CommandClass::decryptToken(const String& encrypted) {
   }
   size_t numberOfPadding = buf[length - 1];
   buf[length - numberOfPadding] = '\0';
-  log("DEBUG", buf);
+  // log("DEBUG", buf);
   String token(buf);
   free(buf);
   return token;

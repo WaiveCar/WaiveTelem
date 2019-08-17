@@ -37,10 +37,13 @@ void MqttClass::setup() {
 }
 
 void MqttClass::connect() {
+  Watchdog.disable();  // Internet.connect() and mqttClient.connect() can take a long time
   if (!Internet.isConnected()) {
     if (!Internet.connect()) {
+      Watchdog.enable();
       return;
     }
+    System.keepTime();
     // test internect connection
     // Watchdog.disable();
     // Https.download("waiveplug.s3.us-east-2.amazonaws.com", "config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP");  // connect sometimes works with DigiCertBaltimoreCA_2G2, but WR failed
@@ -50,23 +53,19 @@ void MqttClass::connect() {
   const JsonObject mqtt = Config.get()["mqtt"];
   const char* url = mqtt["url"] | "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com";  // "waive.azure-devices.net";
 
-  log("DEBUG", "broker", url);
-  const int maxTry = 10;
-  int i = 1;
-  while (!mqttClient.connect(url, 8883)) {
-    Watchdog.reset();
-    if (i == maxTry) {
-      log("WARN_", "Failed to connect, try later");
-      return;
-    }
-    log("WARN_", "error", String(mqttClient.connectError()).c_str());
-    delay(5000);
-    i++;
+  log("INFO ", "broker", url);
+  if (!mqttClient.connect(url, 8883)) {
+    Watchdog.enable();
+    log("WARN ", "error", String(mqttClient.connectError()).c_str());
+    return;
   }
+  Watchdog.enable();
   log("DEBUG", "You're connected to the MQTT broker");
   String id = String(System.getId());
   mqttClient.subscribe("$aws/things/" + id + "/shadow/update/delta");
-  topic = "$aws/things/" + id + "/shadow/update";
+  updateTopic = "$aws/things/" + id + "/shadow/update";
+  // things/+/log
+  logTopic = "things/" + id + "/log";
 }
 
 bool MqttClass::isConnected() {
@@ -80,9 +79,14 @@ void MqttClass::poll() {
   mqttClient.poll();
 }
 
-void MqttClass::send(const String& message) {
-  // log("DEBUG");
-  mqttClient.beginMessage(topic);
+void MqttClass::updateShadow(const String& message) {
+  mqttClient.beginMessage(updateTopic);
+  mqttClient.print(message);
+  mqttClient.endMessage();
+}
+
+void MqttClass::logMsg(const String& message) {
+  mqttClient.beginMessage(logTopic);
   mqttClient.print(message);
   mqttClient.endMessage();
 }

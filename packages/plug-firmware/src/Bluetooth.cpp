@@ -15,7 +15,7 @@ void HCI_Event_CB(void *pckt) {
   if (hci_pckt->type != HCI_EVENT_PKT)
     return;
 
-  log("DEBUG", "evt", String(event_pckt->evt).c_str());
+  // log("DEBUG", "evt", String(event_pckt->evt).c_str());
 
   switch (event_pckt->evt) {
     case EVT_DISCONN_COMPLETE: {
@@ -55,7 +55,7 @@ void BluetoothClass::setup() {
   reset();
 
   sprintf(name, "W-%s", System.getId());
-  log("DEBUG", "name", name);
+  log("INFO ", "name", name);
 
   int ret = aci_gatt_init();
   if (ret) {
@@ -81,13 +81,13 @@ void BluetoothClass::setup() {
                                      DONOT_USE_FIXED_PIN_FOR_PAIRING,
                                      0,
                                      BONDING);
-  if (ret == BLE_STATUS_SUCCESS) {
-    log("DEBUG", "BLE Stack Initialized.");
-  }
+  // if (ret == BLE_STATUS_SUCCESS) {
+  //   log("DEBUG", "BLE Stack Initialized.");
+  // }
 
   ret = addService();
   if (ret == BLE_STATUS_SUCCESS) {
-    log("DEBUG", "BLE Service added successfully.");
+    // log("DEBUG", "BLE Service added successfully.");
   } else {
     log("ERROR", "BLE Error while adding service.");
   }
@@ -242,7 +242,7 @@ void BluetoothClass::GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
   connection_handle = handle;
   char sprintbuff[64];
   snprintf(sprintbuff, 64, "BLE Connected to device: %02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
-  log("INFO_", sprintbuff);
+  log("INFO ", sprintbuff);
   Command.unauthorize();
   Bluetooth.setChallenge();
   System.setStayAwake(true);

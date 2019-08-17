@@ -1,5 +1,4 @@
 #ifdef ARDUINO_SAMD_MKR1000
-#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <WiFi101.h>
 
@@ -12,20 +11,13 @@ bool InternetClass::connect() {
     log("ERROR", "WiFi hardware not present");
     return false;
   }
-  const int maxTry = 5;
-  int i = 1;
   JsonObject wifi = Config.get()["wifi"];
   const char* ssid = wifi["ssid"];
   const char* password = wifi["password"];
   log("DEBUG", "ssid", ssid);
-  while (WiFi.begin(ssid, password) != WL_CONNECTED) {
-    Watchdog.reset();
-    Serial.print(".");
-    if (i == maxTry) {
-      log("DEBUG", "Failed to connect, try later");
-      return false;
-    }
-    i++;
+  if (WiFi.begin(ssid, password) != WL_CONNECTED) {
+    log("DEBUG", "Failed to connect, try later");
+    return false;
   }
   log("DEBUG", "You're connected to the network");
   return true;

@@ -25,14 +25,12 @@ const char* SystemClass::getId() {
 }
 
 void SystemClass::setup() {
-#ifndef DEBUG
   rtc.begin();
-  rtc.setAlarmSeconds(0);
+  rtc.setAlarmSeconds(59);
   rtc.enableAlarm(rtc.MATCH_SS);
-#endif
 
   sprintf(id, "%s", ECCX08.serialNumber().c_str());
-  log("DEBUG", "id", id);
+  log("INFO ", "id", id);
 
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
@@ -44,8 +42,8 @@ void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
   JsonObject heartbeat = Config.get()["heartbeat"];
   uint32_t interval = inRide ? heartbeat["inRide"] | 30 : heartbeat["notInRide"] | 900;
-  // log("INFO_", "time: " + String(time));
-  // log("INFO_", "lastHeartbeat: " + String(lastHeartbeat));
+  // log("DEBUG", "time: " + String(time));
+  // log("DEBUG", "lastHeartbeat: " + String(lastHeartbeat));
   if (time - lastHeartbeat == interval * 29 / 30 - 15) {
     Gps.wakeup();
   } else if (lastHeartbeat == -1 || time - lastHeartbeat >= interval) {
@@ -89,9 +87,9 @@ void SystemClass::sendHeartbeat() {
   gps["hdop"] = Gps.getHdop();
   gps["speed"] = Gps.getSpeed();
   gps["heading"] = Gps.getHeading();
-  system["dateTime"] = System.getDateTime();
+  system["time"] = System.getDateTime();
   system["uptime"] = time - bootTime;
-  system["signalStrength"] = Internet.getSignalStrength();
+  system["signal"] = Internet.getSignalStrength();
   system["heapFreeMem"] = freeMemory();
   system["statusFreeMem"] = STATUS_DOC_SIZE - statusDoc.memoryUsage();
   report(statusDoc["heartbeat"].as<String>());
@@ -118,22 +116,22 @@ void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delt
 }
 
 void SystemClass::sleep(uint32_t sec) {
+  // #ifdef DEBUG
+  //   // don't use Watchdog.sleep as it disconnects USB
+  //   delay(sec * 1000);
+  // #else
   digitalWrite(LED_BUILTIN, LOW);
-#ifdef DEBUG
-  // don't use Watchdog.sleep as it disconnects USB
-  delay(sec * 1000);
-#else
-  rtc.setSeconds(0);
+  rtc.setSeconds(60 - sec);
   rtc.standbyMode();
   _ulTickCount = _ulTickCount + sec * 1000;
-#endif
   digitalWrite(LED_BUILTIN, HIGH);
+  // #endif
 }
 
 void SystemClass::setTimes(uint32_t in) {
   time = in;
   if (bootTime == 0) {
-    bootTime = in;
+    bootTime = in - millis() / 1000;
   }
   lastMillis = millis();
 }
@@ -145,20 +143,20 @@ void SystemClass::report(const String& reported, const String& desired) {
                    (desired != "" ? "\"desired\":" + desired : "") + "}}";
   log("DEBUG", "report", message.c_str());
   if (Mqtt.isConnected()) {
-    Mqtt.send(message);
+    Mqtt.updateShadow(message);
   }
 }
 
-bool SystemClass::getStayAwake() {
-  return stayAwake;
+bool SystemClass::stayAwake() {
+  return stayawake;
 }
 
 void SystemClass::setStayAwake(bool stay) {
-  stayAwake = stay;
+  stayawake = stay;
 }
 
 void SystemClass::keepTime() {
-  if (time % 20 == 0 && Internet.isConnected()) {  // don't get time from modem too often; only every 20 secs
+  if (time % 60 == 0 && Internet.isConnected()) {  // don't get time from modem too often; only every minute
     setTimes(Internet.getTime());
   } else {
     int32_t elapsed = millis() - lastMillis;
