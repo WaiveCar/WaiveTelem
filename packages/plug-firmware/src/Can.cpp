@@ -51,7 +51,7 @@ static void onCanReceive1(const CANMessage& inMessage) {
   onCanReceive(inMessage, 1);
 }
 
-void CanClass::setup() {
+void CanClass::begin() {
   log("DEBUG");
   JsonObject can = Config.get()["can"];
   JsonArray bus = can["bus"];

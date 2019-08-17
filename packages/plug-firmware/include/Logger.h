@@ -14,7 +14,7 @@
 
 class LoggerClass {
  public:
-  void setup();
+  void begin();
   void logKeyValueJson(const char* key, ...);
 
  private:

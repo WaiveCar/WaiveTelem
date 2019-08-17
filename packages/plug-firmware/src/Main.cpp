@@ -20,23 +20,22 @@ void setup() {
 #endif
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
-  log("DEBUG");
-  Pins.setup();
+  Pins.begin();
   if (!ECCX08.begin()) {
     log("ERROR", "No ECCX08 present");
   }
   if (!SD.begin(SD_CS_PIN)) {
     log("ERROR", "Failed to initialize SD Library");
   }
-  Logger.setup();
+  Logger.begin();
   Config.load();
-  Command.setup();
-  System.setup();
-  Mqtt.setup();
+  Command.begin();
+  System.begin();
+  Mqtt.begin();
   Mqtt.poll();
-  Gps.setup();
-  Bluetooth.setup();
-  Can.setup();
+  Bluetooth.begin();
+  Gps.begin();
+  Can.begin();
   System.sendInfo();
 }
 

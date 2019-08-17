@@ -5,7 +5,7 @@
 #include "Logger.h"
 #include "Pins.h"
 
-void PinsClass::setup() {
+void PinsClass::begin() {
   log("DEBUG");
 #ifdef ARDUINO_SAMD_WAIVE1000
   pinMode(VIN_SENSE, INPUT);

@@ -3,7 +3,7 @@
 
 class GpsClass {
  public:
-  void setup();
+  void begin();
   bool poll();
   int getLatitude();
   int getLongitude();

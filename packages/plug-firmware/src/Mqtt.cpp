@@ -25,7 +25,7 @@ static unsigned long getTime() {
   return Internet.getTime();
 }
 
-void MqttClass::setup() {
+void MqttClass::begin() {
   log("DEBUG");
   ArduinoBearSSL.onGetTime(getTime);
   JsonObject mqtt = Config.get()["mqtt"];

@@ -14,7 +14,7 @@
 #define AUTH_DOC_SIZE 128
 #define COMMAND_DOC_SIZE 512
 
-void CommandClass::setup() {
+void CommandClass::begin() {
   log("DEBUG");
   // set bluetooth token key and iv
   const char* cert = Config.get()["mqtt"]["cert"];

@@ -6,7 +6,7 @@
 
 class BluetoothClass {
  public:
-  void setup();
+  void begin();
   uint8_t addService();
   void poll();
   void reset();

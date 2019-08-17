@@ -24,7 +24,7 @@ const char* SystemClass::getId() {
   return id;
 }
 
-void SystemClass::setup() {
+void SystemClass::begin() {
   rtc.begin();
   rtc.setAlarmSeconds(59);
   rtc.enableAlarm(rtc.MATCH_SS);
@@ -116,16 +116,12 @@ void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delt
 }
 
 void SystemClass::sleep(uint32_t sec) {
-  // #ifdef DEBUG
-  //   // don't use Watchdog.sleep as it disconnects USB
-  //   delay(sec * 1000);
-  // #else
-  digitalWrite(LED_BUILTIN, LOW);
-  rtc.setSeconds(60 - sec);
-  rtc.standbyMode();
-  _ulTickCount = _ulTickCount + sec * 1000;
-  digitalWrite(LED_BUILTIN, HIGH);
-  // #endif
+  delay(sec * 1000);  // don't use Watchdog.sleep as it disconnects USB
+  // digitalWrite(LED_BUILTIN, LOW);
+  // rtc.setSeconds(60 - sec);
+  // rtc.standbyMode();
+  // _ulTickCount = _ulTickCount + sec * 1000;
+  // digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void SystemClass::setTimes(uint32_t in) {

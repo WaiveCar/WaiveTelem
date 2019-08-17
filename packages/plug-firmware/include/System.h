@@ -10,7 +10,7 @@
 class SystemClass {
  public:
   const char* getId();
-  void setup();
+  void begin();
   void poll();
   void setTimes(uint32_t in);
   uint32_t getTime();

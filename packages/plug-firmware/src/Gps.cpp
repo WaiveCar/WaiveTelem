@@ -30,7 +30,7 @@ static NMEAGPS gps;
 
 #endif
 
-void GpsClass::setup() {
+void GpsClass::begin() {
   log("DEBUG");
   GPSSerial.begin(9600);
 #ifdef ARDUINO_SAMD_WAIVE1000

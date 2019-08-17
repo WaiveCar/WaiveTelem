@@ -49,7 +49,7 @@ void HCI_Event_CB(void *pckt) {
   }
 }
 
-void BluetoothClass::setup() {
+void BluetoothClass::begin() {
   HCI_Init();
   BNRG_SPI_Init();
   reset();

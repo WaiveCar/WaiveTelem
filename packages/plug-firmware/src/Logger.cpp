@@ -5,7 +5,7 @@
 #include "Pins.h"
 #include "System.h"
 
-void LoggerClass::setup() {
+void LoggerClass::begin() {
   log("DEBUG");
   writeFile = SD.open("LOG.TXT", FILE_WRITE);
   if (!writeFile) {
