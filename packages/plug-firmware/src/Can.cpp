@@ -43,80 +43,90 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
   }
 }
 
-static void onCanReceive0(const CANMessage& inMessage) {
-  onCanReceive(inMessage, 0);
-}
+// static void onCanReceive0(const CANMessage& inMessage) {
+//   onCanReceive(inMessage, 0);
+// }
 
-static void onCanReceive1(const CANMessage& inMessage) {
-  onCanReceive(inMessage, 1);
-}
+// static void onCanReceive1(const CANMessage& inMessage) {
+//   onCanReceive(inMessage, 1);
+// }
 
 void CanClass::begin() {
-  log("DEBUG");
   JsonObject can = Config.get()["can"];
   JsonArray bus = can["bus"];
   for (uint32_t i = 0; i < bus.size(); i++) {
     int baud = bus[i]["baud"];
-    log("DEBUG", "canBusNum", String(i).c_str(), "baud", String(baud).c_str());
+    logDebug("canBusNum", String(i).c_str(), "baud", String(baud).c_str());
     JsonArray status = bus[i]["status"];
     if (status.size() > 0) {
-      numberOfCanBuses = i;
+      busCount = i;
       const int minCanId = status[0]["id"].as<int>();
-      log("DEBUG", "minCanId", String(minCanId).c_str());
+      logDebug("minCanId", String(minCanId).c_str());
       const int maxCanId = status[status.size() - 1]["id"].as<int>();
-      log("DEBUG", "maxCanId", String(maxCanId).c_str());
+      logDebug("maxCanId", String(maxCanId).c_str());
       const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
       const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
       ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
       auto& canbus = (i == 0 ? can0 : can1);
       auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
-      // canbus.changeModeOnTheFly(ACAN2515Settings::NormalMode);
       const uint32_t errorCode = canbus.begin(settings, lambda, rxm0, filters, 1);  // does soft reset
       if (errorCode != 0) {
-        log("ERROR", "error", String(errorCode).c_str(), "CANBUS configuration error ");
+        logError("error", String(errorCode).c_str(), "CANBUS configuration error ");
       }
     }
   }
-  // sleep();
+  sleep();
 }
 
 void CanClass::poll() {
   CANMessage frame;
-  if (numberOfCanBuses > 0) {
+  if (busCount > 0) {
     while (can0.available()) {
+      if (isSleeping(0)) {
+        can0.changeModeOnTheFly(ACAN2515Settings::NormalMode);
+      }
       can0.receive(frame);
-      onCanReceive0(frame);
+      onCanReceive(frame, 0);
     }
 
-    if (numberOfCanBuses > 1) {
+    if (busCount > 1) {
       while (can1.available()) {
+        if (isSleeping(1)) {
+          can1.changeModeOnTheFly(ACAN2515Settings::NormalMode);
+        }
         can1.receive(frame);
-        onCanReceive1(frame);
+        onCanReceive(frame, 1);
       }
     }
   }
 }
 
 void CanClass::sleep() {
-  log("DEBUG");
-  if (numberOfCanBuses > 0) {
+  logDebug("busCount", busCount);
+  if (busCount > 0) {
     can0.changeModeOnTheFly(ACAN2515Settings::SleepMode);
+    sleeping[0] = true;
 
-    if (numberOfCanBuses > 1) {
+    if (busCount > 1) {
       can1.changeModeOnTheFly(ACAN2515Settings::SleepMode);
+      sleeping[1] = true;
     }
   }
 }
 
-void CanClass::wakeup() {
-  log("DEBUG");
-  if (numberOfCanBuses > 0) {
-    can0.changeModeOnTheFly(ACAN2515Settings::NormalMode);
+// void CanClass::wakeup() {
+//   logDebug();
+//   if (busCount > 0) {
+//     can0.changeModeOnTheFly(ACAN2515Settings::NormalMode);
 
-    if (numberOfCanBuses > 1) {
-      can1.changeModeOnTheFly(ACAN2515Settings::NormalMode);
-    }
-  }
+//     if (busCount > 1) {
+//       can1.changeModeOnTheFly(ACAN2515Settings::NormalMode);
+//     }
+//   }
+// }
+
+bool CanClass::isSleeping(int bus) {
+  return sleeping[bus];
 }
 
 CanClass Can;

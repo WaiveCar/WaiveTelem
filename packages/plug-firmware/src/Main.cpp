@@ -16,23 +16,27 @@
 void setup() {
   Serial.begin(115200);
 #if DEBUG
-  delay(5000);  // to see beginning of the login
+  delay(3000);  // to see beginning of the login
 #endif
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
   Pins.begin();
   if (!ECCX08.begin()) {
-    log("ERROR", "No ECCX08 present");
+    logError("No ECCX08 present");
   }
   if (!SD.begin(SD_CS_PIN)) {
-    log("ERROR", "Failed to initialize SD Library");
+    logError("Failed to initialize SD Library");
   }
   Logger.begin();
   Config.load();
   Command.begin();
   System.begin();
   Mqtt.begin();
+#ifdef ARDUINO_SAMD_MKR1000
   Mqtt.poll();
+#else
+  Internet.connect();
+#endif
   Bluetooth.begin();
   Gps.begin();
   Can.begin();
@@ -45,7 +49,9 @@ void loop() {
     System.sleep(1);
   }
   System.keepTime();
-  // Mqtt.poll();
+#ifdef ARDUINO_SAMD_MKR1000
+  Mqtt.poll();
+#endif
   System.poll();
   Bluetooth.poll();
   Can.poll();

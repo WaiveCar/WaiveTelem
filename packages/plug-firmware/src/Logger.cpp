@@ -1,17 +1,18 @@
 #include <Arduino.h>
 #include <cstdarg>
 
+#include "Config.h"
 #include "Logger.h"
 #include "Pins.h"
 #include "System.h"
 
 void LoggerClass::begin() {
-  log("DEBUG");
   writeFile = SD.open("LOG.TXT", FILE_WRITE);
   if (!writeFile) {
-    log("ERROR", "LOG.TXT open failed");
+    logError("LOG.TXT open failed");
     return;
   }
+  minLevel = Config.get()["logger"]["minLevel"] | 2;
 }
 
 void LoggerClass::logKeyValueJson(const char* key, ...) {
@@ -55,6 +56,10 @@ void LoggerClass::logKeyValueJson(const char* key, ...) {
   Serial.println(json);
   // #endif
   json.replace("\"", " ");
+}
+
+uint8_t LoggerClass::getMinLevel() {
+  return minLevel;
 }
 
 LoggerClass Logger;

@@ -18,12 +18,13 @@ bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
   const char* apn = nb["apn"] | "hologram";
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
-    log("WARN ", "Failed to connect, try later");
+    logWarn("Failed to connect, try later");
     return false;
   }
-  log("DEBUG", "ss", String(getSignalStrength()).c_str());
-  log("INFO ", "carrier", nbScanner.getCurrentCarrier().c_str());
-  // log("DEBUG", "IP Address: " + String(gprs.getIPAddress(), 16));
+  logDebug("ss", String(getSignalStrength()).c_str());
+  logInfo("carrier", nbScanner.getCurrentCarrier().c_str());
+  // logDebug( "IP Address: " + String(gprs.getIPAddress(), 16));
+  System.setTimes(getTime());
   return true;
 }
 

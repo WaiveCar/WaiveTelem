@@ -31,7 +31,6 @@ static NMEAGPS gps;
 #endif
 
 void GpsClass::begin() {
-  log("DEBUG");
   GPSSerial.begin(9600);
 #ifdef ARDUINO_SAMD_WAIVE1000
   // reset();
@@ -62,7 +61,7 @@ bool GpsClass::poll() {
   //   Serial.write(GPSSerial.read());  // read it and send it out Serial (USB)
   // }
   // return false;
-  // log("DEBUG");
+  // logDebug();
   uint32_t start = millis();
   gps_fix fix;
   bool hasData = false;
@@ -112,7 +111,7 @@ float GpsClass::getHeading() {
 }
 
 void GpsClass::sleep() {
-  // log("DEBUG");
+  // logDebug();
 #ifdef ARDUINO_SAMD_WAIVE1000
   const unsigned char ubxPMREQ[] PROGMEM = {0x02, 0x41, 0x08, 0x00, 0, 0, 0, 0, 0x02};
   const ublox::msg_t *cfg_ptr = (const ublox::msg_t *)ubxPMREQ;
@@ -123,7 +122,7 @@ void GpsClass::sleep() {
 }
 
 void GpsClass::wakeup() {
-  // log("DEBUG");
+  // logDebug();
 #ifdef ARDUINO_SAMD_WAIVE1000
   GPSSerial.begin(9600);
   gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);
@@ -140,7 +139,6 @@ void GpsClass::wakeup() {
 
 // crashes the system for some reason
 void GpsClass::reset() {
-  log("DEBUG");
 #ifdef ARDUINO_SAMD_WAIVE1000
   static const uint8_t ubxReset[] __PROGMEM =
       {

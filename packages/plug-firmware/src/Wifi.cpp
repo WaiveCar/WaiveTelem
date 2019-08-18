@@ -5,21 +5,31 @@
 #include "Config.h"
 #include "Internet.h"
 #include "Logger.h"
+#include "System.h"
 
 bool InternetClass::connect() {
   if (WiFi.status() == WL_NO_SHIELD) {
-    log("ERROR", "WiFi hardware not present");
+    logError("WiFi hardware not present");
     return false;
   }
   JsonObject wifi = Config.get()["wifi"];
   const char* ssid = wifi["ssid"];
   const char* password = wifi["password"];
-  log("DEBUG", "ssid", ssid);
+  logDebug("ssid", ssid);
   if (WiFi.begin(ssid, password) != WL_CONNECTED) {
-    log("DEBUG", "Failed to connect, try later");
+    logDebug("Failed to connect, try later");
     return false;
   }
-  log("DEBUG", "You're connected to the network");
+  uint32_t time = 0;
+  uint32_t start = millis();
+  while (!time && millis() - start < 20000) {
+    time = getTime();
+  }
+  if (time) {
+    logDebug("start", String(start).c_str(), "millis()", String(millis()).c_str());
+    System.setTimes(time);
+  }
+  logDebug("You're connected to the network");
   return true;
 }
 

@@ -6,10 +6,12 @@ class CanClass {
   void begin();
   void poll();
   void sleep();
-  void wakeup();
+  // void wakeup();
+  bool isSleeping(int bus);
 
  private:
-  uint8_t numberOfCanBuses = 0;
+  bool sleeping[2];
+  uint8_t busCount = 0;
 };
 
 extern CanClass Can;

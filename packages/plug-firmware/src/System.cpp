@@ -30,7 +30,7 @@ void SystemClass::begin() {
   rtc.enableAlarm(rtc.MATCH_SS);
 
   sprintf(id, "%s", ECCX08.serialNumber().c_str());
-  log("INFO ", "id", id);
+  logInfo("id", id);
 
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
@@ -42,8 +42,8 @@ void SystemClass::poll() {
   bool inRide = (statusDoc["inRide"] == "true");
   JsonObject heartbeat = Config.get()["heartbeat"];
   uint32_t interval = inRide ? heartbeat["inRide"] | 30 : heartbeat["notInRide"] | 900;
-  // log("DEBUG", "time: " + String(time));
-  // log("DEBUG", "lastHeartbeat: " + String(lastHeartbeat));
+  // logDebug( "time: " + String(time));
+  // logDebug( "lastHeartbeat: " + String(lastHeartbeat));
   if (time - lastHeartbeat == interval * 29 / 30 - 15) {
     Gps.wakeup();
   } else if (lastHeartbeat == -1 || time - lastHeartbeat >= interval) {
@@ -78,7 +78,7 @@ void SystemClass::sendInfo() {
 }
 
 void SystemClass::sendHeartbeat() {
-  // log("DEBUG");
+  // logDebug();
   JsonObject heartbeat = statusDoc["heartbeat"];
   JsonObject gps = heartbeat["gps"];
   JsonObject system = heartbeat["system"];
@@ -96,7 +96,6 @@ void SystemClass::sendHeartbeat() {
 }
 
 void SystemClass::sendCanStatus() {
-  log("DEBUG");
   if (canStatusChanged) {
     report("{\"can\":" + statusDoc["can"].as<String>() + "}");
     canStatusChanged = false;
@@ -104,7 +103,6 @@ void SystemClass::sendCanStatus() {
 }
 
 void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delta) {
-  log("DEBUG");
   JsonObject can = statusDoc["can"];
   uint64_t oldValue = can[name];
   if (oldValue != value) {
@@ -116,12 +114,12 @@ void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delt
 }
 
 void SystemClass::sleep(uint32_t sec) {
-  delay(sec * 1000);  // don't use Watchdog.sleep as it disconnects USB
-  // digitalWrite(LED_BUILTIN, LOW);
-  // rtc.setSeconds(60 - sec);
-  // rtc.standbyMode();
-  // _ulTickCount = _ulTickCount + sec * 1000;
-  // digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(LED_BUILTIN, LOW);
+  // delay(sec * 1000);  // don't use Watchdog.sleep as it disconnects USB
+  rtc.setSeconds(60 - sec);
+  rtc.standbyMode();
+  _ulTickCount = _ulTickCount + sec * 1000;
+  digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void SystemClass::setTimes(uint32_t in) {
@@ -137,7 +135,7 @@ void SystemClass::report(const String& reported, const String& desired) {
                    (reported != "" ? "\"reported\":" + reported : "") +
                    (reported != "" && desired != "" ? "," : "") +
                    (desired != "" ? "\"desired\":" + desired : "") + "}}";
-  log("DEBUG", "report", message.c_str());
+  logDebug("report", message.c_str());
   if (Mqtt.isConnected()) {
     Mqtt.updateShadow(message);
   }
@@ -167,7 +165,7 @@ void SystemClass::setCanStatusChanged() {
 }
 
 void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& cmdValue) {
-  // log("DEBUG");
+  // logDebug();
   statusDoc[cmdKey] = cmdValue;
   String escapedJson = json;
   escapedJson.replace("\"", "\\\"");
