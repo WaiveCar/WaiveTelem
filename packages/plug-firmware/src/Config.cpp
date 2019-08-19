@@ -9,7 +9,7 @@ void ConfigClass::load() {
   // go to https://arduinojson.org/v6/assistant/ to find the size
   DeserializationError error = deserializeJson(configDoc, file);
   if (error) {
-    logError(error.c_str());
+    logError("error", error.c_str(), "Failed to read json");
   }
   configFreeMem = CONFIG_DOC_SIZE - configDoc.memoryUsage();
   file.close();

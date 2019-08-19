@@ -22,7 +22,7 @@ bool InternetClass::connect() {
   }
   uint32_t time = 0;
   uint32_t start = millis();
-  while (!time && millis() - start < 20000) {
+  while (!time && millis() - start < 14000) {
     time = getTime();
   }
   logDebug("i_start", start, "i_millis()", millis(), "i_time", time);

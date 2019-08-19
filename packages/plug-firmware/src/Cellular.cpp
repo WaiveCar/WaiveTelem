@@ -8,8 +8,11 @@
 #include "Logger.h"
 #include "System.h"
 
-// static NB nbAccess(true);  // turn on debug
+#ifdef DEBUG
+static NB nbAccess(true);  // turn on debug
+#else
 static NB nbAccess;
+#endif
 
 static GPRS gprs;
 static NBScanner nbScanner;
@@ -17,10 +20,16 @@ static NBScanner nbScanner;
 bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
   const char* apn = nb["apn"] | "hologram";
+  logDebug("apn", apn);
+  nbAccess.setTimeout(5000);
+  gprs.setTimeout(5000);
+  // Watchdog.disable();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
+    // Watchdog.enable(WATCHDOG_TIMEOUT);
     logWarn("Failed to connect, try later");
     return false;
   }
+  // Watchdog.enable(WATCHDOG_TIMEOUT);
   logDebug("i_ss", getSignalStrength());
   logInfo("carrier", nbScanner.getCurrentCarrier().c_str());
   // logDebug( "IP Address: " + String(gprs.getIPAddress(), 16));

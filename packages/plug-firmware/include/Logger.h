@@ -3,34 +3,32 @@
 
 #include <SD.h>
 
-#include "Mqtt.h"
-#include "System.h"
-
 #ifndef LOG_MIN_LEVEL
 #define LOG_MIN_LEVEL 1
 #endif
 
-// #define LOG_EASYREAD_SERIAL // in your build option if you want more readable SERIAL output (but no longer JSON)
-
-#ifndef ID_KEY
-#define ID_KEY "i"
+#ifndef LOG_ID_KEY
+#define LOG_ID_KEY "i"
 #endif
 
-#ifndef ID_VALUE
-#define ID_VALUE System.getId()
+#ifndef LOG_TIME_KEY
+#define LOG_TIME_KEY "t"
 #endif
 
-#ifndef TIME_KEY
-#define TIME_KEY "t"
+#ifndef LOG_LEVEL_KEY
+#define LOG_LEVEL_KEY "l"
 #endif
 
-#ifndef TIME_VALUE
-#define TIME_VALUE System.getDateTime()
+#ifndef LOG_SOURCE_KEY
+#define LOG_SOURCE_KEY "s"
 #endif
 
-// can still generate json > LOG_RESERVE_SIZE, just takes slighly longer
-#ifndef LOG_RESERVE_SIZE
-#define LOG_RESERVE_SIZE 256
+#ifndef LOG_FUNC_KEY
+#define LOG_FUNC_KEY "f"
+#endif
+
+#ifndef LOG_MESSAGE_KEY
+#define LOG_MESSAGE_KEY "m"
 #endif
 
 #define logError(...) logKv(4, __VA_ARGS__)

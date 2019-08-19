@@ -15,8 +15,8 @@
 
 void setup() {
   Serial.begin(115200);
-#if DEBUG
-  delay(3000);  // to see beginning of the login
+#ifdef DEBUG
+  delay(5000);  // to see beginning of the login
 #endif
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
@@ -32,11 +32,7 @@ void setup() {
   Command.begin();
   System.begin();
   Mqtt.begin();
-#ifdef ARDUINO_SAMD_MKR1000
   Mqtt.poll();
-#else
-  Internet.connect();
-#endif
   Bluetooth.begin();
   Gps.begin();
   Can.begin();
@@ -49,9 +45,7 @@ void loop() {
     System.sleep(1);
   }
   System.keepTime();
-#ifdef ARDUINO_SAMD_MKR1000
   Mqtt.poll();
-#endif
   System.poll();
   Bluetooth.poll();
   Can.poll();

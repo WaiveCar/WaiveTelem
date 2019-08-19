@@ -1,101 +1,101 @@
 {
-	"mqtt": {
-		"url": .mqttBrokerUrl,
-		"cert": .mqttBrokerCert
-	},
-	"heartbeat": {
-		"inRide": 30,
-		"notInRide": 900
-	},
-	"nb": {
-		"pin": null,
-		"apn": "hologram"
-	},
-	"can": {
-		"make": "Hyundai",
-		"model": "Generic",
-		"bus": [
-			{
-				"baud": 500,
-				"status": [
-					{
-						"name": "fuel_level",
-						"id": 1292,
-						"bit": 18,
-						"len": 5
-					},
-					{
-						"name": "car_speed",
-						"id": 1322,
-						"bit": 0,
-						"len": 8
-					},
-					{
-						"name": "ignition",
-						"id": 1345,
-						"bit": 0,
-						"len": 3
-					},
-					{
-						"name": "door_front_left",
-						"id": 1345,
-						"bit": 8,
-						"len": 2
-					},
-					{
-						"name": "door_front_right",
-						"id": 1345,
-						"bit": 35
-					},
-					{
-						"name": "charging",
-						"id": 1353,
-						"bit": 16,
-						"len": 8
-					},
-					{
-						"name": "door_back_left",
-						"id": 1363,
-						"bit": 23
-					},
-					{
-						"name": "door_back_right",
-						"id": 1363,
-						"bit": 24
-					},
-					{
-						"name": "window_front_left",
-						"id": 1369,
-						"bit": 8
-					},
-					{
-						"name": "window_front_right",
-						"id": 1369,
-						"bit": 9
-					},
-					{
-						"name": "window_back_left",
-						"id": 1369,
-						"bit": 10
-					},
-					{
-						"name": "window_back_right",
-						"id": 1369,
-						"bit": 11
-					},
-					{
-						"name": "mileage",
-						"id": 1456,
-						"bit": 0,
-						"len": 24,
-						"delta": 100,
-					}
-				]				
-			},
-			{
-				"baud": 125,
-				"status": []
-			}
-		]
-	}
+ "mqtt": {
+  "url": .mqttBrokerUrl,
+  "cert": .mqttBrokerCert
+ },
+ "heartbeat": {
+  "inRide": 30,
+  "notInRide": 900
+ },
+ "nb": {
+  "pin": null,
+  "apn": "hologram"
+ },
+ "can": {
+  "make": "Hyundai",
+  "model": "Generic",
+  "bus": [
+   {
+    "baud": 500,
+    "status": [
+     {
+      "name": "fuel_level",
+      "id": 1292,
+      "bit": 18,
+      "len": 5
+     },
+     {
+      "name": "car_speed",
+      "id": 1322,
+      "bit": 0,
+      "len": 8
+     },
+     {
+      "name": "ignition",
+      "id": 1345,
+      "bit": 0,
+      "len": 3
+     },
+     {
+      "name": "door_front_left",
+      "id": 1345,
+      "bit": 8,
+      "len": 2
+     },
+     {
+      "name": "door_front_right",
+      "id": 1345,
+      "bit": 35
+     },
+     {
+      "name": "charging",
+      "id": 1353,
+      "bit": 16,
+      "len": 8
+     },
+     {
+      "name": "door_back_left",
+      "id": 1363,
+      "bit": 23
+     },
+     {
+      "name": "door_back_right",
+      "id": 1363,
+      "bit": 24
+     },
+     {
+      "name": "window_front_left",
+      "id": 1369,
+      "bit": 8
+     },
+     {
+      "name": "window_front_right",
+      "id": 1369,
+      "bit": 9
+     },
+     {
+      "name": "window_back_left",
+      "id": 1369,
+      "bit": 10
+     },
+     {
+      "name": "window_back_right",
+      "id": 1369,
+      "bit": 11
+     },
+     {
+      "name": "mileage",
+      "id": 1456,
+      "bit": 0,
+      "len": 24,
+      "delta": 100,
+     }
+    ]    
+   },
+   {
+    "baud": 125,
+    "status": []
+   }
+  ]
+ }
 }

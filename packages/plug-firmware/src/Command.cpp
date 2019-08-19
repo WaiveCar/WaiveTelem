@@ -29,7 +29,7 @@ void CommandClass::authorize(const String& encrypted) {
   StaticJsonDocument<AUTH_DOC_SIZE> authDoc;
   DeserializationError error = deserializeJson(authDoc, json);
   if (error) {
-    logError("i_error", error, "Failed to read json");
+    logError("error", error.c_str(), "Failed to read json");
     return;
   }
   authCmds = authDoc["cmds"] | "";
@@ -48,7 +48,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
   StaticJsonDocument<COMMAND_DOC_SIZE> cmdDoc;
   DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
-    logError("i_error", error);
+    logError("error", error.c_str(), "Failed to read json");
     return;
   }
   JsonObject desired = isBluetooth ? cmdDoc.as<JsonObject>() : cmdDoc["state"];
@@ -88,28 +88,30 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     System.setCanStatusChanged();
     Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
-    System.reportCommandDone(json, cmdKey, cmdValue);
+    System.report("", "{\"" + cmdKey + "\":null}");
     reboot();
     return;
   } else if (!download.isNull()) {
+    System.report("", "{\"" + cmdKey + "\":null}");
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";
     const char* to = download["to"] | "";
     if (strlen(host) > 0 && strlen(from) > 0 && strlen(to) > 0) {
-      Https.download(host, from, to);
-      System.reportCommandDone(json, cmdKey, cmdValue);
-      reboot();
+      if (!Https.download(host, from, to)) {
+        reboot();
+      }
     } else {
       logError(json.c_str());
     }
     return;
   } else if (!copy.isNull()) {
+    System.report("", "{\"" + cmdKey + "\":null}");
     const char* from = copy["from"] | "";
     const char* to = copy["to"] | "";
     if (strlen(from) > 0 && strlen(to) > 0) {
-      copyFile(from, to);
-      System.reportCommandDone(json, cmdKey, cmdValue);
-      reboot();
+      if (!copyFile(from, to)) {
+        reboot();
+      }
     } else {
       logError(json.c_str());
     }

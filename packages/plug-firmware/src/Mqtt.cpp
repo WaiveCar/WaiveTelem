@@ -16,7 +16,7 @@ static MqttClient mqttClient(sslClient);
 
 static void onMessageReceived(int messageSize) {
   String payload = mqttClient.readString();
-  logDebug("topic", mqttClient.messageTopic(), "i_length", messageSize, "payload", payload);
+  logDebug("topic", mqttClient.messageTopic().c_str(), "i_length", messageSize, "payload", payload.c_str());
   Command.processJson(payload);
 }
 
@@ -38,10 +38,8 @@ void MqttClass::begin() {
 }
 
 void MqttClass::connect() {
-  Watchdog.disable();  // Internet.connect() and mqttClient.connect() can take a long time
   if (!Internet.isConnected()) {
     if (!Internet.connect()) {
-      Watchdog.enable();
       return;
     }
     // test internect connection
@@ -50,16 +48,20 @@ void MqttClass::connect() {
     // Https.download("storage.googleapis.com", "www.swiperweb.com/privacy.html", "TEMP");  //works
     // Https.download("waive.blob.core.windows.net", "plug/config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "TEMP");
   }
+#ifndef ARDUINO_SAMD_MKR1000
+  return;  // mqtt doesn't work over cellular yet
+#endif
   const JsonObject mqtt = Config.get()["mqtt"];
   const char* url = mqtt["url"] | "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com";  // "waive.azure-devices.net";
 
   logInfo("broker", url);
+  Watchdog.disable();  // Internet.connect() and mqttClient.connect() can take a long time
   if (!mqttClient.connect(url, 8883)) {
-    Watchdog.enable();
+    Watchdog.enable(WATCHDOG_TIMEOUT);
     logWarn("i_error", mqttClient.connectError());
     return;
   }
-  Watchdog.enable();
+  Watchdog.enable(WATCHDOG_TIMEOUT);
   logDebug("You're connected to the MQTT broker");
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
 }

@@ -44,13 +44,16 @@ void SystemClass::poll() {
   uint32_t interval = inRide ? heartbeat["inRide"] | 30 : heartbeat["notInRide"] | 900;
   // logDebug( "time: " + String(time));
   // logDebug( "lastHeartbeat: " + String(lastHeartbeat));
-  if (getTime() - lastHeartbeat == interval * 29 / 30 - 15) {
+  uint32_t elapsedTime = getTime() - lastHeartbeat;
+  if (interval > 60 && elapsedTime == interval - 60) {
     Gps.wakeup();
-  } else if (lastHeartbeat == -1 || getTime() - lastHeartbeat >= interval) {
+  } else if (lastHeartbeat == -1 || elapsedTime >= interval) {
     if (Gps.poll()) {
       sendHeartbeat();
       lastHeartbeat = getTime();
-      Gps.sleep();
+      if (interval > 60) {
+        Gps.sleep();
+      }
     }
   }
 }
@@ -87,7 +90,7 @@ void SystemClass::sendHeartbeat() {
   gps["hdop"] = Gps.getHdop();
   gps["speed"] = Gps.getSpeed();
   gps["heading"] = Gps.getHeading();
-  system["time"] = System.getDateTime();
+  // system["time"] = System.getDateTime();
   system["uptime"] = time - bootTime;
   system["signal"] = Internet.getSignalStrength();
   system["heapFreeMem"] = freeMemory();
@@ -115,10 +118,13 @@ void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delt
 
 void SystemClass::sleep(uint32_t sec) {
   digitalWrite(LED_BUILTIN, LOW);
-  // delay(sec * 1000);  // don't use Watchdog.sleep as it disconnects USB
+#ifdef DEBUG
+  delay(sec * 1000);  // don't use Watchdog.sleep as it disconnects USB
+#else
   rtc.setSeconds(60 - sec);
   rtc.standbyMode();
   _ulTickCount = _ulTickCount + sec * 1000;
+#endif
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
@@ -135,7 +141,7 @@ void SystemClass::report(const String& reported, const String& desired) {
                    (reported != "" ? "\"reported\":" + reported : "") +
                    (reported != "" && desired != "" ? "," : "") +
                    (desired != "" ? "\"desired\":" + desired : "") + "}}";
-  logDebug("report", message.c_str());
+  logDebug("o_message", message.c_str());
   if (Mqtt.isConnected()) {
     Mqtt.updateShadow(message);
   }
@@ -150,7 +156,7 @@ void SystemClass::setStayAwake(bool stay) {
 }
 
 void SystemClass::keepTime() {
-  if (time % 60 == 0 && Internet.isConnected()) {  // don't get time from modem too often; only every minute
+  if (time % 60 == 0 && Internet.isConnected()) {  // don't get time from modem too often
     setTimes(Internet.getTime());
   } else {
     int32_t elapsed = millis() - lastMillis;
@@ -170,7 +176,7 @@ void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& 
   String escapedJson = json;
   escapedJson.replace("\"", "\\\"");
   String lastCmd = "\"system\":{\"lastCmd\":\"" + escapedJson + "\"}";
-  System.report("{" + lastCmd + +",\"" + cmdKey + "\":\"" + cmdValue + "\"}", "{\"" + cmdKey + "\":null}");
+  System.report("{" + lastCmd + ",\"" + cmdKey + "\":\"" + cmdValue + "\"}", "{\"" + cmdKey + "\":null}");
 }
 
 SystemClass System;
