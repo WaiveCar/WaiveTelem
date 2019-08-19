@@ -56,14 +56,14 @@ void CanClass::begin() {
   JsonArray bus = can["bus"];
   for (uint32_t i = 0; i < bus.size(); i++) {
     int baud = bus[i]["baud"];
-    logDebug("canBusNum", String(i).c_str(), "baud", String(baud).c_str());
+    logDebug("i_canBusNum", i, "i_baud", baud);
     JsonArray status = bus[i]["status"];
     if (status.size() > 0) {
-      busCount = i;
+      busCount = i + 1;
       const int minCanId = status[0]["id"].as<int>();
-      logDebug("minCanId", String(minCanId).c_str());
+      logDebug("i_minCanId", minCanId);
       const int maxCanId = status[status.size() - 1]["id"].as<int>();
-      logDebug("maxCanId", String(maxCanId).c_str());
+      logDebug("i_maxCanId", maxCanId);
       const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
       const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
       ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
@@ -71,7 +71,7 @@ void CanClass::begin() {
       auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
       const uint32_t errorCode = canbus.begin(settings, lambda, rxm0, filters, 1);  // does soft reset
       if (errorCode != 0) {
-        logError("error", String(errorCode).c_str(), "CANBUS configuration error ");
+        logError("i_error", errorCode, "CANBUS configuration error ");
       }
     }
   }
@@ -102,16 +102,17 @@ void CanClass::poll() {
 }
 
 void CanClass::sleep() {
-  logDebug("busCount", busCount);
-  if (busCount > 0) {
-    can0.changeModeOnTheFly(ACAN2515Settings::SleepMode);
-    sleeping[0] = true;
+  // logDebug("i_busCount", busCount);
+  // get error : 1 , m : CANBUS configuration error
+  // if (busCount > 0) {
+  //   can0.changeModeOnTheFly(ACAN2515Settings::SleepMode);
+  //   sleeping[0] = true;
 
-    if (busCount > 1) {
-      can1.changeModeOnTheFly(ACAN2515Settings::SleepMode);
-      sleeping[1] = true;
-    }
-  }
+  //   if (busCount > 1) {
+  //     can1.changeModeOnTheFly(ACAN2515Settings::SleepMode);
+  //     sleeping[1] = true;
+  //   }
+  // }
 }
 
 // void CanClass::wakeup() {

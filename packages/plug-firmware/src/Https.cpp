@@ -66,7 +66,7 @@ static int32_t saveFile(const char* to) {
     }
     Watchdog.reset();
   }
-  logDebug("totalBytes", String(counter).c_str());
+  logDebug("i_totalBytes", counter);
   SHA256.endHmac();
   file.close();
   return 0;
@@ -92,7 +92,7 @@ static int32_t verifyFile(const String& file) {
 }
 
 int32_t HttpsClass::download(const char* host, const char* from, const char* to) {
-  logDebug("host: " + String(host) + ", from: " + from + ", to: " + to);
+  logDebug("host", host, "from", from, "to", to);
   int32_t error;
   if (client.connect(host, 80)) {
     sendGetRequest(host, from);

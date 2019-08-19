@@ -25,8 +25,8 @@ bool InternetClass::connect() {
   while (!time && millis() - start < 20000) {
     time = getTime();
   }
+  logDebug("i_start", start, "i_millis()", millis(), "i_time", time);
   if (time) {
-    logDebug("start", String(start).c_str(), "millis()", String(millis()).c_str());
     System.setTimes(time);
   }
   logDebug("You're connected to the network");

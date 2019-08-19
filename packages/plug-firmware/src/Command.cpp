@@ -29,13 +29,13 @@ void CommandClass::authorize(const String& encrypted) {
   StaticJsonDocument<AUTH_DOC_SIZE> authDoc;
   DeserializationError error = deserializeJson(authDoc, json);
   if (error) {
-    logError("error", error.c_str(), "Failed to read json");
+    logError("i_error", error, "Failed to read json");
     return;
   }
   authCmds = authDoc["cmds"] | "";
   authStart = authDoc["start"] | 0;
   authEnd = authDoc["end"] | 0;
-  logInfo("authCmds", authCmds.c_str(), "authStart", String(authStart).c_str(), "authEnd", String(authEnd).c_str());
+  logInfo("authCmds", authCmds.c_str(), "i_authStart", authStart, "i_authEnd", authEnd);
   const char* secret = authDoc["secret"] | "";
   rbase64_decode((char*)authSecret, (char*)secret, 16);
 }
@@ -48,9 +48,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
   StaticJsonDocument<COMMAND_DOC_SIZE> cmdDoc;
   DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
-    logError(
-        "Failed to read json: " +
-        String(error.c_str()));
+    logError("i_error", error);
     return;
   }
   JsonObject desired = isBluetooth ? cmdDoc.as<JsonObject>() : cmdDoc["state"];
@@ -66,11 +64,11 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     }
     uint32_t time = System.getTime();
     if (authStart > time) {
-      logError("authStart", String(authStart).c_str(), "time", String(time).c_str());
+      logError("i_authStart", authStart, "i_time", time);
       return;
     }
     if (authEnd < time) {
-      logError("authEnd", String(authEnd).c_str(), "time", String(time).c_str());
+      logError("i_authEnd", authStart, "i_time", time);
       return;
     }
   }

@@ -44,9 +44,9 @@ void SystemClass::poll() {
   uint32_t interval = inRide ? heartbeat["inRide"] | 30 : heartbeat["notInRide"] | 900;
   // logDebug( "time: " + String(time));
   // logDebug( "lastHeartbeat: " + String(lastHeartbeat));
-  if (time - lastHeartbeat == interval * 29 / 30 - 15) {
+  if (getTime() - lastHeartbeat == interval * 29 / 30 - 15) {
     Gps.wakeup();
-  } else if (lastHeartbeat == -1 || time - lastHeartbeat >= interval) {
+  } else if (lastHeartbeat == -1 || getTime() - lastHeartbeat >= interval) {
     if (Gps.poll()) {
       sendHeartbeat();
       lastHeartbeat = getTime();

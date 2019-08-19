@@ -60,18 +60,18 @@ void BluetoothClass::begin() {
 
   int ret = aci_gatt_init();
   if (ret) {
-    logError("BLE GATT_Init failed.");
+    logError("BLE GATT_Init failed");
   }
 
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
   ret = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, 20, &service_handle, &dev_name_char_handle, &appearance_char_handle);
   if (ret) {
-    logError("BLE GAP_Init failed.");
+    logError("BLE GAP_Init failed");
   }
 
   ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, 20, name);
   if (ret) {
-    logError("BLE aci_gatt_update_char_value failed.");
+    logError("BLE aci_gatt_update_char_value failed");
   }
 
   ret = aci_gap_set_auth_requirement(MITM_PROTECTION_REQUIRED,
@@ -83,14 +83,12 @@ void BluetoothClass::begin() {
                                      0,
                                      BONDING);
   // if (ret == BLE_STATUS_SUCCESS) {
-  //   logDebug( "BLE Stack Initialized.");
+  //   logDebug( "BLE Stack Initialized");
   // }
 
   ret = addService();
-  if (ret == BLE_STATUS_SUCCESS) {
-    // logDebug( "BLE Service added successfully.");
-  } else {
-    logError("BLE Error while adding service.");
+  if (ret) {
+    logError("BLE Error while adding service");
   }
 
   ret = aci_hal_set_tx_power_level(1, 0);  // 0 is lowest, prevents eavesdropping
@@ -149,7 +147,6 @@ uint8_t BluetoothClass::addService() {
   return BLE_STATUS_SUCCESS;
 
 fail:
-  logError("Error while adding service.");
   return BLE_STATUS_ERROR;
 }
 
@@ -165,7 +162,7 @@ uint8_t BluetoothClass::setChallenge() {
   ECCX08.random(challenge, sizeof(challenge));
   tBleStatus ret = aci_gatt_update_char_value(ServHandle, ChallengeCharHandle, 0, sizeof(challenge), challenge);
   if (ret != BLE_STATUS_SUCCESS) {
-    logError("error", String(ret).c_str(), "Error while set challenge");
+    logError("i_error", ret, "Error while set challenge");
     return BLE_STATUS_ERROR;
   }
   return BLE_STATUS_SUCCESS;

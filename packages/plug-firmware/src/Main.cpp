@@ -27,8 +27,8 @@ void setup() {
   if (!SD.begin(SD_CS_PIN)) {
     logError("Failed to initialize SD Library");
   }
-  Logger.begin();
   Config.load();
+  Logger.begin();
   Command.begin();
   System.begin();
   Mqtt.begin();
@@ -44,7 +44,7 @@ void setup() {
 }
 
 void loop() {
-  Watchdog.enable(WATCHDOG_TIMEOUT);
+  Watchdog.reset();
   if (!System.stayAwake()) {
     System.sleep(1);
   }

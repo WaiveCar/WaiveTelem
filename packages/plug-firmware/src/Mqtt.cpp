@@ -15,9 +15,8 @@ static BearSSLClient sslClient(client);
 static MqttClient mqttClient(sslClient);
 
 static void onMessageReceived(int messageSize) {
-  logDebug("Received a message with topic '" + mqttClient.messageTopic() + "', length " + messageSize + " bytes:");
   String payload = mqttClient.readString();
-  logDebug("payload: " + payload);
+  logDebug("topic", mqttClient.messageTopic(), "i_length", messageSize, "payload", payload);
   Command.processJson(payload);
 }
 
@@ -57,13 +56,12 @@ void MqttClass::connect() {
   logInfo("broker", url);
   if (!mqttClient.connect(url, 8883)) {
     Watchdog.enable();
-    logWarn("error", String(mqttClient.connectError()).c_str());
+    logWarn("i_error", mqttClient.connectError());
     return;
   }
   Watchdog.enable();
   logDebug("You're connected to the MQTT broker");
-  String id = String(System.getId());
-  mqttClient.subscribe("$aws/things/" + id + "/shadow/update/delta");
+  mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
 }
 
 bool MqttClass::isConnected() {
