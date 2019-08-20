@@ -16,7 +16,6 @@ static MqttClient mqttClient(sslClient);
 
 static void onMessageReceived(int messageSize) {
   String payload = mqttClient.readString();
-  logDebug("topic", mqttClient.messageTopic().c_str(), "i_length", messageSize, "payload", payload.c_str());
   Command.processJson(payload);
 }
 
@@ -28,7 +27,7 @@ int MqttClass::begin() {
   ArduinoBearSSL.onGetTime(getTime);
   const char* cert = Config.get()["mqtt"]["cert"];
   if (!strlen(cert)) {
-    return 1;
+    return -1;
   }
   sslClient.setEccSlot(0, cert);
   String id = System.getId();
@@ -36,7 +35,7 @@ int MqttClass::begin() {
   mqttClient.onMessage(onMessageReceived);
   updateTopic = "$aws/things/" + id + "/shadow/update";
   logTopic = "things/" + id + "/log";
-  return 0;
+  return 1;
 }
 
 void MqttClass::connect() {
@@ -60,11 +59,11 @@ void MqttClass::connect() {
   Watchdog.disable();  // Internet.connect() and mqttClient.connect() can take a long time
   if (!mqttClient.connect(url, 8883)) {
     Watchdog.enable(WATCHDOG_TIMEOUT);
-    logWarn("i_error", mqttClient.connectError());
+    logWarn("i|error", mqttClient.connectError());
     return;
   }
   Watchdog.enable(WATCHDOG_TIMEOUT);
-  logDebug("You're connected to the MQTT broker");
+  logInfo("You're connected to the MQTT broker");
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
 }
 

@@ -8,6 +8,7 @@
 #include "Config.h"
 #include "Gps.h"
 #include "Internet.h"
+#include "JsonBuilder.h"
 #include "Logger.h"
 #include "Mqtt.h"
 #include "System.h"
@@ -36,7 +37,7 @@ int SystemClass::begin() {
   statusDoc.createNestedObject("heartbeat");
   statusDoc["heartbeat"].createNestedObject("gps");
   statusDoc["heartbeat"].createNestedObject("system");
-  return 0;
+  return 1;
 }
 
 void SystemClass::poll() {
@@ -69,15 +70,16 @@ const char* SystemClass::getDateTime() {
   return dateTime;
 }
 
-void SystemClass::sendInfo() {
+void SystemClass::sendInfo(String& sysJson) {
 #ifdef DEBUG
   statusDoc["inRide"] = "true";
 #else
   statusDoc["inRide"] = "false";
 #endif
-  String version = "{\"inRide\":\"" + String(statusDoc["inRide"].as<char*>()) + "\", \"system\":{\"firmware\":\"" +
-                   FIRMWARE_VERSION + "\",\"configFreeMem\":" + Config.getConfigFreeMem() + "}}";
-  report(version);
+  String info = "";
+  json(info, "inRide", statusDoc["inRide"].as<char*>(), "o|system", sysJson.c_str());
+  Serial.println(info);
+  report(info);
 }
 
 void SystemClass::sendHeartbeat() {
@@ -140,7 +142,7 @@ void SystemClass::report(const String& reported, const String& desired) {
                    (reported != "" ? "\"reported\":" + reported : "") +
                    (reported != "" && desired != "" ? "," : "") +
                    (desired != "" ? "\"desired\":" + desired : "") + "}}";
-  logDebug("o_message", message.c_str());
+  logInfo("o|message", message.c_str());
   if (Mqtt.isConnected()) {
     Mqtt.updateShadow(message);
   }

@@ -54,7 +54,7 @@ int GpsClass::begin() {
   delay(COMMAND_DELAY);
   GPSSerial.begin(57600);
 #endif
-  return 0;
+  return 1;
 }
 
 bool GpsClass::poll() {

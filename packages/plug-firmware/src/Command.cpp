@@ -19,14 +19,14 @@ int CommandClass::begin() {
   // set bluetooth token key and iv
   const char* cert = Config.get()["mqtt"]["cert"];
   if (!strlen(cert)) {
-    return 1;
+    return -1;
   }
   char* buf = (char*)malloc(48);
   rbase64_decode(buf, (char*)&cert[743], 64);
   memcpy(tokenIv, buf, 16);
   memcpy(tokenKey, &buf[16], 32);
   free(buf);
-  return 0;
+  return 1;
 }
 
 void CommandClass::authorize(const String& encrypted) {
@@ -40,7 +40,7 @@ void CommandClass::authorize(const String& encrypted) {
   authCmds = authDoc["cmds"] | "";
   authStart = authDoc["start"] | 0;
   authEnd = authDoc["end"] | 0;
-  logInfo("authCmds", authCmds.c_str(), "i_authStart", authStart, "i_authEnd", authEnd);
+  logInfo("authCmds", authCmds.c_str(), "i|authStart", authStart, "i|authEnd", authEnd);
   const char* secret = authDoc["secret"] | "";
   rbase64_decode((char*)authSecret, (char*)secret, 16);
 }
@@ -50,6 +50,7 @@ uint8_t* CommandClass::getAuthSecret() {
 }
 
 void CommandClass::processJson(const String& json, bool isBluetooth) {
+  logInfo("json", json.c_str());
   StaticJsonDocument<COMMAND_DOC_SIZE> cmdDoc;
   DeserializationError error = deserializeJson(cmdDoc, json);
   if (error) {
@@ -69,11 +70,11 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     }
     uint32_t time = System.getTime();
     if (authStart > time) {
-      logError("i_authStart", authStart, "i_time", time);
+      logError("i|authStart", authStart, "i|time", time);
       return;
     }
     if (authEnd < time) {
-      logError("i_authEnd", authStart, "i_time", time);
+      logError("i|authEnd", authStart, "i|time", time);
       return;
     }
   }
@@ -138,7 +139,6 @@ void CommandClass::reboot() {
 }
 
 int32_t CommandClass::moveFile(const char* from, const char* to) {
-  logDebug("from", from, "to", to);
   int32_t error = copyFile(from, to);
   if (!error) {
     SD.remove((char*)from);

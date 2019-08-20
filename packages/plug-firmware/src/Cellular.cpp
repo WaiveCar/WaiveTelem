@@ -20,7 +20,7 @@ static NBScanner nbScanner;
 bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
   const char* apn = nb["apn"] | "hologram";
-  logDebug("apn", apn);
+  logInfo("apn", apn);
   nbAccess.setTimeout(5000);
   gprs.setTimeout(5000);
   // Watchdog.disable();

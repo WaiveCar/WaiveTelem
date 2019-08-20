@@ -15,9 +15,9 @@ bool InternetClass::connect() {
   JsonObject wifi = Config.get()["wifi"];
   const char* ssid = wifi["ssid"];
   const char* password = wifi["password"];
-  logDebug("ssid", ssid);
+  logInfo("ssid", ssid);
   if (WiFi.begin(ssid, password) != WL_CONNECTED) {
-    logDebug("Failed to connect, try later");
+    logWarn("Failed to connect, try later");
     return false;
   }
   uint32_t time = 0;
@@ -25,11 +25,11 @@ bool InternetClass::connect() {
   while (!time && millis() - start < 14000) {
     time = getTime();
   }
-  logDebug("i_start", start, "i_millis()", millis(), "i_time", time);
+  logDebug("i|start", start, "i|millis()", millis(), "i|time", time);
   if (time) {
     System.setTimes(time);
   }
-  logDebug("You're connected to the network");
+  logInfo("You're connected to the network");
   return true;
 }
 

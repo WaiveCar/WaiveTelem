@@ -8,6 +8,7 @@
 #include "Config.h"
 #include "Gps.h"
 #include "Internet.h"
+#include "JsonBuilder.h"
 #include "Logger.h"
 #include "Mqtt.h"
 #include "Pins.h"
@@ -21,18 +22,32 @@ void setup() {
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
   Pins.begin();
-  int eccStatus = ECCX08.begin();
-  int sdStatus = SD.begin(SD_CS_PIN);
-  int configStatus = Config.begin();
-  int loggerStatus = Logger.begin();
-  int cmdStatus = Command.begin();
-  System.begin();
-  int mqttStatus = Mqtt.begin();
+  int eccInit = ECCX08.begin();
+  int sdInit = SD.begin(SD_CS_PIN);
+  int cfgInit = Config.begin();
+  int loggerInit = Logger.begin();
+  int cmdInit = Command.begin();
+  int sysInit = System.begin();
+  int mqttInit = Mqtt.begin();
   Mqtt.poll();
-  int bleStatus = Bluetooth.begin();
-  Gps.begin();
-  int canStatus = Can.begin();
-  System.sendInfo();
+  int bleInit = Bluetooth.begin();
+  int gpsInit = Gps.begin();
+  int canInit = Can.begin();
+
+  String sysJson = "";
+  json(sysJson, "firmware", FIRMWARE_VERSION,
+       "i|configFreeMem", Config.getConfigFreeMem(),
+       "i|eccInit", eccInit,
+       "i|sdInit", sdInit,
+       "i|cfgInit", cfgInit,
+       "i|loggerInit", loggerInit,
+       "i|cmdInit", cmdInit,
+       "i|sysInit", sysInit,
+       "i|mqttInit", mqttInit,
+       "i|bleInit", bleInit,
+       "i|gpsInit", gpsInit,
+       "i|canInit", canInit);
+  System.sendInfo(sysJson);
 }
 
 void loop() {

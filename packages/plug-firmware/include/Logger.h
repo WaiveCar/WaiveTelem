@@ -36,14 +36,14 @@
 #define logInfo(...) logKv(2, __VA_ARGS__)
 #define logDebug(...) logKv(1, __VA_ARGS__)
 
-#define logKv(level, ...)                                                                                     \
-  if (level >= LOG_MIN_LEVEL) Logger.logKeyValueJson(level, "s", (String(__FILE__) + ":" + __LINE__).c_str(), \
+#define logKv(level, ...)                                                                                         \
+  if (level >= LOG_MIN_LEVEL) Logger.logKeyValueJson(level, "", "s", (String(__FILE__) + ":" + __LINE__).c_str(), \
                                                      "f", (String(__func__) + "()").c_str(), __VA_ARGS__, NULL)
 
 class LoggerClass {
  public:
   int begin();
-  void logKeyValueJson(int level, const char* key, ...);
+  void logKeyValueJson(int level, const char* placeholder, ...);
 
  private:
   File writeFile;

@@ -13,7 +13,7 @@ int ConfigClass::begin() {
   }
   configFreeMem = CONFIG_DOC_SIZE - configDoc.memoryUsage();
   file.close();
-  return error.code();
+  return !error.code();
 }
 
 JsonDocument& ConfigClass::get() {

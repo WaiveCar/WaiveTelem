@@ -17,7 +17,7 @@ class SystemClass {
   const char* getDateTime();
   void keepTime();
   void report(const String& reported, const String& desired = "");
-  void sendInfo();
+  void sendInfo(String& sysJson);
   void sendHeartbeat();
   void sendCanStatus();
   void setCanStatus(const String& name, uint64_t value, uint32_t delta);
