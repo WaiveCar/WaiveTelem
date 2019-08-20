@@ -26,7 +26,7 @@
 
 class PinsClass {
  public:
-  void begin();
+  int begin();
   void unlockDoors();
   void lockDoors();
   void immobilize();

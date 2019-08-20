@@ -30,13 +30,14 @@
 
 const char* LEVELS[5] = {"", "DEBUG", "INFO", "WARN", "ERROR"};
 
-void LoggerClass::begin() {
+int LoggerClass::begin() {
   writeFile = SD.open("LOG.TXT", FILE_WRITE);
   if (!writeFile) {
     logError("LOG.TXT open failed");
-    return;
+    return 1;
   }
   mqttLevel = Config.get()["logger"]["mqttLevel"] | 1;
+  return 0;
 }
 
 void LoggerClass::logKeyValueJson(int level, const char* key, ...) {

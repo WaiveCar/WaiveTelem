@@ -24,17 +24,19 @@ static unsigned long getTime() {
   return Internet.getTime();
 }
 
-void MqttClass::begin() {
+int MqttClass::begin() {
   ArduinoBearSSL.onGetTime(getTime);
-  JsonObject mqtt = Config.get()["mqtt"];
-  const char* cert = mqtt["cert"];
-  // logDebug( "cert: " + cert);
+  const char* cert = Config.get()["mqtt"]["cert"];
+  if (!strlen(cert)) {
+    return 1;
+  }
   sslClient.setEccSlot(0, cert);
   String id = System.getId();
   mqttClient.setId(id);
   mqttClient.onMessage(onMessageReceived);
   updateTopic = "$aws/things/" + id + "/shadow/update";
   logTopic = "things/" + id + "/log";
+  return 0;
 }
 
 void MqttClass::connect() {

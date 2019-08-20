@@ -43,7 +43,7 @@ note: Since release binary is sleeping most of the time in loop(), you might wan
 ### Flash firmware binary:
 
 ```bash
-./flash.sh s3/1000_1.0.3_06cdba4ab3c940d63f7ca4b2689e34003c18efbbaa5a7c2849d9df9661153ab8
+./flash.sh s3/mkr1000USB_1.0.8_21b44a51771a67675c5b9c747855eb09fef0b086604f45b43ec7d077d7f5cc5b
 ```
 
 ### Upload firmware binaries and sync it with S3 bucket:

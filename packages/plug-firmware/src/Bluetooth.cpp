@@ -15,7 +15,7 @@ void HCI_Event_CB(void *pckt) {
     return;
   }
 
-  // logDebug( "evt", String(event_pckt->evt).c_str());
+  logDebug("i_evt", event_pckt->evt);
 
   switch (event_pckt->evt) {
     case EVT_DISCONN_COMPLETE: {
@@ -60,17 +60,20 @@ tBleStatus BluetoothClass::begin() {
   status = aci_gatt_init();
   if (status) {
     logError("i_status", status, "BLE GATT_Init failed");
+    return status;
   }
 
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
   status = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, 20, &service_handle, &dev_name_char_handle, &appearance_char_handle);
   if (status) {
     logError("i_status", status, "BLE GAP_Init failed");
+    return status;
   }
 
   status = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, 20, name);
   if (status) {
     logError("i_status", status, "BLE aci_gatt_update_char_value failed");
+    return status;
   }
 
   status = aci_gap_set_auth_requirement(MITM_PROTECTION_REQUIRED,
@@ -81,13 +84,18 @@ tBleStatus BluetoothClass::begin() {
                                         DONOT_USE_FIXED_PIN_FOR_PAIRING,
                                         0,
                                         BONDING);
-  // if (ret == BLE_STATUS_SUCCESS) {
-  //   logDebug( "BLE Stack Initialized");
-  // }
+  if (status) {
+    logError("i_status", status, "BLE aci_gap_set_auth_requirement failed");
+    return status;
+  }
 
   addService();
 
   status = aci_hal_set_tx_power_level(1, 0);  // 0 is lowest, prevents eavesdropping
+  if (status) {
+    logError("i_status", status, "BLE aci_hal_set_tx_power_level failed");
+    return status;
+  }
 
   setConnectable();
 
@@ -200,7 +208,6 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
     char strBuffer[19];
     uint16_t messageLength = att_data[0] | (att_data[1] << 8);
     uint8_t strBegin = 2;
-    // logDebug( String(messageLength));
     if (messageLength != continueLength) {  // first message
       message = "";
       if (IS(CmdCharHandle)) {
@@ -213,8 +220,8 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
     strBuffer[strLength] = '\0';
     continueLength = messageLength - data_length + 2;  // + 2 because att_data[0] and att_data[1] are not data
     message += String(strBuffer);
-    // logDebug( String(continueLength));
-    // logDebug( message);
+    logDebug("length", continueLength);
+    logDebug("i_msg", message);
     if (continueLength == 0) {  // last message
       if (IS(AuthCharHandle)) {
         Command.authorize(message);

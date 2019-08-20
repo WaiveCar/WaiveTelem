@@ -30,9 +30,7 @@ bool InternetClass::connect() {
     return false;
   }
   // Watchdog.enable(WATCHDOG_TIMEOUT);
-  logDebug("i_ss", getSignalStrength());
   logInfo("carrier", nbScanner.getCurrentCarrier().c_str());
-  // logDebug( "IP Address: " + String(gprs.getIPAddress(), 16));
   System.setTimes(getTime());
   return true;
 }

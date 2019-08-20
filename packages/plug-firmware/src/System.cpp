@@ -24,7 +24,7 @@ const char* SystemClass::getId() {
   return id;
 }
 
-void SystemClass::begin() {
+int SystemClass::begin() {
   rtc.begin();
   rtc.setAlarmSeconds(59);
   rtc.enableAlarm(rtc.MATCH_SS);
@@ -36,6 +36,7 @@ void SystemClass::begin() {
   statusDoc.createNestedObject("heartbeat");
   statusDoc["heartbeat"].createNestedObject("gps");
   statusDoc["heartbeat"].createNestedObject("system");
+  return 0;
 }
 
 void SystemClass::poll() {
@@ -69,7 +70,6 @@ const char* SystemClass::getDateTime() {
 }
 
 void SystemClass::sendInfo() {
-  statusDoc["firmware"] = FIRMWARE_VERSION;
 #ifdef DEBUG
   statusDoc["inRide"] = "true";
 #else
@@ -81,7 +81,6 @@ void SystemClass::sendInfo() {
 }
 
 void SystemClass::sendHeartbeat() {
-  // logDebug();
   JsonObject heartbeat = statusDoc["heartbeat"];
   JsonObject gps = heartbeat["gps"];
   JsonObject system = heartbeat["system"];
@@ -171,12 +170,15 @@ void SystemClass::setCanStatusChanged() {
 }
 
 void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& cmdValue) {
-  // logDebug();
   statusDoc[cmdKey] = cmdValue;
   String escapedJson = json;
   escapedJson.replace("\"", "\\\"");
   String lastCmd = "\"system\":{\"lastCmd\":\"" + escapedJson + "\"}";
-  System.report("{" + lastCmd + ",\"" + cmdKey + "\":\"" + cmdValue + "\"}", "{\"" + cmdKey + "\":null}");
+  report("{" + lastCmd + ",\"" + cmdKey + "\":\"" + cmdValue + "\"}", "{\"" + cmdKey + "\":null}");
+}
+
+void SystemClass::resetDesired(const String& name) {
+  report("", "{\"" + name + "\":null}");
 }
 
 SystemClass System;

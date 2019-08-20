@@ -3,7 +3,7 @@
 
 class MqttClass {
  public:
-  void begin();
+  int begin();
   void connect();
   bool isConnected();
   void poll();

@@ -8,7 +8,7 @@
 
 class ConfigClass {
  public:
-  void load();
+  int begin();
   JsonDocument& get();
   int32_t getConfigFreeMem();
 

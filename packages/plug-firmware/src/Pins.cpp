@@ -5,7 +5,7 @@
 #include "Logger.h"
 #include "Pins.h"
 
-void PinsClass::begin() {
+int PinsClass::begin() {
 #ifdef ARDUINO_SAMD_WAIVE1000
   pinMode(VIN_SENSE, INPUT);
   pinMode(IMMO_ON, OUTPUT);
@@ -42,6 +42,8 @@ void PinsClass::begin() {
   digitalWrite(BLE_RST_PIN, HIGH);
 
   SPI.begin();
+
+  return 0;
 }
 
 void PinsClass::unlockDoors() {

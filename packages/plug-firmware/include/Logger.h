@@ -42,7 +42,7 @@
 
 class LoggerClass {
  public:
-  void begin();
+  int begin();
   void logKeyValueJson(int level, const char* key, ...);
 
  private:

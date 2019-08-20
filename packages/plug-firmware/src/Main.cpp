@@ -21,21 +21,17 @@ void setup() {
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
   Pins.begin();
-  if (!ECCX08.begin()) {
-    logError("No ECCX08 present");
-  }
-  if (!SD.begin(SD_CS_PIN)) {
-    logError("Failed to initialize SD Library");
-  }
-  Config.load();
-  Logger.begin();
-  Command.begin();
+  int eccStatus = ECCX08.begin();
+  int sdStatus = SD.begin(SD_CS_PIN);
+  int configStatus = Config.begin();
+  int loggerStatus = Logger.begin();
+  int cmdStatus = Command.begin();
   System.begin();
-  Mqtt.begin();
+  int mqttStatus = Mqtt.begin();
   Mqtt.poll();
-  Bluetooth.begin();
+  int bleStatus = Bluetooth.begin();
   Gps.begin();
-  Can.begin();
+  int canStatus = Can.begin();
   System.sendInfo();
 }
 

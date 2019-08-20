@@ -51,7 +51,7 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
 //   onCanReceive(inMessage, 1);
 // }
 
-void CanClass::begin() {
+int CanClass::begin() {
   JsonObject can = Config.get()["can"];
   JsonArray bus = can["bus"];
   for (uint32_t i = 0; i < bus.size(); i++) {
@@ -69,13 +69,15 @@ void CanClass::begin() {
       ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
       auto& canbus = (i == 0 ? can0 : can1);
       auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
-      const uint32_t errorCode = canbus.begin(settings, lambda, rxm0, filters, 1);  // does soft reset
-      if (errorCode != 0) {
+      int errorCode = canbus.begin(settings, lambda, rxm0, filters, 1);  // does soft reset
+      if (errorCode) {
         logError("i_error", errorCode, "CANBUS configuration error ");
+        return errorCode;
       }
     }
   }
   sleep();
+  return 0;
 }
 
 void CanClass::poll() {

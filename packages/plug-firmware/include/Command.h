@@ -8,7 +8,7 @@
 
 class CommandClass {
  public:
-  void begin();
+  int begin();
   void authorize(const String& encrypted);
   uint8_t* getAuthSecret();
   void unauthorize();

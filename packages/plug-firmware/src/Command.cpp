@@ -6,6 +6,7 @@
 #include "Can.h"
 #include "Command.h"
 #include "Config.h"
+#include "Gps.h"
 #include "Https.h"
 #include "Logger.h"
 #include "Pins.h"
@@ -14,14 +15,18 @@
 #define AUTH_DOC_SIZE 128
 #define COMMAND_DOC_SIZE 512
 
-void CommandClass::begin() {
+int CommandClass::begin() {
   // set bluetooth token key and iv
   const char* cert = Config.get()["mqtt"]["cert"];
+  if (!strlen(cert)) {
+    return 1;
+  }
   char* buf = (char*)malloc(48);
   rbase64_decode(buf, (char*)&cert[743], 64);
   memcpy(tokenIv, buf, 16);
   memcpy(tokenKey, &buf[16], 32);
   free(buf);
+  return 0;
 }
 
 void CommandClass::authorize(const String& encrypted) {
@@ -84,15 +89,16 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     Pins.unimmobilize();
   } else if (cmdKey == "inRide" && cmdValue == "true") {
     System.setCanStatusChanged();
+    Gps.wakeup();
   } else if (cmdKey == "inRide" && cmdValue == "false") {
     System.setCanStatusChanged();
     Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
-    System.report("", "{\"" + cmdKey + "\":null}");
+    System.resetDesired(cmdKey);
     reboot();
     return;
   } else if (!download.isNull()) {
-    System.report("", "{\"" + cmdKey + "\":null}");
+    System.resetDesired(cmdKey);
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";
     const char* to = download["to"] | "";
@@ -101,11 +107,11 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
         reboot();
       }
     } else {
-      logError(json.c_str());
+      logError(json.c_str(), "Invalid download object");
     }
     return;
   } else if (!copy.isNull()) {
-    System.report("", "{\"" + cmdKey + "\":null}");
+    System.resetDesired(cmdKey);
     const char* from = copy["from"] | "";
     const char* to = copy["to"] | "";
     if (strlen(from) > 0 && strlen(to) > 0) {
@@ -113,7 +119,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
         reboot();
       }
     } else {
-      logError(json.c_str());
+      logError(json.c_str(), "Invalid copy object");
     }
     return;
   } else {
@@ -182,7 +188,9 @@ String CommandClass::decryptToken(const String& encrypted) {
   }
   size_t numberOfPadding = buf[length - 1];
   buf[length - numberOfPadding] = '\0';
-  // logDebug( buf);
+#if DEBUG
+  logDebug(buf);
+#endif
   String token(buf);
   free(buf);
   return token;

@@ -9,8 +9,8 @@
 
 class SystemClass {
  public:
+  int begin();
   const char* getId();
-  void begin();
   void poll();
   void setTimes(uint32_t in);
   uint32_t getTime();
@@ -26,6 +26,7 @@ class SystemClass {
   void setStayAwake(bool stay);
   void setCanStatusChanged();
   void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
+  void resetDesired(const String& name);
 
  private:
   char id[19];

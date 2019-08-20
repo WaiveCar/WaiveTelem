@@ -3,7 +3,7 @@
 
 class CanClass {
  public:
-  void begin();
+  int begin();
   void poll();
   void sleep();
   // void wakeup();
