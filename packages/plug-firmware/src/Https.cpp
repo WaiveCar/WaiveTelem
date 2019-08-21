@@ -3,12 +3,10 @@
 #include <ArduinoBearSSL.h>
 #include <SD.h>
 
-#include "Config.h"
+#include "Command.h"
 #include "Https.h"
 #include "Internet.h"
 #include "Logger.h"
-#include "Mqtt.h"
-#include "System.h"
 
 #define DOWNLOAD_TIMEOUT 60 * 1000
 
@@ -34,7 +32,7 @@ static int32_t skipHeaders() {
       prevPrevC = prevC;
       prevC = c;
       c = client.read();
-      log(String(c));
+      Serial.print(String(c));
       if (prevPrevC == '\n' && prevC == '\r' && c == '\n') {
         return 0;
       }
@@ -68,7 +66,7 @@ static int32_t saveFile(const char* to) {
     }
     Watchdog.reset();
   }
-  logDebug("total bytes downloaded: " + String(counter));
+  logDebug("i|totalBytes", counter);
   SHA256.endHmac();
   file.close();
   return 0;
@@ -84,8 +82,7 @@ static int32_t verifyFile(const String& file) {
     computed += String(b, HEX);
   }
   String sha256 = file.substring(file.lastIndexOf("_") + 1);
-  logDebug(sha256);
-  logDebug(computed);
+  logDebug("computed", computed.c_str());
   if (sha256 == computed) {
     return 0;
   } else {
@@ -95,7 +92,7 @@ static int32_t verifyFile(const String& file) {
 }
 
 int32_t HttpsClass::download(const char* host, const char* from, const char* to) {
-  logDebug("host: " + String(host) + ", from: " + from + ", to: " + to);
+  logInfo("host", host, "from", from, "to", to);
   int32_t error;
   if (client.connect(host, 80)) {
     sendGetRequest(host, from);
@@ -105,9 +102,9 @@ int32_t HttpsClass::download(const char* host, const char* from, const char* to)
     if (error) return error;
     error = verifyFile(from);
     if (error) return error;
-    return System.moveFile("TEMP", to);
+    return Command.moveFile("TEMP", to);
   } else {
-    logError(F("https failed"));
+    logError("https failed");
     return -10;
   }
 }

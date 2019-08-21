@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export DEFAULT_BOARD=waive1000
 export TEMPLATE=./config/hyukia.txt
 export DEFAULT_FIRMWARE=../plug-firmware/.pio/build/waive1000/firmware.bin
 export SD_VOLUME=/Volumes/SDCARD

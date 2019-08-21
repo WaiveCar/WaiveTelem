@@ -4,7 +4,7 @@
     "cpu": "cortex-m0plus",
     "extra_flags": "-DARDUINO_SAMD_WAIVE1000 -DARDUINO_SAMD_MKRNB1500 -DARDUINO_ARCH_SAMD -D__SAMD21G18A__ -DUSE_ARDUINO_MKR_PIN_LAYOUT",
     "f_cpu": "48000000L",
-    "hwids": [["0x2341", "0x8055"], ["0x2341", "0x0055"]],
+    "hwids": [["0x0000", "0x1000"], ["0x0000", "0x1000"]],
     "ldscript": "flash_with_bootloader.ld",
     "mcu": "samd21g18a",
     "usb_product": "Waive 1000",

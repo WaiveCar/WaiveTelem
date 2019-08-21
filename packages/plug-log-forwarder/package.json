@@ -1,0 +1,19 @@
+{
+  "name": "plug-log-forwarder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "Buffer": "0.0.0",
+    "aws-mqtt": "^1.0.0",
+    "aws-sdk": "^2.513.0",
+    "winston-loggly-bulk": "^3.0.1",
+    "winston-papertrail": "^1.0.5",
+    "ws": "^7.1.2"
+  }
+}

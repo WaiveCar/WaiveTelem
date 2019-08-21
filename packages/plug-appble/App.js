@@ -12,11 +12,68 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Buffer } from 'buffer';
+import CryptoJS from 'crypto-js';
 
 import BleModule from './BleModule.js';
 global.BluetoothManager = new BleModule();
 
 const API_END_POINT = 'https://4lreu3z4m8.execute-api.us-east-2.amazonaws.com/prod/';
+
+CryptoJS.enc.u8array = {
+  /**
+   * Converts a word array to a Uint8Array.
+   *
+   * @param {WordArray} wordArray The word array.
+   *
+   * @return {Uint8Array} The Uint8Array.
+   *
+   * @static
+   *
+   * @example
+   *
+   *     var u8arr = CryptoJS.enc.u8array.stringify(wordArray);
+   */
+  stringify: function(wordArray) {
+    // Shortcuts
+    var words = wordArray.words;
+    var sigBytes = wordArray.sigBytes;
+
+    // Convert
+    var u8 = new Uint8Array(sigBytes);
+    for (var i = 0; i < sigBytes; i++) {
+      var byte = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+      u8[i] = byte;
+    }
+
+    return u8;
+  },
+
+  /**
+   * Converts a Uint8Array to a word array.
+   *
+   * @param {string} u8Str The Uint8Array.
+   *
+   * @return {WordArray} The word array.
+   *
+   * @static
+   *
+   * @example
+   *
+   *     var wordArray = CryptoJS.enc.u8array.parse(u8arr);
+   */
+  parse: function(u8arr) {
+    // Shortcut
+    var len = u8arr.length;
+
+    // Convert
+    var words = [];
+    for (var i = 0; i < len; i++) {
+      words[i >>> 2] |= (u8arr[i] & 0xff) << (24 - (i % 4) * 8);
+    }
+
+    return CryptoJS.lib.WordArray.create(words, len);
+  }
+};
 
 export default class App extends Component {
   constructor(props) {
@@ -102,11 +159,20 @@ export default class App extends Component {
     newData[item.index].isConnecting = true;
     this.setState({ data: newData });
     BluetoothManager.connect(item.item.id)
-      .then(() => {
+      .then(async () => {
         newData[item.index].isConnecting = false;
         const tokens = newData[item.index].localName.split('-');
         const thingName = tokens[tokens.length - 1];
         this.setState({ data: [newData[item.index]], isConnected: true, thingName });
+
+        const response = await fetch(API_END_POINT + 'token?thingName=' + thingName);
+        const data = await response.json();
+        const { token, secret } = data;
+        this.setState({
+          token,
+          secret
+        });
+
         this.onDisconnect();
       })
       .catch(err => {
@@ -141,21 +207,31 @@ export default class App extends Component {
   };
 
   writeWithoutResponse = async (index, type) => {
-    if (this.state.text.length == 0) {
-      this.alert('enter text');
-      return;
+    let binary;
+    // index 0 is AUTH_CHAR, 1 is CMD_CHAR
+    if (index == 0) {
+      binary = Buffer.from(this.state.token);
+    } else if (index == 1) {
+      binary = Buffer.from(this.state.text);
+      const challenge = await BluetoothManager.read(0);
+      const valueBuffer = Buffer.concat([binary, Buffer.from(challenge)]);
+      const value = CryptoJS.enc.u8array.parse(valueBuffer);
+      const secret = CryptoJS.enc.Base64.parse(this.state.secret);
+      const hmac = CryptoJS.enc.u8array.stringify(CryptoJS.HmacSHA256(value, secret));
+      binary = Buffer.concat([hmac.slice(0, 16), binary]);
     }
-    let remainBytesToSend = this.state.text.length;
     let start = 0;
+    let remainBytesToSend = binary.length;
     while (remainBytesToSend > 0) {
-      const subStringSize = remainBytesToSend > 19 ? 19 : remainBytesToSend;
-      const start = this.state.text.length - remainBytesToSend;
-      const subString = this.state.text.slice(start, start + subStringSize);
-      const data = Buffer.from(subString, 'ascii');
-      console.log('TCL: App -> writeWithoutResponse -> data', data);
-      const lengthByte = Buffer.from([remainBytesToSend]);
-      console.log('TCL: App -> writeWithoutResponse -> lengthByte', lengthByte);
-      const dataBuffer = Buffer.concat([lengthByte, data]);
+      const subStringSize = remainBytesToSend > 18 ? 18 : remainBytesToSend;
+      const start = binary.length - remainBytesToSend;
+      const data = binary.slice(start, start + subStringSize);
+      // console.log('TCL: App -> writeWithoutResponse -> data', data);
+      const dataBuffer = Buffer.concat([
+        new Buffer([remainBytesToSend & 0xff]),
+        new Buffer([remainBytesToSend >> 8]),
+        data
+      ]);
       console.log('TCL: App -> writeWithoutResponse -> dataBuffer', dataBuffer);
       await BluetoothManager.writeWithoutResponse(dataBuffer.toString('base64'), index, type);
       remainBytesToSend -= subStringSize;
@@ -281,12 +357,12 @@ export default class App extends Component {
       <View style={{ marginBottom: 30 }}>
         {this.state.isConnected ? (
           <View>
-            {this.renderWriteView(
+            {/* {this.renderWriteView(
               'write：',
               'send',
               BluetoothManager.writeWithResponseCharacteristicUUID,
               this.write
-            )}
+            )} */}
             {this.renderWriteView(
               'writeWithoutResponse：',
               'send',
@@ -300,13 +376,13 @@ export default class App extends Component {
               this.read,
               this.state.readData
             )}
-            {this.renderReceiveView(
+            {/* {this.renderReceiveView(
               `monitored data：${this.state.isMonitoring ? 'monitoring' : 'not monitoring'}`,
               'start monitoring',
               BluetoothManager.nofityCharacteristicUUID,
               this.monitor,
               this.state.receiveData
-            )}
+            )} */}
           </View>
         ) : (
           <View style={{ marginBottom: 20 }} />
@@ -460,14 +536,6 @@ export default class App extends Component {
             style={styles.button}
             onPress={async () => {
               console.log(this.state.data);
-              const response = await fetch(
-                API_END_POINT + 'token?thingName=' + this.state.thingName
-              );
-              const data = await response.json();
-              const { token } = data;
-              this.setState({
-                text: token
-              });
               setTimeout(() => {
                 onPress(0);
               }, 10);

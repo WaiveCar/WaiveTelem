@@ -1,29 +1,35 @@
 #ifdef ARDUINO_SAMD_MKR1000
-#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <WiFi101.h>
 
+#include "Config.h"
 #include "Internet.h"
 #include "Logger.h"
+#include "System.h"
 
 bool InternetClass::connect() {
   if (WiFi.status() == WL_NO_SHIELD) {
-    logError(F("WiFi hardware not present"));
+    logError("WiFi hardware not present");
     return false;
   }
-  logDebug("Attempting to connect to SSID: " + String(WIFI_SSID));
-  const int maxTry = 5;
-  int i = 1;
-  while (WiFi.begin(WIFI_SSID, WIFI_PASSWORD) != WL_CONNECTED) {
-    Watchdog.reset();
-    log(F("."));
-    if (i == maxTry) {
-      logDebug(F("Failed to connect, try later"));
-      return false;
-    }
-    i++;
+  JsonObject wifi = Config.get()["wifi"];
+  const char* ssid = wifi["ssid"];
+  const char* password = wifi["password"];
+  logInfo("ssid", ssid);
+  if (WiFi.begin(ssid, password) != WL_CONNECTED) {
+    logWarn("Failed to connect, try later");
+    return false;
   }
-  logDebug(F("You're connected to the network"));
+  uint32_t time = 0;
+  uint32_t start = millis();
+  while (!time && millis() - start < 14000) {
+    time = getTime();
+  }
+  logDebug("i|start", start, "i|millis()", millis(), "i|time", time);
+  if (time) {
+    System.setTimes(time);
+  }
+  logInfo("You're connected to the network");
   return true;
 }
 

@@ -24,18 +24,26 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 ```
 ### Step 2:
 - Update and run setEnv.sh in terminal shell to export env variables:
-- Connect to device via USB and Atmel-Ice
+- Connect to device via micro-USB
+- Connect Atmel-Ice if you want to use the debugger
 
-### Run Binary and Start Serial Monitoring (default waive1000):
+### Run Release Binary and Start Serial Monitoring:
 
 ```bash
 ./run.sh
+```
+note: Since release binary is sleeping most of the time in loop(), you might want to upload binary during setup(), right after reset.
+
+### Run Debug Binary and Start Serial Monitoring:
+
+```bash
+./debug.sh
 ```
 
 ### Flash firmware binary:
 
 ```bash
-./flash.sh s3/1000_1.0.3_06cdba4ab3c940d63f7ca4b2689e34003c18efbbaa5a7c2849d9df9661153ab8
+./flash.sh s3/mkr1000USB_1.0.8_21b44a51771a67675c5b9c747855eb09fef0b086604f45b43ec7d077d7f5cc5b
 ```
 
 ### Upload firmware binaries and sync it with S3 bucket:
@@ -58,9 +66,10 @@ e.g. for plug-1
 {"desired":{"inRide":"true"}}
 {"desired":{"inRide":"false"}}
 {"desired":{"reboot":"true"}}
-{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"1500_1.0.5_b824c05bbd9ebd19c5eb9546ef46615607a7da4f3e435c97fbb286969d8fc2d8", "to":"UPDATE.BIN"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.0.9_d84e070505e00ce74e9ab35de951a41d1712f4e32e9541df5b9b488ff80a46e9", "to":"ETADPU.BIN"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"mkr1000USB_1.0.9_58f91825e8cdf93e5c0d1b2d3594f17c1748f97aa5c058db57af43da4c6c78c4", "to":"ETADPU.BIN"}}}
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "to":"CONFIG.TXT"}}}
-{"desired":{"copy":{"from":"DEFAULT.BIN", "to":"UPDATE.BIN"}}}
+{"desired":{"copy":{"from":"DEFAULT.BIN", "to":"ETADPU.BIN"}}}
 {"desired":{"copy":{"from":"DEFAULT.CFG", "to":"CONFIG.TXT"}}}
 ```
 

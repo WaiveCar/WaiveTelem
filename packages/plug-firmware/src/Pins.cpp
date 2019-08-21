@@ -2,9 +2,10 @@
 #include <SPI.h>
 #include <wiring_private.h>
 
+#include "Logger.h"
 #include "Pins.h"
 
-void PinsClass::setup() {
+int PinsClass::begin() {
 #ifdef ARDUINO_SAMD_WAIVE1000
   pinMode(VIN_SENSE, INPUT);
   pinMode(IMMO_ON, OUTPUT);
@@ -41,6 +42,8 @@ void PinsClass::setup() {
   digitalWrite(BLE_RST_PIN, HIGH);
 
   SPI.begin();
+
+  return 0;
 }
 
 void PinsClass::unlockDoors() {

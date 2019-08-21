@@ -3,11 +3,16 @@
 
 class MqttClass {
  public:
-  void setup();
+  int begin();
   void connect();
   bool isConnected();
   void poll();
-  void send(const String& message);
+  void updateShadow(const String& message);
+  void logMsg(const String& message);
+
+ private:
+  String updateTopic;
+  String logTopic;
 };
 
 extern MqttClass Mqtt;

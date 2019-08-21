@@ -18,15 +18,18 @@ export default class BleModule {
       var characteristics = await service.characteristics();
 
       for (let characteristic of characteristics) {
-        characteristicsMap[characteristic.uuid] = {
-          uuid: characteristic.uuid,
-          isReadable: characteristic.isReadable,
-          isWritableWithResponse: characteristic.isWritableWithResponse,
-          isWritableWithoutResponse: characteristic.isWritableWithoutResponse,
-          isNotifiable: characteristic.isNotifiable,
-          isNotifying: characteristic.isNotifying,
-          value: characteristic.value
-        };
+        // weird that for my old Android nexus 6, I have some extra characteristics. Don't list them
+        if (!characteristic.uuid.includes('00805f9b34fb')) {
+          characteristicsMap[characteristic.uuid] = {
+            uuid: characteristic.uuid,
+            isReadable: characteristic.isReadable,
+            isWritableWithResponse: characteristic.isWritableWithResponse,
+            isWritableWithoutResponse: characteristic.isWritableWithoutResponse,
+            isNotifiable: characteristic.isNotifiable,
+            isNotifying: characteristic.isNotifying,
+            value: characteristic.value
+          };
+        }
       }
 
       servicesMap[service.uuid] = {

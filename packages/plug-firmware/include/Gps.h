@@ -3,22 +3,23 @@
 
 class GpsClass {
  public:
-  void setup();
-  void poll();
-  bool isConnected();
+  int begin();
+  bool poll();
   int getLatitude();
   int getLongitude();
   int getHdop();
   float getSpeed();
-  uint32_t getTime();
+  float getHeading();
+  void sleep();
+  void wakeup();
+  void reset();
 
  private:
-  bool connected = false;
   int latitude = 0;
   int longitude = 0;
   int hdop = 0;
-  float speed = 0;
-  uint32_t time = 0;
+  float speed = 0.0;
+  float heading = 0.0;
 };
 
 extern GpsClass Gps;

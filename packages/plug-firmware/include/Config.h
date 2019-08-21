@@ -4,11 +4,11 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-#define CONFIG_DOC_SIZE 4096
+#define CONFIG_DOC_SIZE 3584
 
 class ConfigClass {
  public:
-  void load();
+  int begin();
   JsonDocument& get();
   int32_t getConfigFreeMem();
 
