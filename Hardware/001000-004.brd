@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.005" altunitdist="inch" altunit="inch"/>
+<grid distance="1" unitdist="mm" unit="mm" style="dots" multiple="1" display="yes" altdistance="0.1" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -18,8 +18,8 @@
 <layer number="22" name="bPlace" color="14" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
@@ -32,27 +32,27 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
-<layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="yes"/>
 <layer number="51" name="tDocu" color="6" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="no" active="no"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="no" active="no"/>
 <layer number="93" name="Pins" color="2" fill="1" visible="no" active="no"/>
 <layer number="94" name="Symbols" color="4" fill="1" visible="no" active="no"/>
 <layer number="95" name="Names" color="7" fill="1" visible="no" active="no"/>
 <layer number="96" name="Values" color="7" fill="1" visible="no" active="no"/>
-<layer number="2" name="Route2" color="16" fill="1" visible="no" active="yes"/>
+<layer number="2" name="Route2" color="16" fill="1" visible="yes" active="yes"/>
 <layer number="3" name="Route3" color="17" fill="1" visible="no" active="no"/>
 <layer number="4" name="Route4" color="18" fill="1" visible="no" active="no"/>
 <layer number="5" name="Route5" color="19" fill="1" visible="no" active="no"/>
@@ -65,7 +65,7 @@
 <layer number="12" name="Route12" color="20" fill="1" visible="no" active="no"/>
 <layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
 <layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
-<layer number="15" name="Route15" color="23" fill="1" visible="no" active="yes"/>
+<layer number="15" name="Route15" color="23" fill="1" visible="yes" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -384,6 +384,23 @@
 <circle x="62.8698" y="17.137" radius="0.1905" width="0" layer="199"/>
 <circle x="59.2202" y="15.367" radius="0.1905" width="0" layer="199"/>
 <circle x="65.232" y="23.606" radius="0.1905" width="0" layer="199"/>
+<dimension x1="4" y1="59" x2="0" y2="59.69" x3="2" y3="66.04" textsize="1.778" textratio="15" layer="51" dtype="horizontal"/>
+<dimension x1="81" y1="59" x2="85" y2="59" x3="83" y3="64" textsize="1.778" textratio="15" layer="51" dtype="horizontal"/>
+<dimension x1="33.393" y1="60.1" x2="0" y2="59" x3="16.6965" y3="69" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="44.31" y1="60.54" x2="0" y2="61" x3="22.155" y3="64" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="17.077" y1="61.696" x2="0" y2="63" x3="8.5385" y3="75" textsize="1.778" textratio="15" layer="52" dtype="horizontal" precision="1"/>
+<dimension x1="4" y1="4" x2="4" y2="0" x3="-5" y3="2" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="4" y1="4" x2="0" y2="2" x3="2" y3="-5" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="4" y1="4" x2="2.3" y2="4" x3="3.15" y3="-12" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="4" y1="4" x2="0.5" y2="4" x3="2.25" y3="-8.4" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="14.3" y1="4.4" x2="0" y2="0" x3="7.15" y3="-17" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="42.5" y1="0" x2="0" y2="0" x3="21.25" y3="-14" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="23.1" y1="1.5" x2="0" y2="0" x3="11.55" y3="-21" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="23" y1="1" x2="27.3" y2="1.5" x3="25.15" y3="-3" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="71.4" y1="-0.9" x2="0" y2="0" x3="35.7" y3="-18" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="60.9" y1="1.6" x2="0" y2="0" x3="30.45" y3="-25" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="81" y1="4" x2="85" y2="4" x3="83" y3="4" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="81" y1="4" x2="81" y2="0" x3="81" y3="2" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 </plain>
 <libraries>
 <library name="SamacSys_Parts">

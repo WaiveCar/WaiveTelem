@@ -4817,7 +4817,7 @@ design rules under a new name.</description>
 <wire x1="34.92" y1="39.33" x2="34.3" y2="39.33" width="0.2032" layer="1"/>
 <wire x1="34.3" y1="39.33" x2="33.79" y2="38.82" width="0.2032" layer="1"/>
 </signal>
-<signal name="PA02_AIN0">
+<signal name="PA02_C1_SS">
 <contactref element="IC1" pad="3"/>
 <contactref element="IC11" pad="18"/>
 <contactref element="R24" pad="1"/>
@@ -4850,7 +4850,7 @@ design rules under a new name.</description>
 <signal name="PA03_VREFA">
 <contactref element="IC1" pad="4"/>
 </signal>
-<signal name="PB08_RST">
+<signal name="PB08_M_RST">
 <contactref element="IC1" pad="7"/>
 <contactref element="Q4" pad="5"/>
 <contactref element="R19" pad="2"/>
@@ -4904,7 +4904,7 @@ design rules under a new name.</description>
 <via x="25.4" y="3.175" extent="1-16" drill="0.2032"/>
 <wire x1="25.4" y1="3.175" x2="26.628" y2="3.175" width="0.2032" layer="1"/>
 </signal>
-<signal name="PA04_AIN4">
+<signal name="PA04_BT_RST">
 <contactref element="IC1" pad="9"/>
 <contactref element="IC7" pad="11"/>
 <wire x1="75" y1="48.03365625" x2="77.2776" y2="50.31125625" width="0.2032" layer="1"/>
@@ -4962,7 +4962,7 @@ design rules under a new name.</description>
 <wire x1="46.49538125" y1="47.09503125" x2="46.954325" y2="47.553975" width="0.2032" layer="16"/>
 <wire x1="24.6731" y1="47.09503125" x2="46.49538125" y2="47.09503125" width="0.2032" layer="16"/>
 </signal>
-<signal name="PA07_AIN7">
+<signal name="PA07_C1_INT">
 <contactref element="IC1" pad="12"/>
 <contactref element="IC11" pad="13"/>
 <contactref element="R29" pad="1"/>
@@ -5035,7 +5035,7 @@ design rules under a new name.</description>
 <wire x1="48.332" y1="44.61" x2="48.331865625" y2="44.609865625" width="0.2032" layer="1"/>
 <wire x1="48.331865625" y1="44.609865625" x2="46.709865625" y2="44.609865625" width="0.2032" layer="1"/>
 </signal>
-<signal name="PA11_TCC0-W3">
+<signal name="PA11_C0_SS">
 <contactref element="IC1" pad="16"/>
 <contactref element="IC10" pad="18"/>
 <contactref element="R26" pad="1"/>
@@ -5307,7 +5307,7 @@ design rules under a new name.</description>
 <wire x1="65.455" y1="25.4" x2="63.5" y2="27.355" width="0.2032" layer="16"/>
 <wire x1="67.895" y1="25.4" x2="65.455" y2="25.4" width="0.2032" layer="16"/>
 </signal>
-<signal name="PA20_TCC0-W6">
+<signal name="PA20_S2_MISO">
 <contactref element="IC1" pad="29"/>
 <contactref element="IC7" pad="8"/>
 <wire x1="76.0584" y1="50.81626875" x2="72.83573125" y2="47.5936" width="0.2032" layer="1"/>
@@ -5329,7 +5329,7 @@ design rules under a new name.</description>
 <wire x1="76.0584" y1="53.34" x2="75.7764" y2="53.622" width="0.2032" layer="1"/>
 <wire x1="75.7764" y1="53.622" x2="74.729" y2="53.622" width="0.2032" layer="1"/>
 </signal>
-<signal name="PA21_TCC0-W7">
+<signal name="PA21_C0_INT">
 <contactref element="IC1" pad="30"/>
 <contactref element="IC10" pad="13"/>
 <contactref element="R28" pad="1"/>
@@ -5346,7 +5346,7 @@ design rules under a new name.</description>
 <wire x1="56.432" y1="28.165" x2="55.334" y2="28.165" width="0.254" layer="1"/>
 <wire x1="55.334" y1="28.165" x2="54.384" y2="29.115" width="0.254" layer="1"/>
 </signal>
-<signal name="PA22_TC4-W0">
+<signal name="PA22_S2_MOSI">
 <contactref element="IC1" pad="31"/>
 <contactref element="IC7" pad="9"/>
 <wire x1="76.4648" y1="50.64793125" x2="73.00406875" y2="47.1872" width="0.2032" layer="1"/>
@@ -5437,7 +5437,7 @@ design rules under a new name.</description>
 <wire x1="51.8556" y1="46.661025" x2="51.5541625" y2="46.9624625" width="0.2032" layer="16"/>
 <wire x1="53.909896875" y1="42.616078125" x2="51.8556" y2="44.670375" width="0.2032" layer="16"/>
 </signal>
-<signal name="PB03_AIN11">
+<signal name="PB03_BT_IRQ">
 <contactref element="IC1" pad="48"/>
 <contactref element="IC7" pad="4"/>
 <wire x1="60" y1="53.34" x2="60" y2="49" width="0.2032" layer="1"/>
@@ -5446,7 +5446,7 @@ design rules under a new name.</description>
 <wire x1="61.229" y1="53.622" x2="60.282" y2="53.622" width="0.2032" layer="1"/>
 <wire x1="60.282" y1="53.622" x2="60" y2="53.34" width="0.2032" layer="1"/>
 </signal>
-<signal name="PB02_AIN10">
+<signal name="PB02_BT_SS">
 <contactref element="IC1" pad="47"/>
 <contactref element="IC7" pad="10"/>
 <wire x1="73.17240625" y1="46.7808" x2="76.8712" y2="50.47959375" width="0.2032" layer="1"/>
@@ -5559,7 +5559,7 @@ design rules under a new name.</description>
 <wire x1="59.603" y1="38.822" x2="57.1931" y2="38.822" width="0.2032" layer="1"/>
 <wire x1="57.1931" y1="38.822" x2="56.8151" y2="39.2" width="0.2032" layer="1"/>
 </signal>
-<signal name="PA28_S2_PWRON">
+<signal name="PA28_M_PWRON">
 <contactref element="IC1" pad="41"/>
 <contactref element="Q4" pad="2"/>
 <contactref element="R18" pad="2"/>

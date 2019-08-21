@@ -475,7 +475,7 @@
 <wire x1="0" y1="0.7" x2="0" y2="-0.7" width="0.2" layer="21"/>
 </package>
 <package name="LEDC1608X80N">
-<description>&lt;b&gt;HSMx-C190&lt;/b&gt;&lt;br&gt;
+<description>&lt;b&gt;HSMD-C190&lt;/b&gt;&lt;br&gt;
 </description>
 <smd name="1" x="-0.8" y="0" dx="0.95" dy="0.85" layer="1" rot="R90"/>
 <smd name="2" x="0.8" y="0" dx="0.95" dy="0.85" layer="1" rot="R90"/>
@@ -11167,8 +11167,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <attribute name="TP_SIGNAL_NAME" x="146.05" y="62.23" size="1.778" layer="97" rot="R270"/>
 </instance>
 <instance part="F2" gate="G$1" x="15.24" y="180.34" smashed="yes" rot="R90">
-<attribute name="NAME" x="9.144" y="189.738" size="1.778" layer="95" rot="R90" align="center-left"/>
-<attribute name="VALUE" x="11.43" y="180.848" size="1.778" layer="96" rot="R90" align="center-left"/>
+<attribute name="NAME" x="7.62" y="196.85" size="1.778" layer="95" rot="R90" align="center-left"/>
+<attribute name="VALUE" x="10.16" y="196.85" size="1.778" layer="96" rot="R90" align="center-left"/>
 </instance>
 </instances>
 <busses>
