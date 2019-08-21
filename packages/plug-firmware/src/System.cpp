@@ -78,7 +78,6 @@ void SystemClass::sendInfo(String& sysJson) {
 #endif
   String info = "";
   json(info, "inRide", statusDoc["inRide"].as<char*>(), "o|system", sysJson.c_str());
-  Serial.println(info);
   report(info);
 }
 

@@ -66,7 +66,8 @@ e.g. for plug-1
 {"desired":{"inRide":"true"}}
 {"desired":{"inRide":"false"}}
 {"desired":{"reboot":"true"}}
-{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"mkr1000USB_1.0.8_21b44a51771a67675c5b9c747855eb09fef0b086604f45b43ec7d077d7f5cc5b", "to":"ETADPU.BIN"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.0.9_d84e070505e00ce74e9ab35de951a41d1712f4e32e9541df5b9b488ff80a46e9", "to":"ETADPU.BIN"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"mkr1000USB_1.0.9_58f91825e8cdf93e5c0d1b2d3594f17c1748f97aa5c058db57af43da4c6c78c4", "to":"ETADPU.BIN"}}}
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "to":"CONFIG.TXT"}}}
 {"desired":{"copy":{"from":"DEFAULT.BIN", "to":"ETADPU.BIN"}}}
 {"desired":{"copy":{"from":"DEFAULT.CFG", "to":"CONFIG.TXT"}}}
