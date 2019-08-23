@@ -43,7 +43,7 @@
 class LoggerClass {
  public:
   int begin();
-  void logKeyValueJson(int level, const char* placeholder, ...);
+  int logKeyValueJson(int level, const char* placeholder, ...);
 
  private:
   File writeFile;

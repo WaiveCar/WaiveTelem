@@ -1,6 +1,7 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <ArduinoECCX08.h>
+#include <json_builder.h>
 
 #include "Bluetooth.h"
 #include "Can.h"
@@ -8,7 +9,6 @@
 #include "Config.h"
 #include "Gps.h"
 #include "Internet.h"
-#include "JsonBuilder.h"
 #include "Logger.h"
 #include "Mqtt.h"
 #include "Pins.h"
@@ -34,19 +34,18 @@ void setup() {
   int gpsInit = Gps.begin();
   int canInit = Can.begin();
 
-  String sysJson = "";
-  json(sysJson, "firmware", FIRMWARE_VERSION,
-       "i|configFreeMem", Config.getConfigFreeMem(),
-       "i|eccInit", eccInit,
-       "i|sdInit", sdInit,
-       "i|cfgInit", cfgInit,
-       "i|loggerInit", loggerInit,
-       "i|cmdInit", cmdInit,
-       "i|sysInit", sysInit,
-       "i|mqttInit", mqttInit,
-       "i|bleInit", bleInit,
-       "i|gpsInit", gpsInit,
-       "i|canInit", canInit);
+  char initJson[128], sysJson[256];
+  json(initJson, "i|ecc", eccInit,
+       "i|sd", sdInit,
+       "i|cfg", cfgInit,
+       "i|logger", loggerInit,
+       "i|cmd", cmdInit,
+       "i|sys", sysInit,
+       "i|mqtt", mqttInit,
+       "i|ble", bleInit,
+       "i|gps", gpsInit,
+       "i|can", canInit);
+  json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), "o|init", initJson);
   System.sendInfo(sysJson);
 }
 

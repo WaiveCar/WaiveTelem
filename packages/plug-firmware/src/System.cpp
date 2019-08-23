@@ -3,12 +3,12 @@
 #define ARDUINOJSON_USE_DOUBLE 1
 #include <ArduinoJson.h>
 #include <NMEAGPS.h>
+#include <json_builder.h>
 
 #include "Can.h"
 #include "Config.h"
 #include "Gps.h"
 #include "Internet.h"
-#include "JsonBuilder.h"
 #include "Logger.h"
 #include "Mqtt.h"
 #include "System.h"
@@ -31,7 +31,6 @@ int SystemClass::begin() {
   rtc.enableAlarm(rtc.MATCH_SS);
 
   sprintf(id, "%s", ECCX08.serialNumber().c_str());
-  logInfo("id", id);
 
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
@@ -70,14 +69,14 @@ const char* SystemClass::getDateTime() {
   return dateTime;
 }
 
-void SystemClass::sendInfo(String& sysJson) {
+void SystemClass::sendInfo(const char* sysJson) {
 #ifdef DEBUG
   statusDoc["inRide"] = "true";
 #else
   statusDoc["inRide"] = "false";
 #endif
-  String info = "";
-  json(info, "inRide", statusDoc["inRide"].as<char*>(), "o|system", sysJson.c_str());
+  char info[512];
+  json(info, "inRide", statusDoc["inRide"].as<char*>(), "o|system", sysJson);
   report(info);
 }
 

@@ -41,21 +41,24 @@ int PinsClass::begin() {
   digitalWrite(BLE_CS_PIN, HIGH);
   digitalWrite(BLE_RST_PIN, HIGH);
 
+  digitalWrite(DOOR_UNLOCK_PIN, HIGH);
+  digitalWrite(DOOR_LOCK_PIN, HIGH);
+
   SPI.begin();
 
   return 0;
 }
 
 void PinsClass::unlockDoors() {
-  digitalWrite(DOOR_UNLOCK_PIN, HIGH);
-  delay(100);
   digitalWrite(DOOR_UNLOCK_PIN, LOW);
+  delay(100);
+  digitalWrite(DOOR_UNLOCK_PIN, HIGH);
 }
 
 void PinsClass::lockDoors() {
-  digitalWrite(DOOR_LOCK_PIN, HIGH);
-  delay(100);
   digitalWrite(DOOR_LOCK_PIN, LOW);
+  delay(100);
+  digitalWrite(DOOR_LOCK_PIN, HIGH);
 }
 
 void PinsClass::immobilize() {
