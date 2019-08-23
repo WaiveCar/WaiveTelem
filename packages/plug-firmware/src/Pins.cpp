@@ -7,7 +7,10 @@
 
 int PinsClass::begin() {
 #ifdef ARDUINO_SAMD_WAIVE1000
-  pinMode(VIN_SENSE, INPUT);
+  analogReference(AR_DEFAULT);
+  analogReadResolution(12);
+
+  // pinMode(VIN_SENSE, INPUT);
   pinMode(IMMO_ON, OUTPUT);
   pinMode(IMMO_OFF, OUTPUT);
   pinMode(GPS_RESET, OUTPUT);
@@ -46,7 +49,7 @@ int PinsClass::begin() {
 
   SPI.begin();
 
-  return 0;
+  return 1;
 }
 
 void PinsClass::unlockDoors() {

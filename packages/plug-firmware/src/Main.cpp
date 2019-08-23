@@ -21,13 +21,15 @@ void setup() {
 #endif
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
+  // int pinsInit = Pins.begin();
   Pins.begin();
   int eccInit = ECCX08.begin();
   int sdInit = SD.begin(SD_CS_PIN);
   int cfgInit = Config.begin();
   int loggerInit = Logger.begin();
   int cmdInit = Command.begin();
-  int sysInit = System.begin();
+  // int sysInit = System.begin();
+  System.begin();
   int mqttInit = Mqtt.begin();
   Mqtt.poll();
   int bleInit = Bluetooth.begin();
@@ -40,7 +42,7 @@ void setup() {
        "i|cfg", cfgInit,
        "i|logger", loggerInit,
        "i|cmd", cmdInit,
-       "i|sys", sysInit,
+       //  "i|sys", sysInit,
        "i|mqtt", mqttInit,
        "i|ble", bleInit,
        "i|gps", gpsInit,
@@ -48,6 +50,10 @@ void setup() {
   json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), "o|init", initJson);
   System.sendInfo(sysJson);
 }
+
+float readings[5];
+int readingIndex = 0;
+bool averageValid = false;
 
 void loop() {
   Watchdog.reset();
@@ -59,4 +65,29 @@ void loop() {
   System.poll();
   Bluetooth.poll();
   Can.poll();
+
+#ifdef ARDUINO_SAMD_WAIVE1000
+  {
+    float vin = (float)analogRead(VIN_SENSE) / 4096 * 3.3 * 50.4 / 10.2;
+    char reading[32];
+    sprintf(reading, "%.3f", vin);
+    Serial.println(String("VIN: ") + reading);
+
+    readings[readingIndex] = vin;
+    readingIndex++;
+    if (readingIndex == 5) {
+      averageValid = true;
+      readingIndex = 0;
+    }
+    if (averageValid) {
+      float total = 0;
+      for (int i = 0; i < 5; i++) {
+        total += readings[i];
+      }
+      char reading[32];
+      sprintf(reading, "%.3f", total / 5);
+      Serial.println(String("Average of last 5 VINs: ") + reading);
+    }
+  }
+#endif
 }

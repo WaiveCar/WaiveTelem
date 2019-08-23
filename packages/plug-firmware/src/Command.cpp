@@ -18,7 +18,7 @@
 int CommandClass::begin() {
   // set bluetooth token key and iv
   const char* cert = Config.get()["mqtt"]["cert"];
-  if (!strlen(cert)) {
+  if (!cert) {
     return -1;
   }
   char* buf = (char*)malloc(48);

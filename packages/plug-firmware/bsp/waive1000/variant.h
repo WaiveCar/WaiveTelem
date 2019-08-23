@@ -63,7 +63,7 @@ extern "C" unsigned int PINCOUNT_fn();
  */
 // #define digitalPinToTimer(P)
 
-#define VIN_SENSE   (2u)
+#define VIN_SENSE   (15u)
 #define IMMO_ON     (28u)
 #define IMMO_OFF    (29u)
 #define GPS_RESET   (30u)

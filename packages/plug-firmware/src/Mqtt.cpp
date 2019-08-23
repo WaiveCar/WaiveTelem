@@ -26,7 +26,7 @@ static unsigned long getTime() {
 int MqttClass::begin() {
   ArduinoBearSSL.onGetTime(getTime);
   const char* cert = Config.get()["mqtt"]["cert"];
-  if (!strlen(cert)) {
+  if (!cert) {
     return -1;
   }
   sslClient.setEccSlot(0, cert);

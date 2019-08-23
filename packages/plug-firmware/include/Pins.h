@@ -1,8 +1,11 @@
 #ifndef Pins_h
 #define Pins_h
 
-#ifndef ARDUINO_SAMD_WAIVE1000
+#ifdef ARDUINO_SAMD_WAIVE1000
+#define CAN1_CS_PIN 2
+#else
 #define RELAY_2_PIN 2
+#define CAN1_CS_PIN A0
 #endif
 
 // SPI reserved: 8 MOSI, 9 SCK, 10 MISO
@@ -19,7 +22,6 @@
 #define BLE_MOSI_PIN 0
 #define BLE_SCK_PIN 1
 #define BLE_MISO_PIN 6
-#define CAN1_CS_PIN A0
 #define CAN1_INT_PIN A6
 
 #include <Arduino.h>

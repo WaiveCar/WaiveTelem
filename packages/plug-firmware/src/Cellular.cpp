@@ -8,11 +8,11 @@
 #include "Logger.h"
 #include "System.h"
 
-#ifdef DEBUG
-static NB nbAccess(true);  // turn on debug
-#else
+// #ifdef DEBUG
+// static NB nbAccess(true);  // turn on debug
+// #else
 static NB nbAccess;
-#endif
+// #endif
 
 static GPRS gprs;
 static NBScanner nbScanner;

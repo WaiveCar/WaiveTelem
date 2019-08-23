@@ -51,7 +51,7 @@ void HCI_Event_CB(void *pckt) {
   }
 }
 
-tBleStatus BluetoothClass::begin() {
+int BluetoothClass::begin() {
   HCI_Init();
   BNRG_SPI_Init();
   reset();
@@ -92,6 +92,9 @@ tBleStatus BluetoothClass::begin() {
   }
 
   addService();
+  if (status) {
+    return -1;
+  }
 
   status = aci_hal_set_tx_power_level(1, 0);  // 0 is lowest, prevents eavesdropping
   if (status) {
@@ -100,6 +103,9 @@ tBleStatus BluetoothClass::begin() {
   }
 
   setConnectable();
+  if (status) {
+    return -1;
+  }
 
   return 1;
 }
@@ -129,7 +135,7 @@ tBleStatus BluetoothClass::begin() {
 #define CMD_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 #define CHALLENGE_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
-void BluetoothClass::addService() {
+tBleStatus BluetoothClass::addService() {
   uint8_t uuid[16];
 
   SERVICE_UUID(uuid);
@@ -155,6 +161,7 @@ fail:
   if (status) {
     logError("BLE Error while adding service");
   }
+  return status;
 }
 
 void BluetoothClass::poll() {
@@ -167,7 +174,7 @@ void BluetoothClass::reset() {
   BlueNRG_RST();
 }
 
-uint8_t BluetoothClass::setChallenge() {
+tBleStatus BluetoothClass::setChallenge() {
   ECCX08.random(challenge, sizeof(challenge));
   status = aci_gatt_update_char_value(ServHandle, ChallengeCharHandle, 0, sizeof(challenge), challenge);
   if (status != BLE_STATUS_SUCCESS) {
@@ -180,7 +187,7 @@ uint8_t BluetoothClass::setChallenge() {
 #define ADV_INTERVAL_MIN_MS 50
 #define ADV_INTERVAL_MAX_MS 100
 
-void BluetoothClass::setConnectable() {
+tBleStatus BluetoothClass::setConnectable() {
   hci_le_set_scan_resp_data(0, NULL);
 
   String localName = String((char)AD_TYPE_COMPLETE_LOCAL_NAME) + name;
@@ -191,6 +198,7 @@ void BluetoothClass::setConnectable() {
   if (status != BLE_STATUS_SUCCESS) {
     logError("i|status", status);
   }
+  return status;
 }
 
 // BLE actually only supports sending 20 bytes of data per characteristic. We need a little "protocol" to support longer array.
