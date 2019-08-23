@@ -22,7 +22,8 @@ bool InternetClass::connect() {
   }
   uint32_t time = 0;
   uint32_t start = millis();
-  while (!time && millis() - start < 14000) {
+  while (!time /* && millis() - start < 14000 */) {  //if it doesn't connect, might need battery power
+    delay(10);
     time = getTime();
   }
   logDebug("i|start", start, "i|millis()", millis(), "i|time", time);

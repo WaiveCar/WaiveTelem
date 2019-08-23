@@ -1,7 +1,7 @@
 #include <Arduino.h>
+#include <json_builder.h>
 
 #include "Config.h"
-#include "JsonBuilder.h"
 #include "Logger.h"
 #include "Mqtt.h"
 #include "Pins.h"
@@ -36,48 +36,46 @@ int LoggerClass::begin() {
   return 1;
 }
 
-void LoggerClass::logKeyValueJson(int level, const char* placeholder, ...) {
-  String fragment = (char*)NULL;
-  fragment.reserve(128);
-  json(fragment, "-|", LOG_ID_KEY, LOG_ID_VALUE, LOG_TIME_KEY, LOG_TIME_VALUE, LOG_LEVEL_KEY, LEVELS[level]);
-  String newKey = String("+|") + fragment;
-  String js = (char*)NULL;
-  js.reserve(LOG_RESERVE_SIZE);
+int LoggerClass::logKeyValueJson(int level, const char* placeholder, ...) {
+  char fragment[128], jstr[512];
+  json(fragment, "-{", LOG_ID_KEY, LOG_ID_VALUE, LOG_TIME_KEY, LOG_TIME_VALUE, LOG_LEVEL_KEY, LEVELS[level]);
   va_list args;
   va_start(args, placeholder);
-  JsonBuilder.vbuild(js, newKey.c_str(), args);
+  int ret = vbuild_json(jstr, 512, fragment, args);
   va_end(args);
 
   if (level >= mqttLevel) {
     if (Mqtt.isConnected()) {
-      Mqtt.logMsg(js);
+      Mqtt.logMsg(jstr);
       if (level == 4) {
-        String escapedJson = js;
+        String escapedJson = jstr;
         escapedJson.replace("\"", "\\\"");
         System.report("{\"system\":{\"lastError\":\"" + escapedJson + "\"}}");
       }
     }
   }
   if (writeFile) {
-    writeFile.println(js);
+    writeFile.println(jstr);
     writeFile.flush();
   }
 
 #if LOG_EASYREAD_SERIAL
-#ifndef DEBUG
-  js.replace(String("{\"" LOG_ID_KEY "\":\""), "");
-  js.replace(LOG_ID_VALUE, "");
+  String jstring = jstr;
+  jstring.replace(String("{\"" LOG_ID_KEY "\":"), "");
+  jstring.replace(String("\"") + LOG_ID_VALUE + "\"", "");
+  jstring.replace(String(",\"" LOG_TIME_KEY "\":\""), "");
+  jstring.replace(String("\",\"" LOG_LEVEL_KEY "\":\""), strlen(LEVELS[level]) == 5 ? " " : "  ");
+  jstring.replace(String("\",\"" LOG_SOURCE_KEY "\":\""), " ");
+  jstring.replace(String("\",\"" LOG_FUNC_KEY "\":\""), " ");
 
-  js.replace(String("\",\"" LOG_TIME_KEY "\":\""), "");
+  jstring.replace("\"", " ");
+  jstring.replace("\\", "");
 
-  js.replace(String("\",\"" LOG_LEVEL_KEY "\":\""), strlen(LEVELS[level]) == 5 ? " " : "  ");
-  js.replace(String("\",\"" LOG_SOURCE_KEY "\":\""), " ");
-  js.replace(String("\",\"" LOG_FUNC_KEY "\":\""), " ");
-
-  js.replace("\"", " ");
+  Serial.println(jstring);
+#else
+  Serial.println(jstr);
 #endif
-#endif
-  Serial.println(js);
+  return ret;
 }
 
 LoggerClass Logger;
