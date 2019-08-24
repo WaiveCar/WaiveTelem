@@ -258,6 +258,10 @@ int vbuild_json(char* json, size_t buf_size, const char* item, va_list arg) {
       } else {
         json_cat_array("}");
       }
+    } else {
+      if (lastValueNeedsQuote) {
+        json_cat_array("\"");
+      }
     }
 
   } else {  // ARRAY

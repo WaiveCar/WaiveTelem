@@ -51,10 +51,6 @@ void setup() {
   System.sendInfo(sysJson);
 }
 
-float readings[5];
-int readingIndex = 0;
-bool averageValid = false;
-
 void loop() {
   Watchdog.reset();
   if (!System.stayAwake()) {
@@ -65,29 +61,4 @@ void loop() {
   System.poll();
   Bluetooth.poll();
   Can.poll();
-
-#ifdef ARDUINO_SAMD_WAIVE1000
-  {
-    float vin = (float)analogRead(VIN_SENSE) / 4096 * 3.3 * 50.4 / 10.2;
-    char reading[32];
-    sprintf(reading, "%.3f", vin);
-    Serial.println(String("VIN: ") + reading);
-
-    readings[readingIndex] = vin;
-    readingIndex++;
-    if (readingIndex == 5) {
-      averageValid = true;
-      readingIndex = 0;
-    }
-    if (averageValid) {
-      float total = 0;
-      for (int i = 0; i < 5; i++) {
-        total += readings[i];
-      }
-      char reading[32];
-      sprintf(reading, "%.3f", total / 5);
-      Serial.println(String("Average of last 5 VINs: ") + reading);
-    }
-  }
-#endif
 }

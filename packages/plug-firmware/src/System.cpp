@@ -40,6 +40,13 @@ int SystemClass::begin() {
 }
 
 void SystemClass::poll() {
+  checkHeartbeat();
+#ifdef ARDUINO_SAMD_WAIVE1000
+  checkVinRead();
+#endif
+}
+
+void SystemClass::checkHeartbeat() {
   bool inRide = (statusDoc["inRide"] == "true");
   JsonObject heartbeat = Config.get()["heartbeat"];
   uint32_t interval = inRide ? heartbeat["inRide"] | 30 : heartbeat["notInRide"] | 900;
@@ -56,6 +63,28 @@ void SystemClass::poll() {
         Gps.sleep();
       }
     }
+  }
+}
+
+void SystemClass::checkVinRead() {
+  uint32_t elapsedTime = getTime() - lastVinRead;
+  if (lastVinRead == -1 || elapsedTime >= 10) {
+    vinReads[vinIndex] = (float)analogRead(VIN_SENSE) / (1 << 12) * 3.3 * 50.4 / 10.2;
+    vinIndex++;
+    if (vinIndex == 5) {
+      vinAvgValid = true;
+      vinIndex = 0;
+    }
+    if (vinAvgValid) {
+      float total = 0;
+      for (int i = 0; i < 5; i++) {
+        total += vinReads[i];
+      }
+      char reading[32];
+      sprintf(reading, "%.7f", total / 5);
+      Serial.println(String("Average of last 5 VINs: ") + reading);
+    }
+    lastVinRead = getTime();
   }
 }
 
@@ -90,6 +119,7 @@ void SystemClass::sendHeartbeat() {
   gps["speed"] = Gps.getSpeed();
   gps["heading"] = Gps.getHeading();
   // system["time"] = System.getDateTime();
+  system["vin"] = vinReads[vinIndex];
   system["uptime"] = time - bootTime;
   system["signal"] = Internet.getSignalStrength();
   system["heapFreeMem"] = freeMemory();

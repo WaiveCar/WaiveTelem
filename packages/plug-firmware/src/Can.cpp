@@ -10,7 +10,15 @@
 #define QUARTZ_FREQUENCY 16 * 1000 * 1000
 
 static ACAN2515 can0(CAN0_CS_PIN, SPI, CAN0_INT_PIN);
+
+#ifdef ARDUINO_SAMD_WAIVE1000
+#define NUM_CANBUS 2
 static ACAN2515 can1(CAN1_CS_PIN, SPI, CAN1_INT_PIN);
+static ACAN2515* canbus[NUM_CANBUS] = {&can0, &can1};
+#else
+#define NUM_CANBUS 1
+static ACAN2515* canbus[NUM_CANBUS] = {&can0};
+#endif
 
 static void onCanReceive(const CANMessage& inMessage, int busNum) {
   if (!inMessage.rtr) {
@@ -23,15 +31,9 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
       if (inMessage.id == status["id"]) {
         int bit = status["bit"];
         int len = status["len"] | 1;
-        uint64_t value =
-            static_cast<uint64_t>(inMessage.data[0]) |
-            static_cast<uint64_t>(inMessage.data[1]) << 8 |
-            static_cast<uint64_t>(inMessage.data[2]) << 16 |
-            static_cast<uint64_t>(inMessage.data[3]) << 24 |
-            static_cast<uint64_t>(inMessage.data[4]) << 32 |
-            static_cast<uint64_t>(inMessage.data[5]) << 40 |
-            static_cast<uint64_t>(inMessage.data[6]) << 48 |
-            static_cast<uint64_t>(inMessage.data[7]) << 56;
+
+        // Arduino for SAMD21 is little endian, byte 0 is the lowest byte in data64
+        uint64_t value = inMessage.data64;
         uint64_t mask = pow(2, len) - 1;
         value = (value >> bit) & mask;
         String name = status["name"];
@@ -54,12 +56,12 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
 int CanClass::begin() {
   JsonObject can = Config.get()["can"];
   JsonArray bus = can["bus"];
-  for (uint32_t i = 0; i < bus.size(); i++) {
+  busCount = bus.size();
+  for (uint32_t i = 0; i < bus.size() && i < NUM_CANBUS; i++) {
     int baud = bus[i]["baud"];
     logInfo("i|canBusNum", i, "i|baud", baud);
     JsonArray status = bus[i]["status"];
     if (status.size() > 0) {
-      busCount = i + 1;
       const int minCanId = status[0]["id"].as<int>();
       logDebug("i|minCanId", minCanId);
       const int maxCanId = status[status.size() - 1]["id"].as<int>();
@@ -67,9 +69,12 @@ int CanClass::begin() {
       const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
       const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
       ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
-      auto& canbus = (i == 0 ? can0 : can1);
+#ifdef ARDUINO_SAMD_WAIVE1000
       auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
-      int errorCode = canbus.begin(settings, lambda, rxm0, filters, 1);  // does soft reset
+#else
+      auto lambda = [] { can0.isr(); };
+#endif
+      int errorCode = canbus[i]->begin(settings, lambda, rxm0, filters, 1);  // does soft reset
       if (errorCode) {
         logError("i|error", errorCode, "CANBUS configuration error ");
         return -1;
@@ -77,56 +82,58 @@ int CanClass::begin() {
     }
   }
   sleep();
+
   return 1;
 }
 
 void CanClass::poll() {
-  CANMessage frame;
-  if (busCount > 0) {
-    while (can0.available()) {
-      if (isSleeping(0)) {
-        can0.changeModeOnTheFly(ACAN2515Settings::NormalMode);
+  CANMessage message;
+  for (int i = 0; i < busCount; i++) {
+    while (canbus[i]->available()) {
+      if (isSleeping(i)) {
+        canbus[i]->changeModeOnTheFly(ACAN2515Settings::NormalMode);
       }
-      can0.receive(frame);
-      onCanReceive(frame, 0);
-    }
-
-    if (busCount > 1) {
-      while (can1.available()) {
-        if (isSleeping(1)) {
-          can1.changeModeOnTheFly(ACAN2515Settings::NormalMode);
-        }
-        can1.receive(frame);
-        onCanReceive(frame, 1);
-      }
+      canbus[i]->receive(message);
+      onCanReceive(message, i);
     }
   }
 }
 
-void CanClass::sleep() {
-  // logDebug("i|busCount", busCount);
-  // get error : 1 , m : CANBUS configuration error
-  // if (busCount > 0) {
-  //   can0.changeModeOnTheFly(ACAN2515Settings::SleepMode);
-  //   sleeping[0] = true;
+int CanClass::send() {
+  CANMessage message;
+  message.data[0] = 0x12;
+  message.data[1] = 0x34;
+  message.data[2] = 0x56;
+  message.data[3] = 0x78;
+  message.data[4] = 0x9a;
+  message.data[5] = 0xbc;
+  message.data[6] = 0xde;
+  message.data[7] = 0xf0;
+  char temp[32];
+  sprintf(temp, "%lx%lx", message.data32[1], message.data32[0]);
+  Serial.println(temp);
 
-  //   if (busCount > 1) {
-  //     can1.changeModeOnTheFly(ACAN2515Settings::SleepMode);
-  //     sleeping[1] = true;
-  //   }
-  // }
+  char higher32[32];
+  strncpy(higher32, temp, 8);
+  uint32_t data32h = strtoul(higher32, NULL, 16);
+  uint32_t data32l = strtoul(&temp[8], NULL, 16);
+  char temp2[32];
+  sprintf(temp2, "0x%lx%lx", data32h, data32l);
+  Serial.println(temp2);
+
+  message.id = 0x542;
+  message.data64 = 0x000;
+  can0.tryToSend(message);
+  return 0;
 }
 
-// void CanClass::wakeup() {
-//   logDebug();
-//   if (busCount > 0) {
-//     can0.changeModeOnTheFly(ACAN2515Settings::NormalMode);
-
-//     if (busCount > 1) {
-//       can1.changeModeOnTheFly(ACAN2515Settings::NormalMode);
-//     }
-//   }
-// }
+void CanClass::sleep() {
+  logDebug(NULL);
+  for (int i = 0; i < busCount; i++) {
+    canbus[i]->changeModeOnTheFly(ACAN2515Settings::SleepMode);
+    sleeping[i] = true;
+  }
+}
 
 bool CanClass::isSleeping(int bus) {
   return sleeping[bus];

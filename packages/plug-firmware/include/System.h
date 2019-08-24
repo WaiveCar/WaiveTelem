@@ -27,6 +27,8 @@ class SystemClass {
   void setCanStatusChanged();
   void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
   void resetDesired(const String& name);
+  void checkVinRead();
+  void checkHeartbeat();
 
  private:
   char id[19];
@@ -39,6 +41,11 @@ class SystemClass {
   bool stayawake = false;
   RTCZero rtc;
   uint32_t lastMillis = 0;
+
+  float vinReads[5] = {0};
+  int vinIndex = 0;
+  bool vinAvgValid = false;
+  int32_t lastVinRead = false;
 };
 
 extern SystemClass System;

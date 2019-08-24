@@ -5,8 +5,8 @@ class CanClass {
  public:
   int begin();
   void poll();
+  int send();
   void sleep();
-  // void wakeup();
   bool isSleeping(int bus);
 
  private:
