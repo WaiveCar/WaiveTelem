@@ -18,6 +18,7 @@ class BluetoothClass {
   void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle);
   void GAP_DisconnectionComplete_CB();
   void Read_Request_CB(uint16_t handle);
+  int getHealth();
 
  private:
   tBleStatus status = BLE_STATUS_ERROR;
