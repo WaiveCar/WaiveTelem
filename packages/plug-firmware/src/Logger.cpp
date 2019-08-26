@@ -57,6 +57,11 @@ int LoggerClass::logKeyValueJson(int level, const char* placeholder, ...) {
   if (writeFile) {
     writeFile.println(jstr);
     writeFile.flush();
+    int error = writeFile.getWriteError();
+    if (error) {
+      logError("i|error", error, "cannot write to LOG.TXT");
+      writeFile.close();
+    }
   }
 
 #if LOG_EASYREAD_SERIAL

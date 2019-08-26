@@ -62,20 +62,20 @@ int BluetoothClass::begin() {
   status = aci_gatt_init();
   if (status) {
     logError("i|status", status, "BLE GATT_Init failed");
-    return -1;
+    return getHealth();
   }
 
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
   status = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, 20, &service_handle, &dev_name_char_handle, &appearance_char_handle);
   if (status) {
     logError("i|status", status, "BLE GAP_Init failed");
-    return -1;
+    return getHealth();
   }
 
   status = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, 20, name);
   if (status) {
     logError("i|status", status, "BLE aci_gatt_update_char_value failed");
-    return -1;
+    return getHealth();
   }
 
   status = aci_gap_set_auth_requirement(MITM_PROTECTION_REQUIRED,
@@ -88,26 +88,23 @@ int BluetoothClass::begin() {
                                         BONDING);
   if (status) {
     logError("i|status", status, "BLE aci_gap_set_auth_requirement failed");
-    return -1;
+    return getHealth();
   }
 
   addService();
   if (status) {
-    return -1;
+    return getHealth();
   }
 
   status = aci_hal_set_tx_power_level(1, 0);  // 0 is lowest, prevents eavesdropping
   if (status) {
     logError("i|status", status, "BLE aci_hal_set_tx_power_level failed");
-    return -1;
+    return getHealth();
   }
 
   setConnectable();
-  if (status) {
-    return -1;
-  }
 
-  return 1;
+  return getHealth();
 }
 
 #define UUID_128(uuid_struct, uuid_15, uuid_14, uuid_13, uuid_12, uuid_11, uuid_10, uuid_9, uuid_8, uuid_7, uuid_6, uuid_5, uuid_4, uuid_3, uuid_2, uuid_1, uuid_0) \
@@ -167,6 +164,8 @@ fail:
 void BluetoothClass::poll() {
   if (status == BLE_STATUS_SUCCESS) {
     HCI_Process();
+  } else {
+    begin();
   }
 }
 
@@ -274,6 +273,10 @@ void BluetoothClass::Read_Request_CB(uint16_t handle) {
   if (connection_handle != 0) {
     aci_gatt_allow_read(connection_handle);
   }
+}
+
+int BluetoothClass::getHealth() {
+  return status == BLE_STATUS_SUCCESS ? 1 : -status;
 }
 
 BluetoothClass Bluetooth;

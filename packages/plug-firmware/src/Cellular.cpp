@@ -21,8 +21,8 @@ bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
   const char* apn = nb["apn"] | "hologram";
   logInfo("apn", apn);
-  nbAccess.setTimeout(3000);
-  gprs.setTimeout(10000);
+  nbAccess.setTimeout(7000);
+  gprs.setTimeout(7000);
   // Watchdog.disable();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
     // Watchdog.enable(WATCHDOG_TIMEOUT);

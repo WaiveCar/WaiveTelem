@@ -5,6 +5,7 @@
 #include <NMEAGPS.h>
 #include <json_builder.h>
 
+#include "Bluetooth.h"
 #include "Can.h"
 #include "Config.h"
 #include "Gps.h"
@@ -41,9 +42,7 @@ int SystemClass::begin() {
 
 void SystemClass::poll() {
   checkHeartbeat();
-#ifdef ARDUINO_SAMD_WAIVE1000
   checkVinRead();
-#endif
 }
 
 void SystemClass::checkHeartbeat() {
@@ -67,6 +66,7 @@ void SystemClass::checkHeartbeat() {
 }
 
 void SystemClass::checkVinRead() {
+#ifdef ARDUINO_SAMD_WAIVE1000
   uint32_t elapsedTime = getTime() - lastVinRead;
   if (lastVinRead == -1 || elapsedTime >= 10) {
     vinReads[vinIndex] = (float)analogRead(VIN_SENSE) / (1 << 12) * 3.3 * 50.4 / 10.2;
@@ -80,12 +80,19 @@ void SystemClass::checkVinRead() {
       for (int i = 0; i < 5; i++) {
         total += vinReads[i];
       }
-      char reading[32];
-      sprintf(reading, "%.7f", total / 5);
-      Serial.println(String("Average of last 5 VINs: ") + reading);
+      float avg = total / 5;
+      float limit = Config.get()["vin"]["low"] || 13.0f;
+      if (avg < limit) {
+        logDebug("d|5avgVin", avg);
+        char sysJson[64], info[128];
+        json(sysJson, "d|5vin", avg);
+        json(info, "o|system", sysJson);
+        report(info);
+      }
     }
     lastVinRead = getTime();
   }
+#endif
 }
 
 uint32_t SystemClass::getTime() {
@@ -119,7 +126,8 @@ void SystemClass::sendHeartbeat() {
   gps["speed"] = Gps.getSpeed();
   gps["heading"] = Gps.getHeading();
   // system["time"] = System.getDateTime();
-  system["vin"] = vinReads[vinIndex];
+  system["ble"] = Bluetooth.getHealth();
+  system["can"] = Can.getHealth();
   system["uptime"] = time - bootTime;
   system["signal"] = Internet.getSignalStrength();
   system["heapFreeMem"] = freeMemory();

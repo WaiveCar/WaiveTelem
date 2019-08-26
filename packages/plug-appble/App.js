@@ -19,6 +19,7 @@ global.BluetoothManager = new BleModule();
 
 const API_END_POINT = 'https://4lreu3z4m8.execute-api.us-east-2.amazonaws.com/prod/';
 
+// add function to convert CryptoJS wordArray to u8array and vice versa
 CryptoJS.enc.u8array = {
   /**
    * Converts a word array to a Uint8Array.
@@ -190,21 +191,21 @@ export default class App extends Component {
       .catch(err => {});
   };
 
-  write = (index, type) => {
-    if (this.state.text.length == 0) {
-      this.alert('enter text');
-      return;
-    }
-    BluetoothManager.write(this.state.text, index, type)
-      .then(characteristic => {
-        this.bluetoothReceiveData = [];
-        this.setState({
-          writeData: this.state.text,
-          text: ''
-        });
-      })
-      .catch(err => {});
-  };
+  // write = (index, type) => {
+  //   if (this.state.text.length == 0) {
+  //     this.alert('enter text');
+  //     return;
+  //   }
+  //   BluetoothManager.write(this.state.text, index, type)
+  //     .then(characteristic => {
+  //       this.bluetoothReceiveData = [];
+  //       this.setState({
+  //         writeData: this.state.text,
+  //         text: ''
+  //       });
+  //     })
+  //     .catch(err => {});
+  // };
 
   writeWithoutResponse = async (index, type) => {
     let binary;

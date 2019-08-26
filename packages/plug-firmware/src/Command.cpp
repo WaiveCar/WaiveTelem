@@ -88,12 +88,14 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     Pins.immobilize();
   } else if (cmdKey == "immo" && cmdValue == "unlock") {
     Pins.unimmobilize();
+  } else if (cmdKey == "can") {
+    Can.sendCommand(cmdValue.c_str());
   } else if (cmdKey == "inRide" && cmdValue == "true") {
     System.setCanStatusChanged();
     Gps.wakeup();
   } else if (cmdKey == "inRide" && cmdValue == "false") {
     System.setCanStatusChanged();
-    Can.sleep();
+    // Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
     System.resetDesired(cmdKey);
     reboot();

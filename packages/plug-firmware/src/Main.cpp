@@ -21,33 +21,26 @@ void setup() {
 #endif
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
-  // int pinsInit = Pins.begin();
   Pins.begin();
   int eccInit = ECCX08.begin();
   int sdInit = SD.begin(SD_CS_PIN);
   int cfgInit = Config.begin();
   int loggerInit = Logger.begin();
   int cmdInit = Command.begin();
-  // int sysInit = System.begin();
   System.begin();
   int mqttInit = Mqtt.begin();
   Mqtt.poll();
-  int bleInit = Bluetooth.begin();
-  int gpsInit = Gps.begin();
-  int canInit = Can.begin();
+  Gps.begin();
 
-  char initJson[128], sysJson[256];
-  json(initJson, "i|ecc", eccInit,
+  char initStatus[128], sysJson[256];
+  json(initStatus, "-{",
+       "i|ecc", eccInit,
        "i|sd", sdInit,
        "i|cfg", cfgInit,
        "i|logger", loggerInit,
        "i|cmd", cmdInit,
-       //  "i|sys", sysInit,
-       "i|mqtt", mqttInit,
-       "i|ble", bleInit,
-       "i|gps", gpsInit,
-       "i|can", canInit);
-  json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), "o|init", initJson);
+       "i|mqtt", mqttInit);
+  json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), initStatus);
   System.sendInfo(sysJson);
 }
 
@@ -57,8 +50,9 @@ void loop() {
     System.sleep(1);
   }
   System.keepTime();
+
   Mqtt.poll();
-  System.poll();
   Bluetooth.poll();
   Can.poll();
+  System.poll();
 }

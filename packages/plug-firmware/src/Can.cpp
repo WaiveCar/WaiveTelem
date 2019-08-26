@@ -45,19 +45,12 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
   }
 }
 
-// static void onCanReceive0(const CANMessage& inMessage) {
-//   onCanReceive(inMessage, 0);
-// }
-
-// static void onCanReceive1(const CANMessage& inMessage) {
-//   onCanReceive(inMessage, 1);
-// }
-
 int CanClass::begin() {
   JsonObject can = Config.get()["can"];
   JsonArray bus = can["bus"];
   busCount = bus.size();
-  for (uint32_t i = 0; i < bus.size() && i < NUM_CANBUS; i++) {
+  health = 1;
+  for (uint32_t i = 0; i < busCount && i < NUM_CANBUS; i++) {
     int baud = bus[i]["baud"];
     logInfo("i|canBusNum", i, "i|baud", baud);
     JsonArray status = bus[i]["status"];
@@ -76,55 +69,63 @@ int CanClass::begin() {
 #endif
       int errorCode = canbus[i]->begin(settings, lambda, rxm0, filters, 1);  // does soft reset
       if (errorCode) {
-        logError("i|error", errorCode, "CANBUS configuration error ");
-        return -1;
+        logError("i|error", errorCode, "can configuration error ");
+        health = -1;
       }
     }
   }
-  sleep();
+  // sleep();
 
-  return 1;
+  return health;
 }
 
 void CanClass::poll() {
-  CANMessage message;
-  for (int i = 0; i < busCount; i++) {
-    while (canbus[i]->available()) {
-      if (isSleeping(i)) {
-        canbus[i]->changeModeOnTheFly(ACAN2515Settings::NormalMode);
+  if (health <= 0) {
+    begin();
+  } else {
+    CANMessage message;
+    for (int i = 0; i < busCount; i++) {
+      while (canbus[i]->available()) {
+        if (isSleeping(i)) {
+          canbus[i]->changeModeOnTheFly(ACAN2515Settings::NormalMode);
+        }
+        canbus[i]->receive(message);
+        onCanReceive(message, i);
       }
-      canbus[i]->receive(message);
-      onCanReceive(message, i);
     }
   }
 }
 
-int CanClass::send() {
+void CanClass::send(JsonObject& cmdJson) {
   CANMessage message;
-  message.data[0] = 0x12;
-  message.data[1] = 0x34;
-  message.data[2] = 0x56;
-  message.data[3] = 0x78;
-  message.data[4] = 0x9a;
-  message.data[5] = 0xbc;
-  message.data[6] = 0xde;
-  message.data[7] = 0xf0;
-  char temp[32];
-  sprintf(temp, "%lx%lx", message.data32[1], message.data32[0]);
-  Serial.println(temp);
+  int bus = cmdJson["bus"] || 0;
 
-  char higher32[32];
-  strncpy(higher32, temp, 8);
-  uint32_t data32h = strtoul(higher32, NULL, 16);
-  uint32_t data32l = strtoul(&temp[8], NULL, 16);
-  char temp2[32];
-  sprintf(temp2, "0x%lx%lx", data32h, data32l);
-  Serial.println(temp2);
+  if (bus >= busCount) {
+    logError("cmdJson[\"bus\"] >= busCount");
+    return;
+  }
+  const char* msg = cmdJson["msg"];
 
-  message.id = 0x542;
-  message.data64 = 0x000;
-  can0.tryToSend(message);
-  return 0;
+  message.id = cmdJson["id"];
+  char higher32[9];
+  strncpy(higher32, msg, 8);
+  message.data32[1] = strtoul(higher32, NULL, 16);
+  message.data32[0] = strtoul(&msg[8], NULL, 16);
+  char str[32];
+  sprintf(str, "0x%lx%lx", message.data32[1], message.data32[0]);
+  logDebug("msg", msg);
+  logDebug("str", str);
+
+  bool ok = canbus[bus]->tryToSend(message);
+  if (!ok) {
+    logError("can tryToSend() failed");
+    health = -2;
+  }
+}
+
+void CanClass::sendCommand(const char* cmd) {
+  JsonObject cmdJson = Config.get()["can"]["cmd"][cmd];
+  send(cmdJson);
 }
 
 void CanClass::sleep() {
@@ -137,6 +138,10 @@ void CanClass::sleep() {
 
 bool CanClass::isSleeping(int bus) {
   return sleeping[bus];
+}
+
+int CanClass::getHealth() {
+  return health;
 }
 
 CanClass Can;
