@@ -46,7 +46,7 @@ void setup() {
 
 void loop() {
   Watchdog.reset();
-  if (!System.stayAwake()) {
+  if (!System.stayResponsive()) {
     System.sleep(1);
   }
   System.keepTime();

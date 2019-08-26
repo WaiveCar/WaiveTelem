@@ -111,10 +111,10 @@ void CanClass::send(JsonObject& cmdJson) {
   strncpy(higher32, msg, 8);
   message.data32[1] = strtoul(higher32, NULL, 16);
   message.data32[0] = strtoul(&msg[8], NULL, 16);
-  char str[32];
-  sprintf(str, "0x%lx%lx", message.data32[1], message.data32[0]);
-  logDebug("msg", msg);
-  logDebug("str", str);
+  logDebug("i|bus", bus, "i|id", message.id, "msg", msg);
+  // char str[32];
+  // sprintf(str, "%08lx%08lx", message.data32[1], message.data32[0]);
+  // logDebug("str", str);
 
   bool ok = canbus[bus]->tryToSend(message);
   if (!ok) {
@@ -124,7 +124,11 @@ void CanClass::send(JsonObject& cmdJson) {
 }
 
 void CanClass::sendCommand(const char* cmd) {
+  logDebug("cmd", cmd);
   JsonObject cmdJson = Config.get()["can"]["cmd"][cmd];
+  // char output[128];
+  // serializeJson(cmdJson, output);
+  // logDebug("cmdJson", output);
   send(cmdJson);
 }
 

@@ -22,12 +22,12 @@ class SystemClass {
   void sendCanStatus();
   void setCanStatus(const String& name, uint64_t value, uint32_t delta);
   void sleep(uint32_t sec);
-  bool stayAwake();
-  void setStayAwake(bool stay);
+  bool stayResponsive();
+  void setStayResponsive(bool responsive);
   void setCanStatusChanged();
   void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
   void resetDesired(const String& name);
-  void checkVinRead();
+  void checkVin();
   void checkHeartbeat();
 
  private:
@@ -38,14 +38,14 @@ class SystemClass {
   uint32_t time = 0;
   char dateTime[32] = "";
   StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
-  bool stayawake = false;
+  bool stayresponsive = false;
   RTCZero rtc;
   uint32_t lastMillis = 0;
 
   float vinReads[5] = {0};
   int vinIndex = 0;
   bool vinAvgValid = false;
-  int32_t lastVinRead = false;
+  int32_t lastVinRead = -1;
 };
 
 extern SystemClass System;

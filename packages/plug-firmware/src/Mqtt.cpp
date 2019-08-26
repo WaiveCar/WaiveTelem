@@ -73,9 +73,14 @@ bool MqttClass::isConnected() {
 
 void MqttClass::poll() {
   if (!Mqtt.isConnected()) {
-    Mqtt.connect();
+    // try every 30 secs if not connected and not required to be responsive because cell connect can take 8 seconds
+    uint32_t elapsedTime = System.getTime() - lastConnectTry;
+    if (!System.stayResponsive() && (lastConnectTry == -1 || elapsedTime >= 30)) {
+      Mqtt.connect();
+      lastConnectTry = System.getTime();
+    }
+    mqttClient.poll();
   }
-  mqttClient.poll();
 }
 
 void MqttClass::updateShadow(const String& message) {

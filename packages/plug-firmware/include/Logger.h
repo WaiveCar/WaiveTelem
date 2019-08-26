@@ -3,8 +3,12 @@
 
 #include <SD.h>
 
+#ifdef DEBUG
+#define LOG_MIN_LEVEL 0
+#else
 #ifndef LOG_MIN_LEVEL
 #define LOG_MIN_LEVEL 1
+#endif
 #endif
 
 #ifndef LOG_ID_KEY
@@ -35,6 +39,7 @@
 #define logWarn(...) logKv(3, __VA_ARGS__)
 #define logInfo(...) logKv(2, __VA_ARGS__)
 #define logDebug(...) logKv(1, __VA_ARGS__)
+#define logTrace(...) logKv(0, __VA_ARGS__)
 
 #define logKv(level, ...)                                                                                         \
   if (level >= LOG_MIN_LEVEL) Logger.logKeyValueJson(level, "", "s", (String(__FILE__) + ":" + __LINE__).c_str(), \

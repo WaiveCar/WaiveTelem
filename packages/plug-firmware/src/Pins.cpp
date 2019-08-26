@@ -8,7 +8,7 @@
 int PinsClass::begin() {
 #ifdef ARDUINO_SAMD_WAIVE1000
   analogReference(AR_DEFAULT);
-  analogReadResolution(12);
+  analogReadResolution(ANALOG_RESOLUTION);
 
   // pinMode(VIN_SENSE, INPUT);
   pinMode(IMMO_ON, OUTPUT);

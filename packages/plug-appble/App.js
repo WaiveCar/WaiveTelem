@@ -162,17 +162,14 @@ export default class App extends Component {
     BluetoothManager.connect(item.item.id)
       .then(async () => {
         newData[item.index].isConnecting = false;
-        const tokens = newData[item.index].localName.split('-');
-        const thingName = tokens[tokens.length - 1];
+        const chucks = newData[item.index].localName.split('-');
+        const thingName = chucks[chucks.length - 1];
         this.setState({ data: [newData[item.index]], isConnected: true, thingName });
 
         const response = await fetch(API_END_POINT + 'token?thingName=' + thingName);
         const data = await response.json();
         const { token, secret } = data;
-        this.setState({
-          token,
-          secret
-        });
+        this.setState({ token, secret });
 
         this.onDisconnect();
       })
@@ -207,13 +204,11 @@ export default class App extends Component {
   //     .catch(err => {});
   // };
 
-  writeWithoutResponse = async (index, type) => {
+  writeWithoutResponse = async (index, text) => {
     let binary;
+    binary = Buffer.from(text);
     // index 0 is AUTH_CHAR, 1 is CMD_CHAR
-    if (index == 0) {
-      binary = Buffer.from(this.state.token);
-    } else if (index == 1) {
-      binary = Buffer.from(this.state.text);
+    if (index == 1) {
       const challenge = await BluetoothManager.read(0);
       const valueBuffer = Buffer.concat([binary, Buffer.from(challenge)]);
       const value = CryptoJS.enc.u8array.parse(valueBuffer);
@@ -221,7 +216,6 @@ export default class App extends Component {
       const hmac = CryptoJS.enc.u8array.stringify(CryptoJS.HmacSHA256(value, secret));
       binary = Buffer.concat([hmac.slice(0, 16), binary]);
     }
-    let start = 0;
     let remainBytesToSend = binary.length;
     while (remainBytesToSend > 0) {
       const subStringSize = remainBytesToSend > 18 ? 18 : remainBytesToSend;
@@ -234,13 +228,12 @@ export default class App extends Component {
         data
       ]);
       console.log('TCL: App -> writeWithoutResponse -> dataBuffer', dataBuffer);
-      await BluetoothManager.writeWithoutResponse(dataBuffer.toString('base64'), index, type);
+      await BluetoothManager.writeWithoutResponse(dataBuffer.toString('base64'), index);
       remainBytesToSend -= subStringSize;
     }
     this.bluetoothReceiveData = [];
     this.setState({
-      writeData: this.state.text,
-      text: ''
+      writeData: text
     });
     //let formatValue = new Buffer(value, 'ascii').toString('base64');
     // BluetoothManager.writeWithoutResponse(this.state.text, index, type)
@@ -254,28 +247,28 @@ export default class App extends Component {
     //   .catch(err => {});
   };
 
-  monitor = index => {
-    let transactionId = 'monitor';
-    this.monitorListener = BluetoothManager.manager.monitorCharacteristicForDevice(
-      BluetoothManager.peripheralId,
-      BluetoothManager.nofityServiceUUID[index],
-      BluetoothManager.nofityCharacteristicUUID[index],
-      (error, characteristic) => {
-        if (error) {
-          this.setState({ isMonitoring: false });
-          console.log('monitor fail:', error);
-          this.alert('monitor fail: ' + error.reason);
-        } else {
-          let value = new Buffer(characteristic.value, 'base64').toString('ascii');
-          this.setState({ isMonitoring: true });
-          this.bluetoothReceiveData.push(value);
-          this.setState({ receiveData: this.bluetoothReceiveData.join('') });
-          console.log('monitor success', value);
-        }
-      },
-      transactionId
-    );
-  };
+  // monitor = index => {
+  //   let transactionId = 'monitor';
+  //   this.monitorListener = BluetoothManager.manager.monitorCharacteristicForDevice(
+  //     BluetoothManager.peripheralId,
+  //     BluetoothManager.nofityServiceUUID[index],
+  //     BluetoothManager.nofityCharacteristicUUID[index],
+  //     (error, characteristic) => {
+  //       if (error) {
+  //         this.setState({ isMonitoring: false });
+  //         console.log('monitor fail:', error);
+  //         this.alert('monitor fail: ' + error.reason);
+  //       } else {
+  //         let value = new Buffer(characteristic.value, 'base64').toString('ascii');
+  //         this.setState({ isMonitoring: true });
+  //         this.bluetoothReceiveData.push(value);
+  //         this.setState({ receiveData: this.bluetoothReceiveData.join('') });
+  //         console.log('monitor success', value);
+  //       }
+  //     },
+  //     transactionId
+  //   );
+  // };
 
   onDisconnect() {
     this.disconnectListener = BluetoothManager.manager.onDeviceDisconnected(
@@ -328,7 +321,8 @@ export default class App extends Component {
             {data && data.isConnecting ? 'connecting...' : ''}
           </Text>
         </View>
-        <Text>{data.id}</Text>
+        <Text> </Text>
+        {/* <Text>{data.id}</Text> */}
       </TouchableOpacity>
     );
   };
@@ -346,7 +340,7 @@ export default class App extends Component {
               ? 'Scanning'
               : this.state.isConnected
               ? 'Disconnect'
-              : 'Scan for W-*'}
+              : 'Scan for waive1000 devices'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -365,7 +359,7 @@ export default class App extends Component {
               this.write
             )} */}
             {this.renderWriteView(
-              'writeWithoutResponse：',
+              'write：',
               'send',
               BluetoothManager.writeWithoutResponseCharacteristicUUID,
               this.writeWithoutResponse
@@ -392,7 +386,17 @@ export default class App extends Component {
     );
   };
 
-  renderWriteView = (label, buttonText, characteristics, onPress, state) => {
+  renderButton = (label, onPress) => {
+    return (
+      <TouchableHighlight style={styles.buttonTouchable} onPress={onPress}>
+        <Button style={styles.button} mode="contained">
+          {label}
+        </Button>
+      </TouchableHighlight>
+    );
+  };
+
+  renderWriteView = (label, buttonText, characteristics, onPress) => {
     if (characteristics.length == 0) {
       return null;
     }
@@ -425,128 +429,34 @@ export default class App extends Component {
           }}
         />
         <View style={styles.row}>
+          {this.renderButton('send token', () => onPress(0, this.state.token))}
           <View style={styles.columnGap} />
-          <TouchableHighlight
-            style={styles.buttonTouchable}
-            onPress={() => {
-              this.setState({ text: '{"lock":"open"}' });
-              setTimeout(() => {
-                onPress(1);
-              }, 10);
-            }}
-          >
-            <Button style={styles.button} mode="contained">
-              lock: open
-            </Button>
-          </TouchableHighlight>
-          <View style={styles.columnGap} />
-          <TouchableHighlight
-            style={styles.buttonTouchable}
-            onPress={() => {
-              this.setState({ text: '{"lock":"close"}' });
-              setTimeout(() => {
-                onPress(1);
-              }, 10);
-            }}
-          >
-            <Button style={styles.button} mode="contained">
-              lock: close
-            </Button>
-          </TouchableHighlight>
-          <View style={styles.columnGap} />
+          {this.renderButton('reboot: true', () => onPress(1, '{"reboot":"true"}'))}
         </View>
         <View style={styles.row}>
+          {this.renderButton('lock: open', () => onPress(1, '{"lock":"open"}'))}
           <View style={styles.columnGap} />
-          <TouchableHighlight
-            style={styles.buttonTouchable}
-            onPress={() => {
-              this.setState({ text: '{"immo":"lock"}' });
-              setTimeout(() => {
-                onPress(1);
-              }, 10);
-            }}
-          >
-            <Button style={styles.button} mode="contained">
-              immo: lock
-            </Button>
-          </TouchableHighlight>
-          <View style={styles.columnGap} />
-          <TouchableHighlight
-            style={styles.button}
-            onPress={() => {
-              this.setState({ text: '{"immo":"unlock"}' });
-              setTimeout(() => {
-                onPress(1);
-              }, 10);
-            }}
-          >
-            <Button style={styles.button} mode="contained">
-              immo: unlock
-            </Button>
-          </TouchableHighlight>
-          <View style={styles.columnGap} />
+          {this.renderButton('lock: close', () => onPress(1, '{"lock":"close"}'))}
         </View>
         <View style={styles.row}>
+          {this.renderButton('immo: lock', () => onPress(1, '{"immo":"lock"}'))}
           <View style={styles.columnGap} />
-          <TouchableHighlight
-            style={styles.buttonTouchable}
-            onPress={() => {
-              this.setState({ text: '{"inRide":"true"}}' });
-              setTimeout(() => {
-                onPress(1);
-              }, 10);
-            }}
-          >
-            <Button style={styles.button} mode="contained">
-              inRide: true
-            </Button>
-          </TouchableHighlight>
-          <View style={styles.columnGap} />
-          <TouchableHighlight
-            style={styles.button}
-            onPress={() => {
-              this.setState({ text: '{"inRide":"false"}' });
-              setTimeout(() => {
-                onPress(1);
-              }, 10);
-            }}
-          >
-            <Button style={styles.button} mode="contained">
-              inRide: false
-            </Button>
-          </TouchableHighlight>
-          <View style={styles.columnGap} />
+          {this.renderButton('immo: unlock', () => onPress(1, '{"immo":"unlock"}'))}
         </View>
         <View style={styles.row}>
+          {this.renderButton('can: unlock_1', () => onPress(1, '{"can":"unlock_1"}'))}
           <View style={styles.columnGap} />
-          <TouchableHighlight
-            style={styles.buttonTouchable}
-            onPress={() => {
-              this.setState({ text: '{"reboot":"true"}}' });
-              setTimeout(() => {
-                onPress(1);
-              }, 10);
-            }}
-          >
-            <Button style={styles.button} mode="contained">
-              reboot: true
-            </Button>
-          </TouchableHighlight>
+          {this.renderButton('can: unlock_all', () => onPress(1, '{"can":"unlock_all"}'))}
+        </View>
+        <View style={styles.row}>
+          {this.renderButton('can: lock', () => onPress(1, '{"can":"lock"}'))}
           <View style={styles.columnGap} />
-          <TouchableHighlight
-            style={styles.button}
-            onPress={async () => {
-              console.log(this.state.data);
-              setTimeout(() => {
-                onPress(0);
-              }, 10);
-            }}
-          >
-            <Button style={styles.button} mode="contained">
-              TOKEN
-            </Button>
-          </TouchableHighlight>
+          {this.renderButton('can: flash_lights', () => onPress(1, '{"can":"flash_lights"}'))}
+        </View>
+        <View style={styles.row}>
+          {this.renderButton('inRide: true', () => onPress(1, '{"inRide":"true"}'))}
           <View style={styles.columnGap} />
+          {this.renderButton('inRide: false', () => onPress(1, '{"inRide":"false"}'))}
         </View>
       </View>
     );
@@ -621,7 +531,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     height: 30,
-    backgroundColor: 'rgb(33, 150, 243)',
+    backgroundColor: 'rgb(33, 110, 203)',
     paddingHorizontal: 10,
     borderRadius: 5,
     justifyContent: 'center',
@@ -645,7 +555,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1
   },
-  row: { flexDirection: 'row', height: 70, marginBottom: 10 },
+  row: { flexDirection: 'row', height: 56, marginBottom: 10 },
   columnGap: { width: 10 },
   buttonTouchable: { flex: 1, borderRadius: 4 },
   button: {

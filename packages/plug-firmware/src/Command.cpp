@@ -12,7 +12,7 @@
 #include "Pins.h"
 #include "System.h"
 
-#define AUTH_DOC_SIZE 128
+#define AUTH_DOC_SIZE 256
 #define COMMAND_DOC_SIZE 512
 
 int CommandClass::begin() {
@@ -190,9 +190,7 @@ String CommandClass::decryptToken(const String& encrypted) {
   }
   size_t numberOfPadding = buf[length - 1];
   buf[length - numberOfPadding] = '\0';
-#if DEBUG
-  logDebug(buf);
-#endif
+  logTrace(buf);
   String token(buf);
   free(buf);
   return token;

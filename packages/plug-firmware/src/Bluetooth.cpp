@@ -229,10 +229,7 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
     strBuffer[strLength] = '\0';
     continueLength = messageLength - data_length + 2;  // + 2 because att_data[0] and att_data[1] are not data
     message += String(strBuffer);
-#ifdef DEBUG
-    logDebug("i|length", continueLength);
-    logDebug("msg", message.c_str());
-#endif
+    logTrace("i|length", continueLength, "msg", message.c_str());
     if (continueLength == 0) {  // last message
       if (IS(AuthCharHandle)) {
         Command.authorize(message);
@@ -260,13 +257,13 @@ void BluetoothClass::GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
   logInfo(sprintbuff);
   Command.unauthorize();
   Bluetooth.setChallenge();
-  System.setStayAwake(true);
+  System.setStayResponsive(true);
 }
 
 void BluetoothClass::GAP_DisconnectionComplete_CB() {
   logInfo("BLE Disconnected");
   setConnectable();
-  System.setStayAwake(false);
+  System.setStayResponsive(false);
 }
 
 void BluetoothClass::Read_Request_CB(uint16_t handle) {

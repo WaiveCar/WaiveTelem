@@ -12,6 +12,7 @@
 #include "Internet.h"
 #include "Logger.h"
 #include "Mqtt.h"
+#include "Pins.h"
 #include "System.h"
 
 extern "C" char* sbrk(int incr);
@@ -42,7 +43,7 @@ int SystemClass::begin() {
 
 void SystemClass::poll() {
   checkHeartbeat();
-  checkVinRead();
+  checkVin();
 }
 
 void SystemClass::checkHeartbeat() {
@@ -65,11 +66,11 @@ void SystemClass::checkHeartbeat() {
   }
 }
 
-void SystemClass::checkVinRead() {
+void SystemClass::checkVin() {
 #ifdef ARDUINO_SAMD_WAIVE1000
   uint32_t elapsedTime = getTime() - lastVinRead;
   if (lastVinRead == -1 || elapsedTime >= 10) {
-    vinReads[vinIndex] = (float)analogRead(VIN_SENSE) / (1 << 12) * 3.3 * 50.4 / 10.2;
+    vinReads[vinIndex] = (float)analogRead(VIN_SENSE) / (1 << ANALOG_RESOLUTION) * VOLTAGE * (RESISTOR_1 + RESISTOR_2) / RESISTOR_1;
     vinIndex++;
     if (vinIndex == 5) {
       vinAvgValid = true;
@@ -81,9 +82,11 @@ void SystemClass::checkVinRead() {
         total += vinReads[i];
       }
       float avg = total / 5;
-      float limit = Config.get()["vin"]["low"] || 13.0f;
+      const char* limitStr = Config.get()["vin"]["low"] | "12.4";
+      //TODO strtof takes 2% ROM, maybe we should just code the limit
+      float limit = strtof(limitStr, NULL);
+      // logTrace("d|5limit", limit);
       if (avg < limit) {
-        logDebug("d|5avgVin", avg);
         char sysJson[64], info[128];
         json(sysJson, "d|5vin", avg);
         json(info, "o|system", sysJson);
@@ -184,12 +187,12 @@ void SystemClass::report(const String& reported, const String& desired) {
   }
 }
 
-bool SystemClass::stayAwake() {
-  return stayawake;
+bool SystemClass::stayResponsive() {
+  return stayresponsive;
 }
 
-void SystemClass::setStayAwake(bool stay) {
-  stayawake = stay;
+void SystemClass::setStayResponsive(bool resp) {
+  stayresponsive = resp;
 }
 
 void SystemClass::keepTime() {

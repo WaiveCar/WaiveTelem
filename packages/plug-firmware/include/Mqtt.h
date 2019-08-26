@@ -14,6 +14,7 @@ class MqttClass {
  private:
   String updateTopic;
   String logTopic;
+  int32_t lastConnectTry = -1;
 };
 
 extern MqttClass Mqtt;
