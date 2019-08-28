@@ -19,12 +19,7 @@
 // #pragma message "define LOG_EASYREAD_SERIAL in build_flags (e.g. -D LOG_EASYREAD_SERIAL) if you want more readable SERIAL output (but no longer JSON)"
 // #endif
 
-// can still generate json > LOG_RESERVE_SIZE, just takes slighly longer
-#ifndef LOG_RESERVE_SIZE
-#define LOG_RESERVE_SIZE 256
-#endif
-
-const char* LEVELS[5] = {"", "DEBUG", "INFO", "WARN", "ERROR"};
+const char* LEVELS[] = {"TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 
 int LoggerClass::begin() {
   writeFile = SD.open("LOG.TXT", FILE_WRITE);
@@ -47,7 +42,7 @@ int LoggerClass::logKeyValueJson(int level, const char* placeholder, ...) {
   if (level >= mqttLevel) {
     if (Mqtt.isConnected()) {
       Mqtt.logMsg(jstr);
-      if (level == 4) {
+      if (level >= 4) {  // ERROR, FATAL
         String escapedJson = jstr;
         escapedJson.replace("\"", "\\\"");
         System.report("{\"system\":{\"lastError\":\"" + escapedJson + "\"}}");

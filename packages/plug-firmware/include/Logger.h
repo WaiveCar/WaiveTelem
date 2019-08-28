@@ -31,10 +31,7 @@
 #define LOG_FUNC_KEY "f"
 #endif
 
-#ifndef LOG_MESSAGE_KEY
-#define LOG_MESSAGE_KEY "m"
-#endif
-
+#define logFatal(...) logKv(5, __VA_ARGS__)
 #define logError(...) logKv(4, __VA_ARGS__)
 #define logWarn(...) logKv(3, __VA_ARGS__)
 #define logInfo(...) logKv(2, __VA_ARGS__)

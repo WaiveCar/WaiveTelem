@@ -13,7 +13,7 @@
   },
   "can": {
     "make": "Hyundai",
-    "model": "Generic",
+    "model": "ioniq",
     "bus": [
       {
         "baud": 500,
