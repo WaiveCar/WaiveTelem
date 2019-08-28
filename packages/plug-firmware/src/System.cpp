@@ -34,6 +34,13 @@ int SystemClass::begin() {
 
   sprintf(id, "%s", ECCX08.serialNumber().c_str());
 
+  remoteLogLevel = 4;
+#ifdef DEBUG
+  statusDoc["inRide"] = "true";
+#else
+  statusDoc["inRide"] = "false";
+#endif
+
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
   statusDoc["heartbeat"].createNestedObject("gps");
@@ -109,11 +116,6 @@ const char* SystemClass::getDateTime() {
 }
 
 void SystemClass::sendInfo(const char* sysJson) {
-#ifdef DEBUG
-  statusDoc["inRide"] = "true";
-#else
-  statusDoc["inRide"] = "false";
-#endif
   char info[512];
   json(info, "inRide", statusDoc["inRide"].as<char*>(), "o|system", sysJson);
   report(info);
@@ -159,7 +161,7 @@ void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delt
 void SystemClass::sleep(uint32_t sec) {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
-  delay(sec * 1000);  // don't use Watchdog.sleep as it disconnects USB
+  delay(sec * 1000);  // don't use rtc.standbyMode as it disconnects USB
 #else
   rtc.setSeconds(60 - sec);
   rtc.standbyMode();
@@ -220,6 +222,10 @@ void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& 
 
 void SystemClass::resetDesired(const String& name) {
   report("", "{\"" + name + "\":null}");
+}
+
+uint8_t SystemClass::getRemoteLogLevel() {
+  return remoteLogLevel;
 }
 
 SystemClass System;

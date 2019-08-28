@@ -49,7 +49,6 @@ class LoggerClass {
 
  private:
   File writeFile;
-  uint8_t mqttLevel;
 };
 
 extern LoggerClass Logger;

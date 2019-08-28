@@ -54,24 +54,28 @@ int CanClass::begin() {
     int baud = bus[i]["baud"];
     logInfo("i|canBusNum", i, "i|baud", baud);
     JsonArray status = bus[i]["status"];
+    ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
+
+#ifdef ARDUINO_SAMD_WAIVE1000
+    auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
+#else
+    auto lambda = [] { can0.isr(); };
+#endif
+
+    int errorCode = 0;
     if (status.size() > 0) {
       const int minCanId = status[0]["id"].as<int>();
-      logDebug("i|minCanId", minCanId);
       const int maxCanId = status[status.size() - 1]["id"].as<int>();
-      logDebug("i|maxCanId", maxCanId);
+      logDebug("i|minCanId", minCanId, "i|maxCanId", maxCanId);
       const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
       const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
-      ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
-#ifdef ARDUINO_SAMD_WAIVE1000
-      auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
-#else
-      auto lambda = [] { can0.isr(); };
-#endif
-      int errorCode = canbus[i]->begin(settings, lambda, rxm0, filters, 1);  // does soft reset
-      if (errorCode) {
-        logError("i|error", errorCode, "can configuration error ");
-        health = -1;
-      }
+      errorCode = canbus[i]->begin(settings, lambda, rxm0, filters, 1);
+    } else {
+      errorCode = canbus[i]->begin(settings, lambda);
+    }
+    if (errorCode) {
+      logError("i|error", errorCode, "can configuration error ");
+      health = -1;
     }
   }
   // sleep();

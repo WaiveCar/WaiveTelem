@@ -94,11 +94,15 @@ void MqttClass::connect() {
   const char* url = mqtt["url"] | "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com";  // "waive.azure-devices.net";
 
   logInfo("broker", url);
+  Watchdog.disable();
+  int start = millis();
   if (!mqttClient.connect(url, 8883)) {
     logWarn("i|error", mqttClient.connectError());
+    Watchdog.enable(WATCHDOG_TIMEOUT);
     return;
   }
-  logInfo("You're connected to the MQTT broker");
+  logInfo("i|initTime", millis() - start, "You're connected to the MQTT broker");
+  Watchdog.enable(WATCHDOG_TIMEOUT);
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
 }
 

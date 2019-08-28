@@ -27,7 +27,6 @@ int LoggerClass::begin() {
     logError("LOG.TXT open failed");
     return -1;
   }
-  mqttLevel = Config.get()["logger"]["mqttLevel"] | 1;
   return 1;
 }
 
@@ -39,14 +38,14 @@ int LoggerClass::logKeyValueJson(int level, const char* placeholder, ...) {
   int ret = vbuild_json(jstr, 512, fragment, args);
   va_end(args);
 
-  if (level >= mqttLevel) {
-    if (Mqtt.isConnected()) {
+  if (Mqtt.isConnected()) {
+    if (level >= System.getRemoteLogLevel()) {
       Mqtt.logMsg(jstr);
-      if (level >= 4) {  // ERROR, FATAL
-        String escapedJson = jstr;
-        escapedJson.replace("\"", "\\\"");
-        System.report("{\"system\":{\"lastError\":\"" + escapedJson + "\"}}");
-      }
+    }
+    if (level >= 4) {  // ERROR, FATAL
+      String escapedJson = jstr;
+      escapedJson.replace("\"", "\\\"");
+      System.report("{\"system\":{\"lastError\":\"" + escapedJson + "\"}}");
     }
   }
   if (writeFile) {

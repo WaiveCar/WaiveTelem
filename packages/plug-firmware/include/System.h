@@ -29,9 +29,11 @@ class SystemClass {
   void resetDesired(const String& name);
   void checkVin();
   void checkHeartbeat();
+  uint8_t getRemoteLogLevel();
 
  private:
   char id[19];
+  int8_t remoteLogLevel = 4;
   bool canStatusChanged = false;
   int32_t lastHeartbeat = -1;
   uint32_t bootTime = 0;
