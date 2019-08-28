@@ -1,6 +1,9 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <ArduinoECCX08.h>
+#ifndef ARDUINO_SAMD_MKR1000
+#include <Modem.h>
+#endif
 #include <json_builder.h>
 
 #include "Bluetooth.h"
@@ -17,7 +20,7 @@
 void setup() {
   Serial.begin(115200);
 #ifdef DEBUG
-  delay(5000);  // to see beginning of the login
+  delay(4000);  // to see beginning of the login
 #endif
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
@@ -32,6 +35,12 @@ void setup() {
   Mqtt.poll();
   Gps.begin();
 
+#ifndef ARDUINO_SAMD_MKR1000
+  String modemResponse = "";
+  MODEM.send("ATI9");
+  MODEM.waitForResponse(100, &modemResponse);
+#endif
+
   char initStatus[128], sysJson[256];
   json(initStatus, "-{",
        "i|ecc", eccInit,
@@ -39,7 +48,8 @@ void setup() {
        "i|cfg", cfgInit,
        "i|logger", loggerInit,
        "i|cmd", cmdInit,
-       "i|mqtt", mqttInit);
+       "i|mqtt", mqttInit,
+       "modem", modemResponse.c_str());
   json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), initStatus);
   System.sendInfo(sysJson);
 }
