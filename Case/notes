@@ -1,0 +1,60 @@
+sim slot moved, profile shorter, zip tie holes, give room for slotting top to bottom, potentially make the coax ports bottom border higher, led indicator holes bigger, usb hole bigger, sticker 1 inch wider
+
+dead space underneath board is 2mm (bottom boss height)
+
+bottom part: ?69mm x ?91mm, wall thickness 1.5mm, bottom thickness 2.2mm
+bottom 2.2mm walls 1.5mm, top 2.2mm
+
+#do bottom standoffs as squares, sim corner as square with fillet
+do bottom and top standoffs as hollow bosses with boss supports to wall. supports double as locators
+
+sim slot placed properly for flipped sim
+
+zip tie holes: one side curved enclosed channel
+
+slotting top to bottom: top OD is 2.05mm
+remained at 2mm on actual TBD
+
+coax bottom border: 6.5+1+.5 change dimension
+coax bottom border kept same
+
+led indicators 1.5x1.5
+done (actual 1.4x1.4, new is .7r circle)
+
+usb hole https://en.wikipedia.org/wiki/USB_hardware
+the Micro-B connector is 6.85 by 1.8 mm (0.270 by 0.071 in) with a maximum overmold size of 10.6 by 8.5 mm (0.42 by 0.33 in).
+done
+
+holes: top: 1.8mm diameter NEW 2.0mm. bottom: 2.3mm diameter NEW: 2.6mm
+done as  2.6 through holes with 6mm boss (dia), 1.9 mounting holes with 2.5 boss (dia)
+
+draft .5 degree \____/ as such on both sides
+draft 1 degree the long threading holes
+draft before fillet
+
+
+
+q's
+tolerances: ridges, screw holes, screw head slot
+inner cut, e.g. a hook or two conflicting slots
+if i do xyz (e.g. the hook) will it increase tooling costs or production complexity
+polishing
+
+slot corners (top standoff squares): should they have a fillet radius
+
+
+
+uniform wall thickness
+walls to base should be 50%
+3mm bottom, side 60% of 3mm
+
+holes with boss to sidewalls. these bosses can also be locators for the lid sides
+|
+|-o
+|_|____
+
+
+need half a degree of draft
+	
+
+standard tool finish spi finish c
