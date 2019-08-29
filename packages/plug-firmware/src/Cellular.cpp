@@ -16,10 +16,10 @@ static NBScanner nbScanner;
 
 bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
-  const char* apn = nb["apn"] | "hologram";
+  const char* apn = nb["apn"] | "internet.swir";
   logInfo("apn", apn);
-  nbAccess.setTimeout(20000);
-  gprs.setTimeout(20000);
+  // nbAccess.setTimeout(20000);
+  // gprs.setTimeout(20000);
   Watchdog.disable();
   int start = millis();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
