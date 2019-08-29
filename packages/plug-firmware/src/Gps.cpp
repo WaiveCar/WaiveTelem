@@ -35,13 +35,13 @@ int GpsClass::begin() {
 #ifdef ARDUINO_SAMD_WAIVE1000
   // reset();
   // delay(1000);
-  gps.send_P(&GPSSerial, disableGLL);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);
   delay(COMMAND_DELAY);
-  gps.send_P(&GPSSerial, disableGSA);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGSA);
   delay(COMMAND_DELAY);
-  gps.send_P(&GPSSerial, disableVTG);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableVTG);
   delay(COMMAND_DELAY);
-  gps.send_P(&GPSSerial, baud115200);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)baud115200);
   GPSSerial.flush();
   GPSSerial.end();
   delay(COMMAND_DELAY);
@@ -125,10 +125,10 @@ void GpsClass::wakeup() {
   // logTrace(NULL);
 #ifdef ARDUINO_SAMD_WAIVE1000
   GPSSerial.begin(9600);
-  gps.send_P(&GPSSerial, disableGLL);
-  gps.send_P(&GPSSerial, disableGSA);
-  gps.send_P(&GPSSerial, disableVTG);
-  gps.send_P(&GPSSerial, baud115200);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGSA);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableVTG);
+  gps.send_P(&GPSSerial, (const __FlashStringHelper *)baud115200);
   GPSSerial.flush();
   GPSSerial.end();
   GPSSerial.begin(115200);

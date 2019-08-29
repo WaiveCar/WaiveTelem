@@ -1,10 +1,9 @@
 #!/bin/bash
 
-export DEFAULT_BOARD=waive1000
 export TEMPLATE=./config/hyukia.txt
 export DEFAULT_FIRMWARE=../plug-firmware/.pio/build/waive1000/firmware.bin
-export SD_VOLUME=/Volumes/SDCARD
-#export SD_VOLUME=/E 
+export SD_VOLUME=/E # for Windows
+#export SD_VOLUME=/Volumes/SDCARD # for MacOS
 
 echo ""
 echo "Connect Atmel-Ice to the device, and insert SD to the PC/MAC"
@@ -12,7 +11,7 @@ echo "Connect Atmel-Ice to the device, and insert SD to the PC/MAC"
 . generateCSR.sh
 . registerAWS.sh
 . generateConfig.sh
-#. formatSD.sh
+. formatSD.sh
 . copyToSD.sh
 . flashFirmware.sh
 

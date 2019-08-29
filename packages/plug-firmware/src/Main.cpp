@@ -43,13 +43,15 @@ void setup() {
 
   char initStatus[128], sysJson[256];
   json(initStatus, "-{",
+#ifndef ARDUINO_SAMD_MKR1000
+       "modem", modemResponse.c_str(),
+#endif
        "i|ecc", eccInit,
        "i|sd", sdInit,
        "i|cfg", cfgInit,
        "i|logger", loggerInit,
        "i|cmd", cmdInit,
-       "i|mqtt", mqttInit,
-       "modem", modemResponse.c_str());
+       "i|mqtt", mqttInit);
   json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), initStatus);
   System.sendInfo(sysJson);
 }

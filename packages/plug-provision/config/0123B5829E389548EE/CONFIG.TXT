@@ -1,108 +1,147 @@
 {
- "id": "0123B5829E389548EE",
- "mqtt": {
-  "url": "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com",
-  "cert": "-----BEGIN CERTIFICATE-----\nMIIC5zCCAc+gAwIBAgIVANpQKBQFTsRvqaL9FqGshYpg6QO/MA0GCSqGSIb3DQEB\nCwUAME0xSzBJBgNVBAsMQkFtYXpvbiBXZWIgU2VydmljZXMgTz1BbWF6b24uY29t\nIEluYy4gTD1TZWF0dGxlIFNUPVdhc2hpbmd0b24gQz1VUzAeFw0xOTA4MDExOTE4\nNDJaFw00OTEyMzEyMzU5NTlaMHYxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEU\nMBIGA1UEBxMLTG9zIEFuZ2VsZXMxETAPBgNVBAoTCFdhaXZlQ2FyMRQwEgYDVQQL\nEwtFbmdpbmVlcmluZzEbMBkGA1UEAxMSMDEyM0I1ODI5RTM4OTU0OEVFMFkwEwYH\nKoZIzj0CAQYIKoZIzj0DAQcDQgAEKOsVkVA5uH/CuIVNnLXnarPQw+1Da0x4+6mz\nF2LYET77efj7p3emWNyG+2T118nQi/4SP6cE4nW3Ic3fuMGlzaNgMF4wHwYDVR0j\nBBgwFoAUrJyGWH0oIvqo8tScDpPlQOE36PAwHQYDVR0OBBYEFOEXWB4CUZ1sOfY9\nVhqHgW/bhSUzMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMA0GCSqGSIb3\nDQEBCwUAA4IBAQCmMn7C1hkn3gRXNd0MzbyhdWXiGnoZdfpTNhEjw2fyZvNgGL56\ngFJS/38XEl0IH+afTPr2ZHtTmsAzA4FD693y5DeYEadPrKwutHGFknckdJdtipFB\n23Q0uLQsNDhU4Ov5PXJWxJT/7j0PVGil21oiyNIFVlkHiNnHY3eJon3zYs2mon+K\nYcZhAfz7L7duBrHi5D+U4uCbmf2hl279K6H1IYwxMRX06xd7BQ1QkKKWLsCbzIJR\nudiCTaTBRV8OFoI4mMp7fxiybdE5f3m56KvQ/+KFm1GTGVWJQz0QGbVUhKK1rnCw\nJJ0vF5/HTxJKua4nIMW4AjcMXJfRN2mIjqSi\n-----END CERTIFICATE-----\n"
- },
- "heartbeat": {
-  "inRide": 30,
-  "notInRide": 900
- },
- "nb": {
-  "pin": null,
-  "apn": "hologram"
- },
- "can": {
-  "make": "Hyundai",
-  "model": "Generic",
-  "bus": [
-   {
-    "baud": 500,
-    "status": [
-     {
-      "name": "fuel_level",
-      "id": 1292,
-      "bit": 18,
-      "len": 5
-     },
-     {
-      "name": "car_speed",
-      "id": 1322,
-      "bit": 0,
-      "len": 8
-     },
-     {
-      "name": "ignition",
-      "id": 1345,
-      "bit": 0,
-      "len": 3
-     },
-     {
-      "name": "door_front_left",
-      "id": 1345,
-      "bit": 8,
-      "len": 2
-     },
-     {
-      "name": "door_front_right",
-      "id": 1345,
-      "bit": 35,
-      "len": 1
-     },
-     {
-      "name": "charging",
-      "id": 1353,
-      "bit": 16,
-      "len": 8
-     },
-     {
-      "name": "door_back_left",
-      "id": 1363,
-      "bit": 23,
-      "len": 1
-     },
-     {
-      "name": "door_back_right",
-      "id": 1363,
-      "bit": 24,
-      "len": 1
-     },
-     {
-      "name": "window_front_left",
-      "id": 1369,
-      "bit": 8,
-      "len": 1
-     },
-     {
-      "name": "window_front_right",
-      "id": 1369,
-      "bit": 9,
-      "len": 1
-     },
-     {
-      "name": "window_back_left",
-      "id": 1369,
-      "bit": 10,
-      "len": 1
-     },
-     {
-      "name": "window_back_right",
-      "id": 1369,
-      "bit": 11,
-      "len": 1
-     },
-     {
-      "name": "mileage",
-      "id": 1456,
-      "bit": 0,
-      "len": 24
-     }
-    ]
-   },
-   {
-    "baud": 125,
-    "status": []
-   }
-  ]
- }
+  "mqtt": {
+    "url": "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com",
+    "cert": "-----BEGIN CERTIFICATE-----\nMIIC5zCCAc+gAwIBAgIVANu2ePKjzoutjw1OTqDH8h2eAI1yMA0GCSqGSIb3DQEB\nCwUAME0xSzBJBgNVBAsMQkFtYXpvbiBXZWIgU2VydmljZXMgTz1BbWF6b24uY29t\nIEluYy4gTD1TZWF0dGxlIFNUPVdhc2hpbmd0b24gQz1VUzAeFw0xOTA4MjkxODEw\nMzdaFw00OTEyMzEyMzU5NTlaMHYxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEU\nMBIGA1UEBxMLTG9zIEFuZ2VsZXMxETAPBgNVBAoTCFdhaXZlQ2FyMRQwEgYDVQQL\nEwtFbmdpbmVlcmluZzEbMBkGA1UEAxMSMDEyM0I1ODI5RTM4OTU0OEVFMFkwEwYH\nKoZIzj0CAQYIKoZIzj0DAQcDQgAETSb9o+8Cxe+GTkF0v4BPWNqlsOzK7ORiCORA\nCseEiYV4fnxQn814OLYLJ9zND05o3nURCz5BNK5BGPCdpcMckKNgMF4wHwYDVR0j\nBBgwFoAUDkC49VMAfmazeOhWYQAAjFjKqLcwHQYDVR0OBBYEFAALLOLrjHAg/T9T\nCBuftDl1Ngs6MAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMA0GCSqGSIb3\nDQEBCwUAA4IBAQASj2/tCoHKYS3ztHNqS0z/os01y4fs3pRPcd+k8IDwLLV8VJ8F\nu8n9XPk+hAzPtPdNghikrTRKt4Bzthr1McQ4LpsjAocq4YYvGQcRY2gvp2Th+X2H\nfKgbcyVdHB+9ryusqHy4TdrJZJKQpIk/GsbtxRRpn9URpyQTFgmc8ETHHcEbdT2Q\nbzmNlkM4S+tqhvVDgXZkD0qq+FC/v5krnCmKA9rG60GaJ1H9Va9+Y6pE037Etn5/\nXoB51IzIFitB++ndGkRNorn5XbazsCvS/3sQrNd6YxDWL1C/z3D1bVdlHpj/+z5W\nO6eyzofx0jwBCdroM8UjtSGvy58GIN7bQ/Nu\n-----END CERTIFICATE-----\n"
+  },
+  "heartbeat": {
+    "inRide": 30,
+    "notInRide": 900
+  },
+  "nb": {
+    "pin": null,
+    "apn": "hologram"
+  },
+  "can": {
+    "make": "Hyundai",
+    "model": "ioniq",
+    "bus": [
+      {
+        "baud": 500,
+        "status": [
+          {
+            "name": "fuel_level",
+            "id": 1292,
+            "bit": 18,
+            "len": 5
+          },
+          {
+            "name": "car_speed",
+            "id": 1322,
+            "bit": 0,
+            "len": 8
+          },
+          {
+            "name": "ignition",
+            "id": 1345,
+            "bit": 0,
+            "len": 3
+          },
+          {
+            "name": "door_front_left",
+            "id": 1345,
+            "bit": 8,
+            "len": 2
+          },
+          {
+            "name": "door_front_right",
+            "id": 1345,
+            "bit": 35
+          },
+          {
+            "name": "charging",
+            "id": 1353,
+            "bit": 16,
+            "len": 8
+          },
+          {
+            "name": "door_back_left",
+            "id": 1363,
+            "bit": 23
+          },
+          {
+            "name": "door_back_right",
+            "id": 1363,
+            "bit": 24
+          },
+          {
+            "name": "window_front_left",
+            "id": 1369,
+            "bit": 8
+          },
+          {
+            "name": "window_front_right",
+            "id": 1369,
+            "bit": 9
+          },
+          {
+            "name": "window_back_left",
+            "id": 1369,
+            "bit": 10
+          },
+          {
+            "name": "window_back_right",
+            "id": 1369,
+            "bit": 11
+          },
+          {
+            "name": "mileage",
+            "id": 1456,
+            "bit": 0,
+            "len": 24,
+            "delta": 100
+          }
+        ]
+      },
+      {
+        "baud": 100,
+        "status": [
+          {
+            "name": "lock_front_left",
+            "id": 360,
+            "bit": 18
+          },
+          {
+            "name": "lock_front_right",
+            "id": 360,
+            "bit": 3
+          },
+          {
+            "name": "lock_rear_left",
+            "id": 360,
+            "bit": 35
+          },
+          {
+            "name": "lock_rear_right",
+            "id": 360,
+            "bit": 46
+          }
+        ]
+      }
+    ],
+    "cmd": {
+      "unlock_1": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600001"
+      },
+      "unlock_all": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600011"
+      },
+      "lock": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600020"
+      },
+      "flash_lights": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600000"
+      }
+    }
+  },
+  "vin": {
+    "low": "12.4"
+  }
 }

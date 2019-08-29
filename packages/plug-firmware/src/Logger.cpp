@@ -68,7 +68,6 @@ int LoggerClass::logKeyValueJson(int level, const char* placeholder, ...) {
   jstring.replace(String("\",\"" LOG_FUNC_KEY "\":\""), " ");
 
   jstring.replace("\"", " ");
-  jstring.replace("\\", "");
 
   Serial.println(jstring);
 #else
