@@ -12,13 +12,13 @@
 #include "Pins.h"
 #include "System.h"
 
-#define AUTH_DOC_SIZE 128
+#define AUTH_DOC_SIZE 256
 #define COMMAND_DOC_SIZE 512
 
 int CommandClass::begin() {
   // set bluetooth token key and iv
   const char* cert = Config.get()["mqtt"]["cert"];
-  if (!strlen(cert)) {
+  if (!cert) {
     return -1;
   }
   char* buf = (char*)malloc(48);
@@ -88,12 +88,14 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     Pins.immobilize();
   } else if (cmdKey == "immo" && cmdValue == "unlock") {
     Pins.unimmobilize();
+  } else if (cmdKey == "can") {
+    Can.sendCommand(cmdValue.c_str());
   } else if (cmdKey == "inRide" && cmdValue == "true") {
     System.setCanStatusChanged();
     Gps.wakeup();
   } else if (cmdKey == "inRide" && cmdValue == "false") {
     System.setCanStatusChanged();
-    Can.sleep();
+    // Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
     System.resetDesired(cmdKey);
     reboot();
@@ -188,9 +190,7 @@ String CommandClass::decryptToken(const String& encrypted) {
   }
   size_t numberOfPadding = buf[length - 1];
   buf[length - numberOfPadding] = '\0';
-#if DEBUG
-  logDebug(buf);
-#endif
+  logTrace(buf);
   String token(buf);
   free(buf);
   return token;

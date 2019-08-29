@@ -9,7 +9,7 @@ case "$(uname -s)" in
       diskutil eraseDisk FAT32 SDCARD MBRFormat /dev/disk2
       ;;
    *)
-      read -p "Formating SD-Card at E:, press ENTER to continue"
+      echo "Formating SD-Card at E:"
       format.com E: //FS:FAT32 //Q //V:SDCARD
       ;;
 esac

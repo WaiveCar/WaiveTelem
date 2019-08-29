@@ -1,6 +1,9 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <ArduinoECCX08.h>
+#ifndef ARDUINO_SAMD_MKR1000
+#include <Modem.h>
+#endif
 #include <json_builder.h>
 
 #include "Bluetooth.h"
@@ -17,7 +20,7 @@
 void setup() {
   Serial.begin(115200);
 #ifdef DEBUG
-  delay(5000);  // to see beginning of the login
+  delay(4000);  // to see beginning of the login
 #endif
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
@@ -27,36 +30,41 @@ void setup() {
   int cfgInit = Config.begin();
   int loggerInit = Logger.begin();
   int cmdInit = Command.begin();
-  int sysInit = System.begin();
+  System.begin();
   int mqttInit = Mqtt.begin();
   Mqtt.poll();
-  int bleInit = Bluetooth.begin();
-  int gpsInit = Gps.begin();
-  int canInit = Can.begin();
+  Gps.begin();
 
-  char initJson[128], sysJson[256];
-  json(initJson, "i|ecc", eccInit,
+#ifndef ARDUINO_SAMD_MKR1000
+  String modemResponse = "";
+  MODEM.send("ATI9");
+  MODEM.waitForResponse(100, &modemResponse);
+#endif
+
+  char initStatus[128], sysJson[256];
+  json(initStatus, "-{",
+#ifndef ARDUINO_SAMD_MKR1000
+       "modem", modemResponse.c_str(),
+#endif
+       "i|ecc", eccInit,
        "i|sd", sdInit,
        "i|cfg", cfgInit,
        "i|logger", loggerInit,
        "i|cmd", cmdInit,
-       "i|sys", sysInit,
-       "i|mqtt", mqttInit,
-       "i|ble", bleInit,
-       "i|gps", gpsInit,
-       "i|can", canInit);
-  json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), "o|init", initJson);
+       "i|mqtt", mqttInit);
+  json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), initStatus);
   System.sendInfo(sysJson);
 }
 
 void loop() {
   Watchdog.reset();
-  if (!System.stayAwake()) {
+  if (!System.stayResponsive()) {
     System.sleep(1);
   }
   System.keepTime();
+
   Mqtt.poll();
-  System.poll();
   Bluetooth.poll();
   Can.poll();
+  System.poll();
 }

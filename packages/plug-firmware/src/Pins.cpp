@@ -7,12 +7,19 @@
 
 int PinsClass::begin() {
 #ifdef ARDUINO_SAMD_WAIVE1000
-  pinMode(VIN_SENSE, INPUT);
+  analogReference(AR_DEFAULT);
+  analogReadResolution(ANALOG_RESOLUTION);
+
+  // pinMode(VIN_SENSE, INPUT);
   pinMode(IMMO_ON, OUTPUT);
   pinMode(IMMO_OFF, OUTPUT);
   pinMode(GPS_RESET, OUTPUT);
 
+  pinMode(CAN1_CS_PIN, OUTPUT);
+  pinMode(CAN1_INT_PIN, INPUT);
+
   digitalWrite(GPS_RESET, LOW);
+  digitalWrite(CAN1_CS_PIN, HIGH);
 #else
   pinMode(RELAY_2_PIN, OUTPUT);
 #endif
@@ -20,8 +27,6 @@ int PinsClass::begin() {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(CAN0_CS_PIN, OUTPUT);
   pinMode(CAN0_INT_PIN, INPUT);
-  pinMode(CAN1_CS_PIN, OUTPUT);
-  pinMode(CAN1_INT_PIN, INPUT);
   pinMode(SD_CS_PIN, OUTPUT);
   pinMode(FL_CS_PIN, OUTPUT);
   pinMode(DOOR_UNLOCK_PIN, OUTPUT);
@@ -35,7 +40,6 @@ int PinsClass::begin() {
 
   //Ensure SPI CS Pins are all high to avoid a noisy bus at inits
   digitalWrite(CAN0_CS_PIN, HIGH);
-  digitalWrite(CAN1_CS_PIN, HIGH);
   digitalWrite(SD_CS_PIN, HIGH);
   digitalWrite(FL_CS_PIN, HIGH);
   digitalWrite(BLE_CS_PIN, HIGH);
@@ -46,7 +50,7 @@ int PinsClass::begin() {
 
   SPI.begin();
 
-  return 0;
+  return 1;
 }
 
 void PinsClass::unlockDoors() {

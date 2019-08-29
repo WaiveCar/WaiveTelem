@@ -11,10 +11,10 @@
     "build-android-apk": "react-native run-android --variant=release; open android/app/build/outputs/apk/release"
   },
   "dependencies": {
-    "buffer": "^5.2.1",
+    "buffer": "^5.4.0",
     "crypto-js": "^3.1.9-1",
-    "react": "16.8.6",
-    "react-native": "0.60.4",
+    "react": "16.9.0",
+    "react-native": "0.60.5",
     "react-native-ble-plx": "^1.0.3",
     "react-native-paper": "^2.16.0",
     "react-native-vector-icons": "^6.6.0"
@@ -23,13 +23,13 @@
     "@babel/core": "^7.5.5",
     "@babel/runtime": "^7.5.5",
     "@react-native-community/eslint-config": "^0.0.5",
-    "babel-jest": "^24.8.0",
-    "eslint": "^6.1.0",
-    "eslint-config-prettier": "^6.0.0",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.2.2",
+    "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "jest": "^24.8.0",
-    "metro-react-native-babel-preset": "^0.55.0",
-    "react-test-renderer": "16.8.6"
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.9.0"
   },
   "jest": {
     "preset": "react-native"

@@ -1,7 +1,15 @@
 #ifndef Pins_h
 #define Pins_h
 
-#ifndef ARDUINO_SAMD_WAIVE1000
+#ifdef ARDUINO_SAMD_WAIVE1000
+#define ANALOG_RESOLUTION 12
+#define VOLTAGE 3.3f
+#define RESISTOR_1 10.2f
+#define RESISTOR_2 40.2f
+
+#define CAN1_CS_PIN 2
+#define CAN1_INT_PIN A6
+#else
 #define RELAY_2_PIN 2
 #endif
 
@@ -19,8 +27,6 @@
 #define BLE_MOSI_PIN 0
 #define BLE_SCK_PIN 1
 #define BLE_MISO_PIN 6
-#define CAN1_CS_PIN A0
-#define CAN1_INT_PIN A6
 
 #include <Arduino.h>
 

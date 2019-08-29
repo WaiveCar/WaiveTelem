@@ -1,16 +1,25 @@
 #ifndef Can_h
 #define Can_h
 
+#include <ArduinoJson.h>
+
 class CanClass {
  public:
   int begin();
   void poll();
+  void send(JsonObject& cmdJson);
+  void sendCommand(const char* cmd);
   void sleep();
-  // void wakeup();
   bool isSleeping(int bus);
+  int getHealth();
 
  private:
-  bool sleeping[2];
+  int health = 0;
+#ifdef ARDUINO_SAMD_WAIVE1000
+  bool sleeping[2] = {false, false};
+#else
+  bool sleeping[1] = {false};
+#endif
   uint8_t busCount = 0;
 };
 

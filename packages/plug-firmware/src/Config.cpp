@@ -6,6 +6,10 @@
 
 int ConfigClass::begin() {
   File file = SD.open("CONFIG.TXT");
+  if (!file) {
+    logError("CONFIG.TXT open failed");
+    return -1;
+  }
   // go to https://arduinojson.org/v6/assistant/ to find the size
   DeserializationError error = deserializeJson(configDoc, file);
   if (error) {
@@ -13,7 +17,8 @@ int ConfigClass::begin() {
   }
   configFreeMem = CONFIG_DOC_SIZE - configDoc.memoryUsage();
   file.close();
-  return !error.code();
+  int err = -error.code();
+  return err ? err : 1;
 }
 
 JsonDocument& ConfigClass::get() {

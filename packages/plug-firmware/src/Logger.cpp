@@ -19,12 +19,7 @@
 // #pragma message "define LOG_EASYREAD_SERIAL in build_flags (e.g. -D LOG_EASYREAD_SERIAL) if you want more readable SERIAL output (but no longer JSON)"
 // #endif
 
-// can still generate json > LOG_RESERVE_SIZE, just takes slighly longer
-#ifndef LOG_RESERVE_SIZE
-#define LOG_RESERVE_SIZE 256
-#endif
-
-const char* LEVELS[5] = {"", "DEBUG", "INFO", "WARN", "ERROR"};
+const char* LEVELS[] = {"TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 
 int LoggerClass::begin() {
   writeFile = SD.open("LOG.TXT", FILE_WRITE);
@@ -32,7 +27,6 @@ int LoggerClass::begin() {
     logError("LOG.TXT open failed");
     return -1;
   }
-  mqttLevel = Config.get()["logger"]["mqttLevel"] | 1;
   return 1;
 }
 
@@ -44,19 +38,24 @@ int LoggerClass::logKeyValueJson(int level, const char* placeholder, ...) {
   int ret = vbuild_json(jstr, 512, fragment, args);
   va_end(args);
 
-  if (level >= mqttLevel) {
-    if (Mqtt.isConnected()) {
+  if (Mqtt.isConnected()) {
+    if (level >= System.getRemoteLogLevel()) {
       Mqtt.logMsg(jstr);
-      if (level == 4) {
-        String escapedJson = jstr;
-        escapedJson.replace("\"", "\\\"");
-        System.report("{\"system\":{\"lastError\":\"" + escapedJson + "\"}}");
-      }
+    }
+    if (level >= 4) {  // ERROR, FATAL
+      String escapedJson = jstr;
+      escapedJson.replace("\"", "\\\"");
+      System.report("{\"system\":{\"lastError\":\"" + escapedJson + "\"}}");
     }
   }
   if (writeFile) {
     writeFile.println(jstr);
     writeFile.flush();
+    int error = writeFile.getWriteError();
+    if (error) {
+      logError("i|error", error, "cannot write to LOG.TXT");
+      writeFile.close();
+    }
   }
 
 #if LOG_EASYREAD_SERIAL
@@ -69,7 +68,6 @@ int LoggerClass::logKeyValueJson(int level, const char* placeholder, ...) {
   jstring.replace(String("\",\"" LOG_FUNC_KEY "\":\""), " ");
 
   jstring.replace("\"", " ");
-  jstring.replace("\\", "");
 
   Serial.println(jstring);
 #else

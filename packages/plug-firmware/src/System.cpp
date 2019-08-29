@@ -5,12 +5,14 @@
 #include <NMEAGPS.h>
 #include <json_builder.h>
 
+#include "Bluetooth.h"
 #include "Can.h"
 #include "Config.h"
 #include "Gps.h"
 #include "Internet.h"
 #include "Logger.h"
 #include "Mqtt.h"
+#include "Pins.h"
 #include "System.h"
 
 extern "C" char* sbrk(int incr);
@@ -32,6 +34,13 @@ int SystemClass::begin() {
 
   sprintf(id, "%s", ECCX08.serialNumber().c_str());
 
+  remoteLogLevel = 4;
+#ifdef DEBUG
+  statusDoc["inRide"] = "true";
+#else
+  statusDoc["inRide"] = "false";
+#endif
+
   statusDoc.createNestedObject("can");
   statusDoc.createNestedObject("heartbeat");
   statusDoc["heartbeat"].createNestedObject("gps");
@@ -40,6 +49,11 @@ int SystemClass::begin() {
 }
 
 void SystemClass::poll() {
+  checkHeartbeat();
+  checkVin();
+}
+
+void SystemClass::checkHeartbeat() {
   bool inRide = (statusDoc["inRide"] == "true");
   JsonObject heartbeat = Config.get()["heartbeat"];
   uint32_t interval = inRide ? heartbeat["inRide"] | 30 : heartbeat["notInRide"] | 900;
@@ -59,6 +73,38 @@ void SystemClass::poll() {
   }
 }
 
+void SystemClass::checkVin() {
+#ifdef ARDUINO_SAMD_WAIVE1000
+  uint32_t elapsedTime = getTime() - lastVinRead;
+  if (lastVinRead == -1 || elapsedTime >= 10) {
+    vinReads[vinIndex] = (float)analogRead(VIN_SENSE) / (1 << ANALOG_RESOLUTION) * VOLTAGE * (RESISTOR_1 + RESISTOR_2) / RESISTOR_1;
+    vinIndex++;
+    if (vinIndex == 5) {
+      vinAvgValid = true;
+      vinIndex = 0;
+    }
+    if (vinAvgValid) {
+      float total = 0;
+      for (int i = 0; i < 5; i++) {
+        total += vinReads[i];
+      }
+      float avg = total / 5;
+      const char* limitStr = Config.get()["vin"]["low"] | "12.4";
+      //TODO strtof takes 2% ROM, maybe we should just code the limit
+      float limit = strtof(limitStr, NULL);
+      // logTrace("d|5limit", limit);
+      if (avg < limit) {
+        char sysJson[64], info[128];
+        json(sysJson, "d|5vin", avg);
+        json(info, "o|system", sysJson);
+        report(info);
+      }
+    }
+    lastVinRead = getTime();
+  }
+#endif
+}
+
 uint32_t SystemClass::getTime() {
   return time;
 }
@@ -70,11 +116,6 @@ const char* SystemClass::getDateTime() {
 }
 
 void SystemClass::sendInfo(const char* sysJson) {
-#ifdef DEBUG
-  statusDoc["inRide"] = "true";
-#else
-  statusDoc["inRide"] = "false";
-#endif
   char info[512];
   json(info, "inRide", statusDoc["inRide"].as<char*>(), "o|system", sysJson);
   report(info);
@@ -90,6 +131,8 @@ void SystemClass::sendHeartbeat() {
   gps["speed"] = Gps.getSpeed();
   gps["heading"] = Gps.getHeading();
   // system["time"] = System.getDateTime();
+  system["ble"] = Bluetooth.getHealth();
+  system["can"] = Can.getHealth();
   system["uptime"] = time - bootTime;
   system["signal"] = Internet.getSignalStrength();
   system["heapFreeMem"] = freeMemory();
@@ -118,7 +161,7 @@ void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delt
 void SystemClass::sleep(uint32_t sec) {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
-  delay(sec * 1000);  // don't use Watchdog.sleep as it disconnects USB
+  delay(sec * 1000);  // don't use rtc.standbyMode as it disconnects USB
 #else
   rtc.setSeconds(60 - sec);
   rtc.standbyMode();
@@ -146,12 +189,12 @@ void SystemClass::report(const String& reported, const String& desired) {
   }
 }
 
-bool SystemClass::stayAwake() {
-  return stayawake;
+bool SystemClass::stayResponsive() {
+  return stayresponsive;
 }
 
-void SystemClass::setStayAwake(bool stay) {
-  stayawake = stay;
+void SystemClass::setStayResponsive(bool resp) {
+  stayresponsive = resp;
 }
 
 void SystemClass::keepTime() {
@@ -179,6 +222,10 @@ void SystemClass::reportCommandDone(const String& json, String& cmdKey, String& 
 
 void SystemClass::resetDesired(const String& name) {
   report("", "{\"" + name + "\":null}");
+}
+
+uint8_t SystemClass::getRemoteLogLevel() {
+  return remoteLogLevel;
 }
 
 SystemClass System;

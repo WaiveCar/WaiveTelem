@@ -15,7 +15,7 @@ const getToken = thingName => {
   const token =
     '{"secret":"' +
     secret +
-    '","cmds":"lock,immo,inRide,reboot","start":' +
+    '","cmds":"lock,immo,can,inRide,reboot","start":' +
     Math.round(now / 1000) +
     ',"end":' +
     Math.round(now / 1000 + 10 * 60 * 60) +

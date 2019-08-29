@@ -51,7 +51,7 @@ void HCI_Event_CB(void *pckt) {
   }
 }
 
-tBleStatus BluetoothClass::begin() {
+int BluetoothClass::begin() {
   HCI_Init();
   BNRG_SPI_Init();
   reset();
@@ -62,20 +62,20 @@ tBleStatus BluetoothClass::begin() {
   status = aci_gatt_init();
   if (status) {
     logError("i|status", status, "BLE GATT_Init failed");
-    return -1;
+    return getHealth();
   }
 
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
   status = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, 20, &service_handle, &dev_name_char_handle, &appearance_char_handle);
   if (status) {
     logError("i|status", status, "BLE GAP_Init failed");
-    return -1;
+    return getHealth();
   }
 
   status = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0, 20, name);
   if (status) {
     logError("i|status", status, "BLE aci_gatt_update_char_value failed");
-    return -1;
+    return getHealth();
   }
 
   status = aci_gap_set_auth_requirement(MITM_PROTECTION_REQUIRED,
@@ -88,20 +88,23 @@ tBleStatus BluetoothClass::begin() {
                                         BONDING);
   if (status) {
     logError("i|status", status, "BLE aci_gap_set_auth_requirement failed");
-    return -1;
+    return getHealth();
   }
 
   addService();
+  if (status) {
+    return getHealth();
+  }
 
   status = aci_hal_set_tx_power_level(1, 0);  // 0 is lowest, prevents eavesdropping
   if (status) {
     logError("i|status", status, "BLE aci_hal_set_tx_power_level failed");
-    return -1;
+    return getHealth();
   }
 
   setConnectable();
 
-  return 1;
+  return getHealth();
 }
 
 #define UUID_128(uuid_struct, uuid_15, uuid_14, uuid_13, uuid_12, uuid_11, uuid_10, uuid_9, uuid_8, uuid_7, uuid_6, uuid_5, uuid_4, uuid_3, uuid_2, uuid_1, uuid_0) \
@@ -129,7 +132,7 @@ tBleStatus BluetoothClass::begin() {
 #define CMD_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 #define CHALLENGE_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
-void BluetoothClass::addService() {
+tBleStatus BluetoothClass::addService() {
   uint8_t uuid[16];
 
   SERVICE_UUID(uuid);
@@ -155,11 +158,14 @@ fail:
   if (status) {
     logError("BLE Error while adding service");
   }
+  return status;
 }
 
 void BluetoothClass::poll() {
   if (status == BLE_STATUS_SUCCESS) {
     HCI_Process();
+  } else {
+    begin();
   }
 }
 
@@ -167,7 +173,7 @@ void BluetoothClass::reset() {
   BlueNRG_RST();
 }
 
-uint8_t BluetoothClass::setChallenge() {
+tBleStatus BluetoothClass::setChallenge() {
   ECCX08.random(challenge, sizeof(challenge));
   status = aci_gatt_update_char_value(ServHandle, ChallengeCharHandle, 0, sizeof(challenge), challenge);
   if (status != BLE_STATUS_SUCCESS) {
@@ -180,7 +186,7 @@ uint8_t BluetoothClass::setChallenge() {
 #define ADV_INTERVAL_MIN_MS 50
 #define ADV_INTERVAL_MAX_MS 100
 
-void BluetoothClass::setConnectable() {
+tBleStatus BluetoothClass::setConnectable() {
   hci_le_set_scan_resp_data(0, NULL);
 
   String localName = String((char)AD_TYPE_COMPLETE_LOCAL_NAME) + name;
@@ -191,6 +197,7 @@ void BluetoothClass::setConnectable() {
   if (status != BLE_STATUS_SUCCESS) {
     logError("i|status", status);
   }
+  return status;
 }
 
 // BLE actually only supports sending 20 bytes of data per characteristic. We need a little "protocol" to support longer array.
@@ -222,10 +229,7 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
     strBuffer[strLength] = '\0';
     continueLength = messageLength - data_length + 2;  // + 2 because att_data[0] and att_data[1] are not data
     message += String(strBuffer);
-#ifdef DEBUG
-    logDebug("i|length", continueLength);
-    logDebug("msg", message.c_str());
-#endif
+    logTrace("i|length", continueLength, "msg", message.c_str());
     if (continueLength == 0) {  // last message
       if (IS(AuthCharHandle)) {
         Command.authorize(message);
@@ -253,19 +257,23 @@ void BluetoothClass::GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
   logInfo(sprintbuff);
   Command.unauthorize();
   Bluetooth.setChallenge();
-  System.setStayAwake(true);
+  System.setStayResponsive(true);
 }
 
 void BluetoothClass::GAP_DisconnectionComplete_CB() {
   logInfo("BLE Disconnected");
   setConnectable();
-  System.setStayAwake(false);
+  System.setStayResponsive(false);
 }
 
 void BluetoothClass::Read_Request_CB(uint16_t handle) {
   if (connection_handle != 0) {
     aci_gatt_allow_read(connection_handle);
   }
+}
+
+int BluetoothClass::getHealth() {
+  return status == BLE_STATUS_SUCCESS ? 1 : -status;
 }
 
 BluetoothClass Bluetooth;

@@ -111,7 +111,7 @@ float GpsClass::getHeading() {
 }
 
 void GpsClass::sleep() {
-  logDebug(NULL);
+  logTrace(NULL);
 #ifdef ARDUINO_SAMD_WAIVE1000
   const unsigned char ubxPMREQ[] PROGMEM = {0x02, 0x41, 0x08, 0x00, 0, 0, 0, 0, 0x02};
   const ublox::msg_t *cfg_ptr = (const ublox::msg_t *)ubxPMREQ;
@@ -122,7 +122,7 @@ void GpsClass::sleep() {
 }
 
 void GpsClass::wakeup() {
-  logDebug(NULL);
+  // logTrace(NULL);
 #ifdef ARDUINO_SAMD_WAIVE1000
   GPSSerial.begin(9600);
   gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);

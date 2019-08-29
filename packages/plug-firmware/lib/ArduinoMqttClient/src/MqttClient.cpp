@@ -22,33 +22,35 @@
 // #define MQTT_CLIENT_DEBUG
 
 #ifndef htons
-#ifdef __ARM__
-#define htons __REV16
-#else
-#define htons(s) ((s << 8) | (s >> 8))
-#endif
-#endif
-
-#ifdef __AVR__
-#define TX_PAYLOAD_BUFFER_SIZE 128
-#else
-#define TX_PAYLOAD_BUFFER_SIZE 512
+  #ifdef __ARM__
+    #define htons __REV16
+  #else
+    #define htons(s) ((s<<8) | (s>>8))
+  #endif
 #endif
 
-#define MQTT_CONNECT 1
-#define MQTT_CONNACK 2
-#define MQTT_PUBLISH 3
-#define MQTT_PUBACK 4
-#define MQTT_PUBREC 5
-#define MQTT_PUBREL 6
-#define MQTT_PUBCOMP 7
-#define MQTT_SUBSCRIBE 8
-#define MQTT_SUBACK 9
+#ifndef TX_PAYLOAD_BUFFER_SIZE
+  #ifdef __AVR__
+    #define TX_PAYLOAD_BUFFER_SIZE 128
+  #else
+    #define TX_PAYLOAD_BUFFER_SIZE 256
+  #endif
+#endif
+
+#define MQTT_CONNECT      1
+#define MQTT_CONNACK      2
+#define MQTT_PUBLISH      3
+#define MQTT_PUBACK       4
+#define MQTT_PUBREC       5
+#define MQTT_PUBREL       6
+#define MQTT_PUBCOMP      7
+#define MQTT_SUBSCRIBE    8
+#define MQTT_SUBACK       9
 #define MQTT_UNSUBSCRIBE 10
-#define MQTT_UNSUBACK 11
-#define MQTT_PINGREQ 12
-#define MQTT_PINGRESP 13
-#define MQTT_DISCONNECT 14
+#define MQTT_UNSUBACK    11
+#define MQTT_PINGREQ     12
+#define MQTT_PINGRESP    13
+#define MQTT_DISCONNECT  14
 
 enum {
   MQTT_CLIENT_RX_STATE_READ_TYPE,
@@ -61,22 +63,28 @@ enum {
   MQTT_CLIENT_RX_STATE_DISCARD_PUBLISH_PAYLOAD
 };
 
-MqttClient::MqttClient(Client& client) : _client(&client),
-                                         _onMessage(NULL),
-                                         _keepAliveInterval(60 * 1000L),
-                                         _connectionTimeout(30 * 1000L),
-                                         _connectError(MQTT_SUCCESS),
-                                         _connected(false),
-                                         _subscribeQos(0x00),
-                                         _rxState(MQTT_CLIENT_RX_STATE_READ_TYPE),
-                                         _willBuffer(NULL),
-                                         _willBufferIndex(0),
-                                         _willMessageIndex(0),
-                                         _willFlags(0x00) {
+MqttClient::MqttClient(Client& client) :
+  _client(&client),
+  _onMessage(NULL),
+  _keepAliveInterval(60 * 1000L),
+  _connectionTimeout(30 * 1000L),
+  _connectError(MQTT_SUCCESS),
+  _connected(false),
+  _subscribeQos(0x00),
+  _rxState(MQTT_CLIENT_RX_STATE_READ_TYPE),
+  _txBufferIndex(0),
+  _txPayloadBuffer(NULL),
+  _txPayloadBufferIndex(0),
+  _willBuffer(NULL),
+  _willBufferIndex(0),
+  _willMessageIndex(0),
+  _willFlags(0x00)
+{
   setTimeout(0);
 }
 
-MqttClient::~MqttClient() {
+MqttClient::~MqttClient()
+{
   if (_willBuffer) {
     free(_willBuffer);
 
@@ -90,11 +98,13 @@ MqttClient::~MqttClient() {
   }
 }
 
-void MqttClient::onMessage(void (*callback)(int)) {
+void MqttClient::onMessage(void(*callback)(int))
+{
   _onMessage = callback;
 }
 
-int MqttClient::parseMessage() {
+int MqttClient::parseMessage()
+{
   if (_rxState == MQTT_CLIENT_RX_STATE_READ_PUBLISH_PAYLOAD) {
     // already had a message, but only partially read, discard the data
     _rxState = MQTT_CLIENT_RX_STATE_DISCARD_PUBLISH_PAYLOAD;
@@ -110,7 +120,8 @@ int MqttClient::parseMessage() {
   return _rxLength;
 }
 
-String MqttClient::messageTopic() const {
+String MqttClient::messageTopic() const
+{
   if (_rxState == MQTT_CLIENT_RX_STATE_READ_PUBLISH_PAYLOAD) {
     // message received and ready for reading
     return _rxMessageTopic;
@@ -119,7 +130,8 @@ String MqttClient::messageTopic() const {
   return "";
 }
 
-int MqttClient::messageDup() const {
+int MqttClient::messageDup() const
+{
   if (_rxState == MQTT_CLIENT_RX_STATE_READ_PUBLISH_PAYLOAD) {
     // message received and ready for reading
     return _rxMessageDup;
@@ -128,7 +140,8 @@ int MqttClient::messageDup() const {
   return -1;
 }
 
-int MqttClient::messageQoS() const {
+int MqttClient::messageQoS() const
+{
   if (_rxState == MQTT_CLIENT_RX_STATE_READ_PUBLISH_PAYLOAD) {
     // message received and ready for reading
     return _rxMessageQoS;
@@ -137,7 +150,8 @@ int MqttClient::messageQoS() const {
   return -1;
 }
 
-int MqttClient::messageRetain() const {
+int MqttClient::messageRetain() const
+{
   if (_rxState == MQTT_CLIENT_RX_STATE_READ_PUBLISH_PAYLOAD) {
     // message received and ready for reading
     return _rxMessageRetain;
@@ -146,7 +160,8 @@ int MqttClient::messageRetain() const {
   return -1;
 }
 
-int MqttClient::beginMessage(const char* topic, unsigned long size, bool retain, uint8_t qos, bool dup) {
+int MqttClient::beginMessage(const char* topic, unsigned long size, bool retain, uint8_t qos, bool dup)
+{
   _txMessageTopic = topic;
   _txMessageRetain = retain;
   _txMessageQoS = qos;
@@ -165,19 +180,23 @@ int MqttClient::beginMessage(const char* topic, unsigned long size, bool retain,
   return 1;
 }
 
-int MqttClient::beginMessage(const String& topic, unsigned long size, bool retain, uint8_t qos, bool dup) {
+int MqttClient::beginMessage(const String& topic, unsigned long size, bool retain, uint8_t qos, bool dup)
+{
   return beginMessage(topic.c_str(), size, retain, qos, dup);
 }
 
-int MqttClient::beginMessage(const char* topic, bool retain, uint8_t qos, bool dup) {
+int MqttClient::beginMessage(const char* topic, bool retain, uint8_t qos, bool dup)
+{
   return beginMessage(topic, 0xffffffffL, retain, qos, dup);
 }
 
-int MqttClient::beginMessage(const String& topic, bool retain, uint8_t qos, bool dup) {
+int MqttClient::beginMessage(const String& topic, bool retain, uint8_t qos, bool dup)
+{
   return beginMessage(topic.c_str(), retain, qos, dup);
 }
 
-int MqttClient::endMessage() {
+int MqttClient::endMessage()
+{
   if (!_txStreamPayload) {
     if (!publishHeader(_txPayloadBufferIndex) ||
         (clientWrite(_txPayloadBuffer, _txPayloadBufferIndex) != _txPayloadBufferIndex)) {
@@ -227,7 +246,8 @@ int MqttClient::endMessage() {
   return 1;
 }
 
-int MqttClient::beginWill(const char* topic, unsigned short size, bool retain, uint8_t qos) {
+int MqttClient::beginWill(const char* topic, unsigned short size, bool retain, uint8_t qos)
+{
   int topicLength = strlen(topic);
   size_t willLength = (2 + topicLength + 2 + size);
 
@@ -240,7 +260,7 @@ int MqttClient::beginWill(const char* topic, unsigned short size, bool retain, u
   _txBuffer = _willBuffer;
   _txBufferIndex = 0;
   writeString(topic, topicLength);
-  write16(0);  // dummy size for now
+  write16(0); // dummy size for now
   _willMessageIndex = _txBufferIndex;
 
   _willFlags = (qos << 3) | 0x04;
@@ -251,19 +271,23 @@ int MqttClient::beginWill(const char* topic, unsigned short size, bool retain, u
   return 0;
 }
 
-int MqttClient::beginWill(const String& topic, unsigned short size, bool retain, uint8_t qos) {
+int MqttClient::beginWill(const String& topic, unsigned short size, bool retain, uint8_t qos)
+{
   return beginWill(topic.c_str(), size, retain, qos);
 }
 
-int MqttClient::beginWill(const char* topic, bool retain, uint8_t qos) {
+int MqttClient::beginWill(const char* topic, bool retain, uint8_t qos)
+{
   return beginWill(topic, TX_PAYLOAD_BUFFER_SIZE, retain, qos);
 }
 
-int MqttClient::beginWill(const String& topic, bool retain, uint8_t qos) {
+int MqttClient::beginWill(const String& topic, bool retain, uint8_t qos)
+{
   return beginWill(topic.c_str(), retain, qos);
 }
 
-int MqttClient::endWill() {
+int MqttClient::endWill()
+{
   // update the index
   _willBufferIndex = _txBufferIndex;
 
@@ -277,7 +301,8 @@ int MqttClient::endWill() {
   return 1;
 }
 
-int MqttClient::subscribe(const char* topic, uint8_t qos) {
+int MqttClient::subscribe(const char* topic, uint8_t qos)
+{
   int topicLength = strlen(topic);
   int remainingLength = topicLength + 5;
 
@@ -323,11 +348,13 @@ int MqttClient::subscribe(const char* topic, uint8_t qos) {
   return 0;
 }
 
-int MqttClient::subscribe(const String& topic, uint8_t qos) {
+int MqttClient::subscribe(const String& topic, uint8_t qos)
+{
   return subscribe(topic.c_str(), qos);
 }
 
-int MqttClient::unsubscribe(const char* topic) {
+int MqttClient::unsubscribe(const char* topic)
+{
   int topicLength = strlen(topic);
   int remainingLength = topicLength + 4;
 
@@ -364,11 +391,13 @@ int MqttClient::unsubscribe(const char* topic) {
   return 0;
 }
 
-int MqttClient::unsubscribe(const String& topic) {
+int MqttClient::unsubscribe(const String& topic)
+{
   return unsubscribe(topic.c_str());
 }
 
-void MqttClient::poll() {
+void MqttClient::poll()
+{
   if (clientAvailable() == 0 && !clientConnected()) {
     _rxState = MQTT_CLIENT_RX_STATE_READ_TYPE;
     _connected = false;
@@ -401,12 +430,12 @@ void MqttClient::poll() {
           return;
         }
 
-        if ((b & 0x80) == 0) {  // length done
+        if ((b & 0x80) == 0) { // length done
           bool malformedResponse = false;
 
-          if (_rxType == MQTT_CONNACK ||
-              _rxType == MQTT_PUBACK ||
-              _rxType == MQTT_PUBREC ||
+          if (_rxType == MQTT_CONNACK || 
+              _rxType == MQTT_PUBACK  ||
+              _rxType == MQTT_PUBREC  || 
               _rxType == MQTT_PUBCOMP ||
               _rxType == MQTT_UNSUBACK) {
             malformedResponse = (_rxFlags != 0x00 || _rxLength != 2);
@@ -414,7 +443,7 @@ void MqttClient::poll() {
             malformedResponse = ((_rxFlags & 0x06) == 0x06);
           } else if (_rxType == MQTT_PUBREL) {
             malformedResponse = (_rxFlags != 0x02 || _rxLength != 2);
-          } else if (_rxType == MQTT_SUBACK) {
+          } else if (_rxType == MQTT_SUBACK) { 
             malformedResponse = (_rxFlags != 0x00 || _rxLength != 3);
           } else if (_rxType == MQTT_PINGRESP) {
             malformedResponse = (_rxFlags != 0x00 || _rxLength != 0);
@@ -453,10 +482,10 @@ void MqttClient::poll() {
 
           if (_rxType == MQTT_CONNACK) {
             _returnCode = _rxMessageBuffer[1];
-          } else if (_rxType == MQTT_PUBACK ||
-                     _rxType == MQTT_PUBREC ||
-                     _rxType == MQTT_PUBCOMP ||
-                     _rxType == MQTT_UNSUBACK) {
+          } else if (_rxType == MQTT_PUBACK   ||
+                      _rxType == MQTT_PUBREC  ||
+                      _rxType == MQTT_PUBCOMP ||
+                      _rxType == MQTT_UNSUBACK) {
             uint16_t packetId = (_rxMessageBuffer[0] << 8) | _rxMessageBuffer[1];
 
             if (packetId == _txPacketId) {
@@ -487,7 +516,7 @@ void MqttClient::poll() {
         if (_rxMessageIndex == 2) {
           _rxMessageTopicLength = (_rxMessageBuffer[0] << 8) | _rxMessageBuffer[1];
           _rxLength -= 2;
-
+          
           _rxMessageTopic = "";
           _rxMessageTopic.reserve(_rxMessageTopicLength);
 
@@ -595,19 +624,23 @@ void MqttClient::poll() {
   }
 }
 
-int MqttClient::connect(IPAddress ip, uint16_t port) {
+int MqttClient::connect(IPAddress ip, uint16_t port)
+{
   return connect(ip, NULL, port);
 }
 
-int MqttClient::connect(const char* host, uint16_t port) {
+int MqttClient::connect(const char *host, uint16_t port)
+{
   return connect((uint32_t)0, host, port);
 }
 
-size_t MqttClient::write(uint8_t b) {
+size_t MqttClient::write(uint8_t b)
+{
   return write(&b, sizeof(b));
 }
 
-size_t MqttClient::write(const uint8_t* buf, size_t size) {
+size_t MqttClient::write(const uint8_t *buf, size_t size)
+{
   if (_willMessageIndex) {
     return writeData(buf, size);
   }
@@ -630,7 +663,8 @@ size_t MqttClient::write(const uint8_t* buf, size_t size) {
   return size;
 }
 
-int MqttClient::available() {
+int MqttClient::available()
+{
   if (_rxState == MQTT_CLIENT_RX_STATE_READ_PUBLISH_PAYLOAD) {
     return _rxLength;
   }
@@ -638,7 +672,8 @@ int MqttClient::available() {
   return 0;
 }
 
-int MqttClient::read() {
+int MqttClient::read()
+{
   byte b;
 
   if (read(&b, sizeof(b)) != sizeof(b)) {
@@ -648,7 +683,8 @@ int MqttClient::read() {
   return b;
 }
 
-int MqttClient::read(uint8_t* buf, size_t size) {
+int MqttClient::read(uint8_t *buf, size_t size)
+{
   size_t result = 0;
 
   if (_rxState == MQTT_CLIENT_RX_STATE_READ_PUBLISH_PAYLOAD) {
@@ -663,7 +699,7 @@ int MqttClient::read(uint8_t* buf, size_t size) {
 
       if (b == -1) {
         break;
-      }
+      } 
 
       result++;
       *buf++ = b;
@@ -683,7 +719,8 @@ int MqttClient::read(uint8_t* buf, size_t size) {
   return result;
 }
 
-int MqttClient::peek() {
+int MqttClient::peek()
+{
   if (_rxState == MQTT_CLIENT_RX_STATE_READ_PUBLISH_PAYLOAD) {
     return clientPeek();
   }
@@ -691,10 +728,12 @@ int MqttClient::peek() {
   return -1;
 }
 
-void MqttClient::flush() {
+void MqttClient::flush()
+{
 }
 
-void MqttClient::stop() {
+void MqttClient::stop()
+{
   if (connected()) {
     disconnect();
   }
@@ -703,49 +742,60 @@ void MqttClient::stop() {
   _client->stop();
 }
 
-uint8_t MqttClient::connected() {
+uint8_t MqttClient::connected()
+{
   return clientConnected() && _connected;
 }
 
-MqttClient::operator bool() {
+MqttClient::operator bool()
+{
   return true;
 }
 
-void MqttClient::setId(const char* id) {
+void MqttClient::setId(const char* id)
+{
   _id = id;
 }
 
-void MqttClient::setId(const String& id) {
+void MqttClient::setId(const String& id)
+{
   _id = id;
 }
 
-void MqttClient::setUsernamePassword(const char* username, const char* password) {
+void MqttClient::setUsernamePassword(const char* username, const char* password)
+{
   _username = username;
   _password = password;
 }
 
-void MqttClient::setUsernamePassword(const String& username, const String& password) {
+void MqttClient::setUsernamePassword(const String& username, const String& password)
+{
   _username = username;
   _password = password;
 }
 
-void MqttClient::setKeepAliveInterval(unsigned long interval) {
+void MqttClient::setKeepAliveInterval(unsigned long interval)
+{
   _keepAliveInterval = interval;
 }
 
-void MqttClient::setConnectionTimeout(unsigned long timeout) {
+void MqttClient::setConnectionTimeout(unsigned long timeout)
+{
   _connectionTimeout = timeout;
 }
 
-int MqttClient::connectError() const {
+int MqttClient::connectError() const
+{
   return _connectError;
 }
 
-int MqttClient::subscribeQoS() const {
+int MqttClient::subscribeQoS() const
+{
   return _subscribeQos;
 }
 
-int MqttClient::connect(IPAddress ip, const char* host, uint16_t port) {
+int MqttClient::connect(IPAddress ip, const char* host, uint16_t port)
+{
   if (clientConnected()) {
     _client->stop();
   }
@@ -782,7 +832,7 @@ int MqttClient::connect(IPAddress ip, const char* host, uint16_t port) {
     idLength = sizeof(tempId) - 1;
   }
 
-  struct __attribute__((packed)) {
+  struct __attribute__ ((packed)) {
     struct {
       uint16_t length;
       char value[4];
@@ -807,7 +857,7 @@ int MqttClient::connect(IPAddress ip, const char* host, uint16_t port) {
   }
 
   flags |= _willFlags;
-  flags |= 0x02;  // clean session
+  flags |= 0x02; // clean session
 
   connectVariableHeader.protocolName.length = htons(sizeof(connectVariableHeader.protocolName.value));
   memcpy(connectVariableHeader.protocolName.value, "MQTT", sizeof(connectVariableHeader.protocolName.value));
@@ -864,7 +914,8 @@ int MqttClient::connect(IPAddress ip, const char* host, uint16_t port) {
   return 0;
 }
 
-int MqttClient::publishHeader(size_t length) {
+int MqttClient::publishHeader(size_t length)
+{
   int topicLength = _txMessageTopic.length();
   int headerLength = topicLength + 2;
 
@@ -911,7 +962,8 @@ int MqttClient::publishHeader(size_t length) {
   return endPacket();
 }
 
-void MqttClient::puback(uint16_t id) {
+void MqttClient::puback(uint16_t id)
+{
   uint8_t packetBuffer[4];
 
   beginPacket(MQTT_PUBACK, 0x00, 2, packetBuffer);
@@ -919,7 +971,8 @@ void MqttClient::puback(uint16_t id) {
   endPacket();
 }
 
-void MqttClient::pubrec(uint16_t id) {
+void MqttClient::pubrec(uint16_t id)
+{
   uint8_t packetBuffer[4];
 
   beginPacket(MQTT_PUBREC, 0x00, 2, packetBuffer);
@@ -927,7 +980,8 @@ void MqttClient::pubrec(uint16_t id) {
   endPacket();
 }
 
-void MqttClient::pubrel(uint16_t id) {
+void MqttClient::pubrel(uint16_t id)
+{
   uint8_t packetBuffer[4];
 
   beginPacket(MQTT_PUBREL, 0x02, 2, packetBuffer);
@@ -935,7 +989,8 @@ void MqttClient::pubrel(uint16_t id) {
   endPacket();
 }
 
-void MqttClient::pubcomp(uint16_t id) {
+void MqttClient::pubcomp(uint16_t id)
+{
   uint8_t packetBuffer[4];
 
   beginPacket(MQTT_PUBCOMP, 0x00, 2, packetBuffer);
@@ -943,21 +998,24 @@ void MqttClient::pubcomp(uint16_t id) {
   endPacket();
 }
 
-void MqttClient::ping() {
+void MqttClient::ping()
+{
   uint8_t packetBuffer[2];
 
   beginPacket(MQTT_PINGREQ, 0, 0, packetBuffer);
   endPacket();
 }
 
-void MqttClient::disconnect() {
+void MqttClient::disconnect()
+{
   uint8_t packetBuffer[2];
 
   beginPacket(MQTT_DISCONNECT, 0, 0, packetBuffer);
   endPacket();
 }
 
-int MqttClient::beginPacket(uint8_t type, uint8_t flags, size_t length, uint8_t* buffer) {
+int MqttClient::beginPacket(uint8_t type, uint8_t flags, size_t length, uint8_t* buffer)
+{
   _txBuffer = buffer;
   _txBufferIndex = 0;
 
@@ -967,7 +1025,7 @@ int MqttClient::beginPacket(uint8_t type, uint8_t flags, size_t length, uint8_t*
     uint8_t b = length % 128;
     length /= 128;
 
-    if (length > 0) {
+    if(length > 0) {
       b |= 0x80;
     }
 
@@ -977,7 +1035,8 @@ int MqttClient::beginPacket(uint8_t type, uint8_t flags, size_t length, uint8_t*
   return _txBufferIndex;
 }
 
-int MqttClient::writeString(const char* s, uint16_t length) {
+int MqttClient::writeString(const char* s, uint16_t length)
+{
   int result = 0;
 
   result += write16(length);
@@ -986,24 +1045,28 @@ int MqttClient::writeString(const char* s, uint16_t length) {
   return result;
 }
 
-int MqttClient::write8(uint8_t val) {
+int MqttClient::write8(uint8_t val)
+{
   return writeData(&val, sizeof(val));
 }
 
-int MqttClient::write16(uint16_t val) {
+int MqttClient::write16(uint16_t val)
+{
   val = htons(val);
 
   return writeData(&val, sizeof(val));
 }
 
-int MqttClient::writeData(const void* data, size_t length) {
+int MqttClient::writeData(const void* data, size_t length)
+{
   memcpy(&_txBuffer[_txBufferIndex], data, length);
   _txBufferIndex += length;
 
   return length;
 }
 
-int MqttClient::endPacket() {
+int MqttClient::endPacket()
+{
   int result = (clientWrite(_txBuffer, _txBufferIndex) == _txBufferIndex);
 
   _txBufferIndex = 0;
@@ -1011,7 +1074,8 @@ int MqttClient::endPacket() {
   return result;
 }
 
-void MqttClient::ackRxMessage() {
+void MqttClient::ackRxMessage()
+{
   if (_rxMessageQoS == 1) {
     puback(_rxPacketId);
   } else if (_rxMessageQoS == 2) {
@@ -1019,7 +1083,8 @@ void MqttClient::ackRxMessage() {
   }
 }
 
-int MqttClient::clientRead() {
+int MqttClient::clientRead()
+{
   int result = _client->read();
 
 #ifdef MQTT_CLIENT_DEBUG
@@ -1037,15 +1102,18 @@ int MqttClient::clientRead() {
   return result;
 }
 
-uint8_t MqttClient::clientConnected() {
+uint8_t MqttClient::clientConnected()
+{
   return _client->connected();
 }
 
-int MqttClient::clientAvailable() {
+int MqttClient::clientAvailable()
+{
   return _client->available();
 }
 
-int MqttClient::clientTimedRead() {
+int MqttClient::clientTimedRead()
+{
   unsigned long startMillis = millis();
 
   do {
@@ -1056,16 +1124,18 @@ int MqttClient::clientTimedRead() {
     }
 
     yield();
-  } while ((millis() - startMillis) < 1000);
+  } while((millis() - startMillis) < 1000);
 
   return -1;
 }
 
-int MqttClient::clientPeek() {
+int MqttClient::clientPeek()
+{
   return _client->peek();
 }
 
-size_t MqttClient::clientWrite(const uint8_t* buf, size_t size) {
+size_t MqttClient::clientWrite(const uint8_t *buf, size_t size)
+{
 #ifdef MQTT_CLIENT_DEBUG
   Serial.print("TX: ");
   for (size_t i = 0; i < size; i++) {
