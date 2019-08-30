@@ -27,12 +27,14 @@ void toConsole(int level, const char* json) {
 
 void toFile(int level, const char* json) {
   File writeFile = Logger.getWriteFile();
-  writeFile.println(json);
-  writeFile.flush();
-  int error = writeFile.getWriteError();
-  if (error) {
-    logError("i|error", error, "cannot write to LOG.TXT");
-    writeFile.close();
+  if (writeFile) {
+    writeFile.println(json);
+    writeFile.flush();
+    int error = writeFile.getWriteError();
+    if (error) {
+      logError("i|error", error, "cannot write to LOG.TXT");
+      writeFile.close();
+    }
   }
 }
 
@@ -48,13 +50,13 @@ int LoggerClass::begin() {
   logAddSender(toConsole);
   logAddSender(toMqtt);
 
-  writeFile = SD.open("LOG.TXT", FILE_WRITE);
-  if (!writeFile) {
-    logError("LOG.TXT open failed");
-    return -1;
-  }
+  // writeFile = SD.open("LOG.TXT", FILE_WRITE);
+  // if (!writeFile) {
+  //   logError("LOG.TXT open failed");
+  //   return -1;
+  // }
 
-  logAddSender(toFile);
+  // logAddSender(toFile);
 
   return 1;
 }

@@ -5,6 +5,9 @@ class MotionClass {
  public:
   int begin();
   void poll();
+
+ private:
+  int health = 0;
 };
 
 extern MotionClass Motion;

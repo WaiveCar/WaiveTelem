@@ -29,7 +29,7 @@ void setup() {
   int eccInit = ECCX08.begin();
   int sdInit = SD.begin(SD_CS_PIN);
   int loggerInit = Logger.begin();
-  Motion.begin();
+  int motionInit = Motion.begin();
   int cfgInit = Config.begin();
   int cmdInit = Command.begin();
   System.begin();
@@ -50,6 +50,7 @@ void setup() {
 #endif
        "i|ecc", eccInit,
        "i|sd", sdInit,
+       "i|motion", motionInit,
        "i|cfg", cfgInit,
        "i|logger", loggerInit,
        "i|cmd", cmdInit,
@@ -69,4 +70,5 @@ void loop() {
   Bluetooth.poll();
   Can.poll();
   System.poll();
+  Motion.poll();
 }
