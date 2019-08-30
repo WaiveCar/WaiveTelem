@@ -1,10 +1,10 @@
 #include <ArduinoBearSSL.h>
 #include <ArduinoECCX08.h>
+#include <JsonLogger.h>
 
 #include "Bluetooth.h"
 #include "Command.h"
 #include "Config.h"
-#include "Logger.h"
 #include "System.h"
 
 void HCI_Event_CB(void *pckt) {

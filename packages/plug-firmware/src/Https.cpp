@@ -1,12 +1,12 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <ArduinoBearSSL.h>
+#include <JsonLogger.h>
 #include <SD.h>
 
 #include "Command.h"
 #include "Https.h"
 #include "Internet.h"
-#include "Logger.h"
 
 #define DOWNLOAD_TIMEOUT 60 * 1000
 

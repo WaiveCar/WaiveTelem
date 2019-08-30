@@ -1,5 +1,7 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
+#include <JsonLogger.h>
+#include <SD.h>
 #include <bearssl/bearssl_ssl.h>
 #include <rBase64.h>
 
@@ -8,7 +10,6 @@
 #include "Config.h"
 #include "Gps.h"
 #include "Https.h"
-#include "Logger.h"
 #include "Pins.h"
 #include "System.h"
 

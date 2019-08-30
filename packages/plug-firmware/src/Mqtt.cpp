@@ -1,15 +1,16 @@
 #include <Adafruit_SleepyDog.h>
 #include <ArduinoBearSSL.h>
 #include <ArduinoMqttClient.h>
+#include <JsonLogger.h>
 
 #include "Command.h"
 #include "Config.h"
 #include "Https.h"
 #include "Internet.h"
-#include "Logger.h"
 #include "Mqtt.h"
 #include "System.h"
 
+// this is Amazon certificate, taken from ArduinoBearSSL BearSSLTrustAnchors.h
 static const unsigned char TA1_DN[] = {
     0x30, 0x39, 0x31, 0x0B, 0x30, 0x09, 0x06, 0x03, 0x55, 0x04, 0x06, 0x13,
     0x02, 0x55, 0x53, 0x31, 0x0F, 0x30, 0x0D, 0x06, 0x03, 0x55, 0x04, 0x0A,

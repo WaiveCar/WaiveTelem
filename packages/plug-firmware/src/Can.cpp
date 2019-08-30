@@ -1,8 +1,8 @@
 #include <ACAN2515.h>
+#include <JsonLogger.h>
 
 #include "Can.h"
 #include "Config.h"
-#include "Logger.h"
 #include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
@@ -26,6 +26,7 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
     JsonObject bus = can["bus"][busNum];
     JsonArray statusArray = bus["status"];
     //Software filter for relevant IDs
+    logDebug("i|busNum", busNum, "i|inMessage.id", inMessage.id);
     for (uint8_t i = 0; i < statusArray.size(); i++) {
       JsonObject status = statusArray[i];
       if (inMessage.id == status["id"]) {
@@ -76,6 +77,7 @@ int CanClass::begin() {
     if (errorCode) {
       logError("i|error", errorCode, "can configuration error ");
       health = -1;
+      return health;
     }
   }
   // sleep();

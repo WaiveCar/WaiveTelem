@@ -1,12 +1,12 @@
 #include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <ArduinoECCX08.h>
+#include <JsonLogger.h>
 #ifndef ARDUINO_SAMD_MKR1000
 #include <Modem.h>
 #endif
-#include <MPU6050_tockn.h>
-#include <Wire.h>
-#include <json_builder.h>
+// #include <MPU6050_tockn.h>
+// #include <Wire.h>
 
 #include "Bluetooth.h"
 #include "Can.h"
@@ -19,19 +19,19 @@
 #include "Pins.h"
 #include "System.h"
 
-MPU6050 mpu6050(Wire);
+// MPU6050 mpu6050(Wire);
 
 void setup() {
   Serial.begin(115200);
 #ifdef DEBUG
-  delay(4000);  // to see beginning of the login
+  delay(5000);  // to see beginning of the login
 #endif
   Watchdog.enable(WATCHDOG_TIMEOUT);
 
   Pins.begin();
   int eccInit = ECCX08.begin();
-  mpu6050.begin();
-  mpu6050.calcGyroOffsets(true);
+  // mpu6050.begin();
+  // mpu6050.calcGyroOffsets(true);
   int sdInit = SD.begin(SD_CS_PIN);
   int cfgInit = Config.begin();
   int loggerInit = Logger.begin();
@@ -71,12 +71,12 @@ void loop() {
   }
   System.keepTime();
 
-  Mqtt.poll();
+  // Mqtt.poll();
   Bluetooth.poll();
   Can.poll();
   System.poll();
 
-  mpu6050.update();
+  // mpu6050.update();
 
   // if (millis() - timer > 1000) {
   //   Serial.println("=======================================================");

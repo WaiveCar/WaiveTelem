@@ -1,9 +1,9 @@
 #include <Arduino.h>
+#include <JsonLogger.h>
 #include <NMEAGPS.h>
 
 #include "Gps.h"
 #include "Internet.h"
-#include "Logger.h"
 #include "System.h"
 
 #define GPSSerial Serial1

@@ -2,8 +2,8 @@
 #include <ArduinoECCX08.h>
 #define ARDUINOJSON_USE_DOUBLE 1
 #include <ArduinoJson.h>
+#include <JsonLogger.h>
 #include <NMEAGPS.h>
-#include <json_builder.h>
 
 #include "Bluetooth.h"
 #include "Can.h"
