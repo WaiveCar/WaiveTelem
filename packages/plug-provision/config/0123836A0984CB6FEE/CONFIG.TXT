@@ -98,22 +98,22 @@
           {
             "name": "lock_front_left",
             "id": 360,
-            "bit": 18
+            "bit": 42
           },
           {
             "name": "lock_front_right",
             "id": 360,
-            "bit": 3
+            "bit": 59
           },
           {
             "name": "lock_rear_left",
             "id": 360,
-            "bit": 35
+            "bit": 27
           },
           {
             "name": "lock_rear_right",
             "id": 360,
-            "bit": 46
+            "bit": 22
           }
         ]
       }

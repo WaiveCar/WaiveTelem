@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <JsonLogger.h>
 #include <MKRNB.h>
+#include <Modem.h>
 
 #include "Config.h"
 #include "Internet.h"
@@ -47,6 +48,13 @@ int InternetClass::getSignalStrength() {
   } else {
     return 0;
   }
+}
+
+const char* InternetClass::getModemVersion() {
+  String modemResponse = "";
+  MODEM.send("ATI9");
+  MODEM.waitForResponse(100, &modemResponse);
+  return modemResponse.c_str();
 }
 
 InternetClass Internet;

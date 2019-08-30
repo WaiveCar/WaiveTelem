@@ -2,9 +2,6 @@
 #include <Arduino.h>
 #include <ArduinoECCX08.h>
 #include <JsonLogger.h>
-#ifndef ARDUINO_SAMD_MKR1000
-#include <Modem.h>
-#endif
 
 #include "Bluetooth.h"
 #include "Can.h"
@@ -37,16 +34,10 @@ void setup() {
   Mqtt.poll();
   Gps.begin();
 
-#ifndef ARDUINO_SAMD_MKR1000
-  String modemResponse = "";
-  MODEM.send("ATI9");
-  MODEM.waitForResponse(100, &modemResponse);
-#endif
-
   char initStatus[128], sysJson[256];
   json(initStatus, "-{",
 #ifndef ARDUINO_SAMD_MKR1000
-       "modem", modemResponse.c_str(),
+       "modem", Internet.getModemVersion(),
 #endif
        "i|ecc", eccInit,
        "i|sd", sdInit,

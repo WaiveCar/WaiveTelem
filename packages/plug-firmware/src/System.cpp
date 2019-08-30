@@ -34,9 +34,9 @@ int SystemClass::begin() {
 
   sprintf(id, "%s", ECCX08.serialNumber().c_str());
 
-  remoteLogLevel = 4;
+  remoteLogLevel = 1;
 #ifdef DEBUG
-  statusDoc["inRide"] = "true";
+  statusDoc["inRide"] = "false";
 #else
   statusDoc["inRide"] = "false";
 #endif
@@ -93,7 +93,7 @@ void SystemClass::checkVin() {
       //TODO strtof takes 2% ROM, maybe we should just code the limit
       float limit = strtof(limitStr, NULL);
       // logTrace("d|5limit", limit);
-      if (avg < limit) {
+      if (avg < 10) {
         char sysJson[64], info[128];
         json(sysJson, "d|5vin", avg);
         json(info, "o|system", sysJson);
