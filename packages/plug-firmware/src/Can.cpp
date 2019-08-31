@@ -51,8 +51,7 @@ int CanClass::begin() {
   JsonArray bus = can["bus"];
   busCount = bus.size();
   health = 1;
-  if (busCount >= 1) {
-    int i = 0;
+  for (uint32_t i = 0; i < busCount && i < NUM_CANBUS; i++) {
     int baud = bus[i]["baud"];
     logInfo("i|canBusNum", i, "i|baud", baud);
     JsonArray status = bus[i]["status"];
@@ -68,39 +67,19 @@ int CanClass::begin() {
     if (status.size() > 0) {
       const int minCanId = status[0]["id"].as<int>();
       const int maxCanId = status[status.size() - 1]["id"].as<int>();
-      logDebug("i|minCanId", minCanId, "i|maxCanId", maxCanId);
-      const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
-      const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
-      errorCode = canbus[i]->begin(settings, lambda, rxm0, filters, 1);
-    } else {
-      errorCode = canbus[i]->begin(settings, lambda);
-    }
-    if (errorCode) {
-      logError("i|error", errorCode, "can configuration error ");
-      health = -1;
-      return health;
-    }
-  }
-
-  if (busCount >= 2) {
-    int i = 1;
-    int baud = bus[i]["baud"];
-    logInfo("i|canBusNum", i, "i|baud", baud);
-    JsonArray status = bus[i]["status"];
-    ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
-
-#ifdef ARDUINO_SAMD_WAIVE1000
-    auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
-#else
-    auto lambda = [] { can0.isr(); };
-#endif
-
-    int errorCode = 0;
-    if (status.size() > 0) {
-      const int minCanId = status[0]["id"].as<int>();
-      const int maxCanId = status[status.size() - 1]["id"].as<int>();
-      logDebug("i|minCanId", minCanId, "i|maxCanId", maxCanId);
-      const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
+      uint16_t mask = 0x7ff & ~(minCanId ^ maxCanId);
+      bool clearRestBits = false;
+      for (uint16_t bit = 0x400; bit != 0; bit >>= 1) {
+        if (clearRestBits) {
+          mask = mask & ~(bit);
+        } else {
+          if (!(mask & bit)) {
+            clearRestBits = true;
+          }
+        }
+      }
+      logDebug("i|minCanId", minCanId, "i|maxCanId", maxCanId, "i|mask", mask);
+      const ACAN2515Mask rxm0 = standard2515Mask(mask, 0, 0);
       const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
       errorCode = canbus[i]->begin(settings, lambda, rxm0, filters, 1);
     } else {
