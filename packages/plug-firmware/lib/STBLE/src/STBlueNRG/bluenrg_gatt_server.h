@@ -185,7 +185,7 @@
  * @name Characteristic Presentation Format
  * @{
  */
-typedef __packed struct _charactFormat {
+typedef  struct _charactFormat {
     uint8_t format;
     int8_t exp;
     uint16_t unit;

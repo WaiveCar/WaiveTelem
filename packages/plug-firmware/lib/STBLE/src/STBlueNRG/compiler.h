@@ -19,12 +19,12 @@
 //#define PACKED
 //#else
 //#ifdef __GNUC__
-//#undef __packed
-//#define __packed
+//#undef
+//#define
 //#define PACKED __attribute__((packed))
 //#else
 //#define PACKED
-//#define __packed
+//#define
 //#endif
 //#endif
 //
@@ -32,8 +32,8 @@
 //#define VARIABLE_SIZE 0
 
 #ifdef __GNUC__
-#undef __packed
-#define __packed
+// #undef
+// #define
 #define PACKED __attribute__((packed))
 #else
 #define PACKED
