@@ -41,7 +41,7 @@ int SystemClass::begin() {
   statusDoc["inRide"] = "false";
 #endif
 
-  statusDoc.createNestedObject("can");
+  statusDoc.createNestedObject("canbus");
   statusDoc.createNestedObject("heartbeat");
   statusDoc["heartbeat"].createNestedObject("gps");
   statusDoc["heartbeat"].createNestedObject("system");
@@ -89,13 +89,13 @@ void SystemClass::checkVin() {
         total += vinReads[i];
       }
       float avg = total / 5;
-      const char* limitStr = Config.get()["vin"]["low"] | "12.4";
+      // const char* limitStr = Config.get()["vin"]["low"] | "12.4";
       //TODO strtof takes 2% ROM, maybe we should just code the limit
-      float limit = strtof(limitStr, NULL);
-      // logTrace("d|5limit", limit);
+      // float limit = strtof(limitStr, NULL);
+      // logTrace("f|5limit", limit);
       if (avg < 10) {
         char sysJson[64], info[128];
-        json(sysJson, "d|5vin", avg);
+        json(sysJson, "f|5vin", avg);
         json(info, "o|system", sysJson);
         report(info);
       }
@@ -142,13 +142,13 @@ void SystemClass::sendHeartbeat() {
 
 void SystemClass::sendCanStatus() {
   if (canStatusChanged) {
-    report("{\"can\":" + statusDoc["can"].as<String>() + "}");
+    report("{\"canbus\":" + statusDoc["canbus"].as<String>() + "}");
     canStatusChanged = false;
   }
 }
 
 void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delta) {
-  JsonObject can = statusDoc["can"];
+  JsonObject can = statusDoc["canbus"];
   uint64_t oldValue = can[name];
   if (oldValue != value) {
     can[name] = value;
