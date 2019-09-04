@@ -123,14 +123,15 @@ void MqttClass::poll() {
   mqttClient.poll();
 }
 
-void MqttClass::updateShadow(const String& message) {
-  mqttClient.beginMessage(updateTopic);
+void MqttClass::updateShadow(const char* message) {
+  // logDebug("i|msgLen", strlen(message));
+  mqttClient.beginMessage(updateTopic, strlen(message), false, 0, false);
   mqttClient.print(message);
   mqttClient.endMessage();
 }
 
-void MqttClass::logMsg(const String& message) {
-  mqttClient.beginMessage(logTopic);
+void MqttClass::logMsg(const char* message) {
+  mqttClient.beginMessage(logTopic, strlen(message), false, 0, false);
   mqttClient.print(message);
   mqttClient.endMessage();
 }

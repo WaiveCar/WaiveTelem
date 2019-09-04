@@ -123,7 +123,7 @@ void CanClass::send(JsonObject& cmdJson) {
   int bus = cmdJson["bus"] || 0;
 
   if (bus >= busCount) {
-    logError("cmdJson[\"bus\"] >= busCount");
+    logError("cmdJson[bus] >= busCount");
     return;
   }
   const char* msg = cmdJson["msg"];
