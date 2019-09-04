@@ -119,8 +119,8 @@ void MqttClass::poll() {
       Mqtt.connect();
       lastConnectTry = System.getTime();
     }
-    mqttClient.poll();
   }
+  mqttClient.poll();
 }
 
 void MqttClass::updateShadow(const String& message) {

@@ -142,12 +142,16 @@ void CanClass::send(JsonObject& cmdJson) {
 }
 
 void CanClass::sendCommand(const char* cmd) {
-  logDebug("cmd", cmd);
-  JsonObject cmdJson = Config.get()["can"]["cmd"][cmd];
-  // char output[128];
-  // serializeJson(cmdJson, output);
-  // logDebug("cmdJson", output);
-  send(cmdJson);
+  if (health == 1) {
+    logDebug("cmd", cmd);
+    JsonObject cmdJson = Config.get()["can"]["cmd"][cmd];
+    // char output[128];
+    // serializeJson(cmdJson, output);
+    // logDebug("cmdJson", output);
+    send(cmdJson);
+  } else {
+    logWarn("can not initialized yet");
+  }
 }
 
 void CanClass::sleep() {
