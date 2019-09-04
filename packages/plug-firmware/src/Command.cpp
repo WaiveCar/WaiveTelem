@@ -22,6 +22,10 @@ int CommandClass::begin() {
   if (!cert) {
     return -1;
   }
+  // char str[65];
+  // snprintf(str, 65, "%s", (char*)&cert[743]);
+  // logDebug("str", str);
+
   char* buf = (char*)malloc(48);
   rbase64_decode(buf, (char*)&cert[743], 64);
   memcpy(tokenIv, buf, 16);
@@ -35,7 +39,7 @@ void CommandClass::authorize(const String& encrypted) {
   StaticJsonDocument<AUTH_DOC_SIZE> authDoc;
   DeserializationError error = deserializeJson(authDoc, json);
   if (error) {
-    logError("error", error.c_str(), "Failed to read json");
+    logError("error", error.c_str(), "json", json.c_str(), "Failed to read json");
     return;
   }
   authCmds = authDoc["cmds"] | "";

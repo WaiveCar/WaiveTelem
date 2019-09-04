@@ -56,6 +56,8 @@ void setup() {
   // Serial.println(serialNumber);
   // Serial.println();
 
+  bool newPrivateKey = false;
+
   if (!ECCX08.locked()) {
     // String lock = promptAndReadLine("The ECCX08 on your board is not locked, would you like to PERMANENTLY configure and lock it now? (y/N)", "N");
     // lock.toLowerCase();
@@ -79,6 +81,8 @@ void setup() {
 
     // Serial.println("ECCX08 locked successfully");
     // Serial.println();
+
+    newPrivateKey = true;
   }
 
   // Serial.println("Hi there, in order to generate a new CSR for your board, we'll need the following information ...");
@@ -105,12 +109,12 @@ void setup() {
   String country = "US";
   String stateOrProvince = "CA";
   String locality = "Los Angeles";
-  String organization = "WaiveCar";
+  String organization = "Waive";
   String organizationalUnit = "Engineering";
   String common = serialNumber;
   String slot = "0";
 
-  if (!ECCX08CSR.begin(slot.toInt(), true)) {
+  if (!ECCX08CSR.begin(slot.toInt(), newPrivateKey)) {
     Serial.println("Error starting CSR generation!");
     while (1)
       ;

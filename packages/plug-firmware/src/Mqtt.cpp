@@ -102,7 +102,7 @@ void MqttClass::connect() {
     Watchdog.enable(WATCHDOG_TIMEOUT);
     return;
   }
-  logInfo("i|initTime", millis() - start, "You're connected to the MQTT broker");
+  logDebug("i|initTime", millis() - start, "You're connected to the MQTT broker");
   Watchdog.enable(WATCHDOG_TIMEOUT);
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
 }
@@ -113,9 +113,9 @@ bool MqttClass::isConnected() {
 
 void MqttClass::poll() {
   if (!Mqtt.isConnected()) {
-    // try every 30 secs if not connected and not required to be responsive because cell and mqtt connect can take a long time (40 seconds not unusual)
+    // try every 60 secs if not connected and not required to be responsive because cell and mqtt connect can take a long time (40 seconds not unusual)
     uint32_t elapsedTime = System.getTime() - lastConnectTry;
-    if (!System.stayResponsive() && (lastConnectTry == -1 || elapsedTime >= 30)) {
+    if (!System.stayResponsive() && (lastConnectTry == -1 || elapsedTime >= 60)) {
       Mqtt.connect();
       lastConnectTry = System.getTime();
     }
