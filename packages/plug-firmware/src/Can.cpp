@@ -102,13 +102,16 @@ void CanClass::poll() {
   } else {
     CANMessage message;
     for (int i = 0; i < busCount; i++) {
+      int totalMsg = 0;
       while (canbus[i]->available()) {
         if (isSleeping(i)) {
           canbus[i]->changeModeOnTheFly(ACAN2515Settings::NormalMode);
         }
         canbus[i]->receive(message);
         onCanReceive(message, i);
+        totalMsg++;
       }
+      logTrace("i|totalMsg", totalMsg);
     }
   }
 }

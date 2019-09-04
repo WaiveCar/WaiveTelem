@@ -57,9 +57,9 @@ void loop() {
   }
   System.keepTime();
 
-  Mqtt.poll();
   Bluetooth.poll();
   Can.poll();
   System.poll();
   Motion.poll();
+  Mqtt.poll();
 }

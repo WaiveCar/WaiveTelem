@@ -91,6 +91,8 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     Pins.unimmobilize();
   } else if (cmdKey == "can") {
     Can.sendCommand(cmdValue.c_str());
+    System.resetDesired(cmdKey);
+    return;
   } else if (cmdKey == "inRide" && cmdValue == "true") {
     System.setCanStatusChanged();
     Gps.wakeup();
