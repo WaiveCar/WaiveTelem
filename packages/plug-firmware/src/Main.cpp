@@ -28,9 +28,9 @@ void setup() {
   int loggerInit = Logger.begin();
   int motionInit = Motion.begin();
   int cfgInit = Config.begin();
-  int cmdInit = Command.begin();
+  Command.begin();
   System.begin();
-  int mqttInit = Mqtt.begin();
+  int certInit = Mqtt.begin();
   Mqtt.poll();
   Gps.begin();
 
@@ -44,8 +44,7 @@ void setup() {
        "i|motion", motionInit,
        "i|cfg", cfgInit,
        "i|logger", loggerInit,
-       "i|cmd", cmdInit,
-       "i|mqtt", mqttInit);
+       "i|cert", certInit);
   json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), initStatus);
   System.sendInfo(sysJson);
 }

@@ -56,6 +56,8 @@ int CanClass::begin() {
     logInfo("i|canBusNum", i, "i|baud", baud);
     JsonArray status = bus[i]["status"];
     ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
+    settings.mReceiveBufferSize = 16;
+    settings.mTransmitBuffer0Size = 2;
 
 #ifdef ARDUINO_SAMD_WAIVE1000
     auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
