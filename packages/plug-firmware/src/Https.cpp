@@ -32,7 +32,7 @@ static int32_t skipHeaders() {
       prevPrevC = prevC;
       prevC = c;
       c = client.read();
-      Serial.print(String(c));
+      // Serial.print(String(c));
       if (prevPrevC == '\n' && prevC == '\r' && c == '\n') {
         return 0;
       }

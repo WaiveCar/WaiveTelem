@@ -58,3 +58,9 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 ```bash
 export TEMPLATE=./config/hyukia.txt; export DEVICE_ID=0123836A0984CB6FEE; ./generateConfig.sh
 ```
+
+- to upload a config file to a device
+  
+```bash
+export DEVICE_ID=0123CCBCCC98B697EE; ./uploadConfig.sh
+```
