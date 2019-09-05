@@ -25,25 +25,25 @@ void setup() {
   Pins.begin();
   int eccInit = ECCX08.begin();
   int sdInit = SD.begin(SD_CS_PIN);
-  int loggerInit = Logger.begin();
+  int loggerInit = Logger.begin();  // dependent on SD.begin()
   int motionInit = Motion.begin();
-  int cfgInit = Config.begin();
-  int certInit = Mqtt.begin();
+  int cfgInit = Config.begin();  // dependent on SD.begin()
 
   // long data = 0;
   // //ECCX08.writeSlot(8, (byte *)&data, 4);
   // ECCX08.readSlot(8, (byte *)&data, 4);
   // logDebug("i|data", data);
 
-  Command.begin();
-  System.begin();
+  Command.begin();              // dependent on ECCX08.begin()
+  System.begin();               // dependent on ECCX08.begin()
+  int certInit = Mqtt.begin();  // dependent on System.begin()
   Mqtt.poll();
   Gps.begin();
 
   char initStatus[128], sysJson[256];
   json(initStatus, "-{",
 #ifndef ARDUINO_SAMD_MKR1000
-       "modem", Internet.getModemVersion(),
+       "modem", Internet.getModemVersion(),  // dependent on Mqtt.poll()
 #endif
        "i|ecc", eccInit,
        "i|sd", sdInit,
