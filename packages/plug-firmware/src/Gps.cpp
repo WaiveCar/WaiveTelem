@@ -122,7 +122,7 @@ void GpsClass::sleep() {
 }
 
 void GpsClass::wakeup() {
-  // logTrace(NULL);
+  logTrace(NULL);
 #ifdef ARDUINO_SAMD_WAIVE1000
   GPSSerial.begin(9600);
   gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);

@@ -79,6 +79,7 @@ int MqttClass::begin() {
   sslClient.setEccSlot(0, cert);
   String id = System.getId();
   mqttClient.setId(id);
+  mqttClient.setKeepAliveInterval(1200 * 1000);
   mqttClient.onMessage(onMessageReceived);
   updateTopic = "$aws/things/" + id + "/shadow/update";
   logTopic = "things/" + id + "/log";
@@ -108,7 +109,7 @@ void MqttClass::connect() {
 }
 
 bool MqttClass::isConnected() {
-  return mqttClient.connected();
+  return Internet.isConnected() && mqttClient.connected();
 }
 
 void MqttClass::poll() {
@@ -120,7 +121,10 @@ void MqttClass::poll() {
       lastConnectTry = System.getTime();
     }
   }
+  // uint32_t start = millis();
   mqttClient.poll();
+  // uint32_t total = millis() - start;
+  // logDebug("i|pollTime", total); // poll takes 150ms over cellular
 }
 
 void MqttClass::updateShadow(const char* message) {

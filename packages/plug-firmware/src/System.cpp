@@ -15,6 +15,8 @@
 #include "Pins.h"
 #include "System.h"
 
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+
 extern "C" char* sbrk(int incr);
 extern volatile uint32_t _ulTickCount;
 
@@ -42,8 +44,8 @@ int SystemClass::begin() {
 }
 
 void SystemClass::poll() {
-  checkHeartbeat();
   checkVin();
+  checkHeartbeat();
 }
 
 void SystemClass::checkHeartbeat() {
@@ -71,16 +73,16 @@ void SystemClass::checkVin() {
   if (lastVinRead == -1 || elapsedTime >= 10) {
     vinReads[vinIndex] = (float)analogRead(VIN_SENSE) / (1 << ANALOG_RESOLUTION) * VOLTAGE * (RESISTOR_1 + RESISTOR_2) / RESISTOR_1;
     vinIndex++;
-    if (vinIndex == 5) {
+    if (vinIndex == ARRAY_SIZE(vinReads)) {
       vinAvgValid = true;
       vinIndex = 0;
     }
     if (vinAvgValid) {
       float total = 0;
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < (int)ARRAY_SIZE(vinReads); i++) {
         total += vinReads[i];
       }
-      float avg = total / 5;
+      float avg = total / ARRAY_SIZE(vinReads);
       // const char* limitStr = Config.get()["vin"]["low"] | "12.4";
       //TODO strtof takes 2% ROM, maybe we should just code the limit
       // float limit = strtof(limitStr, NULL);
@@ -122,7 +124,11 @@ void SystemClass::sendHeartbeat() {
   gps["hdop"] = Gps.getHdop();
   gps["speed"] = Gps.getSpeed();
   gps["heading"] = Gps.getHeading();
-  // system["time"] = System.getDateTime();
+// system["time"] = System.getDateTime();
+#ifdef ARDUINO_SAMD_WAIVE1000
+  int index = (vinIndex - 1) % ARRAY_SIZE(vinReads);
+  system["vin"] = vinReads[index];
+#endif
   system["ble"] = Bluetooth.getHealth();
   system["can"] = Can.getHealth();
   system["uptime"] = time - bootTime;
@@ -201,7 +207,7 @@ void SystemClass::setStayResponsive(bool resp) {
 }
 
 void SystemClass::keepTime() {
-  if (time % 60 == 0 && Internet.isConnected()) {  // don't get time from modem too often
+  if (time % 7 == 0 && Internet.isConnected()) {  // don't get time from modem too often
     setTimes(Internet.getTime());
   } else {
     int32_t elapsed = millis() - lastMillis;

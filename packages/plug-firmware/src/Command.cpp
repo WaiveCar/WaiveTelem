@@ -83,8 +83,8 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
       return;
     }
   }
-  JsonObject download = desired["download"];
-  JsonObject copy = desired["copy"];
+  JsonVariant download = desired["download"];
+  JsonVariant copy = desired["copy"];
   if (cmdKey == "lock" && cmdValue == "open") {
     Pins.unlockDoors();
   } else if (cmdKey == "lock" && cmdValue == "close") {
@@ -111,7 +111,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
     reboot();
     return;
-  } else if (!download.isNull()) {
+  } else if (download) {
     System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";
@@ -124,7 +124,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
       logError(json.c_str(), "Invalid download object");
     }
     return;
-  } else if (!copy.isNull()) {
+  } else if (copy) {
     System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
     const char* from = copy["from"] | "";
     const char* to = copy["to"] | "";

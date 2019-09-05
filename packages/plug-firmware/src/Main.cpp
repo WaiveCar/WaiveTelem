@@ -28,9 +28,15 @@ void setup() {
   int loggerInit = Logger.begin();
   int motionInit = Motion.begin();
   int cfgInit = Config.begin();
+  int certInit = Mqtt.begin();
+
+  // long data = 0;
+  // //ECCX08.writeSlot(8, (byte *)&data, 4);
+  // ECCX08.readSlot(8, (byte *)&data, 4);
+  // logDebug("i|data", data);
+
   Command.begin();
   System.begin();
-  int certInit = Mqtt.begin();
   Mqtt.poll();
   Gps.begin();
 
