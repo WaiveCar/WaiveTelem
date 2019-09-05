@@ -1,7 +1,7 @@
-#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <ArduinoECCX08.h>
 #include <JsonLogger.h>
+#include <WDTZero.h>
 
 #include "Bluetooth.h"
 #include "Can.h"
@@ -15,12 +15,26 @@
 #include "Pins.h"
 #include "System.h"
 
+void shutdown() {
+  logDebug(NULL);
+  // uint32_t top = 0;
+  // for (int i = 0; (uint32_t)(&top + i) < 0x20008000; i++) {
+  //   uint32_t value = *(&top + i);
+  //   if (value >= 0x6000 && value < 0x20000 && value & 0x1) {
+  //     Serial.print((uint32_t)(&top + i), HEX);
+  //     Serial.print(String(" ") + String(i) + " ");
+  //     Serial.println(value, HEX);
+  //   }
+  // }
+}
+
 void setup() {
   Serial.begin(115200);
 #ifdef DEBUG
   delay(5000);  // to see beginning of the login
 #endif
-  Watchdog.enable(WATCHDOG_TIMEOUT);
+  Watchdog.attachShutdown(shutdown);
+  Watchdog.setup(WDT_SOFTCYCLE16S);
 
   Pins.begin();
   int eccInit = ECCX08.begin();
@@ -56,7 +70,7 @@ void setup() {
 }
 
 void loop() {
-  Watchdog.reset();
+  Watchdog.clear();
   if (!System.stayResponsive()) {
     System.sleep(1);
   }

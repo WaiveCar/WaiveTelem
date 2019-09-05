@@ -1,7 +1,7 @@
-#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <JsonLogger.h>
 #include <SD.h>
+#include <WDTZero.h>
 #include <bearssl/bearssl_ssl.h>
 #include <rBase64.h>
 
@@ -144,9 +144,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
 }
 
 void CommandClass::reboot() {
-  logInfo("Rebooting...");
-  delay(5000);
-  Watchdog.enable(1);
+  Watchdog.setup(WDT_HARDCYCLE4S);
   while (true)
     ;
 }
@@ -177,7 +175,7 @@ int32_t CommandClass::copyFile(const char* from, const char* to) {
     int bytesRead = readFile.read(buf, sizeof(buf));
     writeFile.write(buf, bytesRead);
     // logDebug( "write " + String(bytesRead));
-    Watchdog.reset();
+    Watchdog.clear();
   }
   readFile.close();
   writeFile.close();

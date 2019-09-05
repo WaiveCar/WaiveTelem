@@ -1,7 +1,7 @@
-#include <Adafruit_SleepyDog.h>
 #include <ArduinoBearSSL.h>
 #include <ArduinoMqttClient.h>
 #include <JsonLogger.h>
+#include <WDTZero.h>
 
 #include "Command.h"
 #include "Config.h"
@@ -96,15 +96,15 @@ void MqttClass::connect() {
   const char* url = mqtt["url"] | "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com";  // "waive.azure-devices.net";
 
   logInfo("broker", url);
-  Watchdog.disable();
   int start = millis();
+  Watchdog.setup(WDT_SOFTCYCLE2M);
   if (!mqttClient.connect(url, 8883)) {
     logWarn("i|error", mqttClient.connectError());
-    Watchdog.enable(WATCHDOG_TIMEOUT);
+    Watchdog.setup(WDT_SOFTCYCLE16S);
     return;
   }
   logDebug("i|initTime", millis() - start, "You're connected to the MQTT broker");
-  Watchdog.enable(WATCHDOG_TIMEOUT);
+  Watchdog.setup(WDT_SOFTCYCLE16S);
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
 }
 

@@ -9,9 +9,9 @@ echo "Connect Atmel-Ice to the device, and insert SD to the PC/MAC"
 . generateCSR.sh
 . registerAWS.sh
 . generateConfig.sh
-. formatSD.sh
+#. formatSD.sh
 . copyToSD.sh
-. flashFirmware.sh
+#. flashFirmware.sh
 
 echo ""
 echo "If there are no error messages, everything should be successful. Please insert the SD to the device."

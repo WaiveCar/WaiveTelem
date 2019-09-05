@@ -1,8 +1,8 @@
-#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <ArduinoBearSSL.h>
 #include <JsonLogger.h>
 #include <SD.h>
+#include <WDTZero.h>
 
 #include "Command.h"
 #include "Https.h"
@@ -39,7 +39,7 @@ static int32_t skipHeaders() {
     } else {
       delay(1);
     }
-    Watchdog.reset();
+    Watchdog.clear();
   }
   return -1;
 }
@@ -64,7 +64,7 @@ static int32_t saveFile(const char* to) {
     } else {
       delay(1);
     }
-    Watchdog.reset();
+    Watchdog.clear();
   }
   logDebug("i|totalBytes", counter);
   SHA256.endHmac();
