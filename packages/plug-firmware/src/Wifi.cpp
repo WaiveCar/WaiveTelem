@@ -1,5 +1,6 @@
 #ifdef ARDUINO_SAMD_MKR1000
 #include <Arduino.h>
+#include <JsonLogger.h>
 #include <WiFi101.h>
 
 #include "Config.h"

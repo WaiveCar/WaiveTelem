@@ -1,0 +1,147 @@
+{
+  "mqtt": {
+    "url": "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com",
+    "cert": "-----BEGIN CERTIFICATE-----\nMIIC5zCCAc+gAwIBAgIVALmJOkVGETC21Rma41C5om+Zt15KMA0GCSqGSIb3DQEB\nCwUAME0xSzBJBgNVBAsMQkFtYXpvbiBXZWIgU2VydmljZXMgTz1BbWF6b24uY29t\nIEluYy4gTD1TZWF0dGxlIFNUPVdhc2hpbmd0b24gQz1VUzAeFw0xOTA4MjkyMzA2\nNDhaFw00OTEyMzEyMzU5NTlaMHYxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEU\nMBIGA1UEBxMLTG9zIEFuZ2VsZXMxETAPBgNVBAoTCFdhaXZlQ2FyMRQwEgYDVQQL\nEwtFbmdpbmVlcmluZzEbMBkGA1UEAxMSMDEyMzgzNkEwOTg0Q0I2RkVFMFkwEwYH\nKoZIzj0CAQYIKoZIzj0DAQcDQgAE1imGuDLEwpavzmPd8p11LnCp5O7VDU6Uht1H\n6vy7JYKnOvHdriU7cFqGBd8ppiqJnuTcNhuDgO5979cGVwGqjKNgMF4wHwYDVR0j\nBBgwFoAUt62jZneC1aEPbaeb6aluZZOlwYkwHQYDVR0OBBYEFG1u3KuMB6hJh0RF\nM8DGzmsaHdCEMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMA0GCSqGSIb3\nDQEBCwUAA4IBAQB9adxen1T1RwS9eovdPajsj3f6MDOH3tqmKBnw7rZho3HKL0it\nFdCgLMAxnsOZqvJQRJ7oSQX8y+er/lMCdMBpCDZfHDq3sJkYi19+P1qditdVfPHT\nTehxxlyqmKa8mItPXCw2SPB+q+O+EJ36hxrPVw2pb8d3mEc99rcFWnLsplKvEte8\n31nbXdjWrnzD5wlN1YbtKFzRhe9rBHvyNr1KYNE8Ymd8tnDk2PFOnF3gvX3w7nHo\nQ/Ap0GcagywuYFdwNQorkonlM0M2cNdWvpsXwb2ghceFpiJjCt/CUDP/2UZNnOF8\ncnkiW7pFug7T1iRJVklzZMSOdI3rGZ3911ff\n-----END CERTIFICATE-----\n"
+  },
+  "heartbeat": {
+    "inRide": 30,
+    "notInRide": 900
+  },
+  "nb": {
+    "pin": null,
+    "apn": "hologram"
+  },
+  "can": {
+    "make": "Hyundai",
+    "model": "ioniq",
+    "bus": [
+      {
+        "baud": 500,
+        "status": [
+          {
+            "name": "fuel_level",
+            "id": 1292,
+            "bit": 18,
+            "len": 5
+          },
+          {
+            "name": "car_speed",
+            "id": 1322,
+            "bit": 0,
+            "len": 8
+          },
+          {
+            "name": "ignition",
+            "id": 1345,
+            "bit": 0,
+            "len": 3
+          },
+          {
+            "name": "door_front_left",
+            "id": 1345,
+            "bit": 8,
+            "len": 2
+          },
+          {
+            "name": "door_front_right",
+            "id": 1345,
+            "bit": 35
+          },
+          {
+            "name": "charging",
+            "id": 1353,
+            "bit": 16,
+            "len": 8
+          },
+          {
+            "name": "door_back_left",
+            "id": 1363,
+            "bit": 23
+          },
+          {
+            "name": "door_back_right",
+            "id": 1363,
+            "bit": 24
+          },
+          {
+            "name": "window_front_left",
+            "id": 1369,
+            "bit": 8
+          },
+          {
+            "name": "window_front_right",
+            "id": 1369,
+            "bit": 9
+          },
+          {
+            "name": "window_back_left",
+            "id": 1369,
+            "bit": 10
+          },
+          {
+            "name": "window_back_right",
+            "id": 1369,
+            "bit": 11
+          },
+          {
+            "name": "mileage",
+            "id": 1456,
+            "bit": 0,
+            "len": 24,
+            "delta": 100
+          }
+        ]
+      },
+      {
+        "baud": 100,
+        "status": [
+          {
+            "name": "lock_front_left",
+            "id": 360,
+            "bit": 42
+          },
+          {
+            "name": "lock_front_right",
+            "id": 360,
+            "bit": 59
+          },
+          {
+            "name": "lock_rear_left",
+            "id": 360,
+            "bit": 27
+          },
+          {
+            "name": "lock_rear_right",
+            "id": 360,
+            "bit": 22
+          }
+        ]
+      }
+    ],
+    "cmd": {
+      "unlock_1": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600001"
+      },
+      "unlock_all": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600011"
+      },
+      "lock": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600020"
+      },
+      "flash_lights": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600000"
+      }
+    }
+  },
+  "vin": {
+    "low": "12.4"
+  }
+}

@@ -1,5 +1,7 @@
-#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
+#include <JsonLogger.h>
+#include <SD.h>
+#include <WDTZero.h>
 #include <bearssl/bearssl_ssl.h>
 #include <rBase64.h>
 
@@ -8,7 +10,6 @@
 #include "Config.h"
 #include "Gps.h"
 #include "Https.h"
-#include "Logger.h"
 #include "Pins.h"
 #include "System.h"
 
@@ -21,6 +22,10 @@ int CommandClass::begin() {
   if (!cert) {
     return -1;
   }
+  // char str[65];
+  // snprintf(str, 65, "%s", (char*)&cert[743]);
+  // logDebug("str", str);
+
   char* buf = (char*)malloc(48);
   rbase64_decode(buf, (char*)&cert[743], 64);
   memcpy(tokenIv, buf, 16);
@@ -34,7 +39,7 @@ void CommandClass::authorize(const String& encrypted) {
   StaticJsonDocument<AUTH_DOC_SIZE> authDoc;
   DeserializationError error = deserializeJson(authDoc, json);
   if (error) {
-    logError("error", error.c_str(), "Failed to read json");
+    logError("error", error.c_str(), "json", json.c_str(), "Failed to read json");
     return;
   }
   authCmds = authDoc["cmds"] | "";
@@ -65,21 +70,21 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
   }
   if (isBluetooth) {
     if (authCmds.indexOf(cmdKey) == -1) {
-      logError("authCmds", authCmds.c_str(), "cmdKey", cmdKey.c_str());
+      logError("authCmds", authCmds.c_str(), "cmdKey", cmdKey.c_str(), "No Auth");
       return;
     }
     uint32_t time = System.getTime();
     if (authStart > time) {
-      logError("i|authStart", authStart, "i|time", time);
+      logError("i|authStart", authStart, "i|time", time, "No Auth");
       return;
     }
     if (authEnd < time) {
-      logError("i|authEnd", authStart, "i|time", time);
+      logError("i|authEnd", authStart, "i|time", time, "No Auth");
       return;
     }
   }
-  JsonObject download = desired["download"];
-  JsonObject copy = desired["copy"];
+  JsonVariant download = desired["download"];
+  JsonVariant copy = desired["copy"];
   if (cmdKey == "lock" && cmdValue == "open") {
     Pins.unlockDoors();
   } else if (cmdKey == "lock" && cmdValue == "close") {
@@ -90,18 +95,24 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     Pins.unimmobilize();
   } else if (cmdKey == "can") {
     Can.sendCommand(cmdValue.c_str());
+    System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
+    return;
   } else if (cmdKey == "inRide" && cmdValue == "true") {
+    System.setInRide(true);
     System.setCanStatusChanged();
+    System.sendCanStatus();
     Gps.wakeup();
   } else if (cmdKey == "inRide" && cmdValue == "false") {
+    System.setInRide(false);
     System.setCanStatusChanged();
+    System.sendCanStatus();
     // Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
-    System.resetDesired(cmdKey);
+    System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
     reboot();
     return;
-  } else if (!download.isNull()) {
-    System.resetDesired(cmdKey);
+  } else if (download) {
+    System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";
     const char* to = download["to"] | "";
@@ -113,8 +124,8 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
       logError(json.c_str(), "Invalid download object");
     }
     return;
-  } else if (!copy.isNull()) {
-    System.resetDesired(cmdKey);
+  } else if (copy) {
+    System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
     const char* from = copy["from"] | "";
     const char* to = copy["to"] | "";
     if (strlen(from) > 0 && strlen(to) > 0) {
@@ -129,13 +140,11 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     logError(json.c_str());
     return;
   }
-  System.reportCommandDone(json, cmdKey, cmdValue);
+  System.reportCommandDone(json.c_str(), cmdKey.c_str(), cmdValue.c_str());
 }
 
 void CommandClass::reboot() {
-  logInfo("Rebooting now");
-  delay(1000);
-  Watchdog.enable(1);
+  Watchdog.setup(WDT_HARDCYCLE4S);
   while (true)
     ;
 }
@@ -166,7 +175,7 @@ int32_t CommandClass::copyFile(const char* from, const char* to) {
     int bytesRead = readFile.read(buf, sizeof(buf));
     writeFile.write(buf, bytesRead);
     // logDebug( "write " + String(bytesRead));
-    Watchdog.reset();
+    Watchdog.clear();
   }
   readFile.close();
   writeFile.close();

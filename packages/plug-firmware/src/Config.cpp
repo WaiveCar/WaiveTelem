@@ -1,7 +1,7 @@
+#include <JsonLogger.h>
 #include <SD.h>
 
 #include "Config.h"
-#include "Logger.h"
 #include "System.h"
 
 int ConfigClass::begin() {

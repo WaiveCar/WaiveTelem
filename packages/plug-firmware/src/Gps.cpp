@@ -1,9 +1,9 @@
 #include <Arduino.h>
+#include <JsonLogger.h>
 #include <NMEAGPS.h>
 
 #include "Gps.h"
 #include "Internet.h"
-#include "Logger.h"
 #include "System.h"
 
 #define GPSSerial Serial1
@@ -122,7 +122,7 @@ void GpsClass::sleep() {
 }
 
 void GpsClass::wakeup() {
-  // logTrace(NULL);
+  logTrace(NULL);
 #ifdef ARDUINO_SAMD_WAIVE1000
   GPSSerial.begin(9600);
   gps.send_P(&GPSSerial, (const __FlashStringHelper *)disableGLL);

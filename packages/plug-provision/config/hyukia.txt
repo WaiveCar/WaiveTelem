@@ -9,7 +9,7 @@
   },
   "nb": {
     "pin": null,
-    "apn": "hologram"
+    "apn": "internet.swir"
   },
   "can": {
     "make": "Hyundai",
@@ -108,14 +108,14 @@
           {
             "name": "lock_rear_left",
             "id": 360,
-            "bit": 35
+            "bit": 32
           },
           {
             "name": "lock_rear_right",
             "id": 360,
-            "bit": 46
+            "bit": 45
           }
-        ],
+        ]
       }
     ],
     "cmd": {
@@ -142,6 +142,6 @@
     }
   },
   "vin": {
-    "low": "12.4"
+    "low": "10"
   }
 }

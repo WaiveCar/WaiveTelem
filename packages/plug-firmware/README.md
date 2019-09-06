@@ -71,6 +71,10 @@ e.g. for plug-1
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "to":"CONFIG.TXT"}}}
 {"desired":{"copy":{"from":"DEFAULT.BIN", "to":"ETADPU.BIN"}}}
 {"desired":{"copy":{"from":"DEFAULT.CFG", "to":"CONFIG.TXT"}}}
+{"desired":{"can":"unlock_1"}}
+{"desired":{"can":"unlock_all"}}
+{"desired":{"can":"lock"}}
+{"desired":{"can":"flash_lights"}}
 ```
 
 ### MQTT Device Shadow Reported (Telemetry):

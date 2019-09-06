@@ -1,12 +1,12 @@
-#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <ArduinoBearSSL.h>
+#include <JsonLogger.h>
 #include <SD.h>
+#include <WDTZero.h>
 
 #include "Command.h"
 #include "Https.h"
 #include "Internet.h"
-#include "Logger.h"
 
 #define DOWNLOAD_TIMEOUT 60 * 1000
 
@@ -32,14 +32,14 @@ static int32_t skipHeaders() {
       prevPrevC = prevC;
       prevC = c;
       c = client.read();
-      Serial.print(String(c));
+      // Serial.print(String(c));
       if (prevPrevC == '\n' && prevC == '\r' && c == '\n') {
         return 0;
       }
     } else {
       delay(1);
     }
-    Watchdog.reset();
+    Watchdog.clear();
   }
   return -1;
 }
@@ -64,7 +64,7 @@ static int32_t saveFile(const char* to) {
     } else {
       delay(1);
     }
-    Watchdog.reset();
+    Watchdog.clear();
   }
   logDebug("i|totalBytes", counter);
   SHA256.endHmac();

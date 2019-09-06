@@ -795,7 +795,7 @@ tBleStatus aci_gatt_update_char_value_ext_IDB05A1(uint16_t service_handle, uint1
  */
 #define EVT_BLUE_GATT_ATTRIBUTE_MODIFIED          (0x0C01)
 
-typedef __packed struct _evt_gatt_attr_modified_IDB05A1{
+typedef  struct _evt_gatt_attr_modified_IDB05A1{
   uint16_t conn_handle; /**< The connection handle which modified the attribute. */
   uint16_t attr_handle; /**< Handle of the attribute that was modified. */
   uint8_t  data_length; /**< The length of the data */
@@ -803,7 +803,7 @@ typedef __packed struct _evt_gatt_attr_modified_IDB05A1{
   uint8_t  att_data[VARIABLE_SIZE]; /**< The new value (length is data_length) */
 } PACKED evt_gatt_attr_modified_IDB05A1;
 
-typedef __packed struct _evt_gatt_attr_modified_IDB04A1{
+typedef  struct _evt_gatt_attr_modified_IDB04A1{
   uint16_t conn_handle; /**< The connection handle which modified the attribute. */
   uint16_t attr_handle; /**< Handle of the attribute that was modified. */
   uint8_t  data_length; /**< The length of the data */
@@ -815,7 +815,7 @@ typedef __packed struct _evt_gatt_attr_modified_IDB04A1{
  * See @ref _evt_gatt_procedure_timeout.
  */
 #define EVT_BLUE_GATT_PROCEDURE_TIMEOUT           (0x0C02)
-typedef __packed struct _evt_gatt_procedure_timeout{
+typedef  struct _evt_gatt_procedure_timeout{
 	uint16_t conn_handle; /**< The connection handle on which the GATT procedure has timed out */
 } PACKED evt_gatt_procedure_timeout;
 
@@ -824,7 +824,7 @@ typedef __packed struct _evt_gatt_procedure_timeout{
  * See @ref _evt_att_exchange_mtu_resp.
  */
 #define EVT_BLUE_ATT_EXCHANGE_MTU_RESP		  (0x0C03)
-typedef __packed struct _evt_att_exchange_mtu_resp{
+typedef  struct _evt_att_exchange_mtu_resp{
   uint16_t conn_handle; /**< The connection handle related to the response */
   uint8_t  event_data_length; /**< Length of following data (always 1). */
   uint16_t server_rx_mtu; /**< Attribute server receive MTU size */
@@ -835,7 +835,7 @@ typedef __packed struct _evt_att_exchange_mtu_resp{
  * Find Information Response in Bluetooth Core v4.0 spec. See @ref _evt_att_find_information_resp.
  */
 #define EVT_BLUE_ATT_FIND_INFORMATION_RESP	  (0x0C04)
-typedef __packed struct _evt_att_find_information_resp{
+typedef  struct _evt_att_find_information_resp{
   uint16_t conn_handle;			/**< The connection handle related to the response */
   uint8_t  event_data_length;	/**< Length of following data. */
   uint8_t  format;				/**< The format of the handle_uuid_pair. @arg 1: 16-bit UUIDs @arg 2: 128-bit UUIDs */
@@ -854,7 +854,7 @@ typedef __packed struct _evt_att_find_information_resp{
  * Find By Type Value Response in Bluetooth Core v4.0 spec. See @ref _evt_att_find_by_type_val_resp.
  */
 #define EVT_BLUE_ATT_FIND_BY_TYPE_VAL_RESP	  (0x0C05)
-typedef __packed struct _evt_att_find_by_type_val_resp{
+typedef  struct _evt_att_find_by_type_val_resp{
   uint16_t conn_handle;				/**< The connection handle related to the response */
   uint8_t  event_data_length;		/**< Length of following data. */
   /**
@@ -870,7 +870,7 @@ typedef __packed struct _evt_att_find_by_type_val_resp{
  * For more info see Read By Type Response in Bluetooth Core v4.0 spec. See @ref _evt_att_read_by_type_resp.
  */
 #define EVT_BLUE_ATT_READ_BY_TYPE_RESP		  (0x0C06)
-typedef __packed struct _evt_att_read_by_type_resp{
+typedef  struct _evt_att_read_by_type_resp{
   uint16_t conn_handle;				/**< The connection handle related to the response */
   uint8_t  event_data_length;		/**< Length of following data. */
   uint8_t  handle_value_pair_length; /**< The size of each attribute handle-value pair */
@@ -886,7 +886,7 @@ typedef __packed struct _evt_att_read_by_type_resp{
  * For more info see Read Response in Bluetooth Core v4.0 spec. See @ref _evt_att_read_resp.
  */
 #define EVT_BLUE_ATT_READ_RESP			  (0x0C07)
-typedef __packed struct _evt_att_read_resp{
+typedef  struct _evt_att_read_resp{
   uint16_t conn_handle;				/**< The connection handle related to the response. */
   uint8_t  event_data_length;		/**< Length of following data. */
   uint8_t  attribute_value[VARIABLE_SIZE]; /**< The value of the attribute. */
@@ -897,7 +897,7 @@ typedef __packed struct _evt_att_read_resp{
  * For more info see Read Blob Response in Bluetooth Core v4.0 spec. See @ref _evt_att_read_blob_resp.
  */
 #define EVT_BLUE_ATT_READ_BLOB_RESP		  (0x0C08)
-typedef __packed struct _evt_att_read_blob_resp{
+typedef  struct _evt_att_read_blob_resp{
   uint16_t conn_handle;				/**< The connection handle related to the response. */
   uint8_t  event_data_length;		/**< Length of following data. */
   uint8_t  part_attribute_value[VARIABLE_SIZE]; /**< Part of the attribute value. */
@@ -908,7 +908,7 @@ typedef __packed struct _evt_att_read_blob_resp{
  * For more info see Read Multiple Response in Bluetooth Core v4.0 spec. See @ref _evt_att_read_mult_resp.
  */
 #define EVT_BLUE_ATT_READ_MULTIPLE_RESP		  (0x0C09)
-typedef __packed struct _evt_att_read_mult_resp{
+typedef  struct _evt_att_read_mult_resp{
   uint16_t conn_handle;				/**< The connection handle related to the response. */
   uint8_t  event_data_length;		/**< Length of following data. */
   uint8_t  set_of_values[VARIABLE_SIZE]; /**< A set of two or more values.*/
@@ -919,7 +919,7 @@ typedef __packed struct _evt_att_read_mult_resp{
  * For more info see Read By Group type Response in Bluetooth Core v4.0 spec. See @ref _evt_att_read_by_group_resp.
  */
 #define EVT_BLUE_ATT_READ_BY_GROUP_TYPE_RESP           (0x0C0A)
-typedef __packed struct _evt_att_read_by_group_resp{
+typedef  struct _evt_att_read_by_group_resp{
   uint16_t conn_handle;				/**< The connection handle related to the response. */
   uint8_t  event_data_length;		/**< Length of following data. */
   uint8_t  attribute_data_length;   /**< The size of each Attribute Data. */
@@ -937,7 +937,7 @@ typedef __packed struct _evt_att_read_by_group_resp{
  * For more info see Prepare Write Response in Bluetooth Core v4.0 spec. See @ref _evt_att_prepare_write_resp.
  */
 #define EVT_BLUE_ATT_PREPARE_WRITE_RESP		  (0x0C0C)
-typedef __packed struct _evt_att_prepare_write_resp{
+typedef  struct _evt_att_prepare_write_resp{
   uint16_t conn_handle;				/**< The connection handle related to the response. */
   uint8_t  event_data_length;		/**< Length of following data. */
   uint16_t  attribute_handle;		/**< The handle of the attribute to be written. */
@@ -950,7 +950,7 @@ typedef __packed struct _evt_att_prepare_write_resp{
  * For more info see Execute Write Response in Bluetooth Core v4.0 spec. See @ref _evt_att_exec_write_resp.
  */
 #define EVT_BLUE_ATT_EXEC_WRITE_RESP		  (0x0C0D)
-typedef __packed struct _evt_att_exec_write_resp{
+typedef  struct _evt_att_exec_write_resp{
   uint16_t conn_handle;			/**< The connection handle related to the response. */
   uint8_t  event_data_length; 	/**< Always 0. */
 } PACKED evt_att_exec_write_resp;
@@ -960,7 +960,7 @@ typedef __packed struct _evt_att_exec_write_resp{
  * For more info see Handle Value Indication in Bluetooth Core v4.0 spec. See @ref _evt_gatt_indication.
  */
 #define EVT_BLUE_GATT_INDICATION		  (0x0C0E)
-typedef __packed struct _evt_gatt_indication{
+typedef  struct _evt_gatt_indication{
   uint16_t conn_handle;		  			/**< The connection handle related to the event. */
   uint8_t  event_data_length; 			/**< Length of following data. */
   uint16_t attr_handle;					/**< The handle of the attribute. */
@@ -972,7 +972,7 @@ typedef __packed struct _evt_gatt_indication{
  * For more info see Handle Value Notification in Bluetooth Core v4.0 spec. See @ref _evt_gatt_notification.
  */
 #define EVT_BLUE_GATT_NOTIFICATION		  (0x0C0F)
-typedef __packed struct _evt_gatt_notification{
+typedef  struct _evt_gatt_notification{
   uint16_t conn_handle;					/**< The connection handle related to the event. */
   uint8_t  event_data_length; 			/**< Length of following data. */
   uint16_t attr_handle;					/**< The handle of the attribute. */
@@ -984,7 +984,7 @@ typedef __packed struct _evt_gatt_notification{
  * See @ref _evt_gatt_procedure_complete.
  */
 #define EVT_BLUE_GATT_PROCEDURE_COMPLETE          (0x0C10)
-typedef __packed struct _evt_gatt_procedure_complete{
+typedef  struct _evt_gatt_procedure_complete{
   uint16_t conn_handle; /**< The connection handle on which the GATT procedure has completed */
   uint8_t  data_length; /**< Length of error_code field (always 1). */
   /**
@@ -999,7 +999,7 @@ typedef __packed struct _evt_gatt_procedure_complete{
  * with an error, but this error event is part of the procedure itself. See @ref _evt_gatt_error_resp.
  */
 #define EVT_BLUE_GATT_ERROR_RESP                  (0x0C11)
-typedef __packed struct _evt_gatt_error_resp{
+typedef  struct _evt_gatt_error_resp{
   uint16_t conn_handle;			/**< The connection handle related to the event. */
   uint8_t  event_data_length;	/**< Length of following data. */
   uint8_t  req_opcode;			/**< The request that generated this error response. */
@@ -1015,7 +1015,7 @@ typedef __packed struct _evt_gatt_error_resp{
  * "Read using Characteristic UUID" has been performed. See @ref _evt_gatt_disc_read_char_by_uuid_resp.
  */
 #define EVT_BLUE_GATT_DISC_READ_CHAR_BY_UUID_RESP (0x0C12)
-typedef __packed struct _evt_gatt_disc_read_char_by_uuid_resp{
+typedef  struct _evt_gatt_disc_read_char_by_uuid_resp{
   uint16_t conn_handle;						/**< The connection handle related to the event. */
   uint8_t  event_data_length;				/**< Length of following data. */
   uint16_t attr_handle;						/**< The handle of the attribute. */
@@ -1039,7 +1039,7 @@ typedef __packed struct _evt_gatt_disc_read_char_by_uuid_resp{
  * See @ref evt_gatt_write_permit_req.
  */
 #define EVT_BLUE_GATT_WRITE_PERMIT_REQ            (0x0C13)
-typedef __packed struct _evt_gatt_write_permit_req{
+typedef  struct _evt_gatt_write_permit_req{
   uint16_t conn_handle; /**< Handle of the connection on which there was the request to write the attribute. */
   uint16_t attr_handle; /**< The handle of the attribute for which the write request has been made by the client */
   uint8_t  data_length; /**< Length of data field. */
@@ -1056,7 +1056,7 @@ typedef __packed struct _evt_gatt_write_permit_req{
  *
  */
 #define EVT_BLUE_GATT_READ_PERMIT_REQ             (0x0C14)
-typedef __packed struct _evt_gatt_read_permit_req{
+typedef  struct _evt_gatt_read_permit_req{
   uint16_t conn_handle; /**< Handle of the connection on which there was the request to read the attribute. */
   uint16_t attr_handle; /**< The handle of the attribute for which the read request has been made by the client */
   uint8_t  data_length; /**< Length of offset field. */
@@ -1073,7 +1073,7 @@ typedef __packed struct _evt_gatt_read_permit_req{
  *
  */
 #define EVT_BLUE_GATT_READ_MULTI_PERMIT_REQ       (0x0C15)
-typedef __packed struct _evt_gatt_read_multi_permit_req{
+typedef  struct _evt_gatt_read_multi_permit_req{
   uint16_t conn_handle; /**< Handle of the connection on which there was the request to read the attribute. */
   uint8_t  data_length; /**< Length of data field. */
   uint8_t  data[VARIABLE_SIZE]; /**< The handles of the attributes that have been requested by the client for a read. */
@@ -1087,7 +1087,7 @@ typedef __packed struct _evt_gatt_read_multi_permit_req{
  *
  */
 #define EVT_BLUE_GATT_TX_POOL_AVAILABLE           (0x0C16)
-typedef __packed struct _evt_gatt_tx_pool_available{
+typedef  struct _evt_gatt_tx_pool_available{
   uint16_t conn_handle; /**< Handle of the connection on which there was the request to read the attribute. */
   uint16_t available_buffers; /**< Length of data field. */
 } PACKED evt_gatt_tx_pool_available;
@@ -1096,7 +1096,7 @@ typedef __packed struct _evt_gatt_tx_pool_available{
  * This event is raised on the server when the client confirms the reception of an indication.
  */
 #define EVT_BLUE_GATT_SERVER_CONFIRMATION_EVENT    (0x0C17)
-typedef __packed struct _evt_gatt_server_confirmation{
+typedef  struct _evt_gatt_server_confirmation{
   uint16_t conn_handle; /**< Handle of the connection on which there was the request to read the attribute. */
 } PACKED evt_gatt_server_confirmation;
 
@@ -1113,7 +1113,7 @@ typedef __packed struct _evt_gatt_server_confirmation{
  * See @ref evt_gatt_write_permit_req.
  */
 #define EVT_BLUE_GATT_PREPARE_WRITE_PERMIT_REQ            (0x0C18)
-typedef __packed struct _evt_gatt_prepare_write_permit_req{
+typedef  struct _evt_gatt_prepare_write_permit_req{
   uint16_t conn_handle; /**< Handle of the connection on which there was the request to write the attribute. */
   uint16_t attr_handle; /**< The handle of the attribute for which the write request has been made by the client */
   uint16_t offset; /**< The offset from which the prepare write has been requested */

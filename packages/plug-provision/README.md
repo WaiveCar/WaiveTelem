@@ -51,4 +51,16 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 
 ## Config Templates:
 
-hyukia.txt is one example of config templates. Make sure the can bus message ids (.can.bus[].status[].id) are in ascending order
+- hyukia.txt is one example of config templates. Make sure the can bus message ids (.can.bus[].status[].id) are in ascending order
+
+- to regenerate a config file after the template file is changed
+  
+```bash
+export TEMPLATE=./config/hyukia.txt; export DEVICE_ID=0123836A0984CB6FEE; ./generateConfig.sh
+```
+
+- to upload a config file to a device
+  
+```bash
+export DEVICE_ID=0123CCBCCC98B697EE; ./uploadConfig.sh
+```

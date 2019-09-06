@@ -16,7 +16,8 @@ class SystemClass {
   uint32_t getTime();
   const char* getDateTime();
   void keepTime();
-  void report(const String& reported, const String& desired = "");
+  void setInRide(bool in);
+  void report(const char* reported, const char* desired = NULL);
   void sendInfo(const char* sysJson);
   void sendHeartbeat();
   void sendCanStatus();
@@ -25,14 +26,14 @@ class SystemClass {
   bool stayResponsive();
   void setStayResponsive(bool responsive);
   void setCanStatusChanged();
-  void reportCommandDone(const String& json, String& cmdKey, String& cmdValue);
-  void resetDesired(const String& name);
+  void reportCommandDone(const char* json, const char* cmdKey, const char* cmdValue);
   void checkVin();
   void checkHeartbeat();
   uint8_t getRemoteLogLevel();
 
  private:
   char id[19];
+  bool inRide = false;
   int8_t remoteLogLevel = 4;
   bool canStatusChanged = false;
   int32_t lastHeartbeat = -1;

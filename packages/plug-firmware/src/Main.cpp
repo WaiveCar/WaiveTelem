@@ -1,10 +1,7 @@
-#include <Adafruit_SleepyDog.h>
 #include <Arduino.h>
 #include <ArduinoECCX08.h>
-#ifndef ARDUINO_SAMD_MKR1000
-#include <Modem.h>
-#endif
-#include <json_builder.h>
+#include <JsonLogger.h>
+#include <WDTZero.h>
 
 #include "Bluetooth.h"
 #include "Can.h"
@@ -13,58 +10,75 @@
 #include "Gps.h"
 #include "Internet.h"
 #include "Logger.h"
+#include "Motion.h"
 #include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
 
+void shutdown() {
+  logDebug(NULL);
+  // uint32_t top = 0;
+  // for (int i = 0; (uint32_t)(&top + i) < 0x20008000; i++) {
+  //   uint32_t value = *(&top + i);
+  //   if (value >= 0x6000 && value < 0x20000 && value & 0x1) {
+  //     Serial.print((uint32_t)(&top + i), HEX);
+  //     Serial.print(String(" ") + String(i) + " ");
+  //     Serial.println(value, HEX);
+  //   }
+  // }
+}
+
 void setup() {
   Serial.begin(115200);
 #ifdef DEBUG
-  delay(4000);  // to see beginning of the login
+  delay(5000);  // to see beginning of the login
 #endif
-  Watchdog.enable(WATCHDOG_TIMEOUT);
+  Watchdog.attachShutdown(shutdown);
+  Watchdog.setup(WDT_SOFTCYCLE16S);
 
   Pins.begin();
   int eccInit = ECCX08.begin();
   int sdInit = SD.begin(SD_CS_PIN);
-  int cfgInit = Config.begin();
-  int loggerInit = Logger.begin();
-  int cmdInit = Command.begin();
-  System.begin();
-  int mqttInit = Mqtt.begin();
+  int loggerInit = Logger.begin();  // dependent on SD.begin()
+  int motionInit = Motion.begin();
+  int cfgInit = Config.begin();  // dependent on SD.begin()
+
+  // long data = 0;
+  // //ECCX08.writeSlot(8, (byte *)&data, 4);
+  // ECCX08.readSlot(8, (byte *)&data, 4);
+  // logDebug("i|data", data);
+
+  Command.begin();              // dependent on ECCX08.begin()
+  System.begin();               // dependent on ECCX08.begin()
+  int certInit = Mqtt.begin();  // dependent on System.begin()
   Mqtt.poll();
   Gps.begin();
-
-#ifndef ARDUINO_SAMD_MKR1000
-  String modemResponse = "";
-  MODEM.send("ATI9");
-  MODEM.waitForResponse(100, &modemResponse);
-#endif
 
   char initStatus[128], sysJson[256];
   json(initStatus, "-{",
 #ifndef ARDUINO_SAMD_MKR1000
-       "modem", modemResponse.c_str(),
+       "modem", Internet.getModemVersion(),  // dependent on Mqtt.poll()
 #endif
        "i|ecc", eccInit,
        "i|sd", sdInit,
+       "i|motion", motionInit,
        "i|cfg", cfgInit,
        "i|logger", loggerInit,
-       "i|cmd", cmdInit,
-       "i|mqtt", mqttInit);
+       "i|cert", certInit);
   json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), initStatus);
   System.sendInfo(sysJson);
 }
 
 void loop() {
-  Watchdog.reset();
+  Watchdog.clear();
   if (!System.stayResponsive()) {
     System.sleep(1);
   }
   System.keepTime();
 
-  Mqtt.poll();
   Bluetooth.poll();
   Can.poll();
   System.poll();
+  Motion.poll();
+  Mqtt.poll();
 }

@@ -1,8 +1,8 @@
 #include <ACAN2515.h>
+#include <JsonLogger.h>
 
 #include "Can.h"
 #include "Config.h"
-#include "Logger.h"
 #include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
@@ -25,7 +25,8 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
     JsonObject can = Config.get()["can"];
     JsonObject bus = can["bus"][busNum];
     JsonArray statusArray = bus["status"];
-    //Software filter for relevant IDs
+    logTrace("i|busNum", busNum, "i|inMessage.id", inMessage.id, "i|valueHi", inMessage.data32[1], "i|valueLow", inMessage.data32[0]);
+    // Software filter for relevant IDs
     for (uint8_t i = 0; i < statusArray.size(); i++) {
       JsonObject status = statusArray[i];
       if (inMessage.id == status["id"]) {
@@ -55,6 +56,8 @@ int CanClass::begin() {
     logInfo("i|canBusNum", i, "i|baud", baud);
     JsonArray status = bus[i]["status"];
     ACAN2515Settings settings(QUARTZ_FREQUENCY, baud * 1000);
+    settings.mReceiveBufferSize = 16;
+    settings.mTransmitBuffer0Size = 2;
 
 #ifdef ARDUINO_SAMD_WAIVE1000
     auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
@@ -66,8 +69,19 @@ int CanClass::begin() {
     if (status.size() > 0) {
       const int minCanId = status[0]["id"].as<int>();
       const int maxCanId = status[status.size() - 1]["id"].as<int>();
-      logDebug("i|minCanId", minCanId, "i|maxCanId", maxCanId);
-      const ACAN2515Mask rxm0 = standard2515Mask(0x7ff & (0x7ff << (int)log2(maxCanId)), 0, 0);
+      uint16_t mask = 0x7ff & ~(minCanId ^ maxCanId);
+      bool clearRestBits = false;
+      for (uint16_t bit = 0x400; bit != 0; bit >>= 1) {
+        if (clearRestBits) {
+          mask = mask & ~(bit);
+        } else {
+          if (!(mask & bit)) {
+            clearRestBits = true;
+          }
+        }
+      }
+      logDebug("i|minCanId", minCanId, "i|maxCanId", maxCanId, "i|mask", mask);
+      const ACAN2515Mask rxm0 = standard2515Mask(mask, 0, 0);
       const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
       errorCode = canbus[i]->begin(settings, lambda, rxm0, filters, 1);
     } else {
@@ -76,6 +90,7 @@ int CanClass::begin() {
     if (errorCode) {
       logError("i|error", errorCode, "can configuration error ");
       health = -1;
+      return health;
     }
   }
   // sleep();
@@ -89,13 +104,16 @@ void CanClass::poll() {
   } else {
     CANMessage message;
     for (int i = 0; i < busCount; i++) {
+      int totalMsg = 0;
       while (canbus[i]->available()) {
         if (isSleeping(i)) {
           canbus[i]->changeModeOnTheFly(ACAN2515Settings::NormalMode);
         }
         canbus[i]->receive(message);
         onCanReceive(message, i);
+        totalMsg++;
       }
+      logTrace("i|totalMsg", totalMsg);
     }
   }
 }
@@ -105,7 +123,7 @@ void CanClass::send(JsonObject& cmdJson) {
   int bus = cmdJson["bus"] || 0;
 
   if (bus >= busCount) {
-    logError("cmdJson[\"bus\"] >= busCount");
+    logError("cmdJson[bus] >= busCount");
     return;
   }
   const char* msg = cmdJson["msg"];
@@ -115,6 +133,7 @@ void CanClass::send(JsonObject& cmdJson) {
   strncpy(higher32, msg, 8);
   message.data32[1] = strtoul(higher32, NULL, 16);
   message.data32[0] = strtoul(&msg[8], NULL, 16);
+  message.len = 8;
   logDebug("i|bus", bus, "i|id", message.id, "msg", msg);
   // char str[32];
   // sprintf(str, "%08lx%08lx", message.data32[1], message.data32[0]);
@@ -128,12 +147,16 @@ void CanClass::send(JsonObject& cmdJson) {
 }
 
 void CanClass::sendCommand(const char* cmd) {
-  logDebug("cmd", cmd);
-  JsonObject cmdJson = Config.get()["can"]["cmd"][cmd];
-  // char output[128];
-  // serializeJson(cmdJson, output);
-  // logDebug("cmdJson", output);
-  send(cmdJson);
+  if (health == 1) {
+    logDebug("cmd", cmd);
+    JsonObject cmdJson = Config.get()["can"]["cmd"][cmd];
+    // char output[128];
+    // serializeJson(cmdJson, output);
+    // logDebug("cmdJson", output);
+    send(cmdJson);
+  } else {
+    logWarn("can not initialized yet");
+  }
 }
 
 void CanClass::sleep() {

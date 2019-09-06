@@ -1,15 +1,16 @@
-#include <Adafruit_SleepyDog.h>
 #include <ArduinoBearSSL.h>
 #include <ArduinoMqttClient.h>
+#include <JsonLogger.h>
+#include <WDTZero.h>
 
 #include "Command.h"
 #include "Config.h"
 #include "Https.h"
 #include "Internet.h"
-#include "Logger.h"
 #include "Mqtt.h"
 #include "System.h"
 
+// this is Amazon certificate, taken from ArduinoBearSSL BearSSLTrustAnchors.h
 static const unsigned char TA1_DN[] = {
     0x30, 0x39, 0x31, 0x0B, 0x30, 0x09, 0x06, 0x03, 0x55, 0x04, 0x06, 0x13,
     0x02, 0x55, 0x53, 0x31, 0x0F, 0x30, 0x0D, 0x06, 0x03, 0x55, 0x04, 0x0A,
@@ -78,6 +79,7 @@ int MqttClass::begin() {
   sslClient.setEccSlot(0, cert);
   String id = System.getId();
   mqttClient.setId(id);
+  mqttClient.setKeepAliveInterval(1200 * 1000);
   mqttClient.onMessage(onMessageReceived);
   updateTopic = "$aws/things/" + id + "/shadow/update";
   logTopic = "things/" + id + "/log";
@@ -94,42 +96,46 @@ void MqttClass::connect() {
   const char* url = mqtt["url"] | "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com";  // "waive.azure-devices.net";
 
   logInfo("broker", url);
-  Watchdog.disable();
   int start = millis();
+  Watchdog.setup(WDT_SOFTCYCLE2M);
   if (!mqttClient.connect(url, 8883)) {
     logWarn("i|error", mqttClient.connectError());
-    Watchdog.enable(WATCHDOG_TIMEOUT);
+    Watchdog.setup(WDT_SOFTCYCLE16S);
     return;
   }
-  logInfo("i|initTime", millis() - start, "You're connected to the MQTT broker");
-  Watchdog.enable(WATCHDOG_TIMEOUT);
+  logDebug("i|initTime", millis() - start, "You're connected to the MQTT broker");
+  Watchdog.setup(WDT_SOFTCYCLE16S);
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
 }
 
 bool MqttClass::isConnected() {
-  return mqttClient.connected();
+  return Internet.isConnected() && mqttClient.connected();
 }
 
 void MqttClass::poll() {
   if (!Mqtt.isConnected()) {
-    // try every 30 secs if not connected and not required to be responsive because cell and mqtt connect can take a long time (40 seconds not unusual)
+    // try every 60 secs if not connected and not required to be responsive because cell and mqtt connect can take a long time (40 seconds not unusual)
     uint32_t elapsedTime = System.getTime() - lastConnectTry;
-    if (!System.stayResponsive() && (lastConnectTry == -1 || elapsedTime >= 30)) {
+    if (!System.stayResponsive() && (lastConnectTry == -1 || elapsedTime >= 60)) {
       Mqtt.connect();
       lastConnectTry = System.getTime();
     }
-    mqttClient.poll();
   }
+  // uint32_t start = millis();
+  mqttClient.poll();
+  // uint32_t total = millis() - start;
+  // logDebug("i|pollTime", total); // poll takes 150ms over cellular
 }
 
-void MqttClass::updateShadow(const String& message) {
-  mqttClient.beginMessage(updateTopic);
+void MqttClass::updateShadow(const char* message) {
+  // logDebug("i|msgLen", strlen(message));
+  mqttClient.beginMessage(updateTopic, strlen(message), false, 0, false);
   mqttClient.print(message);
   mqttClient.endMessage();
 }
 
-void MqttClass::logMsg(const String& message) {
-  mqttClient.beginMessage(logTopic);
+void MqttClass::logMsg(const char* message) {
+  mqttClient.beginMessage(logTopic, strlen(message), false, 0, false);
   mqttClient.print(message);
   mqttClient.endMessage();
 }

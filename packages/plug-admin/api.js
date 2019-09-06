@@ -34,7 +34,7 @@ const getToken = thingName => {
         const iv = buf.slice(0, 16);
         // console.log('iv: ', iv);
         const key = buf.slice(16, 48);
-        // console.log('key: ', k);
+        // console.log('key: ', key);
         const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
         let encrypted = cipher.update(token);
         encrypted = Buffer.concat([encrypted, cipher.final()]);

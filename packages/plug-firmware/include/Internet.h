@@ -17,6 +17,7 @@ class InternetClass {
   bool isConnected();
   unsigned long getTime();
   int getSignalStrength();
+  const char* getModemVersion();
 };
 
 extern InternetClass Internet;

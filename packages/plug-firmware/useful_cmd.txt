@@ -1,8 +1,8 @@
 #using docker
 docker run --rm -v $HOME/.platformio:/.platformio -v `pwd`:/workspace -u `id -u $USER`:`id -g $USER` sglahn/platformio-core:latest run -e mkrnb1500
 
-~/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-objdump -S -j .bss .pioenvs/mkr1000USB/firmware.elf
-~/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-size .pioenvs/mkr1000USB/firmware.elf
-~/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-readelf -a .pioenvs/mkr1000USB/firmware.elf
+~/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-objdump -d -S -j .text .pio/build/waive1000/firmware.elf > dis.txt
+~/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-size .pio/build/waive1000/firmware.elf
+~/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-readelf -a .pio/build/waive1000/firmware.elf | grep " 2000" | more
 
 
