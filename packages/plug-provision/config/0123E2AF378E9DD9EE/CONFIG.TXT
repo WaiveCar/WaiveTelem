@@ -1,19 +1,13 @@
 {
-  "mqtt": {
-    "url": "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com",
-    "cert": "-----BEGIN CERTIFICATE-----\nMIIC5jCCAc6gAwIBAgIUHKy5foerS6ahpBxhfKqEyy2uVFswDQYJKoZIhvcNAQEL\nBQAwTTFLMEkGA1UECwxCQW1hem9uIFdlYiBTZXJ2aWNlcyBPPUFtYXpvbi5jb20g\nSW5jLiBMPVNlYXR0bGUgU1Q9V2FzaGluZ3RvbiBDPVVTMB4XDTE5MDgyODAzMDAy\nNFoXDTQ5MTIzMTIzNTk1OVowdjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRQw\nEgYDVQQHEwtMb3MgQW5nZWxlczERMA8GA1UEChMIV2FpdmVDYXIxFDASBgNVBAsT\nC0VuZ2luZWVyaW5nMRswGQYDVQQDExIwMTIzRTJBRjM3OEU5REQ5RUUwWTATBgcq\nhkjOPQIBBggqhkjOPQMBBwNCAATznWOQPZpJhJ3PEr/k7nFBPRwzfK2C6ism9BY6\n6FyidEgJtRQLUv4NMoS9lXwsCH2OJoo8apjnywMyBoXpsxaGo2AwXjAfBgNVHSME\nGDAWgBRFBe+pAr7c3fjP5iGvedMiSEl+bjAdBgNVHQ4EFgQUzmpctL3DUsYV0c1t\nipzXNiHpvKUwDAYDVR0TAQH/BAIwADAOBgNVHQ8BAf8EBAMCB4AwDQYJKoZIhvcN\nAQELBQADggEBAAxsRg7vSqLpOpRBHCNbt3sLgCKWUk7+n2oPPMUGnh2ig+dGv1zA\nAN2n2GmtR84DHbpC3R/xy/TWXXEaiNMW4P/pfK8hC1k9/LP8YVS3ZYpYFeo9a2QG\nNBGS/DOTCvl+JTMie3Ds+yQX6xyfbzV/2CGJ1OXFQFKoOwodXvsW+y8b/bFhO2ie\nVzJ28i0yY3jQGCezSx3ceC3V7UcfTdm8lQthIDoMOCnoS1I6tTxIsZaUWrBIEJPm\nC89uQhnGdgH6RqFCDG4neGDIRsaQ50XlaTPNvpcUmzJPk8GErwdHbQdurL6R6Ynu\n0ol/q5g5l6tgRxUhu3KKxDc3CkpT4/JVjDs=\n-----END CERTIFICATE-----\n"
-  },
   "heartbeat": {
     "inRide": 30,
     "notInRide": 900
   },
   "nb": {
     "pin": null,
-    "apn": "hologram"
+    "apn": "internet.swir"
   },
   "can": {
-    "make": "Hyundai",
-    "model": "ioniq",
     "bus": [
       {
         "baud": 500,
@@ -108,12 +102,12 @@
           {
             "name": "lock_rear_left",
             "id": 360,
-            "bit": 35
+            "bit": 32
           },
           {
             "name": "lock_rear_right",
             "id": 360,
-            "bit": 46
+            "bit": 45
           }
         ]
       }
@@ -140,8 +134,5 @@
         "msg": "0000000000600000"
       }
     }
-  },
-  "vin": {
-    "low": "12.4"
   }
 }

@@ -8,6 +8,7 @@
 #include "Can.h"
 #include "Command.h"
 #include "Config.h"
+#include "Eeprom.h"
 #include "Gps.h"
 #include "Https.h"
 #include "Pins.h"
@@ -15,24 +16,6 @@
 
 #define AUTH_DOC_SIZE 256
 #define COMMAND_DOC_SIZE 512
-
-int CommandClass::begin() {
-  // set bluetooth token key and iv
-  const char* cert = Config.get()["mqtt"]["cert"];
-  if (!cert) {
-    return -1;
-  }
-  // char str[65];
-  // snprintf(str, 65, "%s", (char*)&cert[743]);
-  // logDebug("str", str);
-
-  char* buf = (char*)malloc(48);
-  rbase64_decode(buf, (char*)&cert[743], 64);
-  memcpy(tokenIv, buf, 16);
-  memcpy(tokenKey, &buf[16], 32);
-  free(buf);
-  return 1;
-}
 
 void CommandClass::authorize(const String& encrypted) {
   String json = decryptToken(encrypted);
@@ -189,8 +172,8 @@ String CommandClass::decryptToken(const String& encrypted) {
   const br_block_cbcdec_class** dc;
   const br_block_cbcdec_class* vd = &br_aes_big_cbcdec_vtable;
   dc = &v_dc.vtable;
-  vd->init(dc, tokenKey, 32);
-  memcpy(iv, tokenIv, 16);
+  vd->init(dc, Eeprom.getTokenKey(), 32);
+  memcpy(iv, Eeprom.getTokenIv(), 16);
   size_t length = rbase64_dec_len((char*)encrypted.c_str(), encrypted.length());
   char* buf = (char*)malloc(length);
   rbase64_decode(buf, (char*)encrypted.c_str(), encrypted.length());

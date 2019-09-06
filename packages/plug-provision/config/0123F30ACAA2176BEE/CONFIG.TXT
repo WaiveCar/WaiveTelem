@@ -1,20 +1,13 @@
 {
-  "id": "0123F30ACAA2176BEE",
-  "mqtt": {
-    "url": "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com",
-    "cert": "-----BEGIN CERTIFICATE-----\nMIIC5jCCAc6gAwIBAgIUDiyYabxmxdp53c3P74itet6E6cYwDQYJKoZIhvcNAQEL\nBQAwTTFLMEkGA1UECwxCQW1hem9uIFdlYiBTZXJ2aWNlcyBPPUFtYXpvbi5jb20g\nSW5jLiBMPVNlYXR0bGUgU1Q9V2FzaGluZ3RvbiBDPVVTMB4XDTE5MDczMTA1NTk1\nM1oXDTQ5MTIzMTIzNTk1OVowdjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRQw\nEgYDVQQHEwtMb3MgQW5nZWxlczERMA8GA1UEChMIV2FpdmVDYXIxFDASBgNVBAsT\nC0VuZ2luZWVyaW5nMRswGQYDVQQDExIwMTIzRjMwQUNBQTIxNzZCRUUwWTATBgcq\nhkjOPQIBBggqhkjOPQMBBwNCAAQ5xX+fNHtPovqHv93NSqegravBNlE1sWztQ+0E\n9rVwus9JezSrm+vttxK93p338RXa0GzUQ3ZroQBCflQGCYLHo2AwXjAfBgNVHSME\nGDAWgBSchShO2zBXeGEOLD/PwDUp/Xz3UTAdBgNVHQ4EFgQUE9IM7qtgYP0ICuxH\nAewWsfSMxU0wDAYDVR0TAQH/BAIwADAOBgNVHQ8BAf8EBAMCB4AwDQYJKoZIhvcN\nAQELBQADggEBAM/vAp5tvmFS/aSE4FbhG2PCaXRdEMd7rjFzcvs5LlwwardnE1MS\ndBkbFq5mN8Z/fq8DIV/aUns+7xAn6gD0c3J7BKVALDSFU51FabRyy8dmoRb6+/zq\nHoBz+tO4LZ+e5ts+YtnZD+qT281uvLqRBVvd1EwAVuVH89Zn89Wa8ONnZoFE9KAJ\n6rL+zgSOb4ZbE6kH6GI8pSWaNSs+x4/Bf8/8m+HsnzZ2eHvh/bVTyOYG+6IlNLjP\nbf8rZYay8nUDRh8aicVU4K1aMY0Iye8PHfGdkuPvWH29UtqLWPxBvfOGD0QXFh4m\nwT6aM4rfQU8v73MwhZacC7VY7QAMFcOyKug=\n-----END CERTIFICATE-----\n"
-  },
   "heartbeat": {
     "inRide": 30,
     "notInRide": 900
   },
   "nb": {
     "pin": null,
-    "apn": "hologram"
+    "apn": "internet.swir"
   },
   "can": {
-    "make": "Hyundai",
-    "model": "Generic",
     "bus": [
       {
         "baud": 500,
@@ -46,8 +39,7 @@
           {
             "name": "door_front_right",
             "id": 1345,
-            "bit": 35,
-            "len": 1
+            "bit": 35
           },
           {
             "name": "charging",
@@ -58,51 +50,89 @@
           {
             "name": "door_back_left",
             "id": 1363,
-            "bit": 23,
-            "len": 1
+            "bit": 23
           },
           {
             "name": "door_back_right",
             "id": 1363,
-            "bit": 24,
-            "len": 1
+            "bit": 24
           },
           {
             "name": "window_front_left",
             "id": 1369,
-            "bit": 8,
-            "len": 1
+            "bit": 8
           },
           {
             "name": "window_front_right",
             "id": 1369,
-            "bit": 9,
-            "len": 1
+            "bit": 9
           },
           {
             "name": "window_back_left",
             "id": 1369,
-            "bit": 10,
-            "len": 1
+            "bit": 10
           },
           {
             "name": "window_back_right",
             "id": 1369,
-            "bit": 11,
-            "len": 1
+            "bit": 11
           },
           {
             "name": "mileage",
             "id": 1456,
             "bit": 0,
-            "len": 24
+            "len": 24,
+            "delta": 100
           }
         ]
       },
       {
-        "baud": 125,
-        "status": []
+        "baud": 100,
+        "status": [
+          {
+            "name": "lock_front_left",
+            "id": 360,
+            "bit": 18
+          },
+          {
+            "name": "lock_front_right",
+            "id": 360,
+            "bit": 3
+          },
+          {
+            "name": "lock_rear_left",
+            "id": 360,
+            "bit": 32
+          },
+          {
+            "name": "lock_rear_right",
+            "id": 360,
+            "bit": 45
+          }
+        ]
       }
-    ]
+    ],
+    "cmd": {
+      "unlock_1": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600001"
+      },
+      "unlock_all": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600011"
+      },
+      "lock": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600020"
+      },
+      "flash_lights": {
+        "bus": 1,
+        "id": 258,
+        "msg": "0000000000600000"
+      }
+    }
   }
 }

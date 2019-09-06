@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-#define CONFIG_DOC_SIZE 4096
+#define CONFIG_DOC_SIZE 3072
 
 class ConfigClass {
  public:

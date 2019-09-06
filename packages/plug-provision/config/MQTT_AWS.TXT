@@ -1,0 +1,5 @@
+{
+  "type": "x509",
+  "url": .mqttBrokerUrl,
+  "cert": .mqttBrokerCert
+}

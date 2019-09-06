@@ -19,8 +19,6 @@ class CommandClass {
   void reboot();
 
  private:
-  uint8_t tokenKey[32];
-  uint8_t tokenIv[16];
   String authCmds = "";
   uint32_t authStart = 0;
   uint32_t authEnd = 0;

@@ -7,6 +7,7 @@
 #include "Can.h"
 #include "Command.h"
 #include "Config.h"
+#include "Eeprom.h"
 #include "Gps.h"
 #include "Internet.h"
 #include "Logger.h"
@@ -40,18 +41,12 @@ void setup() {
   int eccInit = ECCX08.begin();
   int sdInit = SD.begin(SD_CS_PIN);
   int loggerInit = Logger.begin();  // dependent on SD.begin()
-  int motionInit = Motion.begin();
-  int cfgInit = Config.begin();  // dependent on SD.begin()
-
-  // long data = 0;
-  // //ECCX08.writeSlot(8, (byte *)&data, 4);
-  // ECCX08.readSlot(8, (byte *)&data, 4);
-  // logDebug("i|data", data);
-
-  Command.begin();              // dependent on ECCX08.begin()
-  System.begin();               // dependent on ECCX08.begin()
-  int certInit = Mqtt.begin();  // dependent on System.begin()
+  int cfgInit = Config.begin();     // dependent on SD.begin()
+  int eepromInit = Eeprom.begin();  // dependent on ECCX08.begin() and SD.begin()
+  System.begin();                   // dependent on ECCX08.begin()
+  Mqtt.begin();                     // dependent on System.begin()
   Mqtt.poll();
+  int motionInit = Motion.begin();
   Gps.begin();
 
   char initStatus[128], sysJson[256];
@@ -61,10 +56,10 @@ void setup() {
 #endif
        "i|ecc", eccInit,
        "i|sd", sdInit,
+       "i|eeprom", eepromInit,
        "i|motion", motionInit,
        "i|cfg", cfgInit,
-       "i|logger", loggerInit,
-       "i|cert", certInit);
+       "i|logger", loggerInit);
   json(sysJson, "firmware", FIRMWARE_VERSION, "i|configFreeMem", Config.getConfigFreeMem(), initStatus);
   System.sendInfo(sysJson);
 }

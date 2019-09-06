@@ -86,8 +86,9 @@ void SystemClass::checkVin() {
       // const char* limitStr = Config.get()["vin"]["low"] | "12.4";
       //TODO strtof takes 2% ROM, maybe we should just code the limit
       // float limit = strtof(limitStr, NULL);
-      // logTrace("f|5limit", limit);
-      if (avg < 10) {
+      // double limit = Config.get()["vin"]["low"].as<double>();
+      // logDebug("f|5limit", limit);
+      if (avg < 10.5) {
         char sysJson[64], info[128];
         json(sysJson, "f|5vin", avg);
         json(info, "o|system", sysJson);

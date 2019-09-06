@@ -5,6 +5,7 @@
 
 #include "Command.h"
 #include "Config.h"
+#include "Eeprom.h"
 #include "Https.h"
 #include "Internet.h"
 #include "Mqtt.h"
@@ -72,11 +73,9 @@ static unsigned long getTime() {
 
 int MqttClass::begin() {
   ArduinoBearSSL.onGetTime(getTime);
-  const char* cert = Config.get()["mqtt"]["cert"];
-  if (!cert) {
-    return -1;
-  }
-  sslClient.setEccSlot(0, cert);
+
+  sslClient.setEccSlot(0, Eeprom.getMqttCert(), Eeprom.getMqttCertLen());
+
   String id = System.getId();
   mqttClient.setId(id);
   mqttClient.setKeepAliveInterval(1200 * 1000);
@@ -92,13 +91,10 @@ void MqttClass::connect() {
       return;
     }
   }
-  const JsonObject mqtt = Config.get()["mqtt"];
-  const char* url = mqtt["url"] | "a2ink9r2yi1ntl-ats.iot.us-east-2.amazonaws.com";  // "waive.azure-devices.net";
-
-  logInfo("broker", url);
+  logInfo("broker", Eeprom.getMqttUrl());
   int start = millis();
   Watchdog.setup(WDT_SOFTCYCLE2M);
-  if (!mqttClient.connect(url, 8883)) {
+  if (!mqttClient.connect(Eeprom.getMqttUrl(), 8883)) {
     logWarn("i|error", mqttClient.connectError());
     Watchdog.setup(WDT_SOFTCYCLE16S);
     return;

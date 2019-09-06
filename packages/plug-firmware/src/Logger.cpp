@@ -50,13 +50,13 @@ int LoggerClass::begin() {
   logAddSender(toConsole);
   logAddSender(toMqtt);
 
-  // writeFile = SD.open("LOG.TXT", FILE_WRITE);
-  // if (!writeFile) {
-  //   logError("LOG.TXT open failed");
-  //   return -1;
-  // }
+  writeFile = SD.open("LOG.TXT", FILE_WRITE);
+  if (!writeFile) {
+    logError("LOG.TXT open failed");
+    return -1;
+  }
 
-  // logAddSender(toFile);
+  logAddSender(toFile);
 
   return 1;
 }
