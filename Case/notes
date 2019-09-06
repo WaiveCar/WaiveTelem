@@ -1,3 +1,10 @@
+Filename guide               |
+-----------------------------
+002001-00x case bottom       |
+002002-00x case top no logo  |
+002003-00x case top with logo|
+-----------------------------
+
 sim slot moved, profile shorter, zip tie holes, give room for slotting top to bottom, potentially make the coax ports bottom border higher, led indicator holes bigger, usb hole bigger, sticker 1 inch wider
 
 dead space underneath board is 2mm (bottom boss height)
@@ -28,11 +35,9 @@ done
 holes: top: 1.8mm diameter NEW 2.0mm. bottom: 2.3mm diameter NEW: 2.6mm
 done as  2.6 through holes with 6mm boss (dia), 1.9 mounting holes with 2.5 boss (dia)
 
-draft .5 degree \____/ as such on both sides
+draft .5 degree \____/ as such all walls' sides
 draft 1 degree the long threading holes
 draft before fillet
-
-
 
 q's
 tolerances: ridges, screw holes, screw head slot
@@ -41,8 +46,6 @@ if i do xyz (e.g. the hook) will it increase tooling costs or production complex
 polishing
 
 slot corners (top standoff squares): should they have a fillet radius
-
-
 
 uniform wall thickness
 walls to base should be 50%
@@ -53,8 +56,40 @@ holes with boss to sidewalls. these bosses can also be locators for the lid side
 |-o
 |_|____
 
-
 need half a degree of draft
-	
+
+half degree draft all surfaces
+full degree of draft on standoffs internal and external
+M2.2 inner diameter of holes: ?
+split point top to bottom: 7.2y? other?
+new logo
+hole for zip tie?
+standoff rib/locators 1 degree draft
 
 standard tool finish spi finish c
+ 
+component by component testing for operating temperature ranges
+real use testing of individual components heating
+CE marking if for sale in europe
+UL cert
+
+Thermal shock / thermal cycling
+High temperature, high humidity operation
+6-Face Drop
+Tumble
+Vibration
+input voltage spikes
+
+aec council tests
+http://www.aecouncil.com/Documents/AEC_Q100_Rev_H_Base_Document.pdf
+
+thermal shock https://electronics.stackexchange.com/questions/352284/how-to-increase-thermal-shock-resistance-of-the-electronics-components
+
+
+
+new notes
+bring edge line down to coax-to-molex level (or mid point of reset hole)
+reset hole higher
+logo proper
+coax holes need to be wider
+
