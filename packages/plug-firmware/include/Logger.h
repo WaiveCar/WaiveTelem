@@ -6,7 +6,7 @@
 class LoggerClass {
  public:
   int begin();
-  File getWriteFile();
+  File& getWriteFile();
 
  private:
   File writeFile;

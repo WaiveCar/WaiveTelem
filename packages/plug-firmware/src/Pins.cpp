@@ -2,7 +2,6 @@
 #include <SPI.h>
 #include <wiring_private.h>
 
-#include "Logger.h"
 #include "Pins.h"
 
 int PinsClass::begin() {

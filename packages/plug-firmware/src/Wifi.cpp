@@ -47,5 +47,9 @@ int InternetClass::getSignalStrength() {
   return WiFi.RSSI();
 }
 
+String InternetClass::getCarrier() {
+  return String(WiFi.SSID());
+}
+
 InternetClass Internet;
 #endif

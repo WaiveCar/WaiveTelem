@@ -61,7 +61,7 @@ int LoggerClass::begin() {
   return 1;
 }
 
-File LoggerClass::getWriteFile() {
+File& LoggerClass::getWriteFile() {
   return writeFile;
 }
 

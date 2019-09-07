@@ -133,6 +133,7 @@ void SystemClass::sendHeartbeat() {
   system["ble"] = Bluetooth.getHealth();
   system["can"] = Can.getHealth();
   system["uptime"] = time - bootTime;
+  system["carrier"] = Internet.getCarrier();
   system["signal"] = Internet.getSignalStrength();
   system["heapFreeMem"] = freeMemory();
   system["statusFreeMem"] = STATUS_DOC_SIZE - statusDoc.memoryUsage();

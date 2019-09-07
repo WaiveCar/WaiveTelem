@@ -4,8 +4,7 @@
 #include <ArduinoJson.h>
 #include <RTCZero.h>
 
-#define WATCHDOG_TIMEOUT 16 * 1000
-#define STATUS_DOC_SIZE 1024
+#define STATUS_DOC_SIZE 1536
 
 class SystemClass {
  public:

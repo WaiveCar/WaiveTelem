@@ -5,7 +5,6 @@
 
 #include "Bluetooth.h"
 #include "Can.h"
-#include "Command.h"
 #include "Config.h"
 #include "Eeprom.h"
 #include "Gps.h"
@@ -52,7 +51,7 @@ void setup() {
   char initStatus[128], sysJson[256];
   json(initStatus, "-{",
 #ifndef ARDUINO_SAMD_MKR1000
-       "modem", Internet.getModemVersion(),  // dependent on Mqtt.poll()
+       "modem", Internet.getModemVersion().c_str(),  // dependent on Mqtt.poll()
 #endif
        "i|ecc", eccInit,
        "i|sd", sdInit,

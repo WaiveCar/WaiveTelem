@@ -1,11 +1,7 @@
 {
-  "heartbeat": {
-    "inRide": 30,
-    "notInRide": 900
-  },
-  "nb": {
-    "pin": null,
-    "apn": "internet.swir"
+  "wifi": {
+    "ssid": "teacher_phone",
+    "password": "6268073330"
   },
   "can": {
     "bus": [

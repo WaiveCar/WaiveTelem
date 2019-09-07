@@ -50,11 +50,15 @@ int InternetClass::getSignalStrength() {
   }
 }
 
-const char* InternetClass::getModemVersion() {
+String InternetClass::getCarrier() {
+  return nbScanner.getCurrentCarrier();
+}
+
+String InternetClass::getModemVersion() {
   String modemResponse = "";
   MODEM.send("ATI9");
   MODEM.waitForResponse(100, &modemResponse);
-  return modemResponse.c_str();
+  return modemResponse;
 }
 
 InternetClass Internet;

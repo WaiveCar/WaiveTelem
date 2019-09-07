@@ -7,7 +7,6 @@
 
 #include "Can.h"
 #include "Command.h"
-#include "Config.h"
 #include "Eeprom.h"
 #include "Gps.h"
 #include "Https.h"
