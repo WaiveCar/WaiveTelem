@@ -3,9 +3,9 @@
 
 #ifdef ARDUINO_SAMD_WAIVE1000
 #define ANALOG_RESOLUTION 12
-#define VOLTAGE 3.3f
-#define RESISTOR_1 10.2f
-#define RESISTOR_2 40.2f
+#define VOLTAGE 33
+#define RESISTOR_1 102
+#define RESISTOR_2 402
 
 #define CAN1_CS_PIN 2
 #define CAN1_INT_PIN A6

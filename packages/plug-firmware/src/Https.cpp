@@ -75,7 +75,7 @@ static int32_t saveFile(const char* to) {
 static int32_t verifyFile(const String& file) {
   String computed = "";
   while (SHA256.available()) {
-    byte b = SHA256.read();
+    uint8_t b = SHA256.read();
     if (b < 16) {
       computed += "0";
     }

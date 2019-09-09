@@ -76,7 +76,7 @@ int MqttClass::begin() {
 
   String id = System.getId();
   mqttClient.setId(id);
-  mqttClient.setKeepAliveInterval(1200 * 1000);
+  // mqttClient.setKeepAliveInterval(90 * 1000);  // setting it to long value cause MQTT commands to have long delay
   mqttClient.onMessage(onMessageReceived);
   updateTopic = "$aws/things/" + id + "/shadow/update";
   logTopic = "things/" + id + "/log";
@@ -91,7 +91,7 @@ void MqttClass::connect() {
   }
   logInfo("broker", Eeprom.getMqttUrl());
   int start = millis();
-  Watchdog.setup(WDT_SOFTCYCLE2M);
+  Watchdog.setup(WDT_SOFTCYCLE1M);
   if (!mqttClient.connect(Eeprom.getMqttUrl(), 8883)) {
     logWarn("i|error", mqttClient.connectError());
     Watchdog.setup(WDT_SOFTCYCLE16S);

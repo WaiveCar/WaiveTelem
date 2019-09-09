@@ -45,6 +45,8 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     return;
   }
   JsonObject desired = isBluetooth ? cmdDoc.as<JsonObject>() : cmdDoc["state"];
+  String lastCmd;
+  serializeJson(desired, lastCmd);
   String cmdKey, cmdValue;
   for (JsonPair p : desired) {
     cmdKey = p.key().c_str();
@@ -77,7 +79,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     Pins.unimmobilize();
   } else if (cmdKey == "can") {
     Can.sendCommand(cmdValue.c_str());
-    System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
+    System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
     return;
   } else if (cmdKey == "inRide" && cmdValue == "true") {
     System.setInRide(true);
@@ -90,11 +92,11 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     System.sendCanStatus();
     // Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
-    System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
+    System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
     reboot();
     return;
   } else if (download) {
-    System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
+    System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";
     const char* to = download["to"] | "";
@@ -107,7 +109,7 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     }
     return;
   } else if (copy) {
-    System.reportCommandDone(json.c_str(), cmdKey.c_str(), NULL);
+    System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
     const char* from = copy["from"] | "";
     const char* to = copy["to"] | "";
     if (strlen(from) > 0 && strlen(to) > 0) {
@@ -122,10 +124,11 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     logError(json.c_str());
     return;
   }
-  System.reportCommandDone(json.c_str(), cmdKey.c_str(), cmdValue.c_str());
+  System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), cmdValue.c_str());
 }
 
 void CommandClass::reboot() {
+  Watchdog.detachShutdown();
   Watchdog.setup(WDT_HARDCYCLE4S);
   while (true)
     ;

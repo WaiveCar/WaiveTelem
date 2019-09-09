@@ -1,30 +1,30 @@
 const AWS = require('aws-sdk');
 const AWSMqttClient = require('aws-mqtt/lib/NodeClient');
-const winston = require('winston');
-const { Loggly } = require('winston-loggly-bulk');
+// const winston = require('winston');
+// const { Loggly } = require('winston-loggly-bulk');
 
-require('winston-papertrail').Papertrail;
-var winstonPapertrail = new winston.transports.Papertrail({
-  host: 'logs2.papertrailapp.com', // you get this from papertrail account
-  port: 20817 //you get this from papertrail account
-});
+// require('winston-papertrail').Papertrail;
+// var winstonPapertrail = new winston.transports.Papertrail({
+//   host: 'logs2.papertrailapp.com', // you get this from papertrail account
+//   port: 20817 //you get this from papertrail account
+// });
 
-winstonPapertrail.on('error', function(err) {
-  // Handle, report, or silently ignore connection errors and failures
-});
+// winstonPapertrail.on('error', function(err) {
+//   // Handle, report, or silently ignore connection errors and failures
+// });
 
-var logger = winston.createLogger({
-  transports: [winstonPapertrail]
-});
+// var logger = winston.createLogger({
+//   transports: [winstonPapertrail]
+// });
 
-winston.add(
-  new Loggly({
-    token: '8aab8a9c-a254-4e10-8f8b-f36f993c95d4',
-    subdomain: 'ravelab',
-    tags: ['Winston-NodeJS'],
-    json: true
-  })
-);
+// winston.add(
+//   new Loggly({
+//     token: '8aab8a9c-a254-4e10-8f8b-f36f993c95d4',
+//     subdomain: 'ravelab',
+//     tags: ['Winston-NodeJS'],
+//     json: true
+//   })
+// );
 
 const { logEventsToConsole } = require('./utils');
 
@@ -53,8 +53,8 @@ client.on('connect', () => {
 client.on('message', (topic, message) => {
   const str = message.toString();
   console.log(topic, str);
-  winston.log('info', str);
-  logger.info(JSON.parse(str));
+  // winston.log('info', str);
+  // logger.info(JSON.parse(str));
 });
 
 logEventsToConsole(client);

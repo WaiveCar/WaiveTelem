@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <ArduinoECCX08.h>
-#define ARDUINOJSON_USE_DOUBLE 1
 #include <ArduinoJson.h>
 #include <JsonLogger.h>
 #include <NMEAGPS.h>
@@ -71,27 +70,22 @@ void SystemClass::checkVin() {
 #ifdef ARDUINO_SAMD_WAIVE1000
   uint32_t elapsedTime = getTime() - lastVinRead;
   if (lastVinRead == -1 || elapsedTime >= 10) {
-    vinReads[vinIndex] = (float)analogRead(VIN_SENSE) / (1 << ANALOG_RESOLUTION) * VOLTAGE * (RESISTOR_1 + RESISTOR_2) / RESISTOR_1;
+    vinReads[vinIndex] = analogRead(VIN_SENSE) * VOLTAGE * (RESISTOR_1 + RESISTOR_2) * 10 / (1 << ANALOG_RESOLUTION) / RESISTOR_1;
     vinIndex++;
     if (vinIndex == ARRAY_SIZE(vinReads)) {
       vinAvgValid = true;
       vinIndex = 0;
     }
     if (vinAvgValid) {
-      float total = 0;
+      uint32_t total = 0;
       for (int i = 0; i < (int)ARRAY_SIZE(vinReads); i++) {
         total += vinReads[i];
       }
-      float avg = total / ARRAY_SIZE(vinReads);
-      // const char* limitStr = Config.get()["vin"]["low"] | "12.4";
-      //TODO strtof takes 2% ROM, maybe we should just code the limit
-      // float limit = strtof(limitStr, NULL);
-      // double limit = Config.get()["vin"]["low"].as<double>();
-      // logDebug("f|5limit", limit);
-      if (avg < 10.5) {
-        char sysJson[64], info[128];
-        json(sysJson, "f|5vin", avg);
-        json(info, "o|system", sysJson);
+      uint32_t avg = total / ARRAY_SIZE(vinReads);
+      uint32_t limit = Config.get()["vin"]["low"];
+      if (avg < limit) {
+        char info[128];
+        json(info, "{|system", "i|vin", avg, "}|");
         report(info);
       }
     }
@@ -120,8 +114,8 @@ void SystemClass::sendHeartbeat() {
   JsonObject heartbeat = statusDoc["heartbeat"];
   JsonObject gps = heartbeat["gps"];
   JsonObject system = heartbeat["system"];
-  gps["lat"] = Gps.getLatitude() / 1e7;
-  gps["long"] = Gps.getLongitude() / 1e7;
+  gps["lat"] = Gps.getLatitude();
+  gps["long"] = Gps.getLongitude();
   gps["hdop"] = Gps.getHdop();
   gps["speed"] = Gps.getSpeed();
   gps["heading"] = Gps.getHeading();
@@ -185,15 +179,13 @@ void SystemClass::setTimes(uint32_t in) {
 }
 
 void SystemClass::report(const char* reported, const char* desired) {
-  char state[512];
   char message[512];
 
   if (desired) {
-    json(state, "o|reported", reported, "o|desired", desired);
+    json(message, "{|state", "o|reported", reported, "o|desired", desired, "}|");
   } else {
-    json(state, "o|reported", reported);
+    json(message, "{|state", "o|reported", reported, "}|");
   }
-  json(message, "o|state", state);
   logInfo("o|message", message);
   if (Mqtt.isConnected()) {
     Mqtt.updateShadow(message);
@@ -228,12 +220,11 @@ void SystemClass::setCanStatusChanged() {
 }
 
 void SystemClass::reportCommandDone(const char* json, const char* cmdKey, const char* cmdValue) {
-  char lastCmd[256], reported[512], desired[64];
-  json(lastCmd, "lastCmd", json);
+  char reported[512], desired[64];
   if (cmdValue) {
-    json(reported, "o|system", lastCmd, cmdKey, cmdValue);
+    json(reported, "{|system", "lastCmd", json, cmdKey, cmdValue, "}|");
   } else {
-    json(reported, "o|system", lastCmd);
+    json(reported, "{|system", "lastCmd", json, "}|");
   }
   json(desired, (String("o|") + cmdKey).c_str(), "null");
   report(reported, desired);

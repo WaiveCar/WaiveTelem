@@ -4,7 +4,7 @@
 #include <ArduinoJson.h>
 #include <RTCZero.h>
 
-#define STATUS_DOC_SIZE 1536
+#define STATUS_DOC_SIZE 1024
 
 class SystemClass {
  public:
@@ -44,7 +44,7 @@ class SystemClass {
   RTCZero rtc;
   uint32_t lastMillis = 0;
 
-  float vinReads[5] = {0};
+  uint32_t vinReads[5] = {0};
   int vinIndex = 0;
   bool vinAvgValid = false;
   int32_t lastVinRead = -1;

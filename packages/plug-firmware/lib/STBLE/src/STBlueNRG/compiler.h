@@ -19,12 +19,9 @@
 //#define PACKED
 //#else
 //#ifdef __GNUC__
-//#undef
-//#define
 //#define PACKED __attribute__((packed))
 //#else
 //#define PACKED
-//#define
 //#endif
 //#endif
 //

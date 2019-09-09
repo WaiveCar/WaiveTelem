@@ -8,8 +8,8 @@ class GpsClass {
   int getLatitude();
   int getLongitude();
   int getHdop();
-  float getSpeed();
-  float getHeading();
+  int getSpeed();
+  int getHeading();
   void sleep();
   void wakeup();
   void reset();
@@ -18,8 +18,8 @@ class GpsClass {
   int latitude = 0;
   int longitude = 0;
   int hdop = 0;
-  float speed = 0.0;
-  float heading = 0.0;
+  uint32_t speed = 0;
+  uint16_t heading = 0;
 };
 
 extern GpsClass Gps;

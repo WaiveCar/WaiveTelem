@@ -72,9 +72,9 @@ bool GpsClass::poll() {
         latitude = fix.latitudeL();
         longitude = fix.longitudeL();
         hdop = fix.hdop;
-        speed = fix.speed_mph();
+        speed = fix.speed_mkn();
         if (fix.valid.heading) {
-          heading = fix.heading();
+          heading = fix.heading_cd();
         }
         if (!Internet.isConnected()) {
           System.setTimes(fix.dateTime);
@@ -102,11 +102,11 @@ int GpsClass::getHdop() {
   return hdop;
 }
 
-float GpsClass::getSpeed() {
+int GpsClass::getSpeed() {
   return speed;
 }
 
-float GpsClass::getHeading() {
+int GpsClass::getHeading() {
   return heading;
 }
 

@@ -113,7 +113,7 @@ int EepromClass::decodeMqttConfig(uint8_t type, const char* url, const char* cer
 
 int EepromClass::saveMqttConfig(uint8_t type, const char* url) {
   // write config type, size info and url
-  byte info[72];
+  uint8_t info[72];
   info[0] = type;
 
   if (type == 1) {
@@ -122,11 +122,12 @@ int EepromClass::saveMqttConfig(uint8_t type, const char* url) {
       return -2;  // too long
     }
     // save mqttUrl
-    info[1] = strlen(url);
+    uint8_t urlLen = strlen(url);
+    info[1] = urlLen;
     info[2] = certLen;
     info[3] = certLen >> 8;
-    memcpy(&info[4], url, info[1] + 1);
-    int ret = ECCX08.writeSlot(14, info, 72);
+    memcpy(&info[4], url, urlLen + 1);
+    int ret = ECCX08.writeSlot(14, info, ((urlLen + 1 + 2 + 3) / 4) * 4);
     if (ret != 1) {
       logError("i|ret", ret);
       return -3;
@@ -158,7 +159,7 @@ int EepromClass::saveMqttConfig(uint8_t type, const char* url) {
 
 int EepromClass::loadMqttConfig() {
   // read config type and size info
-  byte info[72];
+  uint8_t info[72];
   int ret = ECCX08.readSlot(14, info, 72);
   if (ret != 1) {
     logError("i|ret", ret);
