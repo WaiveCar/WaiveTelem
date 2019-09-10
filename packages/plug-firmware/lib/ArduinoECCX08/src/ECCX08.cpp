@@ -143,7 +143,7 @@ int ECCX08Class::random(byte data[], size_t length)
       return 0;
     }
 
-    delay(23);
+    delayMicroseconds(1000 * 23);
 
     byte response[32];
 
@@ -158,7 +158,7 @@ int ECCX08Class::random(byte data[], size_t length)
     data += copyLength;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
 
   idle();
 
@@ -175,13 +175,13 @@ int ECCX08Class::generatePrivateKey(int slot, byte publicKey[])
     return 0;
   }
 
-  delay(115);
+  delayMicroseconds(1000 * 115);
 
   if (!receiveResponse(publicKey, 64)) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
 
   idle();
 
@@ -198,13 +198,13 @@ int ECCX08Class::generatePublicKey(int slot, byte publicKey[])
     return 0;
   }
 
-  delay(115);
+  delayMicroseconds(1000 * 115);
 
   if (!receiveResponse(publicKey, 64)) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
 
   idle();
 
@@ -255,13 +255,13 @@ int ECCX08Class::beginSHA256()
     return 0;
   }
 
-  delay(9);
+  delayMicroseconds(1000 * 9);
 
   if (!receiveResponse(&status, sizeof(status))) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   if (status != 0) {
@@ -283,13 +283,13 @@ int ECCX08Class::updateSHA256(const byte data[])
     return 0;
   }
 
-  delay(9);
+  delayMicroseconds(1000 * 9);
 
   if (!receiveResponse(&status, sizeof(status))) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   if (status != 0) {
@@ -314,13 +314,13 @@ int ECCX08Class::endSHA256(const byte data[], int length, byte result[])
     return 0;
   }
 
-  delay(9);
+  delayMicroseconds(1000 * 9);
 
   if (!receiveResponse(result, 32)) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   return 1;
@@ -462,7 +462,7 @@ int ECCX08Class::sleep()
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
 
   return 1;
 }
@@ -476,7 +476,7 @@ int ECCX08Class::idle()
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
 
   return 1;
 }
@@ -493,13 +493,13 @@ long ECCX08Class::version()
     return 0;
   }
 
-  delay(2);
+  delayMicroseconds(1000 * 2);
 
   if (!receiveResponse(&version, sizeof(version))) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   return version;
@@ -518,13 +518,13 @@ int ECCX08Class::challenge(const byte message[])
     return 0;
   }
 
-  delay(29);
+  delayMicroseconds(1000 * 29);
 
   if (!receiveResponse(&status, sizeof(status))) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   if (status != 0) {
@@ -551,13 +551,13 @@ int ECCX08Class::verify(const byte signature[], const byte pubkey[])
     return 0;
   }
 
-  delay(72);
+  delayMicroseconds(1000 * 72);
 
   if (!receiveResponse(&status, sizeof(status))) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   if (status != 0) {
@@ -577,13 +577,13 @@ int ECCX08Class::sign(int slot, byte signature[])
     return 0;
   }
 
-  delay(70);
+  delayMicroseconds(1000 * 70);
 
   if (!receiveResponse(signature, 64)) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   return 1;
@@ -607,13 +607,13 @@ int ECCX08Class::read(int zone, int address, byte buffer[], int length)
     return 0;
   }
 
-  delay(5);
+  delayMicroseconds(1000 * 5);
 
   if (!receiveResponse(buffer, length)) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   return length;
@@ -639,13 +639,13 @@ int ECCX08Class::write(int zone, int address, const byte buffer[], int length)
     return 0;
   }
 
-  delay(26);
+  delayMicroseconds(1000 * 26);
 
   if (!receiveResponse(&status, sizeof(status))) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   if (status != 0) {
@@ -667,13 +667,13 @@ int ECCX08Class::lock(int zone)
     return 0;
   }
 
-  delay(32);
+  delayMicroseconds(1000 * 32);
 
   if (!receiveResponse(&status, sizeof(status))) {
     return 0;
   }
 
-  delay(1);
+  delayMicroseconds(1000 * 1);
   idle();
 
   if (status != 0) {
