@@ -99,11 +99,11 @@ void MqttClass::connect() {
   Watchdog.setup(WDT_SOFTCYCLE1M);
   if (!mqttClient.connect(Eeprom.getMqttUrl(), 8883)) {
     logWarn("i|error", mqttClient.connectError());
-    Watchdog.setup(WDT_SOFTCYCLE16S);
+    Watchdog.setup(WDT_SOFTCYCLE8S);
     return;
   }
   logDebug("i|initTime", millis() - start, "You're connected to the MQTT broker");
-  Watchdog.setup(WDT_SOFTCYCLE16S);
+  Watchdog.setup(WDT_SOFTCYCLE8S);
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
 }
 

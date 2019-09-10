@@ -19,12 +19,10 @@
 #define CRASH_REPORT_START_DATA 0xa5
 
 void shutdown() {
-  logDebug(NULL);
   uint32_t top;
   uint8_t data[72];
   int ret = ECCX08.readSlot(13, data, 72);
-  // logDebug("i|ret", ret);
-  data[CRASH_REPORT_START_BYTE] = CRASH_REPORT_START_DATA;
+  Serial.println("ret: " + String(ret));
   int j = CRASH_REPORT_START_BYTE + 2;
   for (int i = 1; j < 70 && (uint32_t)(&top + i) < 0x20008000; i++) {
     uint32_t value = *(&top + i);
@@ -36,13 +34,16 @@ void shutdown() {
       j += 3;
       char str[7];
       sprintf(str, "%lx", value);
-      logDebug(str);
+      Serial.println(str);
     }
   }
   int num = (j - CRASH_REPORT_START_BYTE - 2) / 3;
-  data[CRASH_REPORT_START_BYTE + 1] = num;
-  ret = ECCX08.writeSlot(13, data, 72);
-  logDebug("i|ret", ret, "i|j", j);
+  if (num > 0) {
+    data[CRASH_REPORT_START_BYTE] = CRASH_REPORT_START_DATA;
+    data[CRASH_REPORT_START_BYTE + 1] = num;
+    ret = ECCX08.writeSlot(13, data, 72);
+    Serial.println("ret: " + String(ret) + ",j: " + String(j));
+  }
 }
 
 void checkCrashReport() {
@@ -51,7 +52,8 @@ void checkCrashReport() {
   uint8_t data[72];
   int ret = ECCX08.readSlot(13, data, 72);
   uint8_t len = data[CRASH_REPORT_START_BYTE + 1];
-  if (data[CRASH_REPORT_START_BYTE] == CRASH_REPORT_START_DATA && len < 7) {
+  logDebug("i|ret", ret, "i|len", len);
+  if (data[CRASH_REPORT_START_BYTE] == CRASH_REPORT_START_DATA && len < 7 && len > 0) {
     int i = 0;
     int j = CRASH_REPORT_START_BYTE + 2;
     for (; i < len; i++) {
@@ -59,11 +61,12 @@ void checkCrashReport() {
       j += 3;
       list[i] = (char*)malloc(7);
       sprintf(list[i], "%lx", value & 0xffffff);
+      // logDebug("list[i]", list[i]);
     }
     char reported[256];
     // logDebug("i|i", i);
     // logDebug("list[0]", list[0]);
-    json(reported, "{|system", "{|crash", "s[backtrace", i, list, "}|", "}|");
+    json(reported, "{|system", "{|crash", "s[backtrace", len, list, "}|", "}|");
     System.report(reported);
 
     data[CRASH_REPORT_START_BYTE] = 0;
@@ -85,7 +88,7 @@ void setup() {
   Serial.begin(115200);
 
   Watchdog.attachShutdown(shutdown);
-  Watchdog.setup(WDT_SOFTCYCLE16S);
+  Watchdog.setup(WDT_SOFTCYCLE8S);
 
   Pins.begin();
   ECCX08.begin();

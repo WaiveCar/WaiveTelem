@@ -28,12 +28,12 @@ bool InternetClass::connect() {
   int start = millis();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
     logWarn("Failed to connect, try later");
-    Watchdog.setup(WDT_SOFTCYCLE16S);
+    Watchdog.setup(WDT_SOFTCYCLE8S);
     return false;
   }
-  logInfo("carrier", nbScanner.getCurrentCarrier().c_str(), "i|initTime", millis() - start);
+  logInfo("carrier", nbScanner.getCurrentCarrier().c_str(), "i|initTime", millis() - start, "i|signal", getSignalStrength());
   System.setTimes(getTime());
-  Watchdog.setup(WDT_SOFTCYCLE16S);
+  Watchdog.setup(WDT_SOFTCYCLE8S);
   return true;
 }
 
