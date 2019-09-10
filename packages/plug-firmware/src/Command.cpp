@@ -83,13 +83,11 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     return;
   } else if (cmdKey == "inRide" && cmdValue == "true") {
     System.setInRide(true);
-    System.setCanStatusChanged();
-    System.sendCanStatus();
+    System.sendNotYetCanStatus();
     Gps.wakeup();
   } else if (cmdKey == "inRide" && cmdValue == "false") {
     System.setInRide(false);
-    System.setCanStatusChanged();
-    System.sendCanStatus();
+    System.sendNotYetCanStatus();
     // Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
     System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);

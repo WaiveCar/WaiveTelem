@@ -19,10 +19,11 @@
 #define CRASH_REPORT_START_DATA 0xa5
 
 void shutdown() {
+  logDebug(NULL);
   uint32_t top;
   uint8_t data[72];
   int ret = ECCX08.readSlot(13, data, 72);
-  logDebug("i|ret", ret);
+  // logDebug("i|ret", ret);
   data[CRASH_REPORT_START_BYTE] = CRASH_REPORT_START_DATA;
   int j = CRASH_REPORT_START_BYTE + 2;
   for (int i = 1; j < 70 && (uint32_t)(&top + i) < 0x20008000; i++) {
@@ -35,7 +36,7 @@ void shutdown() {
       j += 3;
       char str[7];
       sprintf(str, "%lx", value);
-      Serial.println(str);
+      logDebug(str);
     }
   }
   int num = (j - CRASH_REPORT_START_BYTE - 2) / 3;
@@ -49,7 +50,6 @@ void checkCrashReport() {
   char* list[maxLen] = {NULL};
   uint8_t data[72];
   int ret = ECCX08.readSlot(13, data, 72);
-  logDebug("i|ret", ret);
   uint8_t len = data[CRASH_REPORT_START_BYTE + 1];
   if (data[CRASH_REPORT_START_BYTE] == CRASH_REPORT_START_DATA && len < 7) {
     int i = 0;
@@ -76,38 +76,29 @@ void checkCrashReport() {
   }
 }
 
+bool initSent = false;
+int8_t sdInit;
+int8_t cfgInit;
+int8_t eepromInit;
+
 void setup() {
   Serial.begin(115200);
-#ifdef DEBUG
-  delay(5000);  // to see beginning of the login
-#endif
+
   Watchdog.attachShutdown(shutdown);
   Watchdog.setup(WDT_SOFTCYCLE16S);
 
   Pins.begin();
   ECCX08.begin();
-  int sdInit = SD.begin(SD_CS_PIN);
+  sdInit = SD.begin(SD_CS_PIN);
   Logger.begin();  // dependent on SD.begin()
   // shutdown();
-  int cfgInit = Config.begin();     // dependent on SD.begin()
-  int eepromInit = Eeprom.begin();  // dependent on ECCX08.begin() and SD.begin()
-  System.begin();                   // dependent on ECCX08.begin()
-  Mqtt.begin();                     // dependent on System.begin()
+  cfgInit = Config.begin();     // dependent on SD.begin()
+  eepromInit = Eeprom.begin();  // dependent on ECCX08.begin() and SD.begin()
+  System.begin();               // dependent on ECCX08.begin()
+  Mqtt.begin();                 // dependent on System.begin()
   Mqtt.poll();
   Motion.begin();
   Gps.begin();
-
-  char sysJson[256];
-  json(sysJson, "firmware", FIRMWARE_VERSION,
-       "i|configFreeMem", Config.getConfigFreeMem(),
-#ifndef ARDUINO_SAMD_MKR1000
-       "modem", Internet.getModemVersion().c_str(),  // dependent on Mqtt.poll()
-#endif
-       "i|sd", sdInit,
-       "i|eeprom", eepromInit,
-       "i|cfg", cfgInit);
-  System.sendInfo(sysJson);
-  checkCrashReport();
 }
 
 void loop() {
@@ -122,4 +113,23 @@ void loop() {
   System.poll();
   Motion.poll();
   Mqtt.poll();
+
+  if (Mqtt.isConnected() && !initSent) {
+    char sysJson[128];
+    json(sysJson, "firmware", FIRMWARE_VERSION,
+         "i|configFreeMem", Config.getConfigFreeMem(),
+#ifndef ARDUINO_SAMD_MKR1000
+         "modem", Internet.getModemVersion().c_str(),
+#endif
+         "i|sd", sdInit,
+         "i|eeprom", eepromInit,
+         "i|cfg", cfgInit);
+    System.sendInfo(sysJson);
+    checkCrashReport();
+    if (Gps.poll()) {
+      System.sendHeartbeat();
+    }
+
+    initSent = true;
+  }
 }

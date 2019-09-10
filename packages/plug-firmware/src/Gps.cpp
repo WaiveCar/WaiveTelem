@@ -72,9 +72,9 @@ bool GpsClass::poll() {
         latitude = fix.latitudeL();
         longitude = fix.longitudeL();
         hdop = fix.hdop;
-        speed = fix.speed_mkn();
+        speed = fix.speed_mkn();  // integer knots, scaled by 1000
         if (fix.valid.heading) {
-          heading = fix.heading_cd();
+          heading = fix.heading_cd();  // integer hundredths of a degree
         }
         if (!Internet.isConnected()) {
           System.setTimes(fix.dateTime);

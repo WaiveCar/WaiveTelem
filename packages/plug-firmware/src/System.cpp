@@ -36,9 +36,7 @@ int SystemClass::begin() {
   sprintf(id, "%s", ECCX08.serialNumber().c_str());
 
   statusDoc.createNestedObject("canbus");
-  statusDoc.createNestedObject("heartbeat");
-  statusDoc["heartbeat"].createNestedObject("gps");
-  statusDoc["heartbeat"].createNestedObject("system");
+  statusDoc.createNestedObject("notyetcanbus");
   return 1;
 }
 
@@ -58,7 +56,6 @@ void SystemClass::checkHeartbeat() {
   } else if (lastHeartbeat == -1 || elapsedTime >= interval) {
     if (Gps.poll()) {
       sendHeartbeat();
-      lastHeartbeat = getTime();
       if (interval > 60) {
         Gps.sleep();
       }
@@ -111,49 +108,57 @@ void SystemClass::sendInfo(const char* sysJson) {
 }
 
 void SystemClass::sendHeartbeat() {
-  JsonObject heartbeat = statusDoc["heartbeat"];
-  JsonObject gps = heartbeat["gps"];
-  JsonObject system = heartbeat["system"];
-  gps["lat"] = Gps.getLatitude();
-  gps["long"] = Gps.getLongitude();
-  gps["hdop"] = Gps.getHdop();
-  gps["speed"] = Gps.getSpeed();
-  gps["heading"] = Gps.getHeading();
-// system["time"] = System.getDateTime();
+  char vinBuf[32] = "+|";
 #ifdef ARDUINO_SAMD_WAIVE1000
   int index = (vinIndex - 1) % ARRAY_SIZE(vinReads);
-  system["vin"] = vinReads[index];
+  json(vinBuf, "-{", "i|vin", vinReads[index]);
 #endif
-  system["ble"] = Bluetooth.getHealth();
-  system["can"] = Can.getHealth();
-  system["uptime"] = time - bootTime;
-  system["carrier"] = Internet.getCarrier();
-  system["signal"] = Internet.getSignalStrength();
-  system["heapFreeMem"] = freeMemory();
-  system["statusFreeMem"] = STATUS_DOC_SIZE - statusDoc.memoryUsage();
+  char cellBuf[64] = "+|";
+  if (Internet.isConnected()) {
+    json(cellBuf, "-{", "i|signal", Internet.getSignalStrength(), "carrier", Internet.getCarrier().c_str());
+  }
+  char buf[512];
+  json(buf, "{|gps", "i|lat", Gps.getLatitude(), "i|long", Gps.getLongitude(), "i|hdop", Gps.getHdop(),
+       "i|speed", Gps.getSpeed(), "i|heading", Gps.getHeading(), "}|",
+       "{|system", "i|ble", Bluetooth.getHealth(), "i|can", Can.getHealth(),
+       "i|uptime", time - bootTime, "i|heapFreeMem", freeMemory(),
+       "i|statusFreeMem", STATUS_DOC_SIZE - statusDoc.memoryUsage(), vinBuf, cellBuf, "}|");
   // system["moreStuff"] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
-  report(statusDoc["heartbeat"].as<String>().c_str());
+  report(buf);
+
+  lastHeartbeat = getTime();
 }
 
-void SystemClass::sendCanStatus() {
-  String canJson = statusDoc["canbus"].as<String>();
-  if (canStatusChanged) {
-    if (canJson != "{}") {
-      char buf[512];
-      json(buf, "o|canbus", canJson.c_str());
-      report(buf);
+void SystemClass::sendNotYetCanStatus() {
+  JsonObject can = statusDoc["canbus"];
+  JsonObject notyet = statusDoc["notyetcanbus"];
+  String canJson = statusDoc["notyetcanbus"].as<String>();
+  if (canJson != "{}") {
+    char buf[512];
+    json(buf, "o|canbus", canJson.c_str());
+    report(buf);
+    for (JsonPair kv : notyet) {
+      can[kv.key()] = kv.value();
+      notyet.remove(kv.key());
     }
-    canStatusChanged = false;
   }
 }
 
 void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delta) {
   JsonObject can = statusDoc["canbus"];
+  JsonObject notyet = statusDoc["notyetcanbus"];
   uint64_t oldValue = can[name];
   if (oldValue != value) {
-    can[name] = value;
     if (abs(oldValue - value) >= delta) {
-      canStatusChanged = true;
+      can[name] = value;
+      if (delta > 0) {
+        notyet.remove(name);
+      }
+      char buf[128];
+      json(buf, "{|canbus", (String("i|") + name).c_str(), value, "}|");
+      report(buf);
+    } else {
+      notyet[name] = value;
     }
   }
 }
@@ -215,14 +220,10 @@ void SystemClass::setInRide(bool in) {
   inRide = in;
 }
 
-void SystemClass::setCanStatusChanged() {
-  canStatusChanged = true;
-}
-
 void SystemClass::reportCommandDone(const char* json, const char* cmdKey, const char* cmdValue) {
   char reported[512], desired[64];
   if (cmdValue) {
-    json(reported, "{|system", "lastCmd", json, cmdKey, cmdValue, "}|");
+    json(reported, "{|system", "lastCmd", json, "}|", cmdKey, cmdValue);
   } else {
     json(reported, "{|system", "lastCmd", json, "}|");
   }
