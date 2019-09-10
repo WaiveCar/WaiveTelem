@@ -5,7 +5,7 @@
   },
   "nb": {
     "pin": null,
-    "apn": "internet.swir"
+    "apn": "hologram"
   },
   "can": {
     "bus": [
