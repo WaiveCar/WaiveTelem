@@ -102,8 +102,9 @@ const char* SystemClass::getDateTime() {
 }
 
 void SystemClass::sendInfo(const char* sysJson) {
-  char info[512];
-  json(info, "inRide", inRide ? "true" : "false", "o|system", sysJson);
+  char info[512], remoteLog[2];
+  snprintf(remoteLog, 2, "%c", '0' + remoteLogLevel);
+  json(info, "inRide", inRide ? "true" : "false", "remoteLog", remoteLog, "o|system", sysJson);
   report(info);
 }
 
@@ -118,11 +119,17 @@ void SystemClass::sendHeartbeat() {
     json(cellBuf, "-{", "i|signal", Internet.getSignalStrength(), "carrier", Internet.getCarrier().c_str());
   }
   char buf[512];
-  json(buf, "{|gps", "i|lat", Gps.getLatitude(), "i|long", Gps.getLongitude(), "i|hdop", Gps.getHdop(),
-       "i|speed", Gps.getSpeed(), "i|heading", Gps.getHeading(), "}|",
-       "{|system", "i|ble", Bluetooth.getHealth(), "i|can", Can.getHealth(),
-       "i|uptime", time - bootTime, "i|heapFreeMem", freeMemory(),
-       "i|statusFreeMem", STATUS_DOC_SIZE - statusDoc.memoryUsage(), vinBuf, cellBuf, "}|");
+  json(buf, "{|gps", "i|lat", Gps.getLatitude(),
+       "i|long", Gps.getLongitude(),
+       "i|hdop", Gps.getHdop(),
+       "i|speed", Gps.getSpeed(),
+       "i|heading", Gps.getHeading(), "}|",
+       "{|system", "i|ble", Bluetooth.getHealth(),
+       "i|can", Can.getHealth(),
+       "i|uptime", time - bootTime,
+       "i|heapFreeMem", freeMemory(),
+       "i|statusFreeMem", STATUS_DOC_SIZE - statusDoc.memoryUsage(),
+       vinBuf, cellBuf, "}|");
   // system["moreStuff"] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
   report(buf);
 
@@ -231,7 +238,11 @@ void SystemClass::reportCommandDone(const char* json, const char* cmdKey, const 
   report(reported, desired);
 }
 
-uint8_t SystemClass::getRemoteLogLevel() {
+void SystemClass::setRemoteLogLevel(int8_t in) {
+  remoteLogLevel = in;
+}
+
+int8_t SystemClass::getRemoteLogLevel() {
   return remoteLogLevel;
 }
 

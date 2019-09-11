@@ -66,6 +66,7 @@ e.g. for plug-1
 {"desired":{"inRide":"true"}}
 {"desired":{"inRide":"false"}}
 {"desired":{"reboot":"true"}}
+{"desired":{"remoteLog":"1"}}
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.0.9_d84e070505e00ce74e9ab35de951a41d1712f4e32e9541df5b9b488ff80a46e9", "to":"ETADPU.BIN"}}}
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"mkr1000USB_1.0.9_58f91825e8cdf93e5c0d1b2d3594f17c1748f97aa5c058db57af43da4c6c78c4", "to":"ETADPU.BIN"}}}
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "to":"CONFIG.TXT"}}}
@@ -81,24 +82,49 @@ e.g. for plug-1
 
 ```json
 {
-  "inRide": "false",
   "system": {
-    "firmware": "1.0.5",
-    "lastInfo": "BLE Disconnected",
-    "signalStrength": -46,
-    "heapFreeMem": 6655,
-    "statusFreeMem": 768,
-    "lastCmd": "{\"immo\":\"lock\"}",
-    "uptime": 14401
+    "firmware": "1.1.5",
+    "configFreeMem": 617,
+    "modem": "L0.0.00.00.05.08,A.02.04",
+    "sd": 1,
+    "eeprom": 1,
+    "cfg": 1,
+    "ble": 1,
+    "can": 1,
+    "uptime": 29,
+    "heapFreeMem": 6523,
+    "statusFreeMem": 992,
+    "vin": 1224,
+    "signal": 18,
+    "carrier": "Verizon Wireless Sierra Wireless",
+    "crash": {
+      "backtrace": [
+        "698e",
+        "9176"
+      ]
+    }
   },
+  "inRide": "false",
   "gps": {
-    "lat": 34.1499433,
-    "long": -118.0278233,
-    "speed": 0.023015579,
-    "heading": 207.3500061,
-    "dateTime": "2019-07-23T00:01:21Z"
+    "lat": 341499688,
+    "long": -1180278212,
+    "hdop": 640,
+    "speed": 20,
+    "heading": 0
   },
   "lock": "open",
   "immo": "lock"
 }
 ```
+
+### Crash Report:
+
+For each binary release, there should be a disassembly info in disassembly folder. You can search the code address (something like 698e or 9176) to see the source code.
+
+### Remote Logging:
+
+Remote Loggin is enabled for log level 4 (ERROR) by default. It can be changed to other levels (1: DEBUG for example) by sending
+```json
+{"desired":{"remoteLog":"1"}}
+```
+See packages/plug-log-forwarder for how to capture logs from all devices

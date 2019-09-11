@@ -27,7 +27,8 @@ class SystemClass {
   void reportCommandDone(const char* json, const char* cmdKey, const char* cmdValue);
   void checkVin();
   void checkHeartbeat();
-  uint8_t getRemoteLogLevel();
+  void setRemoteLogLevel(int8_t in);
+  int8_t getRemoteLogLevel();
 
  private:
   char id[19];

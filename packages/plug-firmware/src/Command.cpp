@@ -93,6 +93,8 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
     reboot();
     return;
+  } else if (cmdKey == "remoteLog") {
+    System.setRemoteLogLevel(cmdValue.toInt());
   } else if (download) {
     System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
     const char* host = download["host"] | "";

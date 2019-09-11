@@ -70,6 +70,7 @@ void checkCrashReport() {
     System.report(reported);
 
     data[CRASH_REPORT_START_BYTE] = 0;
+    data[CRASH_REPORT_START_BYTE + 1] = 0;
     ret = ECCX08.writeSlot(13, data, 72);
     logDebug("i|ret", ret);
 
