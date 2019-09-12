@@ -129,7 +129,6 @@ void CommandClass::processJson(const String& str, bool isBluetooth) {
 
 void CommandClass::reboot() {
   Watchdog.detachShutdown();
-  Watchdog.setup(WDT_HARDCYCLE4S);
   while (true)
     ;
 }
