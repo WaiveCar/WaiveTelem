@@ -15,7 +15,8 @@
 #include "Pins.h"
 #include "System.h"
 
-#define CRASH_REPORT_START_BYTE 52
+#define CRASH_REPORT_START_BYTE 48
+#define CRASH_REPORT_START_HEADER 6
 #define CRASH_REPORT_START_DATA 0xa5
 
 void shutdown() {
@@ -23,8 +24,8 @@ void shutdown() {
   uint8_t data[72];
   int ret = ECCX08.readSlot(13, data, 72);
   Serial.println("ret: " + String(ret));
-  int j = CRASH_REPORT_START_BYTE + 2;
-  for (int i = 1; j < 70 && (uint32_t)(&top + i) < 0x20008000; i++) {
+  int j = CRASH_REPORT_START_BYTE + CRASH_REPORT_START_HEADER;
+  for (int i = 1; j < 72 && (uint32_t)(&top + i) < 0x20008000; i++) {
     uint32_t value = *(&top + i);
     if (value >= 0x6000 && value < 0x20000 && value & 0x1) {
       value &= 0xfffffe;
@@ -37,17 +38,22 @@ void shutdown() {
       Serial.println(str);
     }
   }
-  int num = (j - CRASH_REPORT_START_BYTE - 2) / 3;
+  int num = (j - CRASH_REPORT_START_BYTE - CRASH_REPORT_START_HEADER) / 3;
   if (num > 0) {
     data[CRASH_REPORT_START_BYTE] = CRASH_REPORT_START_DATA;
     data[CRASH_REPORT_START_BYTE + 1] = num;
+    uint32_t time = System.getTime();
+    data[CRASH_REPORT_START_BYTE + 2] = time;
+    data[CRASH_REPORT_START_BYTE + 3] = time >> 8;
+    data[CRASH_REPORT_START_BYTE + 4] = time >> 16;
+    data[CRASH_REPORT_START_BYTE + 5] = time >> 24;
     ret = ECCX08.writeSlot(13, data, 72);
     Serial.println("ret: " + String(ret) + ",j: " + String(j));
   }
 }
 
 void checkCrashReport() {
-  int maxLen = (72 - CRASH_REPORT_START_BYTE - 2) / 3;
+  int maxLen = (72 - CRASH_REPORT_START_BYTE - CRASH_REPORT_START_HEADER) / 3;
   char* list[maxLen] = {NULL};
   uint8_t data[72];
   int ret = ECCX08.readSlot(13, data, 72);
@@ -55,7 +61,7 @@ void checkCrashReport() {
   logDebug("i|ret", ret, "i|len", len);
   if (data[CRASH_REPORT_START_BYTE] == CRASH_REPORT_START_DATA && len < 7 && len > 0) {
     int i = 0;
-    int j = CRASH_REPORT_START_BYTE + 2;
+    int j = CRASH_REPORT_START_BYTE + CRASH_REPORT_START_HEADER;
     for (; i < len; i++) {
       uint32_t value = data[j] | data[j + 1] << 8 | data[j + 2] << 16;
       j += 3;
@@ -66,7 +72,11 @@ void checkCrashReport() {
     char reported[256];
     // logDebug("i|i", i);
     // logDebug("list[0]", list[0]);
-    json(reported, "{|system", "{|crash", "s[backtrace", len, list, "}|", "}|");
+    uint32_t time = data[CRASH_REPORT_START_BYTE + 2] |
+                    data[CRASH_REPORT_START_BYTE + 3] << 8 |
+                    data[CRASH_REPORT_START_BYTE + 4] << 16 |
+                    data[CRASH_REPORT_START_BYTE + 5] << 24;
+    json(reported, "{|crash", "i|time", time, "s[backtrace", len, list, "}|");
     System.report(reported);
 
     data[CRASH_REPORT_START_BYTE] = 0;
@@ -94,8 +104,7 @@ void setup() {
   Pins.begin();
   ECCX08.begin();
   sdInit = SD.begin(SD_CS_PIN);
-  Logger.begin();  // dependent on SD.begin()
-  // shutdown();
+  Logger.begin();               // dependent on SD.begin()
   cfgInit = Config.begin();     // dependent on SD.begin()
   eepromInit = Eeprom.begin();  // dependent on ECCX08.begin() and SD.begin()
   System.begin();               // dependent on ECCX08.begin()
