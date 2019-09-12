@@ -236,7 +236,7 @@ void SystemClass::reportCommandDone(const String& lastCmd, const String& cmdKey,
   if (cmdValue.length() == 0) {
     json(reported, "{|system", "lastCmd", lastCmd.c_str(), "}|");
   } else {
-    json(reported, "{|system", "lastCmd", lastCmd.c_str(), "}|", cmdKey, cmdValue);
+    json(reported, "{|system", "lastCmd", lastCmd.c_str(), "}|", cmdKey.c_str(), cmdValue.c_str());
   }
   json(desired, ("o|" + cmdKey).c_str(), "null");
   report(reported, desired);

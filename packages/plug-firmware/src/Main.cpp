@@ -129,7 +129,12 @@ void loop() {
 
   if (Mqtt.isConnected() && !initSent) {
     char sysJson[128];
-    json(sysJson, "firmware", FIRMWARE_VERSION,
+    json(sysJson, "firmware", FIRMWARE_VERSION, "i|debug",
+#ifdef DEBUG
+         1,
+#else
+         0,
+#endif
          "i|configFreeMem", Config.getConfigFreeMem(),
 #ifndef ARDUINO_SAMD_MKR1000
          "modem", Internet.getModemVersion().c_str(),
