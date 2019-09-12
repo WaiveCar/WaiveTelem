@@ -36,10 +36,10 @@ uint8_t* CommandClass::getAuthSecret() {
   return authSecret;
 }
 
-void CommandClass::processJson(const String& json, bool isBluetooth) {
-  logInfo("json", json.c_str());
+void CommandClass::processJson(const String& str, bool isBluetooth) {
+  logInfo("json", str.c_str());
   StaticJsonDocument<COMMAND_DOC_SIZE> cmdDoc;
-  DeserializationError error = deserializeJson(cmdDoc, json);
+  DeserializationError error = deserializeJson(cmdDoc, str);
   if (error) {
     logError("error", error.c_str(), "Failed to read json");
     return;
@@ -79,24 +79,24 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
     Pins.unimmobilize();
   } else if (cmdKey == "can") {
     Can.sendCommand(cmdValue.c_str());
-    System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
+    System.reportCommandDone(lastCmd, cmdKey);
     return;
   } else if (cmdKey == "inRide" && cmdValue == "true") {
     System.setInRide(true);
-    System.sendNotYetCanStatus();
+    System.sendCanStatus("lessThanDelta");
     Gps.wakeup();
   } else if (cmdKey == "inRide" && cmdValue == "false") {
     System.setInRide(false);
-    System.sendNotYetCanStatus();
+    System.sendCanStatus("lessThanDelta");
     // Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
-    System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
+    System.reportCommandDone(lastCmd, cmdKey);
     reboot();
     return;
   } else if (cmdKey == "remoteLog") {
     System.setRemoteLogLevel(cmdValue.toInt());
   } else if (download) {
-    System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
+    System.reportCommandDone(lastCmd, cmdKey);
     const char* host = download["host"] | "";
     const char* from = download["from"] | "";
     const char* to = download["to"] | "";
@@ -105,11 +105,11 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
         reboot();
       }
     } else {
-      logError(json.c_str(), "Invalid download object");
+      logError(str.c_str(), "Invalid download object");
     }
     return;
   } else if (copy) {
-    System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), NULL);
+    System.reportCommandDone(lastCmd, cmdKey);
     const char* from = copy["from"] | "";
     const char* to = copy["to"] | "";
     if (strlen(from) > 0 && strlen(to) > 0) {
@@ -117,14 +117,14 @@ void CommandClass::processJson(const String& json, bool isBluetooth) {
         reboot();
       }
     } else {
-      logError(json.c_str(), "Invalid copy object");
+      logError(str.c_str(), "Invalid copy object");
     }
     return;
   } else {
-    logError(json.c_str());
+    logError(str.c_str());
     return;
   }
-  System.reportCommandDone(lastCmd.c_str(), cmdKey.c_str(), cmdValue.c_str());
+  System.reportCommandDone(lastCmd, cmdKey, cmdValue);
 }
 
 void CommandClass::reboot() {

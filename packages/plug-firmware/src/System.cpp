@@ -33,10 +33,12 @@ int SystemClass::begin() {
   rtc.setAlarmSeconds(59);
   rtc.enableAlarm(rtc.MATCH_SS);
 
-  sprintf(id, "%s", ECCX08.serialNumber().c_str());
+  String sn = ECCX08.serialNumber();
+  strncpy(id, sn.c_str(), sn.length());
 
-  statusDoc.createNestedObject("canbus");
-  statusDoc.createNestedObject("notyetcanbus");
+  JsonObject can = statusDoc.createNestedObject("canbus");
+  can.createNestedObject("lessThanDelta");
+  can.createNestedObject("batched");
   return 1;
 }
 
@@ -136,38 +138,40 @@ void SystemClass::sendHeartbeat() {
   lastHeartbeat = getTime();
 }
 
-void SystemClass::sendNotYetCanStatus() {
+void SystemClass::sendCanStatus(const char* type) {
   JsonObject can = statusDoc["canbus"];
-  JsonObject notyet = statusDoc["notyetcanbus"];
-  String canJson = statusDoc["notyetcanbus"].as<String>();
-  if (canJson != "{}") {
+  JsonObject telemetry = statusDoc[type];
+  if (telemetry.size() > 0) {
+    const char* canJson = statusDoc[type].as<char*>();
     char buf[512];
-    json(buf, "o|canbus", canJson.c_str());
+    json(buf, "o|canbus", canJson);
     report(buf);
-    for (JsonPair kv : notyet) {
+    for (JsonPair kv : telemetry) {
       can[kv.key()] = kv.value();
-      notyet.remove(kv.key());
+      telemetry.remove(kv.key());
     }
   }
 }
 
-void SystemClass::setCanStatus(const String& name, uint64_t value, uint32_t delta) {
+bool SystemClass::setCanStatus(const char* name, uint64_t value, uint32_t delta) {
   JsonObject can = statusDoc["canbus"];
-  JsonObject notyet = statusDoc["notyetcanbus"];
+  JsonObject lessThanDelta = can["lessThanDelta"];
+  JsonObject batched = can["batched"];
   uint64_t oldValue = can[name];
+  bool isBatched = false;
   if (oldValue != value) {
     if (abs(oldValue - value) >= delta) {
       can[name] = value;
-      if (delta > 0) {
-        notyet.remove(name);
+      if (delta > 1) {
+        lessThanDelta.remove(name);
       }
-      char buf[128];
-      json(buf, "{|canbus", (String("i|") + name).c_str(), value, "}|");
-      report(buf);
+      batched[name] = value;
+      isBatched = true;
     } else {
-      notyet[name] = value;
+      lessThanDelta[name] = value;
     }
   }
+  return isBatched;
 }
 
 void SystemClass::sleep(uint32_t sec) {
@@ -227,14 +231,14 @@ void SystemClass::setInRide(bool in) {
   inRide = in;
 }
 
-void SystemClass::reportCommandDone(const char* json, const char* cmdKey, const char* cmdValue) {
+void SystemClass::reportCommandDone(const String& lastCmd, const String& cmdKey, const String& cmdValue) {
   char reported[512], desired[64];
-  if (cmdValue) {
-    json(reported, "{|system", "lastCmd", json, "}|", cmdKey, cmdValue);
+  if (cmdValue.length() == 0) {
+    json(reported, "{|system", "lastCmd", lastCmd.c_str(), "}|");
   } else {
-    json(reported, "{|system", "lastCmd", json, "}|");
+    json(reported, "{|system", "lastCmd", lastCmd.c_str(), "}|", cmdKey, cmdValue);
   }
-  json(desired, (String("o|") + cmdKey).c_str(), "null");
+  json(desired, ("o|" + cmdKey).c_str(), "null");
   report(reported, desired);
 }
 

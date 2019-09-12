@@ -17,7 +17,7 @@ static InternetClient client;
 static void sendGetRequest(const String& host, const String& file) {
   client.println("GET /" + file + " HTTP/1.0");
   client.println("Host: " + host);
-  client.println("User-Agent: waiveplug/" + String(FIRMWARE_VERSION));
+  client.println("User-Agent: waive/" + String(FIRMWARE_VERSION));
   client.println("Accept: application/octet-stream");
   client.println();
 }

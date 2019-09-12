@@ -27,6 +27,7 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
     JsonArray statusArray = bus["status"];
     logTrace("i|busNum", busNum, "i|inMessage.id", inMessage.id, "i|valueHi", inMessage.data32[1], "i|valueLow", inMessage.data32[0]);
     // Software filter for relevant IDs
+    bool isBatched = false;
     for (uint8_t i = 0; i < statusArray.size(); i++) {
       JsonObject status = statusArray[i];
       if (inMessage.id == status["id"]) {
@@ -37,10 +38,15 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
         uint64_t value = inMessage.data64;
         uint64_t mask = pow(2, len) - 1;
         value = (value >> bit) & mask;
-        String name = status["name"];
+        const char* name = status["name"];
         uint32_t delta = status["delta"] || 0;
-        System.setCanStatus(name, value, delta);
+        if (System.setCanStatus(name, value, delta)) {
+          isBatched = true;
+        }
       }
+    }
+    if (isBatched) {
+      System.sendCanStatus("batched");
     }
   }
 }

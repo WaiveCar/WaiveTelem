@@ -121,6 +121,11 @@ e.g. for plug-1
 
 For each binary release, there should be a disassembly info in disassembly folder. You can search the code address (something like 698e or 9176) to see the source code.
 
+To clear crash report:
+```json
+{"reported":{"system":{"crash":null}}}
+```
+
 ### Remote Logging:
 
 Remote Loggin is enabled for log level 4 (ERROR) by default. It can be changed to other levels (1: DEBUG for example) by sending

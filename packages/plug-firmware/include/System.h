@@ -19,12 +19,12 @@ class SystemClass {
   void report(const char* reported, const char* desired = NULL);
   void sendInfo(const char* sysJson);
   void sendHeartbeat();
-  void sendNotYetCanStatus();
-  void setCanStatus(const String& name, uint64_t value, uint32_t delta);
+  void sendCanStatus(const char* type);
+  bool setCanStatus(const char* name, uint64_t value, uint32_t delta);
   void sleep(uint32_t sec);
   bool stayResponsive();
   void setStayResponsive(bool responsive);
-  void reportCommandDone(const char* json, const char* cmdKey, const char* cmdValue);
+  void reportCommandDone(const String& lastCmd, const String& cmdKey, const String& cmdValue = "");
   void checkVin();
   void checkHeartbeat();
   void setRemoteLogLevel(int8_t in);

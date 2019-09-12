@@ -29,7 +29,7 @@ void toFile(int level, const char* json) {
   File writeFile = Logger.getWriteFile();
   if (writeFile) {
     writeFile.println(json);
-    writeFile.flush();
+    // writeFile.flush();
     int error = writeFile.getWriteError();
     if (error) {
       logError("i|error", error, "cannot write to LOG.TXT");
