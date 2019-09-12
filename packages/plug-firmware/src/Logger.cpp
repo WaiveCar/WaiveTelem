@@ -17,15 +17,15 @@ const char* getLogTime() {
 }
 }
 
-void toConsole(int level, const char* json) {
+void toConsole(int level, const char* json, int len) {
   char mod[LOG_MAX_LEN];
-  strcpy(mod, json);
+  memcpy(mod, json, len + 1);
   logModifyForHuman(level, mod);
 
   Serial.println(mod);
 }
 
-void toFile(int level, const char* json) {
+void toFile(int level, const char* json, int len) {
   File writeFile = Logger.getWriteFile();
   if (writeFile) {
     writeFile.println(json);
@@ -38,10 +38,10 @@ void toFile(int level, const char* json) {
   }
 }
 
-void toMqtt(int level, const char* json) {
+void toMqtt(int level, const char* json, int len) {
   if (Mqtt.isConnected()) {
     if (level >= System.getRemoteLogLevel()) {
-      Mqtt.logMsg(json);
+      Mqtt.logMsg(json, len);
     }
   }
 }

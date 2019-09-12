@@ -197,14 +197,15 @@ void SystemClass::setTimes(uint32_t in) {
 void SystemClass::report(const char* reported, const char* desired) {
   char message[512];
 
+  int len;
   if (desired) {
-    json(message, "{|state", "o|reported", reported, "o|desired", desired, "}|");
+    len = json(message, "{|state", "o|reported", reported, "o|desired", desired, "}|");
   } else {
-    json(message, "{|state", "o|reported", reported, "}|");
+    len = json(message, "{|state", "o|reported", reported, "}|");
   }
   logInfo("o|message", message);
   if (Mqtt.isConnected()) {
-    Mqtt.updateShadow(message);
+    Mqtt.updateShadow(message, len);
   }
 }
 

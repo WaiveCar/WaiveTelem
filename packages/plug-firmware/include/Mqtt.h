@@ -7,8 +7,8 @@ class MqttClass {
   void connect();
   bool isConnected();
   void poll();
-  void updateShadow(const char* message);
-  void logMsg(const char* message);
+  void updateShadow(const char* message, int len);
+  void logMsg(const char* message, int len);
 
  private:
   String updateTopic;

@@ -126,15 +126,15 @@ void MqttClass::poll() {
   // logDebug("i|pollTime", total); // poll takes 150ms over cellular
 }
 
-void MqttClass::updateShadow(const char* message) {
+void MqttClass::updateShadow(const char* message, int len) {
   // logDebug("i|msgLen", strlen(message));
-  mqttClient.beginMessage(updateTopic, strlen(message), false, 0, false);
+  mqttClient.beginMessage(updateTopic, len, false, 0, false);
   mqttClient.print(message);
   mqttClient.endMessage();
 }
 
-void MqttClass::logMsg(const char* message) {
-  mqttClient.beginMessage(logTopic, strlen(message), false, 0, false);
+void MqttClass::logMsg(const char* message, int len) {
+  mqttClient.beginMessage(logTopic, len, false, 0, false);
   mqttClient.print(message);
   mqttClient.endMessage();
 }
