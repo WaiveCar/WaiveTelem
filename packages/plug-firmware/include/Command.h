@@ -10,15 +10,16 @@ class CommandClass {
  public:
   int begin();
   void authorize(const String& encrypted);
-  uint8_t* getAuthSecret();
   void unauthorize();
-  String decryptToken(const String& encrypted);
+  uint8_t* getAuthSecret();
   void processJson(const String& json, bool isBluetooth = false);
   int32_t moveFile(const char* from, const char* to);
   int32_t copyFile(const char* from, const char* to);
   void reboot();
 
  private:
+  String decryptToken(const String& encrypted);
+
   String authCmds = "";
   uint32_t authStart = 0;
   uint32_t authEnd = 0;

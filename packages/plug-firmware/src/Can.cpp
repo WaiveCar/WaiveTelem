@@ -3,7 +3,6 @@
 
 #include "Can.h"
 #include "Config.h"
-#include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
 
@@ -46,7 +45,7 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
       }
     }
     if (isBatched) {
-      System.sendCanStatus("batched");
+      System.sendCanStatus("batch");
     }
   }
 }
@@ -123,34 +122,6 @@ void CanClass::poll() {
   }
 }
 
-void CanClass::send(JsonObject& cmdJson) {
-  CANMessage message;
-  int bus = cmdJson["bus"] || 0;
-
-  if (bus >= busCount) {
-    logError("cmdJson[bus] >= busCount");
-    return;
-  }
-  const char* msg = cmdJson["msg"];
-
-  message.id = cmdJson["id"];
-  char higher32[9];
-  strncpy(higher32, msg, 8);
-  message.data32[1] = strtoul(higher32, NULL, 16);
-  message.data32[0] = strtoul(&msg[8], NULL, 16);
-  message.len = 8;
-  logDebug("i|bus", bus, "i|id", message.id, "msg", msg);
-  // char str[32];
-  // sprintf(str, "%08lx%08lx", message.data32[1], message.data32[0]);
-  // logDebug("str", str);
-
-  bool ok = canbus[bus]->tryToSend(message);
-  if (!ok) {
-    logError("can tryToSend() failed");
-    health = -2;
-  }
-}
-
 void CanClass::sendCommand(const char* cmd) {
   if (health == 1) {
     logDebug("cmd", cmd);
@@ -158,7 +129,30 @@ void CanClass::sendCommand(const char* cmd) {
     // char output[128];
     // serializeJson(cmdJson, output);
     // logDebug("cmdJson", output);
-    send(cmdJson);
+    CANMessage message;
+    int bus = cmdJson["bus"] || 0;
+
+    if (bus >= busCount) {
+      logError("cmdJson[bus] >= busCount");
+      return;
+    }
+    const char* msg = cmdJson["msg"];
+
+    message.id = cmdJson["id"];
+    char higher32[9];
+    strncpy(higher32, msg, 8);
+    message.data32[1] = strtoul(higher32, NULL, 16);
+    message.data32[0] = strtoul(&msg[8], NULL, 16);
+    message.len = 8;
+    logDebug("i|bus", bus, "i|id", message.id, "msg", msg);
+    // char str[32];
+    // sprintf(str, "%08lx%08lx", message.data32[1], message.data32[0]);
+    // logDebug("str", str);
+    bool ok = canbus[bus]->tryToSend(message);
+    if (!ok) {
+      logError("can tryToSend() failed");
+      health = -2;
+    }
   } else {
     logWarn("can not initialized yet");
   }

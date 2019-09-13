@@ -63,8 +63,6 @@ e.g. for plug-1
 {"desired":{"lock":"close"}}
 {"desired":{"immo":"lock"}}
 {"desired":{"immo":"unlock"}}
-{"desired":{"inRide":"true"}}
-{"desired":{"inRide":"false"}}
 {"desired":{"reboot":"true"}}
 {"desired":{"remoteLog":"1"}}
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.0.9_d84e070505e00ce74e9ab35de951a41d1712f4e32e9541df5b9b488ff80a46e9", "to":"ETADPU.BIN"}}}
@@ -104,7 +102,6 @@ e.g. for plug-1
       ]
     }
   },
-  "inRide": "false",
   "gps": {
     "lat": 341499688,
     "long": -1180278212,

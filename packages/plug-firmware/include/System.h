@@ -15,9 +15,9 @@ class SystemClass {
   uint32_t getTime();
   const char* getDateTime();
   void keepTime();
-  void setInRide(bool in);
   void report(const char* reported, const char* desired = NULL);
   void sendInfo(const char* sysJson);
+  void resetLastHeartbeat();
   void sendHeartbeat();
   void sendCanStatus(const char* type);
   bool setCanStatus(const char* name, uint64_t value, uint32_t delta);
@@ -25,14 +25,14 @@ class SystemClass {
   bool stayResponsive();
   void setStayResponsive(bool responsive);
   void reportCommandDone(const String& lastCmd, const String& cmdKey, const String& cmdValue = "");
-  void checkVin();
-  void checkHeartbeat();
   void setRemoteLogLevel(int8_t in);
   int8_t getRemoteLogLevel();
 
  private:
+  void checkVin();
+  void checkHeartbeat();
+
   char id[19];
-  bool inRide = false;
   int8_t remoteLogLevel = 4;
   int32_t lastHeartbeat = -1;
   uint32_t bootTime = 0;
@@ -42,7 +42,6 @@ class SystemClass {
   bool stayresponsive = false;
   RTCZero rtc;
   uint32_t lastMillis = 0;
-
   uint32_t vinReads[5] = {0};
   int vinIndex = 0;
   bool vinAvgValid = false;

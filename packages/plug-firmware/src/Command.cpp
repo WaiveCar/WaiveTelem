@@ -8,7 +8,6 @@
 #include "Can.h"
 #include "Command.h"
 #include "Eeprom.h"
-#include "Gps.h"
 #include "Https.h"
 #include "Pins.h"
 #include "System.h"
@@ -81,14 +80,6 @@ void CommandClass::processJson(const String& str, bool isBluetooth) {
     Can.sendCommand(cmdValue.c_str());
     System.reportCommandDone(lastCmd, cmdKey);
     return;
-  } else if (cmdKey == "inRide" && cmdValue == "true") {
-    System.setInRide(true);
-    System.sendCanStatus("lessThanDelta");
-    Gps.wakeup();
-  } else if (cmdKey == "inRide" && cmdValue == "false") {
-    System.setInRide(false);
-    System.sendCanStatus("lessThanDelta");
-    // Can.sleep();
   } else if (cmdKey == "reboot" && cmdValue == "true") {
     System.reportCommandDone(lastCmd, cmdKey);
     reboot();

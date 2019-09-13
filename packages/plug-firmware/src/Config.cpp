@@ -2,7 +2,6 @@
 #include <SD.h>
 
 #include "Config.h"
-#include "System.h"
 
 int ConfigClass::begin() {
   File file = SD.open("CONFIG.TXT");

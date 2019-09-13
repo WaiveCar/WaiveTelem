@@ -138,19 +138,19 @@ void GpsClass::wakeup() {
 }
 
 // crashes the system for some reason
-void GpsClass::reset() {
-#ifdef ARDUINO_SAMD_WAIVE1000
-  static const uint8_t ubxReset[] __PROGMEM =
-      {
-          ublox::UBX_CFG, ublox::UBX_CFG_RST,
-          UBX_MSG_LEN(ublox::cfg_reset_t), 0,  // word length MSB is 0
-          0, 0,                                // clear bbr section
-          ublox::cfg_reset_t::HW_RESET,        // reset mode
-          0x00                                 // reserved
-      };
-  const ublox::cfg_reset_t *cfg_cold_ptr = (const ublox::cfg_reset_t *)ubxReset;
-  gps.send_request_P(*cfg_cold_ptr);
-#endif
-}
+// void GpsClass::reset() {
+// #ifdef ARDUINO_SAMD_WAIVE1000
+//   static const uint8_t ubxReset[] __PROGMEM =
+//       {
+//           ublox::UBX_CFG, ublox::UBX_CFG_RST,
+//           UBX_MSG_LEN(ublox::cfg_reset_t), 0,  // word length MSB is 0
+//           0, 0,                                // clear bbr section
+//           ublox::cfg_reset_t::HW_RESET,        // reset mode
+//           0x00                                 // reserved
+//       };
+//   const ublox::cfg_reset_t *cfg_cold_ptr = (const ublox::cfg_reset_t *)ubxReset;
+//   gps.send_request_P(*cfg_cold_ptr);
+// #endif
+// }
 
 GpsClass Gps;

@@ -9,7 +9,7 @@ sed -i'.bak' -e 's/static\ volatile\ uint32_t\ _ulTickCount/volatile\ uint32_t\ 
 
 pio lib update
 
-export FIRMWARE_VERSION=1.1.6
+export FIRMWARE_VERSION=1.1.7
 
 export S3_HOST=waiveplug.s3.us-east-2.amazonaws.com
 export DEBUG=

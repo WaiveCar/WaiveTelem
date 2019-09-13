@@ -1,10 +1,8 @@
 #include <Arduino.h>
 #include <JsonLogger.h>
 
-#include "Config.h"
 #include "Logger.h"
 #include "Mqtt.h"
-#include "Pins.h"
 #include "System.h"
 
 extern "C" {

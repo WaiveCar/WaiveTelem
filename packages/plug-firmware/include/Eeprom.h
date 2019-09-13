@@ -18,6 +18,7 @@ class EepromClass {
   int saveMqttConfig(uint8_t type, const char* url);
   int loadMqttConfig();
   static void clientAppendCert(void* ctx, const void* data, size_t len);
+
   char* mqttUrl;
   uint8_t* mqttCert;
   uint16_t mqttCertLen;

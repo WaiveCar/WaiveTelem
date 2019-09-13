@@ -11,16 +11,17 @@ class BluetoothClass {
   int begin();
   void poll();
   void reset();
-  tBleStatus addService();
-  tBleStatus setChallenge();
-  tBleStatus setConnectable();
+  int getHealth();
   void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t* att_data);
   void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle);
   void GAP_DisconnectionComplete_CB();
   void Read_Request_CB(uint16_t handle);
-  int getHealth();
 
  private:
+  tBleStatus addService();
+  tBleStatus setChallenge();
+  tBleStatus setConnectable();
+
   tBleStatus status = BLE_STATUS_ERROR;
   char name[21];
   uint16_t connection_handle = 0;

@@ -76,7 +76,7 @@ int MqttClass::begin() {
 
   String id = System.getId();
   mqttClient.setId(id);
-  // mqttClient.setKeepAliveInterval(30 * 1000);  // setting it to long value cause MQTT commands to have long delay
+  mqttClient.setKeepAliveInterval(30 * 1000);  // setting it to long value cause MQTT commands to have long delay
   mqttClient.onMessage(onMessageReceived);
   updateTopic = "$aws/things/" + id + "/shadow/update";
   logTopic = "things/" + id + "/log";

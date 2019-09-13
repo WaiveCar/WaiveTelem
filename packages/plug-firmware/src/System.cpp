@@ -16,6 +16,8 @@
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
+#define IGNITION_ON 3
+
 extern "C" char* sbrk(int incr);
 extern volatile uint32_t _ulTickCount;
 
@@ -38,7 +40,7 @@ int SystemClass::begin() {
 
   JsonObject can = statusDoc.createNestedObject("canbus");
   can.createNestedObject("lessThanDelta");
-  can.createNestedObject("batched");
+  can.createNestedObject("batch");
   return 1;
 }
 
@@ -48,9 +50,9 @@ void SystemClass::poll() {
 }
 
 void SystemClass::checkHeartbeat() {
-  // logDebug("b|inRide", inRide, "statusDoc['inRide']", statusDoc["inRide"].as<char*>());
   JsonObject heartbeat = Config.get()["heartbeat"];
-  uint32_t interval = inRide ? heartbeat["inRide"] | 30 : heartbeat["notInRide"] | 900;
+  int ignition = statusDoc["canbus"]["ignition"] | 0;
+  uint32_t interval = ignition == IGNITION_ON ? heartbeat["ignitionOn"] | 30 : heartbeat["ignitionOff"] | 900;
   // logDebug("i|time", time, "i|lastHeartbeat", lastHeartbeat, "i|interval", interval);
   uint32_t elapsedTime = getTime() - lastHeartbeat;
   if (interval > 60 && elapsedTime == interval - 60) {
@@ -106,8 +108,12 @@ const char* SystemClass::getDateTime() {
 void SystemClass::sendInfo(const char* sysJson) {
   char info[512], remoteLog[2];
   snprintf(remoteLog, 2, "%c", '0' + remoteLogLevel);
-  json(info, "inRide", inRide ? "true" : "false", "remoteLog", remoteLog, "o|system", sysJson);
+  json(info, "remoteLog", remoteLog, "o|system", sysJson);
   report(info);
+}
+
+void SystemClass::resetLastHeartbeat() {
+  lastHeartbeat = -1;
 }
 
 void SystemClass::sendHeartbeat() {
@@ -124,8 +130,8 @@ void SystemClass::sendHeartbeat() {
   json(buf, "{|gps", "i|lat", Gps.getLatitude(),
        "i|long", Gps.getLongitude(),
        "i|hdop", Gps.getHdop(),
-       "i|speed", Gps.getSpeed(),
-       "i|heading", Gps.getHeading(), "}|",
+       "i|speed", Gps.getSpeed() / 869,  // convert to miles per hour
+       "i|heading", Gps.getHeading() 100, "}|",
        "{|system", "i|ble", Bluetooth.getHealth(),
        "i|can", Can.getHealth(),
        "i|uptime", time - bootTime,
@@ -156,17 +162,30 @@ void SystemClass::sendCanStatus(const char* type) {
 bool SystemClass::setCanStatus(const char* name, uint64_t value, uint32_t delta) {
   JsonObject can = statusDoc["canbus"];
   JsonObject lessThanDelta = can["lessThanDelta"];
-  JsonObject batched = can["batched"];
+  JsonObject batch = can["batch"];
   uint64_t oldValue = can[name];
   bool isBatched = false;
   if (oldValue != value) {
     if (abs(oldValue - value) >= delta) {
       can[name] = value;
-      if (delta > 1) {
+      if (delta > 0) {
         lessThanDelta.remove(name);
       }
-      batched[name] = value;
+      batch[name] = value;
       isBatched = true;
+      if (strcmp(name, "ignition") == 0) {
+        if (oldValue == IGNITION_ON && value != IGNITION_ON) {
+          // send all the changed data
+          sendCanStatus("lessThanDelta");
+          Gps.poll();
+          System.sendHeartbeat();
+          // put in power-saving mode for canbus, mpu6050
+          // change heartbeat interval to 15 minutes, gps will be sleep for the first 14 minutes
+        } else if (oldValue != IGNITION_ON && value == IGNITION_ON) {
+          // put in normal mode canus, mpu6050
+          // change heartbeat interval to 30 secs
+        }
+      }
     } else {
       lessThanDelta[name] = value;
     }
@@ -177,7 +196,7 @@ bool SystemClass::setCanStatus(const char* name, uint64_t value, uint32_t delta)
 void SystemClass::sleep(uint32_t sec) {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
-  delay(sec * 1000);  // don't use rtc.standbyMode as it disconnects USB
+  delay(sec * 1000 - 150);
 #else
   rtc.setSeconds(60 - sec);
   rtc.standbyMode();
@@ -226,10 +245,6 @@ void SystemClass::keepTime() {
       setTimes(time + elapsed / 1000);
     }
   }
-}
-
-void SystemClass::setInRide(bool in) {
-  inRide = in;
 }
 
 void SystemClass::reportCommandDone(const String& lastCmd, const String& cmdKey, const String& cmdValue) {

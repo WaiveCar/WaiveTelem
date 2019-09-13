@@ -7,11 +7,10 @@ class CanClass {
  public:
   int begin();
   void poll();
-  void send(JsonObject& cmdJson);
+  int getHealth();
   void sendCommand(const char* cmd);
   void sleep();
   bool isSleeping(int bus);
-  int getHealth();
 
  private:
   int health = 0;
