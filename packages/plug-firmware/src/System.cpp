@@ -131,7 +131,7 @@ void SystemClass::sendHeartbeat() {
        "i|long", Gps.getLongitude(),
        "i|hdop", Gps.getHdop(),
        "i|speed", Gps.getSpeed() / 869,  // convert to miles per hour
-       "i|heading", Gps.getHeading() 100, "}|",
+       "i|heading", Gps.getHeading() / 100, "}|",
        "{|system", "i|ble", Bluetooth.getHealth(),
        "i|can", Can.getHealth(),
        "i|uptime", time - bootTime,

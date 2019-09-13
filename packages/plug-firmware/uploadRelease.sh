@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. setEnv.sh
 . buildAll.sh
 
 SHA=$(openssl dgst -sha256 -hmac "https failed" .pio/build/waive1000/firmware.bin)
