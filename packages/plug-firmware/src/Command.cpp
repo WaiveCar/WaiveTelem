@@ -1,9 +1,9 @@
 #include <Arduino.h>
+#include <Base64.h>
 #include <JsonLogger.h>
 #include <SD.h>
 #include <WDTZero.h>
 #include <bearssl/bearssl_ssl.h>
-#include <rBase64.h>
 
 #include "Can.h"
 #include "Command.h"
@@ -29,7 +29,7 @@ void CommandClass::authorize(const String& encrypted) {
   authEnd = authDoc["end"] | 0;
   logInfo("authCmds", authCmds.c_str(), "i|authStart", authStart, "i|authEnd", authEnd);
   const char* secret = authDoc["secret"] | "";
-  rbase64_decode((char*)authSecret, (char*)secret, 16);
+  Base64.decode((char*)authSecret, (char*)secret, 16);
 }
 
 uint8_t* CommandClass::getAuthSecret() {
@@ -175,9 +175,9 @@ String CommandClass::decryptToken(const String& encrypted) {
   dc = &v_dc.vtable;
   vd->init(dc, Eeprom.getTokenKey(), 32);
   memcpy(iv, Eeprom.getTokenIv(), 16);
-  size_t length = rbase64_dec_len((char*)encrypted.c_str(), encrypted.length());
+  size_t length = Base64.decodedLength((char*)encrypted.c_str(), encrypted.length());
   char* buf = (char*)malloc(length);
-  rbase64_decode(buf, (char*)encrypted.c_str(), encrypted.length());
+  Base64.decode(buf, (char*)encrypted.c_str(), encrypted.length());
   for (size_t v = 0; v < length; v += 16) {
     vd->run(dc, iv, buf + v, 16);
   }

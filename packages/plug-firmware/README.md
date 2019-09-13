@@ -121,6 +121,8 @@ e.g. for plug-1
 
 For each binary release, there should be a disassembly info in disassembly folder. You can search the code address (something like 698e or 9176) to see the source code.
 
+Also, when you run `./run.sh` or `./debug.sh`, disassembly for the build is created in ./nosave/dis.txt
+
 To clear crash report:
 ```json
 {"reported":{"system":{"crash":null}}}
