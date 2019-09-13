@@ -7,6 +7,7 @@
 
 #include "Can.h"
 #include "Command.h"
+#include "Config.h"
 #include "Eeprom.h"
 #include "Https.h"
 #include "Pins.h"
@@ -74,8 +75,10 @@ void CommandClass::processJson(const String& str, bool isBluetooth) {
     Pins.lockDoors();
   } else if (cmdKey == "immo" && cmdValue == "lock") {
     Pins.immobilize();
+    Config.saveImmoState('1');
   } else if (cmdKey == "immo" && cmdValue == "unlock") {
     Pins.unimmobilize();
+    Config.saveImmoState('0');
   } else if (cmdKey == "can") {
     Can.sendCommand(cmdValue.c_str());
     System.reportCommandDone(lastCmd, cmdKey);

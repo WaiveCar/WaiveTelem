@@ -41,6 +41,13 @@ int SystemClass::begin() {
   JsonObject can = statusDoc.createNestedObject("canbus");
   can.createNestedObject("lessThanDelta");
   can.createNestedObject("batch");
+
+  char state = Config.loadImmoState();
+  if (state == '1') {
+    Pins.immobilize();
+  } else if (state == '0') {
+    Pins.unimmobilize();
+  }
   return 1;
 }
 

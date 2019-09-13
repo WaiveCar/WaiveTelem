@@ -6,7 +6,7 @@
 
 #include "Eeprom.h"
 
-#define FILENAME "MQTT.TXT"
+#define MQTT_FILE "MQTT.TXT"
 
 struct slot {
   uint8_t num;
@@ -23,7 +23,7 @@ const struct slot slots[] = {
 };
 
 int EepromClass::begin() {
-  File file = SD.open(FILENAME);
+  File file = SD.open(MQTT_FILE);
   if (file) {
     const size_t capacity = JSON_OBJECT_SIZE(3) + 1260;
     DynamicJsonDocument doc(capacity);
@@ -41,7 +41,8 @@ int EepromClass::begin() {
       decodeMqttConfig(1, url, cert);
     }
 
-    SD.remove((char*)FILENAME);
+    file.close();
+    SD.remove((char*)MQTT_FILE);
   }
 
   loadMqttConfig();

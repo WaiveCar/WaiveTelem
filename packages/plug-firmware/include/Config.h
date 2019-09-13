@@ -11,6 +11,8 @@ class ConfigClass {
   int begin();
   JsonDocument& get();
   int32_t getConfigFreeMem();
+  char loadImmoState();
+  void saveImmoState(char value);
 
  private:
   StaticJsonDocument<CONFIG_DOC_SIZE> configDoc;

@@ -94,13 +94,7 @@ e.g. for plug-1
     "statusFreeMem": 992,
     "vin": 1224,
     "signal": 18,
-    "carrier": "Verizon Wireless Sierra Wireless",
-    "crash": {
-      "backtrace": [
-        "698e",
-        "9176"
-      ]
-    }
+    "carrier": "Verizon Wireless Sierra Wireless"
   },
   "gps": {
     "lat": 341499688,
@@ -109,6 +103,14 @@ e.g. for plug-1
     "speed": 20,
     "heading": 0
   },
+  "crash": {
+    "time": 1568406162,
+    "backtrace": [
+      "698e",
+      "9176"
+    ]
+  },
+  "remoteLog": "4",
   "lock": "open",
   "immo": "lock"
 }
@@ -122,7 +124,7 @@ Also, when you run `./run.sh` or `./debug.sh`, disassembly for the build is crea
 
 To clear crash report:
 ```json
-{"reported":{"system":{"crash":null}}}
+{"reported":{"crash":null}}
 ```
 
 ### Remote Logging:

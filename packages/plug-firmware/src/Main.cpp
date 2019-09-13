@@ -34,7 +34,7 @@ void setup() {
   cfgInit = Config.begin();     // dependent on SD.begin()
   eepromInit = Eeprom.begin();  // dependent on ECCX08.begin() and SD.begin()
   System.begin();               // dependent on ECCX08.begin()
-  Mqtt.begin();                 // dependent on System.begin()
+  Mqtt.begin();                 // dependent on Eeprom.begin() and System.begin()
   Mqtt.poll();
   //  Motion.begin();
   Gps.begin();

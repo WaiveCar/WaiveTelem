@@ -53,7 +53,7 @@ static int32_t saveFile(const char* to) {
     logError("file open failed");
     return -1;
   }
-  file.seek(0);  // workaround BUG in SD to default to append
+  file.seek(0);
   uint8_t buf[BUFFER_SIZE];
   while ((client.connected() || client.available()) && ((millis() - timeoutStart) < DOWNLOAD_TIMEOUT)) {
     if (client.available()) {
