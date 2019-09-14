@@ -8,11 +8,10 @@
 #include "Https.h"
 #include "Internet.h"
 
-#define DOWNLOAD_TIMEOUT 60 * 1000
+#define DOWNLOAD_TIMEOUT 30 * 60 * 1000
 
-// static InternetClient _client;
-// static BearSSLClient client(_client);
-static InternetClient client;
+// static InternetClient client;
+static InternetSslClient client;
 
 static void sendGetRequest(const String& host, const String& file) {
   client.println("GET /" + file + " HTTP/1.0");
@@ -23,11 +22,11 @@ static void sendGetRequest(const String& host, const String& file) {
 }
 
 static int32_t skipHeaders() {
-  unsigned long timeoutStart = millis();
   char prevPrevC = '\0';
   char prevC = '\0';
   char c = '\0';
-  while ((client.connected() || client.available()) && ((millis() - timeoutStart) < DOWNLOAD_TIMEOUT)) {
+  unsigned long start = millis();
+  while ((client.connected() || client.available()) && (millis() - start < DOWNLOAD_TIMEOUT)) {
     if (client.available()) {
       prevPrevC = prevC;
       prevC = c;
@@ -37,7 +36,7 @@ static int32_t skipHeaders() {
         return 0;
       }
     } else {
-      delay(1);
+      delay(10);
     }
     Watchdog.clear();
   }
@@ -45,7 +44,6 @@ static int32_t skipHeaders() {
 }
 
 static int32_t saveFile(const char* to) {
-  unsigned long timeoutStart = millis();
   int counter = 0;
   SHA256.beginHmac("https failed");
   File file = SD.open(to, FILE_WRITE);
@@ -55,14 +53,16 @@ static int32_t saveFile(const char* to) {
   }
   file.seek(0);
   uint8_t buf[BUFFER_SIZE];
-  while ((client.connected() || client.available()) && ((millis() - timeoutStart) < DOWNLOAD_TIMEOUT)) {
+  unsigned long start = millis();
+  while ((client.connected() || client.available()) && (millis() - start < DOWNLOAD_TIMEOUT)) {
     if (client.available()) {
       int bytesRead = client.read(buf, sizeof(buf));
+      // Serial.println(String(bytesRead));
       counter += bytesRead;
       SHA256.write(buf, bytesRead);
       file.write(buf, bytesRead);
     } else {
-      delay(1);
+      delay(10);
     }
     Watchdog.clear();
   }
@@ -94,7 +94,12 @@ static int32_t verifyFile(const String& file) {
 int32_t HttpsClass::download(const char* host, const char* from, const char* to) {
   logInfo("host", host, "from", from, "to", to);
   int32_t error;
-  if (client.connect(host, 80)) {
+  // Watchdog.clear();
+  Watchdog.setup(WDT_SOFTCYCLE32S);
+  int start = millis();
+  if (client.connect(host, 443)) {
+    logInfo("i|initTime", millis() - start);
+    Watchdog.setup(WDT_SOFTCYCLE8S);
     sendGetRequest(host, from);
     error = skipHeaders();
     if (error) return error;

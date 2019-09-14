@@ -454,9 +454,23 @@ export default class App extends Component {
           {this.renderButton('can: flash_lights', () => onPress(1, '{"can":"flash_lights"}'))}
         </View>
         <View style={styles.row}>
-          {this.renderButton('inRide: true', () => onPress(1, '{"inRide":"true"}'))}
+          {this.renderButton('DEFAULT.BIN', () =>
+            onPress(1, '{"copy":{"from":"DEFAULT.BIN", "to":"ETADPU.BIN"}}')
+          )}
           <View style={styles.columnGap} />
-          {this.renderButton('inRide: false', () => onPress(1, '{"inRide":"false"}'))}
+          {this.renderButton('DEFAULT.CFG', () =>
+            onPress(1, '{"copy":{"from":"DEFAULT.CFG", "to":"CONFIG.TXT"}}')
+          )}
+        </View>
+        <View style={styles.row}>
+          {this.renderButton('DOWNLOAD BIN', () =>
+            onPress(
+              1,
+              '{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.1.8_de8da132fd7e991918f84c2da97d8e92c0e48f9e191a43fd3b7ed0d9eb3bca1b", "to":"ETADPU.BIN"}}'
+            )
+          )}
+          <View style={styles.columnGap} />
+          {this.renderButton('remoteLog: "DEBUG"', () => onPress(1, '{"remoteLog":"1"}'))}
         </View>
       </View>
     );
