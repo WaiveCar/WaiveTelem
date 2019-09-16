@@ -15,7 +15,7 @@ void shutdown() {
   int j = CRASH_REPORT_START_BYTE + CRASH_REPORT_START_HEADER;
   uint32_t value = 0;
   for (int i = 1; j < 72 && (uint32_t)(&top + i) < 0x20008000; i++) {
-    if (value == (*(&top + i)) & 0xfffffe) {  // skip repeated value
+    if (value == ((*(&top + i)) & 0xfffffe)) {  // skip repeated value
       continue;
     }
     value = *(&top + i);
