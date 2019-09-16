@@ -8,6 +8,7 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 sed -i'.bak' -e 's/static\ volatile\ uint32_t\ _ulTickCount/volatile\ uint32_t\ _ulTickCount/g' ~/.platformio/packages/framework-arduinosam/cores/samd/delay.c
 
 pio lib update
+pio lib install JsonLogger # for some reason, on windows, JsonLogger doesn't get install unless explicitly
 
 export FIRMWARE_VERSION=1.1.8
 

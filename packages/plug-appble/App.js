@@ -76,6 +76,10 @@ CryptoJS.enc.u8array = {
   }
 };
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -91,6 +95,7 @@ export default class App extends Component {
     };
     this.bluetoothReceiveData = [];
     this.deviceMap = new Map();
+    this.isWritting = false;
     setTimeout(() => {
       this.scan();
     }, 100);
@@ -205,6 +210,10 @@ export default class App extends Component {
   // };
 
   writeWithoutResponse = async (index, text) => {
+    if (this.isWritting) {
+      return;
+    }
+    this.isWritting = true;
     let binary;
     binary = Buffer.from(text);
     // index 0 is AUTH_CHAR, 1 is CMD_CHAR
@@ -232,19 +241,11 @@ export default class App extends Component {
       remainBytesToSend -= subStringSize;
     }
     this.bluetoothReceiveData = [];
+    await sleep(1000); // wait for challenge to be set on the device
+    this.isWritting = false;
     this.setState({
       writeData: text
     });
-    //let formatValue = new Buffer(value, 'ascii').toString('base64');
-    // BluetoothManager.writeWithoutResponse(this.state.text, index, type)
-    //   .then(characteristic => {
-    //     this.bluetoothReceiveData = [];
-    //     this.setState({
-    //       writeData: this.state.text,
-    //       text: ''
-    //     });
-    //   })
-    //   .catch(err => {});
   };
 
   // monitor = index => {

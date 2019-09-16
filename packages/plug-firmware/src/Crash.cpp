@@ -11,10 +11,14 @@ void shutdown() {
   uint32_t top;
   uint8_t data[72];
   int ret = ECCX08.readSlot(13, data, 72);
-  Serial.println("ret: " + String(ret));
+  Serial.println("shutdown() ret: " + String(ret));
   int j = CRASH_REPORT_START_BYTE + CRASH_REPORT_START_HEADER;
+  uint32_t value = 0;
   for (int i = 1; j < 72 && (uint32_t)(&top + i) < 0x20008000; i++) {
-    uint32_t value = *(&top + i);
+    if (value == (*(&top + i)) & 0xfffffe) {  // skip repeated value
+      continue;
+    }
+    value = *(&top + i);
     if (value >= 0x6000 && value < 0x20000 && value & 0x1) {
       value &= 0xfffffe;
       data[j] = value;

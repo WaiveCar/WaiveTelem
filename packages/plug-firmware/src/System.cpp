@@ -31,9 +31,11 @@ const char* SystemClass::getId() {
 }
 
 int SystemClass::begin() {
+#ifndef DEBUG
   rtc.begin();
   rtc.setAlarmSeconds(59);
   rtc.enableAlarm(rtc.MATCH_SS);
+#endif
 
   String sn = ECCX08.serialNumber();
   strncpy(id, sn.c_str(), sn.length());
@@ -107,6 +109,9 @@ uint32_t SystemClass::getTime() {
 }
 
 const char* SystemClass::getDateTime() {
+  if (Internet.isConnected()) {
+    setTimes(Internet.getTime());
+  }
   NeoGPS::time_t dt = time;
   sprintf(dateTime, "%04d-%02d-%02dT%02d:%02d:%02dZ", dt.full_year(dt.year), dt.month, dt.date, dt.hours, dt.minutes, dt.seconds);
   return dateTime;
@@ -182,15 +187,13 @@ bool SystemClass::setCanStatus(const char* name, uint64_t value, uint32_t delta)
       isBatched = true;
       if (strcmp(name, "ignition") == 0) {
         if (oldValue == IGNITION_ON && value != IGNITION_ON) {
-          // send all the changed data
+          // send all changed data
           sendCanStatus("lessThanDelta");
           Gps.poll();
           System.sendHeartbeat();
           // put in power-saving mode for canbus, mpu6050
-          // change heartbeat interval to 15 minutes, gps will be sleep for the first 14 minutes
         } else if (oldValue != IGNITION_ON && value == IGNITION_ON) {
           // put in normal mode canus, mpu6050
-          // change heartbeat interval to 30 secs
         }
       }
     } else {

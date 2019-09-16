@@ -2,7 +2,10 @@
 #define System_h
 
 #include <ArduinoJson.h>
+
+#ifndef DEBUG
 #include <RTCZero.h>
+#endif
 
 #define STATUS_DOC_SIZE 1024
 
@@ -40,7 +43,9 @@ class SystemClass {
   char dateTime[32] = "";
   StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
   bool stayresponsive = false;
+#ifndef DEBUG
   RTCZero rtc;
+#endif
   uint32_t lastMillis = 0;
   uint32_t vinReads[5] = {0};
   int vinIndex = 0;

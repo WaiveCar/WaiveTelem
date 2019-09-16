@@ -5,6 +5,8 @@
 #include "Mqtt.h"
 #include "System.h"
 
+#define LOG_FILE "LOG.TXT"
+
 extern "C" {
 const char* getLogId() {
   return System.getId();
@@ -30,7 +32,7 @@ void toFile(int level, const char* json, int len) {
     // writeFile.flush();
     int error = writeFile.getWriteError();
     if (error) {
-      logError("i|error", error, "cannot write to LOG.TXT");
+      logError("i|error", error, "cannot write to " LOG_FILE);
       writeFile.close();
     }
   }
@@ -48,9 +50,9 @@ int LoggerClass::begin() {
   logAddSender(toConsole);
   logAddSender(toMqtt);
 
-  writeFile = SD.open("LOG.TXT", FILE_WRITE);
+  writeFile = SD.open(LOG_FILE, FILE_WRITE);
   if (!writeFile) {
-    logError("LOG.TXT open failed");
+    logError(LOG_FILE " open failed");
     return -1;
   }
 

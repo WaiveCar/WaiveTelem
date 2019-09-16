@@ -89,9 +89,9 @@ void MqttClass::connect() {
       return;
     }
   }
-  int signalStrengh = Internet.getSignalStrength();
-  // logDebug("i|signal", signalStrengh);
-  if (signalStrengh < 14) {
+  int signalStrength = Internet.getSignalStrength();
+  // logDebug("i|signal", signalStrength);
+  if (signalStrength < 10) {
     return;
   }
   logInfo("broker", Eeprom.getMqttUrl());
@@ -113,9 +113,9 @@ bool MqttClass::isConnected() {
 
 void MqttClass::poll() {
   if (!Mqtt.isConnected()) {
-    // try every 120 secs if not connected and not required to be responsive because cell and mqtt connect can take a long time (40 seconds not unusual)
+    // try in 60 secs if not connected and not required to be responsive because cell and mqtt connect can take a long time (40 seconds not unusual)
     uint32_t elapsedTime = System.getTime() - lastConnectTry;
-    if (!System.stayResponsive() && (lastConnectTry == -1 || elapsedTime >= 120)) {
+    if (!System.stayResponsive() && (lastConnectTry == -1 || elapsedTime >= 60)) {
       Mqtt.connect();
       lastConnectTry = System.getTime();
     }
