@@ -5,9 +5,8 @@ class MotionClass {
  public:
   int begin();
   void poll();
-  // to be implemented, awake only when inRide?
-  // void sleep();
-  // void wakeup();
+  float getTemp();
+  void setSleepEnabled(bool state);
 
  private:
   int health = 0;

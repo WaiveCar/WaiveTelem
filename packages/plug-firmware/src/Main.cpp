@@ -11,7 +11,7 @@
 #include "Gps.h"
 #include "Internet.h"
 #include "Logger.h"
-// #include "Motion.h"
+#include "Motion.h"
 #include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
@@ -20,6 +20,7 @@ bool initSent = false;
 int8_t sdInit;
 int8_t cfgInit;
 int8_t eepromInit;
+int8_t motionInit;
 
 void setup() {
   Serial.begin(115200);
@@ -36,7 +37,7 @@ void setup() {
   System.begin();               // dependent on ECCX08.begin()
   Mqtt.begin();                 // dependent on Eeprom.begin() and System.begin()
   Mqtt.poll();
-  //  Motion.begin();
+  motionInit = Motion.begin();
   Gps.begin();
 }
 
@@ -50,7 +51,7 @@ void loop() {
   Bluetooth.poll();
   Can.poll();
   System.poll();
-  //  Motion.poll();
+  Motion.poll();
   Mqtt.poll();
 
   if (Mqtt.isConnected() && !initSent) {
@@ -67,6 +68,7 @@ void loop() {
 #endif
          "i|sd", sdInit,
          "i|eeprom", eepromInit,
+         "i|motion", motionInit,
          "i|cfg", cfgInit);
     System.sendInfo(sysJson);
     checkCrashReport();

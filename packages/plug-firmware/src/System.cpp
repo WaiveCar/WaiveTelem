@@ -10,6 +10,7 @@
 #include "Gps.h"
 #include "Internet.h"
 #include "Logger.h"
+#include "Motion.h"
 #include "Mqtt.h"
 #include "Pins.h"
 #include "System.h"
@@ -139,14 +140,15 @@ void SystemClass::sendHeartbeat() {
     json(cellBuf, "-{", "i|signal", Internet.getSignalStrength(), "carrier", Internet.getCarrier().c_str());
   }
   char buf[512];
-  json(buf, "{|gps", "i|lat", Gps.getLatitude(),
-       "i|long", Gps.getLongitude(),
+  json(buf, "{|gps", "fa|lat", (double)Gps.getLatitude() / 1e7,
+       "fa|long", (double)Gps.getLongitude() / 1e7,
        "i|hdop", Gps.getHdop(),
        "i|speed", Gps.getSpeed() / 869,  // convert to miles per hour
        "i|heading", Gps.getHeading() / 100, "}|",
        "{|system", "i|ble", Bluetooth.getHealth(),
        "i|can", Can.getHealth(),
        "i|uptime", time - bootTime,
+       "f3|temp", Motion.getTemp(),
        "i|heapFreeMem", freeMemory(),
        "i|statusFreeMem", STATUS_DOC_SIZE - statusDoc.memoryUsage(),
        vinBuf, cellBuf, "}|");
@@ -192,8 +194,10 @@ bool SystemClass::setCanStatus(const char* name, uint64_t value, uint32_t delta)
           Gps.poll();
           System.sendHeartbeat();
           // put in power-saving mode for canbus, mpu6050
+          Motion.setSleepEnabled(true);
         } else if (oldValue != IGNITION_ON && value == IGNITION_ON) {
-          // put in normal mode canus, mpu6050
+          // put in normal mode canbus, mpu6050
+          Motion.setSleepEnabled(false);
         }
       }
     } else {
