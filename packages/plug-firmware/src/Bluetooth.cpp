@@ -1,10 +1,13 @@
 #include <ArduinoBearSSL.h>
 #include <ArduinoECCX08.h>
 #include <JsonLogger.h>
+#include <SPI.h>
 
 #include "Bluetooth.h"
 #include "Command.h"
 #include "System.h"
+
+SPIClass *BLESPI = &SPI1;
 
 void HCI_Event_CB(void *pckt) {
   hci_uart_pckt *hci_pckt = (hci_uart_pckt *)pckt;
