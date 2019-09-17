@@ -1,0 +1,52 @@
+{
+    "name": "ACAN2515", 
+    "version": "2.0.2", 
+    "keywords": [
+        "communication"
+    ], 
+    "description": "Driver for MCP2515 CAN Controller", 
+    "frameworks": [
+        "arduino"
+    ], 
+    "platforms": [
+        "atmelavr", 
+        "atmelsam", 
+        "espressif32", 
+        "espressif8266", 
+        "infineonxmc", 
+        "intel_arc32", 
+        "kendryte210", 
+        "microchippic32", 
+        "nordicnrf51", 
+        "nordicnrf52", 
+        "ststm32", 
+        "ststm8", 
+        "teensy", 
+        "timsp430"
+    ], 
+    "authors": [
+        {
+            "email": "Pierre.Molinaro@pcmolinaro.name", 
+            "url": null, 
+            "maintainer": true, 
+            "name": "Pierre Molinaro"
+        }
+    ], 
+    "repository": {
+        "type": "git", 
+        "url": "https://github.com/pierremolinaro/acan2515"
+    }, 
+    "homepage": null, 
+    "export": {
+        "include": null, 
+        "exclude": [
+            "extras", 
+            "docs", 
+            "tests", 
+            "test", 
+            "*.doxyfile", 
+            "*.pdf"
+        ]
+    }, 
+    "id": 5832
+}

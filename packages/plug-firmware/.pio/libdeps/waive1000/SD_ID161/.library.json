@@ -1,0 +1,30 @@
+{
+    "name": "SD", 
+    "keywords": [
+        "sd", 
+        "card", 
+        "file", 
+        "system"
+    ], 
+    "description": "This library aims to expose a subset of SD card functionality in the form of a higher level 'wrapper' object", 
+    "repository": {
+        "type": "git", 
+        "url": "https://github.com/adafruit/SD.git"
+    }, 
+    "frameworks": [
+        "arduino"
+    ], 
+    "platforms": [
+        "atmelavr"
+    ], 
+    "version": "041f788250", 
+    "authors": [
+        {
+            "email": null, 
+            "url": "https://github.com/adafruit", 
+            "maintainer": false, 
+            "name": "Adafruit Industries"
+        }
+    ], 
+    "id": 161
+}

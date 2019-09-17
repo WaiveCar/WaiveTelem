@@ -1,0 +1,50 @@
+{
+    "name": "Base64", 
+    "version": "0.0.1", 
+    "keywords": [
+        "data", 
+        "processing"
+    ], 
+    "description": "A Base64 library for Arduino", 
+    "frameworks": [
+        "arduino"
+    ], 
+    "platforms": [
+        "atmelavr", 
+        "atmelsam", 
+        "espressif32", 
+        "espressif8266", 
+        "intel_arc32", 
+        "microchippic32", 
+        "nordicnrf51", 
+        "nordicnrf52", 
+        "ststm32", 
+        "teensy", 
+        "timsp430"
+    ], 
+    "authors": [
+        {
+            "email": null, 
+            "url": null, 
+            "maintainer": true, 
+            "name": "Arturo Guadalupi"
+        }
+    ], 
+    "repository": {
+        "type": "git", 
+        "url": "https://github.com/agdl/Base64"
+    }, 
+    "homepage": null, 
+    "export": {
+        "include": null, 
+        "exclude": [
+            "extras", 
+            "docs", 
+            "tests", 
+            "test", 
+            "*.doxyfile", 
+            "*.pdf"
+        ]
+    }, 
+    "id": 582
+}
