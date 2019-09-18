@@ -1,7 +1,7 @@
 {
   "heartbeat": {
-    "inRide": 30,
-    "notInRide": 900
+    "ignitionOn": 30,
+    "ignitionOff": 900
   },
   "nb": {
     "pin": null,
