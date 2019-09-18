@@ -7,8 +7,6 @@
 #include "Command.h"
 #include "System.h"
 
-SPIClass *BLESPI = &SPI1;
-
 void HCI_Event_CB(void *pckt) {
   hci_uart_pckt *hci_pckt = (hci_uart_pckt *)pckt;
   hci_event_pckt *event_pckt = (hci_event_pckt *)hci_pckt->data;

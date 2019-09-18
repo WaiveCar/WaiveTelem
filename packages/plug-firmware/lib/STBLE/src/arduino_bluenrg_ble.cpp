@@ -81,7 +81,7 @@ extern volatile uint32_t ms_counter;
 
 SPI_HandleTypeDef SpiHandle;
 
-extern SPIClass *BLESPI;
+SPIClass *BLESPI = &SPI1;
 
 /**
  * @}
