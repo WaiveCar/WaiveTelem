@@ -23,7 +23,7 @@ class SystemClass {
   void resetLastHeartbeat();
   void sendHeartbeat();
   void sendCanStatus(const char* type);
-  bool setCanStatus(const char* name, uint64_t value, uint32_t delta);
+  void setCanStatus(const char* name, int64_t value, uint32_t delta);
   void sleep(uint32_t sec);
   bool stayResponsive();
   void setStayResponsive(bool responsive);

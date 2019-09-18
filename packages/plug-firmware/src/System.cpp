@@ -160,33 +160,35 @@ void SystemClass::sendHeartbeat() {
 
 void SystemClass::sendCanStatus(const char* type) {
   JsonObject can = statusDoc["canbus"];
-  JsonObject telemetry = statusDoc[type];
+  JsonObject telemetry = can[type];
+  logTrace("i|telemetry.size(): ", telemetry.size());
   if (telemetry.size() > 0) {
-    const char* canJson = statusDoc[type].as<char*>();
+    String canJson = can[type].as<String>();
     char buf[512];
-    json(buf, "o|canbus", canJson);
+    json(buf, "o|canbus", canJson.c_str());
     report(buf);
     for (JsonPair kv : telemetry) {
       can[kv.key()] = kv.value();
+      logTrace("kv.key(): ", kv.key().c_str(), "i|kv.value()", (int32_t)kv.value());
       telemetry.remove(kv.key());
     }
   }
+  logTrace("i|telemetry.size(): ", telemetry.size());
 }
 
-bool SystemClass::setCanStatus(const char* name, uint64_t value, uint32_t delta) {
+void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) {
   JsonObject can = statusDoc["canbus"];
   JsonObject lessThanDelta = can["lessThanDelta"];
   JsonObject batch = can["batch"];
-  uint64_t oldValue = can[name];
-  bool isBatched = false;
+  int64_t oldValue = can[name];
   if (oldValue != value) {
+    logTrace("name", name, "i|value", (int32_t)value, "i|delta", delta, "i|oldValue", (int32_t)oldValue);
     if (abs(oldValue - value) >= delta) {
       can[name] = value;
       if (delta > 0) {
         lessThanDelta.remove(name);
       }
       batch[name] = value;
-      isBatched = true;
       if (strcmp(name, "ignition") == 0) {
         if (oldValue == IGNITION_ON && value != IGNITION_ON) {
           // send all changed data
@@ -204,13 +206,12 @@ bool SystemClass::setCanStatus(const char* name, uint64_t value, uint32_t delta)
       lessThanDelta[name] = value;
     }
   }
-  return isBatched;
 }
 
 void SystemClass::sleep(uint32_t sec) {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
-  delay(sec * 1000 - 150);
+  delay(sec * 1000 - 150);  // minus 150msec to account for other stuff in the loop
 #else
   rtc.setSeconds(60 - sec);
   rtc.standbyMode();

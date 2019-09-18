@@ -24,9 +24,8 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
     JsonObject can = Config.get()["can"];
     JsonObject bus = can["bus"][busNum];
     JsonArray statusArray = bus["status"];
-    logTrace("i|busNum", busNum, "i|inMessage.id", inMessage.id, "i|valueHi", inMessage.data32[1], "i|valueLow", inMessage.data32[0]);
+    // logTrace("i|busNum", busNum, "i|inMessage.id", inMessage.id, "i|valueHi", inMessage.data32[1], "i|valueLow", inMessage.data32[0]);
     // Software filter for relevant IDs
-    bool isBatched = false;
     for (uint8_t i = 0; i < statusArray.size(); i++) {
       JsonObject status = statusArray[i];
       if (inMessage.id == status["id"]) {
@@ -38,14 +37,9 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
         uint64_t mask = pow(2, len) - 1;
         value = (value >> bit) & mask;
         const char* name = status["name"];
-        uint32_t delta = status["delta"] || 0;
-        if (System.setCanStatus(name, value, delta)) {
-          isBatched = true;
-        }
+        int delta = status["delta"] | 0;
+        System.setCanStatus(name, (int64_t)value, delta);
       }
-    }
-    if (isBatched) {
-      System.sendCanStatus("batch");
     }
   }
 }
@@ -119,6 +113,7 @@ void CanClass::poll() {
       }
       logTrace("i|totalMsg", totalMsg);
     }
+    System.sendCanStatus("batch");
   }
 }
 

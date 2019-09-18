@@ -8,10 +8,11 @@
 #define CRASH_REPORT_START_DATA 0xa5
 
 void shutdown() {
+  Serial.print("shutdown()");
   uint32_t top;
   uint8_t data[72];
   int ret = ECCX08.readSlot(13, data, 72);
-  Serial.println("shutdown() ret: " + String(ret));
+  Serial.println(" ret: " + String(ret));
   int j = CRASH_REPORT_START_BYTE + CRASH_REPORT_START_HEADER;
   uint32_t value = 0;
   for (int i = 1; j < 72 && (uint32_t)(&top + i) < 0x20008000; i++) {

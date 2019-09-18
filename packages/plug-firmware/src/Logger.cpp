@@ -29,7 +29,7 @@ void toFile(int level, const char* json, int len) {
   File writeFile = Logger.getWriteFile();
   if (writeFile) {
     writeFile.println(json);
-    // writeFile.flush();
+    writeFile.flush();
     int error = writeFile.getWriteError();
     if (error) {
       logError("i|error", error, "cannot write to " LOG_FILE);
@@ -55,7 +55,6 @@ int LoggerClass::begin() {
     logError(LOG_FILE " open failed");
     return -1;
   }
-
   logAddSender(toFile);
 
   return 1;
