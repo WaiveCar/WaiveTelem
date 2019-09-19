@@ -52,11 +52,13 @@
 
 #include "SD.h"
 
+namespace SDLib {
+
 // Used by `getNextPathComponent`
 #define MAX_COMPONENT_LEN 12 // What is max length?
 #define PATH_COMPONENT_BUFFER_LEN MAX_COMPONENT_LEN+1
 
-bool getNextPathComponent(char *path, unsigned int *p_offset,
+bool getNextPathComponent(const char *path, unsigned int *p_offset,
 			  char *buffer) {
   /*
 
@@ -115,9 +117,9 @@ bool getNextPathComponent(char *path, unsigned int *p_offset,
 
 
 
-boolean walkPath(char *filepath, SdFile& parentDir,
+boolean walkPath(const char *filepath, SdFile& parentDir,
 		 boolean (*callback)(SdFile& parentDir,
-				     char *filePathComponent,
+				     const char *filePathComponent,
 				     boolean isLastComponent,
 				     void *object),
 		 void *object = NULL) {
@@ -230,8 +232,8 @@ boolean walkPath(char *filepath, SdFile& parentDir,
 
  */
 
-boolean callback_pathExists(SdFile& parentDir, char *filePathComponent, 
-			    boolean isLastComponent, void *object) {
+boolean callback_pathExists(SdFile& parentDir, const char *filePathComponent, 
+			    boolean /* isLastComponent */, void * /* object */) {
   /*
 
     Callback used to determine if a file/directory exists in parent
@@ -253,7 +255,7 @@ boolean callback_pathExists(SdFile& parentDir, char *filePathComponent,
 
 
 
-boolean callback_makeDirPath(SdFile& parentDir, char *filePathComponent, 
+boolean callback_makeDirPath(SdFile& parentDir, const char *filePathComponent, 
 			     boolean isLastComponent, void *object) {
   /*
 
@@ -308,16 +310,16 @@ boolean callback_openPath(SdFile& parentDir, char *filePathComponent,
 
 
 
-boolean callback_remove(SdFile& parentDir, char *filePathComponent, 
-			boolean isLastComponent, void *object) {
+boolean callback_remove(SdFile& parentDir, const char *filePathComponent, 
+			boolean isLastComponent, void * /* object */) {
   if (isLastComponent) {
     return SdFile::remove(parentDir, filePathComponent);
   }
   return true;
 }
 
-boolean callback_rmdir(SdFile& parentDir, char *filePathComponent, 
-			boolean isLastComponent, void *object) {
+boolean callback_rmdir(SdFile& parentDir, const char *filePathComponent, 
+			boolean isLastComponent, void * /* object */) {
   if (isLastComponent) {
     SdFile f;
     if (!f.open(parentDir, filePathComponent, O_READ)) return false;
@@ -332,7 +334,9 @@ boolean callback_rmdir(SdFile& parentDir, char *filePathComponent,
 
 
 
-boolean SDClass::begin(uint8_t csPin, int8_t mosi, int8_t miso, int8_t sck) {
+boolean SDClass::begin(uint8_t csPin) {
+  if(root.isOpen()) root.close();
+
   /*
 
     Performs the initialisation required by the sdfatlib library.
@@ -340,23 +344,33 @@ boolean SDClass::begin(uint8_t csPin, int8_t mosi, int8_t miso, int8_t sck) {
     Return true if initialization succeeds, false otherwise.
 
    */
-  return card.init(SPI_HALF_SPEED, csPin, mosi, miso, sck) &&
+  return card.init(SPI_HALF_SPEED, csPin) &&
          volume.init(card) &&
          root.openRoot(volume);
 }
 
-//call this when a card is removed. It will allow you to inster and initialise a new card.
+boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
+  if(root.isOpen()) root.close();
+
+  return card.init(SPI_HALF_SPEED, csPin) &&
+         card.setSpiClock(clock) &&
+         volume.init(card) &&
+         root.openRoot(volume);
+}
+
+//call this when a card is removed. It will allow you to insert and initialise a new card.
 void SDClass::end()
 {
   root.close();
 }
 
-
 // this little helper is used to traverse paths
 SdFile SDClass::getParentDir(const char *filepath, int *index) {
   // get parent directory
-  SdFile d1 = root; // start with the mostparent, root!
+  SdFile d1;
   SdFile d2;
+
+  d1.openRoot(volume); // start with the mostparent, root!
 
   // we'll use the pointers to swap between the two objects
   SdFile *parent = &d1;
@@ -453,22 +467,13 @@ File SDClass::open(const char *filepath, uint8_t mode) {
   if (!parentdir.isOpen())
     return File();
 
-  // there is a special case for the Root directory since its a static dir
-  if (parentdir.isRoot()) {
-    if ( ! file.open(root, filepath, mode)) {
-      // failed to open the file :(
-      return File();
-    }
-    // dont close the root!
-  } else {
-    if ( ! file.open(parentdir, filepath, mode)) {
-      return File();
-    }
-    // close the parent
-    parentdir.close();
+  if ( ! file.open(parentdir, filepath, mode)) {
+    return File();
   }
+  // close the parent
+  parentdir.close();
 
-  if (mode & (O_APPEND | O_WRITE)) 
+  if ((mode & (O_APPEND | O_WRITE)) == (O_APPEND | O_WRITE))
     file.seekSet(file.fileSize());
   return File(file, filepath);
 }
@@ -520,7 +525,7 @@ File SDClass::open(char *filepath, uint8_t mode) {
 //}
 
 
-boolean SDClass::exists(char *filepath) {
+boolean SDClass::exists(const char *filepath) {
   /*
 
      Returns true if the supplied file path exists.
@@ -541,7 +546,7 @@ boolean SDClass::exists(char *filepath) {
 //}
 
 
-boolean SDClass::mkdir(char *filepath) {
+boolean SDClass::mkdir(const char *filepath) {
   /*
   
     Makes a single directory or a heirarchy of directories.
@@ -552,23 +557,19 @@ boolean SDClass::mkdir(char *filepath) {
   return walkPath(filepath, root, callback_makeDirPath);
 }
 
-boolean SDClass::rmdir(char *filepath) {
+boolean SDClass::rmdir(const char *filepath) {
   /*
   
-    Makes a single directory or a heirarchy of directories.
+    Remove a single directory or a heirarchy of directories.
 
-    A rough equivalent to `mkdir -p`.
+    A rough equivalent to `rm -rf`.
   
    */
   return walkPath(filepath, root, callback_rmdir);
 }
 
-boolean SDClass::remove(char *filepath) {
+boolean SDClass::remove(const char *filepath) {
   return walkPath(filepath, root, callback_remove);
-}
-
-void SDClass::enableCRC(boolean mode) {
-  card.enableCRC(mode);
 }
 
 
@@ -623,3 +624,5 @@ void File::rewindDirectory(void) {
 }
 
 SDClass SD;
+
+};

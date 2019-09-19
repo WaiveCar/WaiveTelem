@@ -1,9 +1,3 @@
-this library fork is being archived - the Arduino SD lirbary has all these capabilities in it now
-
-please use the SdFat Library instead for any advanced SD card needs! (its much better) 
-
----------------------------
-
 
 ** SD - a slightly more friendly wrapper for sdfatlib **
 

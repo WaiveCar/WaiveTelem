@@ -54,6 +54,10 @@ uint8_t const SPI_QUARTER_SPEED = 2;
 //
 #ifndef SOFTWARE_SPI
 // hardware pin defs
+
+// include pins_arduino.h or variant.h depending on architecture, via Arduino.h
+#include <Arduino.h>
+
 /**
  * SD Chip Select pin
  *
@@ -61,15 +65,28 @@ uint8_t const SPI_QUARTER_SPEED = 2;
  * as an output by init().  An avr processor will not function as an SPI
  * master unless SS is set to output mode.
  */
+#ifndef SDCARD_SS_PIN
 /** The default chip select pin for the SD card is SS. */
-uint8_t const  SD_CHIP_SELECT_PIN = SS_PIN;
-// The following three pins must not be redefined for hardware SPI.
+uint8_t const  SD_CHIP_SELECT_PIN = SS;
+#else
+uint8_t const  SD_CHIP_SELECT_PIN = SDCARD_SS_PIN;
+#endif
+
+// The following three pins must not be redefined for hardware SPI,
+// so ensure that they are taken from pins_arduino.h or variant.h, depending on architecture.
+#ifndef SDCARD_MOSI_PIN
 /** SPI Master Out Slave In pin */
-uint8_t const  SPI_MOSI_PIN = MOSI_PIN;
+uint8_t const  SPI_MOSI_PIN = MOSI;
 /** SPI Master In Slave Out pin */
-uint8_t const  SPI_MISO_PIN = MISO_PIN;
+uint8_t const  SPI_MISO_PIN = MISO;
 /** SPI Clock pin */
-uint8_t const  SPI_SCK_PIN = SCK_PIN;
+uint8_t const  SPI_SCK_PIN = SCK;
+#else
+uint8_t const  SPI_MOSI_PIN = SDCARD_MOSI_PIN;
+uint8_t const  SPI_MISO_PIN = SDCARD_MISO_PIN;
+uint8_t const  SPI_SCK_PIN = SDCARD_SCK_PIN;
+#endif
+
 /** optimize loops for hardware SPI */
 #ifndef USE_SPI_LIB
 #define OPTIMIZE_HARDWARE_SPI
@@ -90,13 +107,13 @@ uint8_t const SPI_SCK_PIN = 13;
 /** Protect block zero from write if nonzero */
 #define SD_PROTECT_BLOCK_ZERO 1
 /** init timeout ms */
-uint16_t const SD_INIT_TIMEOUT = 2000;
+unsigned int const SD_INIT_TIMEOUT = 2000;
 /** erase timeout ms */
-uint16_t const SD_ERASE_TIMEOUT = 10000;
+unsigned int const SD_ERASE_TIMEOUT = 10000;
 /** read timeout ms */
-uint16_t const SD_READ_TIMEOUT = 300;
+unsigned int const SD_READ_TIMEOUT = 300;
 /** write time out ms */
-uint16_t const SD_WRITE_TIMEOUT = 600;
+unsigned int const SD_WRITE_TIMEOUT = 600;
 //------------------------------------------------------------------------------
 // SD card errors
 /** timeout error for command CMD0 */
@@ -184,7 +201,7 @@ class Sd2Card {
   uint8_t init(uint8_t sckRateID) {
     return init(sckRateID, SD_CHIP_SELECT_PIN);
   }
-  uint8_t init(uint8_t sckRateID, uint8_t chipSelectPin, int8_t mosiPin = -1, int8_t misoPin = -1, int8_t clockPin = -1);
+  uint8_t init(uint8_t sckRateID, uint8_t chipSelectPin);
   void partialBlockRead(uint8_t value);
   /** Returns the current value, true or false, for partial block read. */
   uint8_t partialBlockRead(void) const {return partialBlockRead_;}
@@ -206,15 +223,16 @@ class Sd2Card {
   }
   void readEnd(void);
   uint8_t setSckRate(uint8_t sckRateID);
+#ifdef USE_SPI_LIB
+  uint8_t setSpiClock(uint32_t clock);
+#endif
   /** Return the card type: SD V1, SD V2 or SDHC */
   uint8_t type(void) const {return type_;}
   uint8_t writeBlock(uint32_t blockNumber, const uint8_t* src);
   uint8_t writeData(const uint8_t* src);
   uint8_t writeStart(uint32_t blockNumber, uint32_t eraseCount);
   uint8_t writeStop(void);
-  void    enableCRC(uint8_t mode);
-
-private:
+ private:
   uint32_t block_;
   uint8_t chipSelectPin_;
   uint8_t errorCode_;
@@ -223,9 +241,6 @@ private:
   uint8_t partialBlockRead_;
   uint8_t status_;
   uint8_t type_;
-  uint8_t writeCRC_;
-
-  
   // private functions
   uint8_t cardAcmd(uint8_t cmd, uint32_t arg) {
     cardCommand(CMD55, 0);
@@ -238,7 +253,7 @@ private:
   void chipSelectHigh(void);
   void chipSelectLow(void);
   void type(uint8_t value) {type_ = value;}
-  uint8_t waitNotBusy(uint16_t timeoutMillis);
+  uint8_t waitNotBusy(unsigned int timeoutMillis);
   uint8_t writeData(uint8_t token, const uint8_t* src);
   uint8_t waitStartBlock(void);
 };

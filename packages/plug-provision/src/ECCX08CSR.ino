@@ -48,12 +48,14 @@ void setup() {
 
   delay(12000);
 
+  // disable OTA firmware update
   ret = 0;
   while (ret != 1) {
     MODEM.send("AT+UFOTACONF=2,-1");
     ret = MODEM.waitForResponse(2000);
   }
 
+  // set LED as network status indicator
   MODEM.send("AT+UGPIOC=16,2");
   ret = MODEM.waitForResponse(2000);
   if (ret != 1) {
@@ -61,6 +63,7 @@ void setup() {
     return;
   }
 
+  // get firmware version
   MODEM.send("ATI9");
   modemResponse = "";
   MODEM.waitForResponse(2000, &modemResponse);
@@ -68,6 +71,7 @@ void setup() {
     Serial.println("Error 'ATI9' response: " + modemResponse);
   }
 
+  // confirm OTA firmware update is disabled
   MODEM.send("AT+UFOTACONF=2");
   modemResponse = "";
   MODEM.waitForResponse(2000, &modemResponse);
