@@ -1,5 +1,5 @@
 #!/usr/local/bin/expect -f
-set timeout 10
+set timeout 20
 log_user 0 
 spawn pio device monitor --quiet
 log_user 1

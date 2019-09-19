@@ -34,15 +34,48 @@
 #endif
 
 void setup() {
-#ifndef ARDUINO_SAMD_MKR1000
-  MODEM.begin(false);
-  delay(2000);
-  MODEM.send("AT+UGPIOC=16,2");
-#endif
-
   Serial.begin(115200);
-  while (!Serial)
-    ;
+  // while (!Serial)
+  //   ;
+
+#ifndef ARDUINO_SAMD_MKR1000
+  int ret = MODEM.begin();
+  if (ret != 1) {
+    Serial.println("MODEM.begin() failed: " + String(ret));
+    return;
+  }
+  String modemResponse = "";
+
+  delay(12000);
+
+  ret = 0;
+  while (ret != 1) {
+    MODEM.send("AT+UFOTACONF=2,-1");
+    ret = MODEM.waitForResponse(2000);
+  }
+
+  MODEM.send("AT+UGPIOC=16,2");
+  ret = MODEM.waitForResponse(2000);
+  if (ret != 1) {
+    Serial.println("Error 'AT+UGPIOC=16,2' ret: " + String(ret));
+    return;
+  }
+
+  MODEM.send("ATI9");
+  modemResponse = "";
+  MODEM.waitForResponse(2000, &modemResponse);
+  if (modemResponse != "L0.0.00.00.05.08,A.02.04") {
+    Serial.println("Error 'ATI9' response: " + modemResponse);
+  }
+
+  MODEM.send("AT+UFOTACONF=2");
+  modemResponse = "";
+  MODEM.waitForResponse(2000, &modemResponse);
+  if (modemResponse != "+UFOTACONF: 2, -1") {
+    Serial.println("Error 'AT+UFOTACONF=2' response: " + modemResponse);
+  }
+
+#endif
 
   if (!ECCX08.begin()) {
     Serial.println("No ECCX08 present!");
