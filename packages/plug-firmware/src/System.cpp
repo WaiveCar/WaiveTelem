@@ -92,8 +92,9 @@ void SystemClass::checkVin() {
       for (int i = 0; i < (int)ARRAY_SIZE(vinReads); i++) {
         total += vinReads[i];
       }
-      uint32_t avg = total / ARRAY_SIZE(vinReads);
-      uint32_t limit = Config.get()["vin"]["low"];
+      int32_t avg = total / ARRAY_SIZE(vinReads);
+      int32_t limit = Config.get()["vin"]["low"].as<int>();
+      // logDebug("i|limit", limit);
       if (avg < limit) {
         char info[128];
         json(info, "{|system", "i|vin", avg, "}|");
@@ -133,7 +134,7 @@ void SystemClass::sendHeartbeat() {
   char vinBuf[32] = "+|";
 #ifdef ARDUINO_SAMD_WAIVE1000
   int index = (vinIndex - 1) % ARRAY_SIZE(vinReads);
-  json(vinBuf, "-{", "i|vin", vinReads[index]);
+  json(vinBuf, "-{", "i|lastVin", vinReads[index]);
 #endif
   char cellBuf[64] = "+|";
   if (Internet.isConnected()) {

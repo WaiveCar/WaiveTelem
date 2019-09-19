@@ -7,9 +7,6 @@
     "pin": null,
     "apn": "hologram"
   },
-  "vin": {
-    "low": 1050
-  },
   "can": {
     "bus": [
       {

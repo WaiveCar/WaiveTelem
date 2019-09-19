@@ -122,6 +122,7 @@ void CommandClass::processJson(const String& str, bool isBluetooth) {
 }
 
 void CommandClass::reboot() {
+  logInfo(NULL);
   Watchdog.detachShutdown();
   while (true)
     ;
@@ -156,6 +157,7 @@ int32_t CommandClass::copyFile(const char* from, const char* to) {
     Watchdog.clear();
   }
   readFile.close();
+  writeFile.flush();
   writeFile.close();
   return 0;
 }

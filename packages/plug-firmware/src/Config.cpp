@@ -56,6 +56,7 @@ void ConfigClass::saveImmoState(char value) {
   }
   file.seek(0);
   char len = file.write(&value, 1);
+  file.flush();
   if (len < 1) {
     logError("i|len", len);
   }

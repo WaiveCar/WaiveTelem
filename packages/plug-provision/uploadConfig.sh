@@ -7,6 +7,7 @@ SHA=${SHA/* }
 FILENAME="config_${DEVICE_ID}_${SHA}"
 cp config/$DEVICE_ID/CONFIG.TXT s3/$FILENAME
 aws s3 sync s3 s3://waiveplug
+aws s3api put-object-acl --bucket waiveplug --key $FILENAME --acl public-read
 echo ""
 echo '{"desired":{"download":{"host":"'"${S3_HOST}"'", "from":"'"${FILENAME}"'", "to":"CONFIG.TXT"}}}'
 
