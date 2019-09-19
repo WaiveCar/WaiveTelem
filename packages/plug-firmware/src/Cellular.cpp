@@ -25,15 +25,17 @@ bool InternetClass::connect() {
   // nbAccess.begin(nb["pin"].as<char*>(), apn, true, false);
   // gprs.attachGPRS(false);
   // Watchdog.setup(WDT_OFF);
+  MODEM.debug(Serial);
   int start = millis();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
     logWarn("Failed to connect, try later");
     Watchdog.setup(WDT_SOFTCYCLE8S);
     return false;
   }
-  logInfo("carrier", nbScanner.getCurrentCarrier().c_str(), "i|initTime", millis() - start, "i|signal", getSignalStrength());
   System.setTimes(getTime());
+  logInfo("carrier", nbScanner.getCurrentCarrier().c_str(), "i|initTime", millis() - start, "i|signal", getSignalStrength());
   Watchdog.setup(WDT_SOFTCYCLE8S);
+  MODEM.noDebug();
   return true;
 }
 
@@ -62,7 +64,7 @@ String InternetClass::getCarrier() {
 String InternetClass::getModemVersion() {
   String modemResponse = "";
   MODEM.send("ATI9");
-  MODEM.waitForResponse(100, &modemResponse);
+  MODEM.waitForResponse(1000, &modemResponse);
   return modemResponse;
 }
 

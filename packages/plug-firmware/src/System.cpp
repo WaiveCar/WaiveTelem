@@ -111,9 +111,6 @@ uint32_t SystemClass::getTime() {
 }
 
 const char* SystemClass::getDateTime() {
-  if (Internet.isConnected()) {
-    setTimes(Internet.getTime());
-  }
   NeoGPS::time_t dt = time;
   sprintf(dateTime, "%04d-%02d-%02dT%02d:%02d:%02dZ", dt.full_year(dt.year), dt.month, dt.date, dt.hours, dt.minutes, dt.seconds);
   return dateTime;
@@ -253,13 +250,13 @@ void SystemClass::setStayResponsive(bool resp) {
 }
 
 void SystemClass::keepTime() {
-  if (time % 7 == 0 && Internet.isConnected()) {  // don't get time from modem too often
-    setTimes(Internet.getTime());
-  } else {
+  if (time % 5 != 0 || (!Internet.isConnected() && !Gps.poll())) {
     int32_t elapsed = millis() - lastMillis;
     if (elapsed >= 1000) {
       setTimes(time + elapsed / 1000);
     }
+  } else {
+    setTimes(Internet.getTime());
   }
 }
 
