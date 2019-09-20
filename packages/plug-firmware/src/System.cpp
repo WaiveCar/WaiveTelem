@@ -250,13 +250,16 @@ void SystemClass::setStayResponsive(bool resp) {
 }
 
 void SystemClass::keepTime() {
-  if (time % 5 != 0 || (!Internet.isConnected() && !Gps.poll())) {
+  bool hasInternet;
+  if (time % 10 != 0 || (!(hasInternet = Internet.isConnected()) && !Gps.poll())) {
     int32_t elapsed = millis() - lastMillis;
     if (elapsed >= 1000) {
       setTimes(time + elapsed / 1000);
     }
   } else {
-    setTimes(Internet.getTime());
+    if (hasInternet) {
+      setTimes(Internet.getTime());
+    }
   }
 }
 

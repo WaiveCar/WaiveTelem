@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export DEVICE_ID=0123CCBCCC98B697EE
 export S3_HOST=waiveplug.s3.us-east-2.amazonaws.com
 
 SHA=$(openssl dgst -sha256 -hmac "https failed" config/$DEVICE_ID/CONFIG.TXT)

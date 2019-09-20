@@ -8,7 +8,7 @@
     "apn": "internet.swir"
   },
   "vin": {
-    "low": 1050
+    "low": 850
   },
   "can": {
     "bus": [

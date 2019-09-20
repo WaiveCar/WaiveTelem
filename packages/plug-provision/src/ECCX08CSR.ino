@@ -30,6 +30,7 @@
 #include <utility/ECCX08CSR.h>
 #include <utility/ECCX08DefaultTLSConfig.h>
 #ifndef ARDUINO_SAMD_MKR1000
+#include <MKRNB.h>
 #include <Modem.h>
 #endif
 
@@ -44,15 +45,16 @@ void setup() {
     Serial.println("MODEM.begin() failed: " + String(ret));
     return;
   }
-  String modemResponse = "";
 
-  delay(12000);
+  int start = millis();
+  while (!MODEM.noop())
+    ;
 
-  // disable OTA firmware update
-  ret = 0;
-  while (ret != 1) {
-    MODEM.send("AT+UFOTACONF=2,-1");
-    ret = MODEM.waitForResponse(2000);
+  // import root certificates to modem
+  NBSSLClient client(false);
+  client.connect("127.0.0.1", 443);
+  while (millis() - start < 12000) {
+    client.ready();
   }
 
   // set LED as network status indicator
@@ -65,10 +67,17 @@ void setup() {
 
   // get firmware version
   MODEM.send("ATI9");
-  modemResponse = "";
+  String modemResponse = "";
   MODEM.waitForResponse(2000, &modemResponse);
   if (modemResponse != "L0.0.00.00.05.08,A.02.04") {
     Serial.println("Error 'ATI9' response: " + modemResponse);
+  }
+
+  // disable OTA firmware update
+  ret = 0;
+  while (ret != 1) {
+    MODEM.send("AT+UFOTACONF=2,-1");
+    ret = MODEM.waitForResponse(2000);
   }
 
   // confirm OTA firmware update is disabled

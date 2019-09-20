@@ -81,6 +81,10 @@ extern volatile uint32_t ms_counter;
 
 SPI_HandleTypeDef SpiHandle;
 
+#ifndef ARDUINO_SAMD_WAIVE1000
+SPIClass SPI1(&sercom3, 6u, 1u, 0u, SPI_PAD_0_SCK_1, SERCOM_RX_PAD_2);
+#endif
+
 SPIClass *BLESPI = &SPI1;
 
 /**

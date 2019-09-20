@@ -7,6 +7,9 @@
     "pin": null,
     "apn": "internet.swir"
   },
+  "vin": {
+    "low": 850
+  },
   "can": {
     "bus": [
       {
