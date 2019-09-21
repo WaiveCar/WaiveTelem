@@ -93,7 +93,7 @@ void SystemClass::checkVin() {
         total += vinReads[i];
       }
       int32_t avg = total / ARRAY_SIZE(vinReads);
-      int32_t limit = Config.get()["vin"]["low"].as<int>();
+      int32_t limit = Config.get()["vin"]["low"] | 800;
       // logDebug("i|limit", limit);
       if (avg < limit) {
         char info[128];

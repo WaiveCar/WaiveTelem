@@ -9,7 +9,6 @@
 #include "Internet.h"
 #include "System.h"
 
-// static NB nbAccess(true);  // turn on debug
 static NB nbAccess;
 
 static GPRS gprs;
@@ -22,9 +21,6 @@ bool InternetClass::connect() {
   nbAccess.setTimeout(14000);
   gprs.setTimeout(14000);
   Watchdog.setup(WDT_SOFTCYCLE32S);
-  // nbAccess.begin(nb["pin"].as<char*>(), apn, true, false);
-  // gprs.attachGPRS(false);
-  // Watchdog.setup(WDT_OFF);
   MODEM.debug(Serial);
   int start = millis();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
@@ -40,12 +36,6 @@ bool InternetClass::connect() {
 }
 
 bool InternetClass::isConnected() {
-  // nbAccess.ready();
-  // Serial.println(String(nbReady));
-  // gprs.ready();
-  // Serial.println(String(gReady));
-  // Serial.println(String(nbAccess.status()));
-  // Serial.println(String(gprs.status()));
   return nbAccess.status() == NB_READY && gprs.status() == GPRS_READY;
 }
 

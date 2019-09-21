@@ -72,7 +72,7 @@ void loop() {
          "i|cfg", cfgInit);
     System.sendInfo(sysJson);
     checkCrashReport();
-    System.resetLastHeartbeat();  // so it is send to cloud
+    System.resetLastHeartbeat();  // so heartbeat is sent
 
     initSent = true;
   }

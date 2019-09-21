@@ -1,6 +1,7 @@
 #include <ArduinoBearSSL.h>
 #include <ArduinoMqttClient.h>
 #include <JsonLogger.h>
+#include <Modem.h>
 #include <WDTZero.h>
 
 #include "Command.h"
@@ -76,7 +77,7 @@ int MqttClass::begin() {
 
   String id = System.getId();
   mqttClient.setId(id);
-  mqttClient.setKeepAliveInterval(30 * 1000);  // setting it to long value cause MQTT commands to have long delay
+  mqttClient.setKeepAliveInterval(20 * 60 * 1000);
   mqttClient.onMessage(onMessageReceived);
   updateTopic = "$aws/things/" + id + "/shadow/update";
   logTopic = "things/" + id + "/log";
@@ -107,6 +108,14 @@ void MqttClass::connect() {
   logDebug("i|initTime", millis() - start, "You're connected to the MQTT broker");
   Watchdog.setup(WDT_SOFTCYCLE8S);
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
+  // to fix long mqtt cmd delay:
+  // https://portal.u-blox.com/s/question/0D52p00008RlYDrCAN/long-delays-using-sarar41002b-with-att
+  MODEM.send("AT+USOSO=0,6,1,1");
+  MODEM.waitForResponse();
+  MODEM.send("AT+USOSO=0,65535,8,1");
+  MODEM.waitForResponse();
+  MODEM.send("AT+CEDRXS=0");  // this is supposed to be stored in non-volatile memory, but it seems AT&T can flip it?
+  MODEM.waitForResponse();
 }
 
 bool MqttClass::isConnected() {
