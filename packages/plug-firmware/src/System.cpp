@@ -147,7 +147,7 @@ void SystemClass::sendHeartbeat() {
        "i|can", Can.getHealth(),
        "i|uptime", time - bootTime,
        "f3|temp", Motion.getTemp(),
-       "i|heapFreeMem", freeMemory(),
+       "i|freeMem", freeMemory(),
        "i|statusFreeMem", STATUS_DOC_SIZE - statusDoc.memoryUsage(),
        vinBuf, cellBuf, "}|");
   // system["moreStuff"] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
@@ -209,7 +209,7 @@ void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) 
 void SystemClass::sleep(uint32_t sec) {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
-  delay(sec * 1000 - 150);  // minus 150msec to account for other stuff in the loop
+  delay(sec * 1000);
 #else
   rtc.setSeconds(60 - sec);
   rtc.standbyMode();
@@ -254,7 +254,9 @@ void SystemClass::keepTime() {
   if (time % 10 != 0 || (!(hasInternet = Internet.isConnected()) && !Gps.poll())) {
     int32_t elapsed = millis() - lastMillis;
     if (elapsed >= 1000) {
+      int32_t remainder = elapsed % 1000;
       setTimes(time + elapsed / 1000);
+      lastMillis -= remainder;
     }
   } else {
     if (hasInternet) {

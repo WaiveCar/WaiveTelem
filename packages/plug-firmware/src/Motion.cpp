@@ -42,7 +42,7 @@ void MotionClass::poll() {
 }
 
 float MotionClass::getTemp() {
-  return health == 1 ? mpu.readTemperature() : -1;
+  return health == 1 ? mpu.readTemperature() * 9 / 5 + 32 : -1;
 }
 
 void MotionClass::setSleepEnabled(bool state) {

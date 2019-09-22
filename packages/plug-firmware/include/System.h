@@ -46,7 +46,7 @@ class SystemClass {
 #ifndef DEBUG
   RTCZero rtc;
 #endif
-  uint32_t lastMillis = 0;
+  volatile uint32_t lastMillis = 0;
   uint32_t vinReads[5] = {0};
   int vinIndex = 0;
   bool vinAvgValid = false;
