@@ -2,7 +2,7 @@
 
 export CAR_TEMPLATE=./config/CAR_IONIQ.TXT
 export MQTT_TEMPLATE=./config/MQTT_AWS.TXT
-export DEFAULT_FIRMWARE=../plug-firmware/s3/waive1000_1.2.2_18540a7530e00091d0efa07d46d1db457c6a50ae0a155b4d6e8ab35382c45e6e
+export DEFAULT_FIRMWARE=../plug-firmware/s3/waive1000_1.2.3_b5b1ea8c7fab5b7d52c8cbbb42aaca10577bcd8428aa155258e667bacfcb3ca9
 
 echo ""
 echo "Connect Atmel-Ice to the device, and insert SD to the PC/MAC"
