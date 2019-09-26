@@ -119,7 +119,7 @@ const char* SystemClass::getDateTime() {
 void SystemClass::sendInfo(const char* sysJson) {
   char info[512], remoteLog[2];
   snprintf(remoteLog, 2, "%c", '0' + remoteLogLevel);
-  json(info, "remoteLog", remoteLog, "o|system", sysJson);
+  json(info, "remoteLog", remoteLog, "o|init", sysJson);
   report(info);
 }
 
@@ -128,28 +128,29 @@ void SystemClass::resetLastHeartbeat() {
 }
 
 void SystemClass::sendHeartbeat() {
-  char vinBuf[32] = "+|";
-#ifdef ARDUINO_SAMD_WAIVE1000
-  int index = (vinIndex - 1) % ARRAY_SIZE(vinReads);
-  json(vinBuf, "-{", "i|lastVin", vinReads[index]);
-#endif
+  //   char vinBuf[32] = "+|";
+  // #ifdef ARDUINO_SAMD_WAIVE1000
+  //   int index = (vinIndex - 1) % ARRAY_SIZE(vinReads);
+  //   json(vinBuf, "-{", "i|lastVin", vinReads[index]);
+  // #endif
   char cellBuf[64] = "+|";
   if (Internet.isConnected()) {
     json(cellBuf, "-{", "i|signal", Internet.getSignalStrength(), "carrier", Internet.getCarrier().c_str());
   }
   char buf[512];
-  json(buf, "{|gps", "fa|lat", (double)Gps.getLatitude() / 1e7,
+  json(buf, "{|heartbeat", "fa|lat", (double)Gps.getLatitude() / 1e7,
        "fa|long", (double)Gps.getLongitude() / 1e7,
        "i|hdop", Gps.getHdop(),
        "i|speed", Gps.getSpeed() / 869,  // convert to miles per hour
-       "i|heading", Gps.getHeading() / 100, "}|",
-       "{|system", "i|ble", Bluetooth.getHealth(),
-       "i|can", Can.getHealth(),
+       "i|heading", Gps.getHeading() / 100,
        "i|uptime", time - bootTime,
        "f3|temp", Motion.getTemp(),
-       "i|freeMem", freeMemory(),
-       "i|statusFreeMem", STATUS_DOC_SIZE - statusDoc.memoryUsage(),
-       vinBuf, cellBuf, "}|");
+       //  "i|ble", Bluetooth.getHealth(),
+       //  "i|can", Can.getHealth(),
+       //  "i|freeMem", freeMemory(),
+       //  "i|statusFreeMem", STATUS_DOC_SIZE - statusDoc.memoryUsage(),
+       //  vinBuf,
+       cellBuf, "}|");
   // system["moreStuff"] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
   report(buf);
 
@@ -194,9 +195,10 @@ void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) 
           Gps.poll();
           System.sendHeartbeat();
           // put in power-saving mode for canbus, mpu6050
+          // Can.sleep(); doesn't work
           Motion.setSleepEnabled(true);
         } else if (oldValue != IGNITION_ON && value == IGNITION_ON) {
-          // put in normal mode canbus, mpu6050
+          // put in normal mode mpu6050
           Motion.setSleepEnabled(false);
         }
       }
@@ -251,7 +253,7 @@ void SystemClass::setStayResponsive(bool resp) {
 
 void SystemClass::keepTime() {
   bool hasInternet;
-  if (time % 10 != 0 || (!(hasInternet = Internet.isConnected()) && !Gps.poll())) {
+  if (time % 30 != 0 || (!(hasInternet = Internet.isConnected()) && !Gps.poll())) {
     int32_t elapsed = millis() - lastMillis;
     if (elapsed >= 1000) {
       int32_t remainder = elapsed % 1000;

@@ -7,7 +7,7 @@
 #include <RTCZero.h>
 #endif
 
-#define STATUS_DOC_SIZE 1024
+#define STATUS_DOC_SIZE 600
 
 class SystemClass {
  public:

@@ -18,9 +18,10 @@ bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
   const char* apn = nb["apn"] | "internet.swir";
   logInfo("apn", apn);
-  nbAccess.setTimeout(14000);
-  gprs.setTimeout(14000);
+  nbAccess.setTimeout(20000);
+  gprs.setTimeout(20000);
   Watchdog.setup(WDT_SOFTCYCLE32S);
+  // Watchdog.setup(WDT_OFF);
   MODEM.debug(Serial);
   int start = millis();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {

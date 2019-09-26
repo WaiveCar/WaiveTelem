@@ -98,12 +98,14 @@ void MqttClass::connect() {
   logInfo("broker", Eeprom.getMqttUrl());
   int start = millis();
   Watchdog.setup(WDT_SOFTCYCLE1M);
+  // MODEM.debug(Serial);
   if (!mqttClient.connect(Eeprom.getMqttUrl(), 8883)) {
     System.setTimes(Internet.getTime());
     logWarn("i|error", mqttClient.connectError());
     Watchdog.setup(WDT_SOFTCYCLE8S);
     return;
   }
+  // MODEM.noDebug();
   System.setTimes(Internet.getTime());
   logDebug("i|initTime", millis() - start, "You're connected to the MQTT broker");
   Watchdog.setup(WDT_SOFTCYCLE8S);

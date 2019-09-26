@@ -54,8 +54,8 @@ note: Since release binary is sleeping most of the time in loop(), you might wan
 
 ### MQTT Device Shadow Desired (Command):
 
-e.g. for plug-1
-- go to https://us-east-2.console.aws.amazon.com/iot/home?region=us-east-2#/thing/plug-1
+e.g. for 0123CCBCCC98B697EE
+- go to https://us-east-2.console.aws.amazon.com/iot/home?region=us-east-2#/thing/0123CCBCCC98B697EE
 - click on "Shadow" and edit the Shadow State to have one of the following JSONs:
 
 ```json

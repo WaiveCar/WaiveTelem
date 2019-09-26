@@ -22,6 +22,27 @@ int8_t cfgInit;
 int8_t eepromInit;
 int8_t motionInit;
 
+void sendInitStatus() {
+  char sysJson[128];
+  json(sysJson, "firmware", FIRMWARE_VERSION, "i|debug",
+#ifdef DEBUG
+       1,
+#else
+       0,
+#endif
+       "i|configFreeMem", Config.getConfigFreeMem(),
+#ifndef ARDUINO_SAMD_MKR1000
+       "modem", Internet.getModemVersion().c_str(),
+#endif
+       "i|sd", sdInit,
+       "i|eeprom", eepromInit,
+       "i|motion", motionInit,
+       "i|cfg", cfgInit);
+  System.sendInfo(sysJson);
+  checkCrashReport();
+  System.resetLastHeartbeat();  // so heartbeat is sent
+}
+
 void setup() {
   Serial.begin(115200);
 
@@ -36,44 +57,25 @@ void setup() {
   eepromInit = Eeprom.begin();  // dependent on ECCX08.begin() and SD.begin()
   System.begin();               // dependent on ECCX08.begin()
   Mqtt.begin();                 // dependent on Eeprom.begin() and System.begin()
-  Mqtt.poll();
   motionInit = Motion.begin();
   Gps.begin();
 }
 
 void loop() {
   Watchdog.clear();
+
+  Mqtt.poll();
+  if (Mqtt.isConnected() && !initSent) {
+    sendInitStatus();
+    initSent = true;
+  }
+  Bluetooth.poll();
+  System.poll();
+  Motion.poll();
+  Can.poll();
+
   if (!System.stayResponsive()) {
     System.sleep(1);
   }
   System.keepTime();
-
-  Bluetooth.poll();
-  Can.poll();
-  System.poll();
-  Motion.poll();
-  Mqtt.poll();
-
-  if (Mqtt.isConnected() && !initSent) {
-    char sysJson[128];
-    json(sysJson, "firmware", FIRMWARE_VERSION, "i|debug",
-#ifdef DEBUG
-         1,
-#else
-         0,
-#endif
-         "i|configFreeMem", Config.getConfigFreeMem(),
-#ifndef ARDUINO_SAMD_MKR1000
-         "modem", Internet.getModemVersion().c_str(),
-#endif
-         "i|sd", sdInit,
-         "i|eeprom", eepromInit,
-         "i|motion", motionInit,
-         "i|cfg", cfgInit);
-    System.sendInfo(sysJson);
-    checkCrashReport();
-    System.resetLastHeartbeat();  // so heartbeat is sent
-
-    initSent = true;
-  }
 }
