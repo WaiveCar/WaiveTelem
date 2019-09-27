@@ -73,35 +73,36 @@ e.g. for 0123CCBCCC98B697EE
 {"desired":{"can":"unlock_all"}}
 {"desired":{"can":"lock"}}
 {"desired":{"can":"flash_lights"}}
+{"desired":{"simIgnition":"on"}}
+{"desired":{"simIgnition":"off"}}
 ```
 
 ### MQTT Device Shadow Reported (Telemetry):
 
 ```json
 {
-  "system": {
-    "firmware": "1.1.5",
-    "configFreeMem": 617,
+  "init": {
+    "firmware": "1.2.4",
+    "debug": 0,
+    "configFreeMem": 239,
     "modem": "L0.0.00.00.05.08,A.02.04",
     "sd": 1,
     "eeprom": 1,
-    "cfg": 1,
-    "ble": 1,
-    "can": 1,
-    "uptime": 29,
-    "heapFreeMem": 6523,
-    "statusFreeMem": 992,
-    "vin": 1224,
-    "signal": 18,
-    "carrier": "Verizon Wireless Sierra Wireless"
+    "motion": -1,
+    "cfg": 1
   },
-  "gps": {
-    "lat": 341499688,
-    "long": -1180278212,
-    "hdop": 640,
-    "speed": 20,
-    "heading": 0
+  "heartbeat": {
+    "lat": 34.1500113,
+    "long": -118.0278477,
+    "hdop": 870,
+    "speed": 0,
+    "heading": 0,
+    "uptime": 1823,
+    "temp": -1,
+    "signal": 20,
+    "carrier": "AT&T Sierra Wireless"
   },
+  "lastCmd": "{\"lock\":\"open\"}",
   "crash": {
     "time": 1568406162,
     "backtrace": [

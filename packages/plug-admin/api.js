@@ -15,7 +15,7 @@ const getToken = thingName => {
   const token =
     '{"secret":"' +
     secret +
-    '","cmds":"lock,immo,can,reboot,copy,download,remoteLog","start":' +
+    '","cmds":"lock,immo,can,reboot,copy,download,remoteLog,simIgnition","start":' +
     Math.round(now / 1000) +
     ',"end":' +
     Math.round(now / 1000 + 10 * 60 * 60) +

@@ -1,8 +1,10 @@
 #include <ArduinoBearSSL.h>
 #include <ArduinoMqttClient.h>
 #include <JsonLogger.h>
-#include <Modem.h>
 #include <WDTZero.h>
+#ifndef ARDUINO_SAMD_MKR1000
+#include <Modem.h>
+#endif
 
 #include "Command.h"
 #include "Eeprom.h"
@@ -110,6 +112,8 @@ void MqttClass::connect() {
   logDebug("i|initTime", millis() - start, "You're connected to the MQTT broker");
   Watchdog.setup(WDT_SOFTCYCLE8S);
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
+
+#ifndef ARDUINO_SAMD_MKR1000
   // to fix long mqtt cmd delay:
   // https://portal.u-blox.com/s/question/0D52p00008RlYDrCAN/long-delays-using-sarar41002b-with-att
   MODEM.send("AT+USOSO=0,6,1,1");
@@ -118,6 +122,7 @@ void MqttClass::connect() {
   MODEM.waitForResponse();
   MODEM.send("AT+CEDRXS=0");  // this is supposed to be stored in non-volatile memory, but it seems AT&T can flip it?
   MODEM.waitForResponse();
+#endif
 }
 
 bool MqttClass::isConnected() {

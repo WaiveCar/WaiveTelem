@@ -435,6 +435,11 @@ export default class App extends Component {
           {this.renderButton('reboot: true', () => onPress(1, '{"reboot":"true"}'))}
         </View>
         <View style={styles.row}>
+          {this.renderButton('sim ig: on', () => onPress(1, '{"simIgnition":"on"}'))}
+          <View style={styles.columnGap} />
+          {this.renderButton('sim ig: off', () => onPress(1, '{"simIgnition":"off"}'))}
+        </View>
+        <View style={styles.row}>
           {this.renderButton('lock: open', () => onPress(1, '{"lock":"open"}'))}
           <View style={styles.columnGap} />
           {this.renderButton('lock: close', () => onPress(1, '{"lock":"close"}'))}

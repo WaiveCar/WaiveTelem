@@ -97,7 +97,7 @@ void SystemClass::checkVin() {
       // logDebug("i|limit", limit);
       if (avg < limit) {
         char info[128];
-        json(info, "{|system", "i|vin", avg, "}|");
+        json(info, "i|vin", avg);
         report(info);
       }
     }
@@ -190,16 +190,9 @@ void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) 
       batch[name] = value;
       if (strcmp(name, "ignition") == 0) {
         if (oldValue == IGNITION_ON && value != IGNITION_ON) {
-          // send all changed data
-          sendCanStatus("lessThanDelta");
-          Gps.poll();
-          System.sendHeartbeat();
-          // put in power-saving mode for canbus, mpu6050
-          // Can.sleep(); doesn't work
-          Motion.setSleepEnabled(true);
+          handleIgnitionOff();
         } else if (oldValue != IGNITION_ON && value == IGNITION_ON) {
-          // put in normal mode mpu6050
-          Motion.setSleepEnabled(false);
+          handleIgnitionOn();
         }
       }
     } else {
@@ -252,17 +245,14 @@ void SystemClass::setStayResponsive(bool resp) {
 }
 
 void SystemClass::keepTime() {
-  bool hasInternet;
-  if (time % 30 != 0 || (!(hasInternet = Internet.isConnected()) && !Gps.poll())) {
+  if (Internet.isConnected()) {
+    setTimes(Internet.getTime());
+  } else if (!Gps.poll()) {
     int32_t elapsed = millis() - lastMillis;
     if (elapsed >= 1000) {
       int32_t remainder = elapsed % 1000;
       setTimes(time + elapsed / 1000);
       lastMillis -= remainder;
-    }
-  } else {
-    if (hasInternet) {
-      setTimes(Internet.getTime());
     }
   }
 }
@@ -270,9 +260,9 @@ void SystemClass::keepTime() {
 void SystemClass::reportCommandDone(const String& lastCmd, const String& cmdKey, const String& cmdValue) {
   char reported[512], desired[64];
   if (cmdValue.length() == 0) {
-    json(reported, "{|system", "lastCmd", lastCmd.c_str(), "}|");
+    json(reported, "lastCmd", lastCmd.c_str());
   } else {
-    json(reported, "{|system", "lastCmd", lastCmd.c_str(), "}|", cmdKey.c_str(), cmdValue.c_str());
+    json(reported, "lastCmd", lastCmd.c_str(), cmdKey.c_str(), cmdValue.c_str());
   }
   json(desired, ("o|" + cmdKey).c_str(), "null");
   report(reported, desired);
@@ -284,6 +274,31 @@ void SystemClass::setRemoteLogLevel(int8_t in) {
 
 int8_t SystemClass::getRemoteLogLevel() {
   return remoteLogLevel;
+}
+
+void SystemClass::handleIgnitionOn() {
+  // put in normal mode mpu6050
+  Motion.setSleepEnabled(false);
+}
+
+void SystemClass::handleIgnitionOff() {
+  // send all changed data
+  sendCanStatus("lessThanDelta");
+  Gps.poll();
+  System.sendHeartbeat();
+  // put in power-saving mode for canbus, mpu6050
+  // Can.sleep(); doesn't work
+  Motion.setSleepEnabled(true);
+}
+
+void SystemClass::simulateIgnition(const String& cmdValue) {
+  if (cmdValue == "on") {
+    statusDoc["canbus"]["ignition"] = 3;
+    handleIgnitionOn();
+  } else if (cmdValue == "off") {
+    statusDoc["canbus"]["ignition"] = 0;
+    handleIgnitionOff();
+  }
 }
 
 SystemClass System;

@@ -89,6 +89,10 @@ void CommandClass::processJson(const String& str, bool isBluetooth) {
     return;
   } else if (cmdKey == "remoteLog") {
     System.setRemoteLogLevel(cmdValue.toInt());
+  } else if (cmdKey == "simIgnition") {
+    System.simulateIgnition(cmdValue);
+    System.reportCommandDone(lastCmd, cmdKey);
+    return;
   } else if (download) {
     System.reportCommandDone(lastCmd, cmdKey);
     const char* host = download["host"] | "";

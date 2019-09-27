@@ -3,15 +3,19 @@
 #include <JsonLogger.h>
 #include <SD.h>
 #include <WDTZero.h>
-#include <utility/NBRootCerts.h>
 
 #include "Command.h"
 #include "Https.h"
 #include "Internet.h"
 
-#define DOWNLOAD_TIMEOUT 30 * 60 * 1000
-
+#ifndef ARDUINO_SAMD_MKR1000
+#include <utility/NBRootCerts.h>
 static InternetSslClient client(NULL, 0);
+#else
+static InternetSslClient client;
+#endif
+
+#define DOWNLOAD_TIMEOUT 30 * 60 * 1000
 
 static void sendGetRequest(const String& host, const String& file) {
   client.println("GET /" + file + " HTTP/1.0");

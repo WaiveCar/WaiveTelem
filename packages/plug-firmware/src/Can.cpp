@@ -100,9 +100,7 @@ void CanClass::poll() {
   if (health <= 0) {
     begin();
   } else {
-#ifndef DEBUG
     delay(200);  // give it sometime to get messages
-#endif
     CANMessage message;
     for (int i = 0; i < busCount; i++) {
       int totalMsg = 0;

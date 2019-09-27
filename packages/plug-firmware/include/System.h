@@ -30,10 +30,13 @@ class SystemClass {
   void reportCommandDone(const String& lastCmd, const String& cmdKey, const String& cmdValue = "");
   void setRemoteLogLevel(int8_t in);
   int8_t getRemoteLogLevel();
+  void simulateIgnition(const String& cmdValue);
 
  private:
   void checkVin();
   void checkHeartbeat();
+  void handleIgnitionOn();
+  void handleIgnitionOff();
 
   char id[19];
   int8_t remoteLogLevel = 4;
