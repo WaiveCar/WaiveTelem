@@ -2,6 +2,7 @@
 #include <MPU6050.h>
 
 #include "Motion.h"
+#include "System.h"
 
 MPU6050 mpu;
 
@@ -38,6 +39,12 @@ void MotionClass::poll() {
     Serial.print(act.isInactivity);
 
     Serial.print("\n");
+
+    if (act.isActivity) {
+      char info[64];
+      json(info, "i|motionDetected", act.isActivity);
+      System.report(info);
+    }
   }
 }
 

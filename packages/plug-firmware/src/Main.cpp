@@ -72,7 +72,7 @@ void loop() {
   Bluetooth.poll();
   System.poll();
   Motion.poll();
-  Can.poll();
+  // Can.poll();
 
   if (!System.stayResponsive()) {
     System.sleep(1);

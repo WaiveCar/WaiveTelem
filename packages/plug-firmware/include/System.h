@@ -1,13 +1,11 @@
 #ifndef System_h
 #define System_h
 
-#include <ArduinoJson.h>
-
 #ifndef DEBUG
 #include <RTCZero.h>
 #endif
 
-#define STATUS_DOC_SIZE 600
+#include "HashMap/HashMap.h"
 
 class SystemClass {
  public:
@@ -44,7 +42,6 @@ class SystemClass {
   uint32_t bootTime = 0;
   uint32_t time = 0;
   char dateTime[32] = "";
-  StaticJsonDocument<STATUS_DOC_SIZE> statusDoc;
   bool stayresponsive = false;
 #ifndef DEBUG
   RTCZero rtc;
@@ -54,6 +51,9 @@ class SystemClass {
   int vinIndex = 0;
   bool vinAvgValid = false;
   int32_t lastVinRead = -1;
+  HashMap<const char*, int64_t, 40> canBus;
+  HashMap<const char*, int64_t, 20> canBusLessThanDelta;
+  HashMap<const char*, int64_t, 20> canBusBatch;
 };
 
 extern SystemClass System;

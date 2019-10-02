@@ -24,7 +24,7 @@ static void onCanReceive(const CANMessage& inMessage, int busNum) {
     JsonObject can = Config.get()["can"];
     JsonObject bus = can["bus"][busNum];
     JsonArray statusArray = bus["status"];
-    logTrace("i|busNum", busNum, "i|inMessage.id", inMessage.id, "i|valueHi", inMessage.data32[1], "i|valueLow", inMessage.data32[0]);
+    // logTrace("i|busNum", busNum, "i|inMessage.id", inMessage.id, "i|valueHi", inMessage.data32[1], "i|valueLow", inMessage.data32[0]);
     // Software filter for relevant IDs
     for (uint8_t i = 0; i < statusArray.size(); i++) {
       JsonObject status = statusArray[i];
@@ -100,7 +100,7 @@ void CanClass::poll() {
   if (health <= 0) {
     begin();
   } else {
-    delay(200);  // give it sometime to get messages
+    // delay(200);  // give it sometime to get messages
     CANMessage message;
     for (int i = 0; i < busCount; i++) {
       int totalMsg = 0;

@@ -41,16 +41,13 @@ int SystemClass::begin() {
   String sn = ECCX08.serialNumber();
   strncpy(id, sn.c_str(), sn.length());
 
-  JsonObject can = statusDoc.createNestedObject("canbus");
-  can.createNestedObject("lessThanDelta");
-  can.createNestedObject("batch");
-
   char state = Config.loadImmoState();
   if (state == '1') {
     Pins.immobilize();
   } else if (state == '0') {
     Pins.unimmobilize();
   }
+
   return 1;
 }
 
@@ -61,8 +58,7 @@ void SystemClass::poll() {
 
 void SystemClass::checkHeartbeat() {
   JsonObject heartbeat = Config.get()["heartbeat"];
-  int ignition = statusDoc["canbus"]["ignition"] | 0;
-  uint32_t interval = ignition == IGNITION_ON ? heartbeat["ignitionOn"] | 30 : heartbeat["ignitionOff"] | 900;
+  uint32_t interval = canBus["ignition"] == IGNITION_ON ? heartbeat["ignitionOn"] | 30 : heartbeat["ignitionOff"] | 900;
   // logDebug("i|time", time, "i|lastHeartbeat", lastHeartbeat, "i|interval", interval);
   uint32_t elapsedTime = getTime() - lastHeartbeat;
   if (interval > 60 && elapsedTime == interval - 60) {
@@ -96,7 +92,7 @@ void SystemClass::checkVin() {
       int32_t limit = Config.get()["vin"]["low"] | 800;
       // logDebug("i|limit", limit);
       if (avg < limit) {
-        char info[128];
+        char info[64];
         json(info, "i|vin", avg);
         report(info);
       }
@@ -128,11 +124,13 @@ void SystemClass::resetLastHeartbeat() {
 }
 
 void SystemClass::sendHeartbeat() {
-  //   char vinBuf[32] = "+|";
-  // #ifdef ARDUINO_SAMD_WAIVE1000
-  //   int index = (vinIndex - 1) % ARRAY_SIZE(vinReads);
-  //   json(vinBuf, "-{", "i|lastVin", vinReads[index]);
-  // #endif
+#ifdef DEBUG
+  char vinBuf[32] = "+|";
+#ifdef ARDUINO_SAMD_WAIVE1000
+  int index = (vinIndex - 1) % ARRAY_SIZE(vinReads);
+  json(vinBuf, "-{", "i|lastVin", vinReads[index]);
+#endif
+#endif
   char cellBuf[64] = "+|";
   if (Internet.isConnected()) {
     json(cellBuf, "-{", "i|signal", Internet.getSignalStrength(), "carrier", Internet.getCarrier().c_str());
@@ -145,11 +143,12 @@ void SystemClass::sendHeartbeat() {
        "i|heading", Gps.getHeading() / 100,
        "i|uptime", time - bootTime,
        "f3|temp", Motion.getTemp(),
-       //  "i|ble", Bluetooth.getHealth(),
-       //  "i|can", Can.getHealth(),
-       //  "i|freeMem", freeMemory(),
-       //  "i|statusFreeMem", STATUS_DOC_SIZE - statusDoc.memoryUsage(),
-       //  vinBuf,
+#ifdef DEBUG
+       "i|ble", Bluetooth.getHealth(),
+       "i|can", Can.getHealth(),
+       "i|freeMem", freeMemory(),
+       vinBuf,
+#endif
        cellBuf, "}|");
   // system["moreStuff"] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
   report(buf);
@@ -158,36 +157,42 @@ void SystemClass::sendHeartbeat() {
 }
 
 void SystemClass::sendCanStatus(const char* type) {
-  JsonObject can = statusDoc["canbus"];
-  JsonObject telemetry = can[type];
+  HashMap<const char*, int64_t, 20>& telemetry = (strcmp(type, "batch") == 0) ? canBusBatch : canBusLessThanDelta;
   logTrace("i|telemetry.size(): ", telemetry.size());
   if (telemetry.size() > 0) {
-    String canJson = can[type].as<String>();
-    char buf[512];
-    json(buf, "o|canbus", canJson.c_str());
-    report(buf);
-    for (JsonPair kv : telemetry) {
-      can[kv.key()] = kv.value();
-      logTrace("kv.key(): ", kv.key().c_str(), "i|kv.value()", (int32_t)kv.value());
-      telemetry.remove(kv.key());
+    char canFragment[512] = "+|";
+
+    while (telemetry.size() > 0) {
+      const char* key = telemetry.keyAt(0);
+      int64_t value = telemetry.valueAt(0);
+      canBus[key] = value;
+      logTrace("key", key, "i|value", (int32_t)value);
+      telemetry.remove(key);
+
+      // augment json with another key value pair
+      char jsonKey[64];
+      sprintf(jsonKey, "i|%s", key);
+      char fragmentCopy[512];
+      strcpy(fragmentCopy, canFragment);
+      json(canFragment, "-{", fragmentCopy, jsonKey, (int32_t)value);
     }
+    char buf[512];
+    json(buf, "{|canbus", canFragment, "}|");
+    report(buf);
   }
-  logTrace("i|telemetry.size(): ", telemetry.size());
+  // logTrace("i|telemetry.size(): ", telemetry.size());
 }
 
 void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) {
-  JsonObject can = statusDoc["canbus"];
-  JsonObject lessThanDelta = can["lessThanDelta"];
-  JsonObject batch = can["batch"];
-  int64_t oldValue = can[name];
+  int64_t oldValue = canBus[name];
   if (oldValue != value) {
     logTrace("name", name, "i|value", (int32_t)value, "i|delta", delta, "i|oldValue", (int32_t)oldValue);
     if (abs(oldValue - value) >= delta) {
-      can[name] = value;
+      canBus[name] = value;
       if (delta > 0) {
-        lessThanDelta.remove(name);
+        canBusLessThanDelta.remove(name);
       }
-      batch[name] = value;
+      canBusBatch[name] = value;
       if (strcmp(name, "ignition") == 0) {
         if (oldValue == IGNITION_ON && value != IGNITION_ON) {
           handleIgnitionOff();
@@ -196,7 +201,7 @@ void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) 
         }
       }
     } else {
-      lessThanDelta[name] = value;
+      canBusLessThanDelta[name] = value;
     }
   }
 }
@@ -207,6 +212,7 @@ void SystemClass::sleep(uint32_t sec) {
   delay(sec * 1000);
 #else
   rtc.setSeconds(60 - sec);
+  // TODO: it seems can bus interrupt is waking MCU up
   rtc.standbyMode();
   _ulTickCount = _ulTickCount + sec * 1000;
 #endif
@@ -293,10 +299,10 @@ void SystemClass::handleIgnitionOff() {
 
 void SystemClass::simulateIgnition(const String& cmdValue) {
   if (cmdValue == "on") {
-    statusDoc["canbus"]["ignition"] = 3;
+    canBus["ignition"] = 3;
     handleIgnitionOn();
   } else if (cmdValue == "off") {
-    statusDoc["canbus"]["ignition"] = 0;
+    canBus["ignition"] = 0;
     handleIgnitionOff();
   }
 }
