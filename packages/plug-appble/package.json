@@ -1,6 +1,6 @@
 {
   "name": "appble",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "private": true,
   "scripts": {
     "start": "react-native start",
@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "runa": "react-native run-android",
     "build-android": "cd android; ./gradlew bundleRelease; open app/build/outputs/bundle/release",
-    "build-android-apk": "react-native run-android --variant=release; open android/app/build/outputs/apk/release"
+    "build-android-apk": "cd android && ./gradlew assembleRelease; open app/build/outputs/apk/release"
   },
   "dependencies": {
     "buffer": "^5.4.3",
