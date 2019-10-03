@@ -65,17 +65,17 @@ void loop() {
   Watchdog.clear();
 
   Mqtt.poll();
+  Bluetooth.poll();
+  System.poll();
+  Motion.poll();
+  Can.poll();
+
   if (Mqtt.isConnected() && !initSent) {
     sendInitStatus();
     initSent = true;
   }
-  Bluetooth.poll();
-  System.poll();
-  Motion.poll();
-  // Can.poll();
-
   if (!System.stayResponsive()) {
-    System.sleep(1);
+    System.sleep();
   }
   System.keepTime();
 }

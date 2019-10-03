@@ -14,6 +14,7 @@ class MqttClass {
   String updateTopic;
   String logTopic;
   int32_t lastConnectTry = -1;
+  int32_t lastPollTime = -1;
 };
 
 extern MqttClass Mqtt;

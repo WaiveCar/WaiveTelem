@@ -124,12 +124,10 @@ void SystemClass::resetLastHeartbeat() {
 }
 
 void SystemClass::sendHeartbeat() {
-#ifdef DEBUG
   char vinBuf[32] = "+|";
 #ifdef ARDUINO_SAMD_WAIVE1000
   int index = (vinIndex - 1) % ARRAY_SIZE(vinReads);
   json(vinBuf, "-{", "i|lastVin", vinReads[index]);
-#endif
 #endif
   char cellBuf[64] = "+|";
   if (Internet.isConnected()) {
@@ -143,12 +141,10 @@ void SystemClass::sendHeartbeat() {
        "i|heading", Gps.getHeading() / 100,
        "i|uptime", time - bootTime,
        "f3|temp", Motion.getTemp(),
-#ifdef DEBUG
-       "i|ble", Bluetooth.getHealth(),
-       "i|can", Can.getHealth(),
+       //  "i|ble", Bluetooth.getHealth(),
+       //  "i|can", Can.getHealth(),
        "i|freeMem", freeMemory(),
        vinBuf,
-#endif
        cellBuf, "}|");
   // system["moreStuff"] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
   report(buf);
@@ -206,15 +202,15 @@ void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) 
   }
 }
 
-void SystemClass::sleep(uint32_t sec) {
+void SystemClass::sleep() {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
-  delay(sec * 1000);
+  delay(1000);
 #else
-  rtc.setSeconds(60 - sec);
+  rtc.setSeconds(59);
   // TODO: it seems can bus interrupt is waking MCU up
   rtc.standbyMode();
-  _ulTickCount = _ulTickCount + sec * 1000;
+  // _ulTickCount = _ulTickCount + sec * 1000;
 #endif
   digitalWrite(LED_BUILTIN, HIGH);
 }

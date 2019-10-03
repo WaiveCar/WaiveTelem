@@ -22,7 +22,7 @@ class SystemClass {
   void sendHeartbeat();
   void sendCanStatus(const char* type);
   void setCanStatus(const char* name, int64_t value, uint32_t delta);
-  void sleep(uint32_t sec);
+  void sleep();
   bool stayResponsive();
   void setStayResponsive(bool responsive);
   void reportCommandDone(const String& lastCmd, const String& cmdKey, const String& cmdValue = "");

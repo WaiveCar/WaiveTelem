@@ -29,10 +29,20 @@ bool InternetClass::connect() {
     Watchdog.setup(WDT_SOFTCYCLE8S);
     return false;
   }
+  MODEM.noDebug();
+
+  // to fix long mqtt cmd delay:
+  // https://portal.u-blox.com/s/question/0D52p00008RlYDrCAN/long-delays-using-sarar41002b-with-att
+  MODEM.send("AT+USOSO=0,6,1,1");
+  MODEM.waitForResponse();
+  MODEM.send("AT+USOSO=0,65535,8,1");
+  MODEM.waitForResponse();
+  MODEM.send("AT+CEDRXS=0");  // this is supposed to be stored in non-volatile memory, but it seems AT&T can flip it?
+  MODEM.waitForResponse();
+
   System.setTimes(getTime());
   logInfo("carrier", nbScanner.getCurrentCarrier().c_str(), "i|initTime", millis() - start, "i|signal", getSignalStrength());
   Watchdog.setup(WDT_SOFTCYCLE8S);
-  MODEM.noDebug();
   return true;
 }
 

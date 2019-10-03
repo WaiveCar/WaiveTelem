@@ -42,7 +42,7 @@ void MotionClass::poll() {
 
     if (act.isActivity) {
       char info[64];
-      json(info, "i|motionDetected", act.isActivity);
+      json(info, "i|collisionDetected", act.isActivity);
       System.report(info);
     }
   }
