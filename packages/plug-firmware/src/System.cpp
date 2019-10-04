@@ -249,7 +249,7 @@ void SystemClass::setStayResponsive(bool resp) {
 void SystemClass::keepTime() {
   if (Internet.isConnected()) {
     setTimes(Internet.getTime());
-  } else if (!Gps.poll()) {
+  } else if (time % 10 != 0 || !Gps.poll()) {
     int32_t elapsed = millis() - lastMillis;
     if (elapsed >= 1000) {
       int32_t remainder = elapsed % 1000;

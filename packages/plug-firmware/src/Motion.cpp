@@ -15,8 +15,10 @@ int MotionClass::begin() {
 
   mpu.setAccelPowerOnDelay(MPU6050_DELAY_3MS);
   mpu.setDHPFMode(MPU6050_DHPF_5HZ);
+  // Motion detection acceleration threshold. 1LSB = 1mg?
   mpu.setMotionDetectionThreshold(120);  //TBD
-  mpu.setMotionDetectionDuration(5);     //TBD
+  // Motion detection event duration in ms
+  mpu.setMotionDetectionDuration(50);  //TBD, higher value, less detection
 
   mpu.setSleepEnabled(true);
 
@@ -25,20 +27,20 @@ int MotionClass::begin() {
 
 void MotionClass::poll() {
   if (health == 1) {
-    Vector accel = mpu.readScaledAccel();
+    mpu.readScaledAccel();
     Activites act = mpu.readActivites();
 
-    Serial.print(accel.XAxis);
-    Serial.print(" ");
-    Serial.print(accel.YAxis);
-    Serial.print(" ");
-    Serial.print(accel.ZAxis);
-    Serial.print(" ");
+    // Serial.print(accel.XAxis);
+    // Serial.print(" ");
+    // Serial.print(accel.YAxis);
+    // Serial.print(" ");
+    // Serial.print(accel.ZAxis);
+    // Serial.print(" ");
 
-    Serial.print(act.isActivity);
-    Serial.print(act.isInactivity);
+    // Serial.print(act.isActivity);
+    // Serial.print(act.isInactivity);
 
-    Serial.print("\n");
+    // Serial.print("\n");
 
     if (act.isActivity) {
       char info[64];
