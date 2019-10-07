@@ -14,6 +14,32 @@ static NB nbAccess;
 static GPRS gprs;
 static NBScanner nbScanner;
 
+static void disableModemFirmwareUpdate() {
+  int ret = MODEM.begin();
+  if (ret != 1) {
+    Serial.println("MODEM.begin() failed: " + String(ret));
+    return;
+  }
+
+  while (!MODEM.noop())
+    ;
+
+  // disable OTA firmware update
+  ret = 0;
+  while (ret != 1) {
+    MODEM.send("AT+UFOTACONF=2,-1");
+    ret = MODEM.waitForResponse(2000);
+  }
+
+  // confirm OTA firmware update is disabled
+  MODEM.send("AT+UFOTACONF=2");
+  String modemResponse = "";
+  MODEM.waitForResponse(2000, &modemResponse);
+  if (modemResponse != "+UFOTACONF: 2, -1") {
+    Serial.println("Error 'AT+UFOTACONF=2' response: " + modemResponse);
+  }
+}
+
 bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
   const char* apn = nb["apn"] | "internet.swir";
@@ -22,6 +48,7 @@ bool InternetClass::connect() {
   gprs.setTimeout(20000);
   Watchdog.setup(WDT_SOFTCYCLE32S);
   // Watchdog.setup(WDT_OFF);
+  disableModemFirmwareUpdate();
   MODEM.debug(Serial);
   int start = millis();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
