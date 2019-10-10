@@ -97,7 +97,7 @@ int CanClass::begin() {
 }
 
 void CanClass::poll() {
-  if (health <= 0) {
+  if (health == 0) {
     begin();
   } else {
     // delay(200);  // give it sometime to get messages

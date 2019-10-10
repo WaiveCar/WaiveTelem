@@ -95,7 +95,7 @@ export default class App extends Component {
     };
     this.bluetoothReceiveData = [];
     this.deviceMap = new Map();
-    this.isWritting = false;
+    this.isWriting = false;
     setTimeout(() => {
       this.scan();
     }, 100);
@@ -210,10 +210,11 @@ export default class App extends Component {
   // };
 
   writeWithoutResponse = async (index, text) => {
-    if (this.isWritting) {
+    console.log('writeWithoutResponse');
+    if (this.isWriting) {
       return;
     }
-    this.isWritting = true;
+    this.isWriting = true;
     let binary;
     binary = Buffer.from(text);
     // index 0 is AUTH_CHAR, 1 is CMD_CHAR
@@ -242,7 +243,7 @@ export default class App extends Component {
     }
     this.bluetoothReceiveData = [];
     await sleep(1000); // wait for challenge to be set on the device
-    this.isWritting = false;
+    this.isWriting = false;
     this.setState({
       writeData: text
     });

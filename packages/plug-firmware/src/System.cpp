@@ -64,7 +64,7 @@ void SystemClass::checkHeartbeat() {
   if (interval > 60 && elapsedTime == interval - 60) {
     Gps.wakeup();
   } else if (lastHeartbeat == -1 || elapsedTime >= interval) {
-    if (Gps.poll()) {
+    if (!stayResponsive() && Gps.poll()) {
       sendHeartbeat();
       if (interval > 60) {
         Gps.sleep();
@@ -249,7 +249,7 @@ void SystemClass::setStayResponsive(bool resp) {
 void SystemClass::keepTime() {
   if (Internet.isConnected()) {
     setTimes(Internet.getTime());
-  } else if (time % 10 != 0 || !Gps.poll()) {
+  } else if (time % 20 != 0 || !Gps.poll()) {
     int32_t elapsed = millis() - lastMillis;
     if (elapsed >= 1000) {
       int32_t remainder = elapsed % 1000;

@@ -177,8 +177,8 @@ export default class BleModule {
           characteristic => {
             let buffer = Buffer.from(characteristic.value, 'base64');
             let value = buffer.toString();
-            console.log('read success', value);
-            // console.log('read success',characteristic.value);
+            // console.log('read success', value);
+            console.log('read success', characteristic.value);
             resolve(value);
           },
           error => {

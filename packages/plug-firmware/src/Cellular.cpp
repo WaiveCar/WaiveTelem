@@ -15,9 +15,9 @@ static GPRS gprs;
 static NBScanner nbScanner;
 
 static void disableModemFirmwareUpdate() {
-  int ret = MODEM.begin();
+  int ret = MODEM.begin(true);
   if (ret != 1) {
-    Serial.println("MODEM.begin() failed: " + String(ret));
+    logError("i|ret", ret);
     return;
   }
 
@@ -36,7 +36,7 @@ static void disableModemFirmwareUpdate() {
   String modemResponse = "";
   MODEM.waitForResponse(2000, &modemResponse);
   if (modemResponse != "+UFOTACONF: 2, -1") {
-    Serial.println("Error 'AT+UFOTACONF=2' response: " + modemResponse);
+    logError("modemResponse", modemResponse.c_str());
   }
 }
 

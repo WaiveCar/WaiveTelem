@@ -47,7 +47,8 @@ const client = new AWSMqttClient({
 });
 
 client.on('connect', () => {
-  client.subscribe('things/+/log');
+  // client.subscribe('things/+/log');
+  client.subscribe('things/+/gps');
 });
 
 client.on('message', (topic, message) => {

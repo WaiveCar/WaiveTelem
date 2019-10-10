@@ -96,7 +96,7 @@ int BluetoothClass::begin() {
     return getHealth();
   }
 
-  status = aci_hal_set_tx_power_level(1, 0);  // 0 is lowest, prevents eavesdropping
+  status = aci_hal_set_tx_power_level(1, 0);  // 0 is lowest, prevents eavesdropping, 7 is highest
   if (status) {
     logError("i|status", status, "BLE aci_hal_set_tx_power_level failed");
     return getHealth();
