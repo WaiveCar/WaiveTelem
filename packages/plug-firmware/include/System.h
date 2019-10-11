@@ -29,6 +29,7 @@ class SystemClass {
   void setRemoteLogLevel(int8_t in);
   int8_t getRemoteLogLevel();
   void simulateIgnition(const String& cmdValue);
+  void setIgnitionKey(void* key);
 
  private:
   void checkVin();
@@ -51,9 +52,10 @@ class SystemClass {
   int vinIndex = 0;
   bool vinAvgValid = false;
   int32_t lastVinRead = -1;
-  HashMap<const char*, int64_t, 40> canBus;
-  HashMap<const char*, int64_t, 20> canBusLessThanDelta;
-  HashMap<const char*, int64_t, 20> canBusBatch;
+  void* ignitionKey;
+  HashMap<void*, int64_t, 20> canBus;
+  HashMap<void*, int64_t, 10> canBusLessThanDelta;
+  HashMap<void*, int64_t, 10> canBusBatch;
 };
 
 extern SystemClass System;

@@ -2,6 +2,9 @@
 #include <ArduinoMqttClient.h>
 #include <JsonLogger.h>
 #include <WDTZero.h>
+#ifndef ARDUINO_SAMD_MKR1000
+#include <Modem.h>
+#endif
 
 #include "Command.h"
 #include "Eeprom.h"
@@ -97,14 +100,30 @@ void MqttClass::connect() {
   logInfo("broker", Eeprom.getMqttUrl());
   int start = millis();
   Watchdog.setup(WDT_SOFTCYCLE1M);
-  // MODEM.debug(Serial);
   if (!mqttClient.connect(Eeprom.getMqttUrl(), 8883)) {
     System.setTimes(Internet.getTime());
     logWarn("i|error", mqttClient.connectError());
     Watchdog.setup(WDT_SOFTCYCLE8S);
     return;
   }
-  // MODEM.noDebug();
+
+#ifndef ARDUINO_SAMD_MKR1000
+  MODEM.debug(Serial);
+
+  MODEM.send("AT+USOSO=0,6,1,1");
+  MODEM.waitForResponse();
+  MODEM.send("AT+USOSO=0,65535,8,1");
+  MODEM.waitForResponse();
+  // to fix long mqtt cmd delay:
+  // https://portal.u-blox.com/s/question/0D52p00008RlYDrCAN/long-delays-using-sarar41002b-with-att
+  // https://github.com/botletics/SIM7000-LTE-Shield/wiki/Current-Consumption
+  // MODEM.send("AT+CEDRXS=1,4,\"0000\"");  // up to 5.12 sec delay but I observed 60 seconds delay
+  MODEM.send("AT+CEDRXS=0");  // no delay, but more current consumption
+  MODEM.waitForResponse();
+
+  MODEM.noDebug();
+#endif
+
   System.setTimes(Internet.getTime());
   logDebug("i|initTime", millis() - start, "You're connected to the MQTT broker");
   Watchdog.setup(WDT_SOFTCYCLE8S);

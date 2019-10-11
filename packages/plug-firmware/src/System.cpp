@@ -58,8 +58,8 @@ void SystemClass::poll() {
 
 void SystemClass::checkHeartbeat() {
   JsonObject heartbeat = Config.get()["heartbeat"];
-  uint32_t interval = canBus["ignition"] == IGNITION_ON ? heartbeat["ignitionOn"] | 30 : heartbeat["ignitionOff"] | 900;
-  // logDebug("i|time", time, "i|lastHeartbeat", lastHeartbeat, "i|interval", interval);
+  uint32_t interval = canBus[ignitionKey] == IGNITION_ON ? heartbeat["ignitionOn"] | 30 : heartbeat["ignitionOff"] | 900;
+  logTrace("i|time", time, "i|lastHeartbeat", lastHeartbeat, "i|interval", interval, "i|canBus[ignition]", (int32_t)canBus[ignitionKey]);
   uint32_t elapsedTime = getTime() - lastHeartbeat;
   if (interval > 60 && elapsedTime == interval - 60) {
     Gps.wakeup();
@@ -153,21 +153,21 @@ void SystemClass::sendHeartbeat() {
 }
 
 void SystemClass::sendCanStatus(const char* type) {
-  HashMap<const char*, int64_t, 20>& telemetry = (strcmp(type, "batch") == 0) ? canBusBatch : canBusLessThanDelta;
+  HashMap<void*, int64_t, 10>& telemetry = (strcmp(type, "batch") == 0) ? canBusBatch : canBusLessThanDelta;
   logTrace("i|telemetry.size(): ", telemetry.size());
   if (telemetry.size() > 0) {
     char canFragment[512] = "+|";
 
     while (telemetry.size() > 0) {
-      const char* key = telemetry.keyAt(0);
+      void* key = telemetry.keyAt(0);
       int64_t value = telemetry.valueAt(0);
       canBus[key] = value;
-      logTrace("key", key, "i|value", (int32_t)value);
+      logTrace("key", key, "i|value", (int32_t)value, "i|canBus[key]", (int32_t)canBus[key]);
       telemetry.remove(key);
 
       // augment json with another key value pair
       char jsonKey[64];
-      sprintf(jsonKey, "i|%s", key);
+      sprintf(jsonKey, "i|%s", (const char*)key);
       char fragmentCopy[512];
       strcpy(fragmentCopy, canFragment);
       json(canFragment, "-{", fragmentCopy, jsonKey, (int32_t)value);
@@ -180,15 +180,15 @@ void SystemClass::sendCanStatus(const char* type) {
 }
 
 void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) {
-  int64_t oldValue = canBus[name];
+  int64_t oldValue = canBus[(void*)name];
   if (oldValue != value) {
     logTrace("name", name, "i|value", (int32_t)value, "i|delta", delta, "i|oldValue", (int32_t)oldValue);
     if (abs(oldValue - value) >= delta) {
-      canBus[name] = value;
+      canBus[(void*)name] = value;
       if (delta > 0) {
-        canBusLessThanDelta.remove(name);
+        canBusLessThanDelta.remove((void*)name);
       }
-      canBusBatch[name] = value;
+      canBusBatch[(void*)name] = value;
       if (strcmp(name, "ignition") == 0) {
         if (oldValue == IGNITION_ON && value != IGNITION_ON) {
           handleIgnitionOff();
@@ -197,7 +197,7 @@ void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) 
         }
       }
     } else {
-      canBusLessThanDelta[name] = value;
+      canBusLessThanDelta[(void*)name] = value;
     }
   }
 }
@@ -205,7 +205,7 @@ void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) 
 void SystemClass::sleep() {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
-  delay(1000);
+  delay(800);
 #else
   rtc.setSeconds(59);
   // TODO: it seems can bus interrupt is waking MCU up
@@ -249,7 +249,7 @@ void SystemClass::setStayResponsive(bool resp) {
 void SystemClass::keepTime() {
   if (Internet.isConnected()) {
     setTimes(Internet.getTime());
-  } else if (time % 20 != 0 || !Gps.poll()) {
+  } else if (time % 10 != 0 || !Gps.poll()) {
     int32_t elapsed = millis() - lastMillis;
     if (elapsed >= 1000) {
       int32_t remainder = elapsed % 1000;
@@ -295,12 +295,16 @@ void SystemClass::handleIgnitionOff() {
 
 void SystemClass::simulateIgnition(const String& cmdValue) {
   if (cmdValue == "on") {
-    canBus["ignition"] = 3;
+    canBus[ignitionKey] = 3;
     handleIgnitionOn();
   } else if (cmdValue == "off") {
-    canBus["ignition"] = 0;
+    canBus[ignitionKey] = 0;
     handleIgnitionOff();
   }
+}
+
+void SystemClass::setIgnitionKey(void* key) {
+  ignitionKey = key;
 }
 
 SystemClass System;

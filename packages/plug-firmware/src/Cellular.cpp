@@ -15,18 +15,10 @@ static GPRS gprs;
 static NBScanner nbScanner;
 
 static void disableModemFirmwareUpdate() {
-  int ret = MODEM.begin(true);
-  if (ret != 1) {
-    logError("i|ret", ret);
-    return;
-  }
-
-  while (!MODEM.noop())
-    ;
-
   // disable OTA firmware update
-  ret = 0;
+  int ret = 0;
   while (ret != 1) {
+    delay(1000);
     MODEM.send("AT+UFOTACONF=2,-1");
     ret = MODEM.waitForResponse(2000);
   }
@@ -40,6 +32,13 @@ static void disableModemFirmwareUpdate() {
   }
 }
 
+// static void chooseNetwork() {
+//   MODEM.send("AT+COPS=2");
+//   MODEM.waitForResponse();
+//   MODEM.send("AT+UMNOPROF=2");  // 2: AT&T, 3: Verizon
+//   MODEM.waitForResponse();
+// }
+
 bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
   const char* apn = nb["apn"] | "internet.swir";
@@ -48,24 +47,28 @@ bool InternetClass::connect() {
   gprs.setTimeout(20000);
   Watchdog.setup(WDT_SOFTCYCLE32S);
   // Watchdog.setup(WDT_OFF);
-  disableModemFirmwareUpdate();
   MODEM.debug(Serial);
+  int ret = MODEM.begin(true);
+  if (ret != 1) {
+    logError("i|ret", ret);
+    return false;
+  }
+
+  // chooseNetwork();
+  disableModemFirmwareUpdate();
+
+  // Reboot modem
+  // MODEM.send("AT+CFUN=15");
+  // delay(6000);
+
   int start = millis();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
     logWarn("Failed to connect, try later");
     Watchdog.setup(WDT_SOFTCYCLE8S);
     return false;
   }
-  MODEM.noDebug();
 
-  // to fix long mqtt cmd delay:
-  // https://portal.u-blox.com/s/question/0D52p00008RlYDrCAN/long-delays-using-sarar41002b-with-att
-  MODEM.send("AT+USOSO=0,6,1,1");
-  MODEM.waitForResponse();
-  MODEM.send("AT+USOSO=0,65535,8,1");
-  MODEM.waitForResponse();
-  MODEM.send("AT+CEDRXS=0");  // this is supposed to be stored in non-volatile memory, but it seems AT&T can flip it?
-  MODEM.waitForResponse();
+  MODEM.noDebug();
 
   System.setTimes(getTime());
   logInfo("carrier", nbScanner.getCurrentCarrier().c_str(), "i|initTime", millis() - start, "i|signal", getSignalStrength());

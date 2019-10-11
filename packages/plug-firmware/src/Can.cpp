@@ -57,7 +57,7 @@ int CanClass::begin() {
     settings.mReceiveBufferSize = 16;
     settings.mTransmitBuffer0Size = 2;
 
-#ifdef ARDUINO_SAMD_WAIVE1000
+#if NUM_CANBUS == 2
     auto lambda = (i == 0 ? [] { can0.isr(); } : [] { can1.isr(); });
 #else
     auto lambda = [] { can0.isr(); };
@@ -82,13 +82,21 @@ int CanClass::begin() {
       const ACAN2515Mask rxm0 = standard2515Mask(mask, 0, 0);
       const ACAN2515AcceptanceFilter filters[] = {{standard2515Filter(minCanId, 0, 0), NULL}};
       errorCode = canbus[i]->begin(settings, lambda, rxm0, filters, 1);
+
+      // set the ignition pointer
+      for (uint8_t i = 0; i < status.size(); i++) {
+        const char* key = status[i]["name"];
+        if (strcmp(key, "ignition") == 0) {
+          System.setIgnitionKey((void*)key);
+          break;
+        }
+      }
     } else {
       errorCode = canbus[i]->begin(settings, lambda);
     }
     if (errorCode) {
       logError("i|error", errorCode, "can configuration error ");
       health = -1;
-      return health;
     }
   }
   // sleep();
@@ -97,7 +105,7 @@ int CanClass::begin() {
 }
 
 void CanClass::poll() {
-  if (health == 0) {
+  if (health <= 0) {
     begin();
   } else {
     // delay(200);  // give it sometime to get messages
