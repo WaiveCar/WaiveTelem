@@ -1,48 +1,27 @@
 {
-    "name": "SD", 
-    "version": "1.2.3", 
-    "keywords": [
-        "data", 
-        "storage"
-    ], 
     "description": "Enables reading and writing on SD cards.", 
-    "frameworks": [
-        "arduino"
-    ], 
+    "repository": {
+        "url": "https://github.com/arduino-libraries/SD", 
+        "type": "git"
+    }, 
     "platforms": [
         "atmelavr", 
         "atmelsam", 
         "espressif32", 
         "espressif8266", 
+        "gd32v", 
+        "infineonxmc", 
         "intel_arc32", 
+        "kendryte210", 
         "microchippic32", 
         "nordicnrf51", 
         "nordicnrf52", 
         "ststm32", 
+        "ststm8", 
         "teensy", 
         "timsp430"
     ], 
-    "authors": [
-        {
-            "email": "info@arduino.cc", 
-            "url": null, 
-            "maintainer": true, 
-            "name": "Arduino"
-        }, 
-        {
-            "email": null, 
-            "url": null, 
-            "maintainer": false, 
-            "name": "SparkFun"
-        }
-    ], 
-    "repository": {
-        "type": "git", 
-        "url": "https://github.com/arduino-libraries/SD"
-    }, 
-    "homepage": "http://www.arduino.cc/en/Reference/SD", 
     "export": {
-        "include": null, 
         "exclude": [
             "extras", 
             "docs", 
@@ -50,7 +29,32 @@
             "test", 
             "*.doxyfile", 
             "*.pdf"
-        ]
+        ], 
+        "include": null
     }, 
-    "id": 868
+    "authors": [
+        {
+            "maintainer": true, 
+            "name": "Arduino", 
+            "url": null, 
+            "email": "info@arduino.cc"
+        }, 
+        {
+            "maintainer": false, 
+            "name": "SparkFun", 
+            "url": null, 
+            "email": null
+        }
+    ], 
+    "keywords": [
+        "storage", 
+        "data"
+    ], 
+    "id": 868, 
+    "name": "SD", 
+    "frameworks": [
+        "arduino"
+    ], 
+    "version": "1.2.4", 
+    "homepage": "http://www.arduino.cc/en/Reference/SD"
 }
