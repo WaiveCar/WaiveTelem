@@ -11,6 +11,8 @@ void HCI_Event_CB(void *pckt) {
   hci_uart_pckt *hci_pckt = (hci_uart_pckt *)pckt;
   hci_event_pckt *event_pckt = (hci_event_pckt *)hci_pckt->data;
 
+  // logDebug("i|type", hci_pckt->type);
+
   if (hci_pckt->type != HCI_EVENT_PKT) {
     return;
   }
@@ -174,10 +176,10 @@ void BluetoothClass::reset() {
 }
 
 tBleStatus BluetoothClass::setChallenge() {
-  ECCX08.random(challenge, sizeof(challenge));
+  int ret = ECCX08.random(challenge, sizeof(challenge));
   status = aci_gatt_update_char_value(ServHandle, ChallengeCharHandle, 0, sizeof(challenge), challenge);
-  if (status != BLE_STATUS_SUCCESS) {
-    logError("i|status", status, "Error while set challenge");
+  if (ret != 1 || status != BLE_STATUS_SUCCESS) {
+    logError("i|status", status);
     return BLE_STATUS_ERROR;
   }
   return BLE_STATUS_SUCCESS;
@@ -253,8 +255,8 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
 void BluetoothClass::GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle) {
   connection_handle = handle;
   char sprintbuff[64];
-  snprintf(sprintbuff, 64, "BLE Connected to device: %02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
-  logInfo(sprintbuff);
+  snprintf(sprintbuff, 64, "%02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
+  logInfo("device", sprintbuff);
   Command.unauthorize();
   Bluetooth.setChallenge();
   System.setStayResponsive(true);

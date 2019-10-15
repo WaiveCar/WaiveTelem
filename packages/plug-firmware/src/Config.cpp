@@ -49,7 +49,7 @@ char ConfigClass::loadImmoState() {
 }
 
 void ConfigClass::saveImmoState(char value) {
-  File file = SD.open(IMMO_FILE, FILE_WRITE);
+  File file = SD.open(IMMO_FILE, O_WRITE | O_CREAT);
 
   if (!file) {
     logError(IMMO_FILE " open failed");

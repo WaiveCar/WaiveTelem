@@ -214,6 +214,7 @@ export default class App extends Component {
     if (this.isWriting) {
       return;
     }
+    this.setState({ writeData: '' });
     this.isWriting = true;
     let binary;
     binary = Buffer.from(text);

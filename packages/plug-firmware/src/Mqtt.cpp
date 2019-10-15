@@ -119,7 +119,7 @@ void MqttClass::connect() {
 #endif
 
   System.setTimes(Internet.getTime());
-  logDebug("i|initTime", millis() - start, "You're connected to the MQTT broker");
+  logDebug("i|connectTime", millis() - start, "You're connected to the MQTT broker");
   Watchdog.setup(WDT_SOFTCYCLE8S);
   mqttClient.subscribe("$aws/things/" + String(System.getId()) + "/shadow/update/delta");
 }

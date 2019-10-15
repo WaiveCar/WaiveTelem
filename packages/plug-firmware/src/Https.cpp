@@ -50,7 +50,7 @@ static int32_t skipHeaders() {
 static int32_t saveFile(const char* to) {
   int counter = 0;
   SHA256.beginHmac("https failed");
-  File file = SD.open(to, FILE_WRITE);
+  File file = SD.open(to, O_WRITE | O_CREAT);
   if (!file) {
     logError("file open failed");
     return -1;

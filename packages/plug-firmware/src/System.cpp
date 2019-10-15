@@ -42,6 +42,7 @@ int SystemClass::begin() {
   strncpy(id, sn.c_str(), sn.length());
 
   char state = Config.loadImmoState();
+  logDebug("i|immo", (int32_t)state - 48);
   if (state == '1') {
     Pins.immobilize();
   } else if (state == '0') {

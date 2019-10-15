@@ -147,7 +147,7 @@ int32_t CommandClass::copyFile(const char* from, const char* to) {
     logError("readFile open failed");
     return -1;
   }
-  File writeFile = SD.open(to, FILE_WRITE);
+  File writeFile = SD.open(to, O_WRITE | O_CREAT);
   if (!writeFile) {
     logError("writeFile open failed");
     return -1;
