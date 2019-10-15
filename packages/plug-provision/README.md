@@ -43,7 +43,7 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 
 #### NOTES: If you want to provision a plug that is provisioned already, delete its associated certificate first from the aws console as the private key will be changed.
 
-- Connect to the device via Atmel-Ice, and insert the SD
+- Connect to the device via both Atmel-Ice and USB. Insert the SD to your computer.
   
 ```bash
 ./provision.sh

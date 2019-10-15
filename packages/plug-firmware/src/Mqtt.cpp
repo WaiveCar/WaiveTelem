@@ -114,12 +114,6 @@ void MqttClass::connect() {
   MODEM.waitForResponse();
   MODEM.send("AT+USOSO=0,65535,8,1");
   MODEM.waitForResponse();
-  // to fix long mqtt cmd delay:
-  // https://portal.u-blox.com/s/question/0D52p00008RlYDrCAN/long-delays-using-sarar41002b-with-att
-  // https://github.com/botletics/SIM7000-LTE-Shield/wiki/Current-Consumption
-  // MODEM.send("AT+CEDRXS=1,4,\"0000\"");  // up to 5.12 sec delay but I observed 60 seconds delay
-  MODEM.send("AT+CEDRXS=0");  // no delay, but more current consumption
-  MODEM.waitForResponse();
 
   MODEM.noDebug();
 #endif

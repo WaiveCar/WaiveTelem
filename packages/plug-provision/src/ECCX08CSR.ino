@@ -34,6 +34,35 @@
 #include <Modem.h>
 #endif
 
+static void setEdrx() {
+  // to fix long mqtt cmd delay:
+  // https://portal.u-blox.com/s/question/0D52p00008RlYDrCAN/long-delays-using-sarar41002b-with-att
+  // https://github.com/botletics/SIM7000-LTE-Shield/wiki/Current-Consumption
+  MODEM.send("AT+CEDRXS=1,4,\"0000\"");  // up to 5.12 sec delay
+  // MODEM.send("AT+CEDRXS=0");  // no delay, but more power consumption
+  MODEM.waitForResponse(2000);
+  String modemResponse;
+  // MODEM.send("AT+CEDRXS=?");
+  // MODEM.waitForResponse(2000, &modemResponse);
+  MODEM.send("AT+CEDRXS?");
+  MODEM.waitForResponse(2000, &modemResponse);
+}
+
+static void chooseNetwork() {
+  MODEM.send("AT+COPS=2");
+  MODEM.waitForResponse(2000);
+  // https://www.u-blox.com/sites/default/files/SARA-R4-N4-Application-Development_AppNote_%28UBX-18019856%29.pdf
+  // 0: SW default profile, 1: ICCID Select, 2: AT&T, 3: Verizon
+  MODEM.send("AT+UMNOPROF=0");
+  MODEM.waitForResponse(2000);
+  String modemResponse;
+  MODEM.send("AT+UMNOPROF?");
+  MODEM.waitForResponse(2000, &modemResponse);
+  setEdrx();
+  // reset sim card
+  MODEM.send("AT+CFUN=15");
+}
+
 void setup() {
   Serial.begin(115200);
   // while (!Serial)
@@ -87,6 +116,8 @@ void setup() {
   if (modemResponse != "+UFOTACONF: 2, -1") {
     Serial.println("Error 'AT+UFOTACONF=2' response: " + modemResponse);
   }
+
+  chooseNetwork();
 
 #endif
 

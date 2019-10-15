@@ -14,7 +14,7 @@ case "$(uname -s)" in
       echo 'other OS'
       pio device monitor --quiet > csr.txt &
       PID=$!
-      sleep 14
+      sleep 15
       kill $PID
       JSON=$(cat csr.txt)
       rm -rf csr.txt

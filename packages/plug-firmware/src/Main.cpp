@@ -64,15 +64,15 @@ void setup() {
 void loop() {
   Watchdog.clear();
 
-  Mqtt.poll();
-  Bluetooth.poll();
-  System.poll();
   Motion.poll();
+  Bluetooth.poll();
   Can.poll();
+  Mqtt.poll();
   if (Mqtt.isConnected() && !initSent) {
     sendInitStatus();
     initSent = true;
   }
+  System.poll();
   if (!System.stayResponsive()) {
     System.sleep();
   }
