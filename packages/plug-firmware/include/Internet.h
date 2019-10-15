@@ -13,6 +13,7 @@
 
 class InternetClass {
  public:
+  int begin();
   bool connect();
   bool isConnected();
   unsigned long getTime();

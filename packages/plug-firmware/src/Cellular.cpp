@@ -14,7 +14,7 @@ static NB nbAccess;
 static GPRS gprs;
 static NBScanner nbScanner;
 
-static void disableModemFirmwareUpdate() {
+void disableModemFirmwareUpdate() {
   // https://www.u-blox.com/sites/default/files/SARA-R4-FW-Update_AppNote_%28UBX-17049154%29.pdf
   // disable OTA firmware update
   int ret = 0;
@@ -42,35 +42,29 @@ void chooseNetwork() {
   MODEM.waitForResponse(2000);
 }
 
-bool InternetClass::connect() {
-  JsonObject nb = Config.get()["nb"];
-  const char* apn = nb["apn"] | "internet.swir";
-  logInfo("apn", apn);
-  nbAccess.setTimeout(20000);
-  gprs.setTimeout(20000);
-  Watchdog.setup(WDT_SOFTCYCLE1M);
-  // Watchdog.setup(WDT_OFF);
+int InternetClass::begin() {
   MODEM.debug(Serial);
   int ret = MODEM.begin(true);
   if (ret != 1) {
     logError("i|ret", ret);
-    return false;
+    return 0;
   }
 
+  Watchdog.setup(WDT_SOFTCYCLE32S);
   // confirm OTA firmware update is disabled
   delay(12000);
   MODEM.send("AT+UFOTACONF=2");
   String modemResponse = "";
   MODEM.waitForResponse(2000, &modemResponse);
   if (modemResponse != "+UFOTACONF: 2, -1") {
-    logWarn("modemResponse", modemResponse.c_str());
+    logWarn("AT+UFOTACONF=2", modemResponse.c_str());
     disableModemFirmwareUpdate();
   }
 
   MODEM.send("AT+UMNOPROF?");
   MODEM.waitForResponse(2000, &modemResponse);
   if (modemResponse != "+UMNOPROF: 0") {
-    logWarn("modemResponse", modemResponse.c_str());
+    logWarn("AT+UMNOPROF?", modemResponse.c_str());
     chooseNetwork();
     // reset sim card
     MODEM.send("AT+CFUN=15");
@@ -80,12 +74,25 @@ bool InternetClass::connect() {
   MODEM.send("AT+CEDRXS?");
   MODEM.waitForResponse(2000, &modemResponse);
   if (modemResponse != "+CEDRXS: 4,\"0000\"") {
-    logWarn("modemResponse", modemResponse.c_str());
+    logWarn("AT+CEDRXS?", modemResponse.c_str());
     setEdrx();
     // reset sim card
     MODEM.send("AT+CFUN=15");
     delay(8000);
   }
+
+  Watchdog.setup(WDT_SOFTCYCLE8S);
+  return 1;
+}
+
+bool InternetClass::connect() {
+  JsonObject nb = Config.get()["nb"];
+  const char* apn = nb["apn"] | "internet.swir";
+  logInfo("apn", apn);
+  nbAccess.setTimeout(20000);
+  gprs.setTimeout(20000);
+  Watchdog.setup(WDT_SOFTCYCLE32S);
+  MODEM.debug(Serial);
 
   int start = millis();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {

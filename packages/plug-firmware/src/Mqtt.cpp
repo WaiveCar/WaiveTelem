@@ -108,14 +108,14 @@ void MqttClass::connect() {
   }
 
 #ifndef ARDUINO_SAMD_MKR1000
-  MODEM.debug(Serial);
+  // MODEM.debug(Serial);
 
-  MODEM.send("AT+USOSO=0,6,1,1");
-  MODEM.waitForResponse();
-  MODEM.send("AT+USOSO=0,65535,8,1");
-  MODEM.waitForResponse();
+  // MODEM.send("AT+USOSO=0,6,1,1");
+  // MODEM.waitForResponse();
+  // MODEM.send("AT+USOSO=0,65535,8,1");
+  // MODEM.waitForResponse();
 
-  MODEM.noDebug();
+  // MODEM.noDebug();
 #endif
 
   System.setTimes(Internet.getTime());

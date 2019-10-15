@@ -53,6 +53,7 @@ void setup() {
   ECCX08.begin();
   sdInit = SD.begin(SD_CS_PIN);
   Logger.begin();               // dependent on SD.begin()
+  Internet.begin();             // after Logger is better for logging
   cfgInit = Config.begin();     // dependent on SD.begin()
   eepromInit = Eeprom.begin();  // dependent on ECCX08.begin() and SD.begin()
   System.begin();               // dependent on ECCX08.begin()
