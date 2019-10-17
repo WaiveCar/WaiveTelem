@@ -100,12 +100,14 @@ void MqttClass::connect() {
   logInfo("broker", Eeprom.getMqttUrl());
   int start = millis();
   Watchdog.setup(WDT_SOFTCYCLE1M);
+  // MODEM.debug(Serial);
   if (!mqttClient.connect(Eeprom.getMqttUrl(), 8883)) {
     System.setTimes(Internet.getTime());
     logWarn("i|error", mqttClient.connectError());
     Watchdog.setup(WDT_SOFTCYCLE8S);
     return;
   }
+  // MODEM.noDebug();
 
 #ifndef ARDUINO_SAMD_MKR1000
   // MODEM.debug(Serial);
