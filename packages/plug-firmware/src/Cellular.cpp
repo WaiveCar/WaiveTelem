@@ -21,18 +21,18 @@ void saveConfigAndReboot() {
 
 void checkModemFirmwareUpdate() {
   // https://www.u-blox.com/sites/default/files/SARA-R4-FW-Update_AppNote_%28UBX-17049154%29.pdf
-  delay(12000);
+  delay(14000);
   // disable OTA firmware update
   int ret = 0;
   while (ret != 1) {
     MODEM.send("AT+UFOTACONF=2,-1");
-    ret = MODEM.waitForResponse(2000);
+    ret = MODEM.waitForResponse(1000);
   }
-  delay(1000);
+  delay(2000);
   // confirm OTA firmware update is disabled
   String modemResponse = "";
   MODEM.send("AT+UFOTACONF=2");
-  MODEM.waitForResponse(2000, &modemResponse);
+  MODEM.waitForResponse(1000, &modemResponse);
   if (modemResponse != "+UFOTACONF: 2, -1") {
     logWarn("AT+UFOTACONF=2", modemResponse.c_str());
   }
@@ -41,16 +41,16 @@ void checkModemFirmwareUpdate() {
 void checkNetwork() {
   String modemResponse = "";
   MODEM.send("AT+UMNOPROF?");
-  MODEM.waitForResponse(2000, &modemResponse);
+  MODEM.waitForResponse(1000, &modemResponse);
   if (modemResponse != "+UMNOPROF: 0") {
     logWarn("AT+UMNOPROF?", modemResponse.c_str());
 
     MODEM.send("AT+COPS=2");  // unregister
-    MODEM.waitForResponse(2000);
+    MODEM.waitForResponse(1000);
     // https://www.u-blox.com/sites/default/files/SARA-R4-N4-Application-Development_AppNote_%28UBX-18019856%29.pdf
     // 0: SW default profile, 1: ICCID Select, 2: AT&T, 3: Verizon (I'm unable to set it to 1 or 2)
     MODEM.send("AT+UMNOPROF=0");
-    MODEM.waitForResponse(2000);
+    MODEM.waitForResponse(1000);
 
     saveConfigAndReboot();
   }
@@ -62,27 +62,27 @@ void checkEdrx() {
   // https://github.com/botletics/SIM7000-LTE-Shield/wiki/Current-Consumption
   String modemResponse = "";
   MODEM.send("AT+CEDRXS?");
-  MODEM.waitForResponse(2000, &modemResponse);
-  if (modemResponse != "+CEDRXS: 4,\"0000\"") {
+  MODEM.waitForResponse(1000, &modemResponse);
+  if (modemResponse.indexOf("+CEDRXS: 4,\"0000\"") == -1) {
     logWarn("AT+CEDRXS?", modemResponse.c_str());
 
     MODEM.send("AT+CEDRXS=1,4,\"0000\"");  // asleep for 5.12 sec, then awake for 10.24 sec
     // MODEM.send("AT+CEDRXS=0");  // no delay, but more power consumption
-    MODEM.waitForResponse(2000);
+    MODEM.waitForResponse(1000);
 
     saveConfigAndReboot();
   }
 }
 
 int InternetClass::begin() {
+  Watchdog.setup(WDT_SOFTCYCLE1M);
+
   MODEM.debug(Serial);
   int ret = MODEM.begin(true);
   if (ret != 1) {
     logError("i|ret", ret);
     return 0;
   }
-
-  Watchdog.setup(WDT_SOFTCYCLE1M);
 
   checkModemFirmwareUpdate();
   checkNetwork();

@@ -211,7 +211,7 @@ void SystemClass::sleep() {
   rtc.setSeconds(59);
   // TODO: it seems can bus interrupt is waking MCU up
   rtc.standbyMode();
-  // _ulTickCount = _ulTickCount + sec * 1000;
+  // _ulTickCount = _ulTickCount + 250;
 #endif
   digitalWrite(LED_BUILTIN, HIGH);
 }
