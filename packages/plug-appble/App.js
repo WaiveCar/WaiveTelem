@@ -95,7 +95,6 @@ export default class App extends Component {
     };
     this.bluetoothReceiveData = [];
     this.deviceMap = new Map();
-    this.isWriting = false;
     setTimeout(() => {
       this.scan();
     }, 100);
@@ -145,7 +144,7 @@ export default class App extends Component {
           BluetoothManager.stopScan();
           this.setState({ scanning: false });
         }
-      }, 1000);
+      }, 2000);
     } else {
       BluetoothManager.stopScan();
       this.setState({ scanning: false });
@@ -173,10 +172,12 @@ export default class App extends Component {
 
         const response = await fetch(API_END_POINT + 'token?thingName=' + thingName);
         const data = await response.json();
+        console.log('token fetched');
         const { token, secret } = data;
         this.setState({ token, secret });
 
         this.onDisconnect();
+        this.isWriting = false;
       })
       .catch(err => {
         newData[item.index].isConnecting = false;
@@ -186,9 +187,11 @@ export default class App extends Component {
   }
 
   read = index => {
+    this.setState({ statusData: '' });
     BluetoothManager.read(index)
       .then(value => {
-        this.setState({ readData: value });
+        const statusData = Buffer.from(value).toString('hex');
+        this.setState({ statusData });
       })
       .catch(err => {});
   };
@@ -210,7 +213,7 @@ export default class App extends Component {
   // };
 
   writeWithoutResponse = async (index, text) => {
-    console.log('writeWithoutResponse');
+    console.log('writeWithoutResponse, isWriting', this.isWriting);
     if (this.isWriting) {
       return;
     }
@@ -221,6 +224,7 @@ export default class App extends Component {
     // index 0 is AUTH_CHAR, 1 is CMD_CHAR
     if (index == 1) {
       const challenge = await BluetoothManager.read(0);
+      console.log('challenge read');
       const valueBuffer = Buffer.concat([binary, Buffer.from(challenge)]);
       const value = CryptoJS.enc.u8array.parse(valueBuffer);
       const secret = CryptoJS.enc.Base64.parse(this.state.secret);
@@ -243,11 +247,16 @@ export default class App extends Component {
       remainBytesToSend -= subStringSize;
     }
     this.bluetoothReceiveData = [];
-    await sleep(1000); // wait for challenge to be set on the device
+    // await sleep(300);
     this.isWriting = false;
     this.setState({
       writeData: text
     });
+    // const status = await BluetoothManager.read(1);
+    // console.log('status read');
+    // const statusData = Buffer.from(status).toString('hex');
+    // console.log('TCL: App -> writeWithoutResponse -> statusData', statusData);
+    // this.setState({ statusData });
   };
 
   // monitor = index => {
@@ -361,18 +370,18 @@ export default class App extends Component {
               BluetoothManager.writeWithResponseCharacteristicUUID,
               this.write
             )} */}
+            {this.renderReceiveView(
+              'read：',
+              'read status',
+              BluetoothManager.readCharacteristicUUID,
+              this.read,
+              this.state.statusData
+            )}
             {this.renderWriteView(
               'write：',
               'send',
               BluetoothManager.writeWithoutResponseCharacteristicUUID,
               this.writeWithoutResponse
-            )}
-            {this.renderReceiveView(
-              'read：',
-              'read',
-              BluetoothManager.readCharacteristicUUID,
-              this.read,
-              this.state.readData
             )}
             {/* {this.renderReceiveView(
               `monitored data：${this.state.isMonitoring ? 'monitoring' : 'not monitoring'}`,
@@ -404,10 +413,10 @@ export default class App extends Component {
       return null;
     }
     return (
-      <View style={{ marginHorizontal: 10, marginTop: 30 }} behavior="padding">
+      <View style={{ marginHorizontal: 10, marginTop: 10 }} behavior="padding">
         <Text style={{ color: 'black' }}>{label}</Text>
         <Text style={styles.content}>{this.state.writeData}</Text>
-        {characteristics.map((item, index) => {
+        {/* {characteristics.map((item, index) => {
           return (
             <TouchableOpacity
               key={index}
@@ -422,7 +431,7 @@ export default class App extends Component {
               </Text>
             </TouchableOpacity>
           );
-        })}
+        })} */}
         <TextInput
           style={[styles.textInput]}
           value={this.state.text}
@@ -447,9 +456,9 @@ export default class App extends Component {
           {this.renderButton('lock: close', () => onPress(1, '{"lock":"close"}'))}
         </View>
         <View style={styles.row}>
-          {this.renderButton('immo: lock', () => onPress(1, '{"immo":"lock"}'))}
-          <View style={styles.columnGap} />
           {this.renderButton('immo: unlock', () => onPress(1, '{"immo":"unlock"}'))}
+          <View style={styles.columnGap} />
+          {this.renderButton('immo: lock', () => onPress(1, '{"immo":"lock"}'))}
         </View>
         <View style={styles.row}>
           {this.renderButton('can: unlock_1', () => onPress(1, '{"can":"unlock_1"}'))}
@@ -489,10 +498,13 @@ export default class App extends Component {
       return null;
     }
     return (
-      <View style={{ marginHorizontal: 10, marginTop: 30 }}>
+      <View style={{ marginHorizontal: 10, marginTop: 10 }}>
         <Text style={{ color: 'black', marginTop: 5 }}>{label}</Text>
         <Text style={styles.content}>{state}</Text>
         {characteristics.map((item, index) => {
+          if (index == 0) {
+            return null;
+          }
           return (
             <TouchableOpacity
               activeOpacity={0.7}
@@ -573,7 +585,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     backgroundColor: 'white',
-    height: 50,
+    // height: 50,
     fontSize: 16,
     flex: 1
   },

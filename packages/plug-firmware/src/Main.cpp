@@ -69,12 +69,14 @@ void loop() {
   Bluetooth.poll();
   Can.poll();
   Mqtt.poll();
-  if (Mqtt.isConnected() && !initSent) {
+  if (!initSent && Mqtt.isConnected()) {
     sendInitStatus();
     initSent = true;
   }
   System.poll();
-  if (!System.stayResponsive()) {
+  if (System.stayResponsive()) {
+    delay(10);
+  } else {
     System.sleep();
   }
   System.keepTime();

@@ -122,7 +122,7 @@ export default class BleModule {
   }
 
   connect(id) {
-    console.log('isConneting:', id);
+    console.log('isConnecting:', id);
     this.isConnecting = true;
     return new Promise((resolve, reject) => {
       this.manager

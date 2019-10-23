@@ -5,6 +5,7 @@
 #include <WDTZero.h>
 #include <bearssl/bearssl_ssl.h>
 
+#include "Bluetooth.h"
 #include "Can.h"
 #include "Command.h"
 #include "Config.h"
@@ -69,16 +70,20 @@ void CommandClass::processJson(const String& str, bool isBluetooth) {
   }
   JsonVariant download = desired["download"];
   JsonVariant copy = desired["copy"];
-  if (cmdKey == "lock" && cmdValue == "open") {
-    Pins.unlockDoors();
-  } else if (cmdKey == "lock" && cmdValue == "close") {
+  if (cmdKey == "lock" && cmdValue == "close") {
     Pins.lockDoors();
+    Bluetooth.setSystemStatus(STATUS_LOCK_CMD, 1);
+  } else if (cmdKey == "lock" && cmdValue == "open") {
+    Pins.unlockDoors();
+    Bluetooth.setSystemStatus(STATUS_LOCK_CMD, 2);
   } else if (cmdKey == "immo" && cmdValue == "lock") {
     Pins.immobilize();
     Config.saveImmoState('1');
+    Bluetooth.setSystemStatus(STATUS_IMMOBILIZER, 1);
   } else if (cmdKey == "immo" && cmdValue == "unlock") {
     Pins.unimmobilize();
-    Config.saveImmoState('0');
+    Config.saveImmoState('2');
+    Bluetooth.setSystemStatus(STATUS_IMMOBILIZER, 2);
   } else if (cmdKey == "can") {
     Can.sendCommand(cmdValue.c_str());
     System.reportCommandDone(lastCmd, cmdKey);

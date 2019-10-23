@@ -11,7 +11,7 @@ class ConfigClass {
   int begin();
   JsonDocument& get();
   int32_t getConfigFreeMem();
-  char loadImmoState();
+  char loadImmoState();  // '1': immobilized (locked), '2': unimmobilized (unlocked)
   void saveImmoState(char value);
 
  private:

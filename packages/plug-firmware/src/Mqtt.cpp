@@ -127,21 +127,23 @@ void MqttClass::connect() {
 }
 
 bool MqttClass::isConnected() {
-  return Internet.isConnected() && mqttClient.connected();
+  return mqttClient.connected();
 }
 
 void MqttClass::poll() {
-  if (!Mqtt.isConnected()) {
-    // try in 60 secs if not connected and not required to be responsive because cell and mqtt connect can take a long time (40 seconds not unusual)
-    uint32_t elapsedTime = System.getTime() - lastConnectTry;
-    if (!System.stayResponsive() && (lastConnectTry == -1 || elapsedTime >= 60)) {
-      Mqtt.connect();
-      lastConnectTry = System.getTime();
-    }
-  }
   // poll every sec
   uint32_t elapsedTime = System.getTime() - lastPollTime;
+  logTrace("i|elapsedTime", elapsedTime, "i|lastPollTime", lastPollTime);
   if (lastPollTime == -1 || elapsedTime >= 1) {
+    if (!Mqtt.isConnected()) {
+      // try in 60 secs if not connected and not required to be responsive because cell and mqtt connect can take a long time (40 seconds not unusual)
+      uint32_t elapsedTime = System.getTime() - lastConnectTry;
+      if (!System.stayResponsive() && (lastConnectTry == -1 || elapsedTime >= 60)) {
+        Mqtt.connect();
+        lastConnectTry = System.getTime();
+      }
+    }
+
     mqttClient.poll();
     lastPollTime = System.getTime();
   }

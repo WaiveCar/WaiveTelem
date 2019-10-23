@@ -85,7 +85,7 @@ bool GpsClass::poll() {
     }
   }
   if (!hasData) {
-    wakeup();
+    // wakeup();
   }
   return hasData;
 }

@@ -39,8 +39,8 @@ void toFile(int level, const char* json, int len) {
 }
 
 void toMqtt(int level, const char* json, int len) {
-  if (Mqtt.isConnected()) {
-    if (level >= System.getRemoteLogLevel()) {
+  if (level >= System.getRemoteLogLevel()) {
+    if (Mqtt.isConnected()) {
       Mqtt.logMsg(json, len);
     }
   }

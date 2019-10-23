@@ -5,20 +5,21 @@
 
 #include "Bluetooth.h"
 #include "Command.h"
+#include "HashMap/HashMap.h"
 #include "System.h"
 
 void HCI_Event_CB(void *pckt) {
   hci_uart_pckt *hci_pckt = (hci_uart_pckt *)pckt;
   hci_event_pckt *event_pckt = (hci_event_pckt *)hci_pckt->data;
 
-  // logDebug("i|type", hci_pckt->type);
+  logTrace("i|type", hci_pckt->type);
 
   if (hci_pckt->type != HCI_EVENT_PKT) {
     return;
   }
 
   if (event_pckt->evt != HCI_VENDOR_PKT) {
-    logDebug("i|evt", event_pckt->evt);
+    logTrace("i|evt", event_pckt->evt);
   }
 
   switch (event_pckt->evt) {
@@ -104,6 +105,8 @@ int BluetoothClass::begin() {
     return getHealth();
   }
 
+  setDefaultSystemStatus();
+
   setConnectable();
 
   return getHealth();
@@ -133,12 +136,13 @@ int BluetoothClass::begin() {
 #define AUTH_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 #define CMD_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 #define CHALLENGE_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+#define STATUS_CHAR_UUID(uuid_struct) UUID_128(uuid_struct, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
 tBleStatus BluetoothClass::addService() {
   uint8_t uuid[16];
 
   SERVICE_UUID(uuid);
-  status = aci_gatt_add_serv(UUID_TYPE_128, uuid, PRIMARY_SERVICE, 7, &ServHandle);
+  status = aci_gatt_add_serv(UUID_TYPE_128, uuid, PRIMARY_SERVICE, 10, &ServHandle);
   if (status != BLE_STATUS_SUCCESS) goto fail;
 
   AUTH_CHAR_UUID(uuid);
@@ -154,6 +158,11 @@ tBleStatus BluetoothClass::addService() {
   CHALLENGE_CHAR_UUID(uuid);
   status = aci_gatt_add_char(ServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_READ, ATTR_PERMISSION_NONE, GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
                              16, 1, &ChallengeCharHandle);
+  if (status != BLE_STATUS_SUCCESS) goto fail;
+
+  STATUS_CHAR_UUID(uuid);
+  status = aci_gatt_add_char(ServHandle, UUID_TYPE_128, uuid, 20, CHAR_PROP_READ, ATTR_PERMISSION_NONE, GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
+                             16, 1, &StatusCharHandle);
   if (status != BLE_STATUS_SUCCESS) goto fail;
 
 fail:
@@ -176,6 +185,7 @@ void BluetoothClass::reset() {
 }
 
 tBleStatus BluetoothClass::setChallenge() {
+  logTrace(NULL);
   int ret = ECCX08.random(challenge, sizeof(challenge));
   status = aci_gatt_update_char_value(ServHandle, ChallengeCharHandle, 0, sizeof(challenge), challenge);
   if (ret != 1 || status != BLE_STATUS_SUCCESS) {
@@ -244,7 +254,6 @@ void BluetoothClass::Attribute_Modified_CB(uint16_t handle, uint8_t data_length,
         SHA256.readBytes(computedHmac, HMAC_LENGTH);
         if (memcmp(computedHmac, hmac, HMAC_LENGTH)) {
           Command.processJson(message, true);
-          Bluetooth.setChallenge();
         }
       }
       message = "";
@@ -258,7 +267,6 @@ void BluetoothClass::GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
   snprintf(sprintbuff, 64, "%02X-%02X-%02X-%02X-%02X-%02X", addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
   logInfo("device", sprintbuff);
   Command.unauthorize();
-  Bluetooth.setChallenge();
   System.setStayResponsive(true);
 }
 
@@ -269,6 +277,13 @@ void BluetoothClass::GAP_DisconnectionComplete_CB() {
 }
 
 void BluetoothClass::Read_Request_CB(uint16_t handle) {
+  logTrace(NULL);
+  if (IS(ChallengeCharHandle)) {
+    setChallenge();
+  } else if (IS(StatusCharHandle)) {
+    updateSystemStatus();
+  }
+
   if (connection_handle != 0) {
     aci_gatt_allow_read(connection_handle);
   }
@@ -276,6 +291,58 @@ void BluetoothClass::Read_Request_CB(uint16_t handle) {
 
 int BluetoothClass::getHealth() {
   return status == BLE_STATUS_SUCCESS ? 1 : -status;
+}
+
+void BluetoothClass::setSystemStatus(int which, uint8_t value) {
+  systemStatus[which] = value;
+}
+
+void BluetoothClass::setDefaultSystemStatus() {
+  for (int i = 0; i < 8; i++) {
+    systemStatus[i] = 0x0;
+  }
+}
+
+boolean BluetoothClass::checkCanBus(unsigned int i, const char *name, int what, u_int8_t mask) {
+  HashMap<void *, int64_t, 20> &canBus = System.getCanBusStatus();
+  void *key = canBus.keyAt(i);
+  if (strcmp((const char *)key, name) == 0) {
+    if (canBus.valueAt(i)) {
+      systemStatus[what] |= mask;
+    } else {
+      systemStatus[what] &= ~(mask);
+    }
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void BluetoothClass::updateSystemStatus() {
+  logTrace(NULL);
+
+  HashMap<void *, int64_t, 20> &canBus = System.getCanBusStatus();
+  for (unsigned int i = 0; i < canBus.size(); i++) {
+    checkCanBus(i, "door_front_left", STATUS_CAN_DOORS, 0x01) ||
+        checkCanBus(i, "door_front_right", STATUS_CAN_DOORS, 0x02) ||
+        checkCanBus(i, "door_back_left", STATUS_CAN_DOORS, 0x04) ||
+        checkCanBus(i, "door_back_right", STATUS_CAN_DOORS, 0x08) ||
+
+        checkCanBus(i, "window_front_left", STATUS_CAN_WINDOWS, 0x01) ||
+        checkCanBus(i, "window_front_right", STATUS_CAN_WINDOWS, 0x02) ||
+        checkCanBus(i, "window_back_left", STATUS_CAN_WINDOWS, 0x04) ||
+        checkCanBus(i, "window_back_right", STATUS_CAN_WINDOWS, 0x08) ||
+
+        checkCanBus(i, "lock_front_left", STATUS_CAN_LOCKS, 0x01) ||
+        checkCanBus(i, "lock_front_right", STATUS_CAN_LOCKS, 0x02) ||
+        checkCanBus(i, "lock_back_left", STATUS_CAN_LOCKS, 0x04) ||
+        checkCanBus(i, "lock_back_right", STATUS_CAN_LOCKS, 0x08);
+  }
+
+  status = aci_gatt_update_char_value(ServHandle, StatusCharHandle, 0, sizeof(systemStatus), systemStatus);
+  if (status != BLE_STATUS_SUCCESS) {
+    logError("i|status", status);
+  }
 }
 
 BluetoothClass Bluetooth;

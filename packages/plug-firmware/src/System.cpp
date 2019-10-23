@@ -45,8 +45,10 @@ int SystemClass::begin() {
   logDebug("i|immo", (int32_t)state - 48);
   if (state == '1') {
     Pins.immobilize();
-  } else if (state == '0') {
+    Bluetooth.setSystemStatus(STATUS_IMMOBILIZER, 1);
+  } else if (state == '2') {
     Pins.unimmobilize();
+    Bluetooth.setSystemStatus(STATUS_IMMOBILIZER, 2);
   }
 
   return 1;
@@ -63,12 +65,13 @@ void SystemClass::checkHeartbeat() {
   logTrace("i|time", time, "i|lastHeartbeat", lastHeartbeat, "i|interval", interval, "i|canBus[ignition]", (int32_t)canBus[ignitionKey]);
   uint32_t elapsedTime = getTime() - lastHeartbeat;
   if (interval > 60 && elapsedTime == interval - 60) {
-    Gps.wakeup();
+    // Gps.wakeup();
   } else if (lastHeartbeat == -1 || elapsedTime >= interval) {
-    if (!stayResponsive() && Gps.poll()) {
+    //if (!stayResponsive() && Gps.poll()) {
+    if (Gps.poll()) {
       sendHeartbeat();
       if (interval > 60) {
-        Gps.sleep();
+        // Gps.sleep();
       }
     }
   }
@@ -145,6 +148,7 @@ void SystemClass::sendHeartbeat() {
        //  "i|ble", Bluetooth.getHealth(),
        //  "i|can", Can.getHealth(),
        "i|freeMem", freeMemory(),
+       "datetime", System.getDateTime(),
        vinBuf,
        cellBuf, "}|");
   // system["moreStuff"] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
@@ -206,17 +210,18 @@ void SystemClass::setCanStatus(const char* name, int64_t value, uint32_t delta) 
 void SystemClass::sleep() {
   digitalWrite(LED_BUILTIN, LOW);
 #ifdef DEBUG
-  delay(800);
+  delay(840);
 #else
   rtc.setSeconds(59);
   // TODO: it seems can bus interrupt is waking MCU up
   rtc.standbyMode();
-  // _ulTickCount = _ulTickCount + 250;
+  _ulTickCount = _ulTickCount + 250;  // 250 because can bus 1 seems to wake up MCU 4 times every second
 #endif
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void SystemClass::setTimes(uint32_t in) {
+  logTrace("i|in", in);
   time = in;
   if (bootTime == 0) {
     bootTime = in - millis() / 1000;
@@ -247,25 +252,33 @@ void SystemClass::setStayResponsive(bool resp) {
   stayresponsive = resp;
 }
 
+void SystemClass::keepTimeWithMillis() {
+  int32_t elapsed = millis() - lastMillis;
+  logTrace("i|elapsed", elapsed, "i|lastMillis", lastMillis);
+  if (elapsed >= 1000) {
+    int32_t remainder = elapsed % 1000;
+    setTimes(time + elapsed / 1000);
+    lastMillis -= remainder;
+  }
+  logTrace("i|lastMillis", lastMillis);
+}
+
 void SystemClass::keepTime() {
-  if (Internet.isConnected()) {
+  if (time % 10 != 0) {
+    keepTimeWithMillis();
+  } else if (Internet.isConnected()) {
     setTimes(Internet.getTime());
-  } else if (time % 10 != 0 || !Gps.poll()) {
-    int32_t elapsed = millis() - lastMillis;
-    if (elapsed >= 1000) {
-      int32_t remainder = elapsed % 1000;
-      setTimes(time + elapsed / 1000);
-      lastMillis -= remainder;
-    }
+  } else if (!Gps.poll()) {
+    keepTimeWithMillis();
   }
 }
 
 void SystemClass::reportCommandDone(const String& lastCmd, const String& cmdKey, const String& cmdValue) {
   char reported[512], desired[64];
   if (cmdValue.length() == 0) {
-    json(reported, "lastCmd", lastCmd.c_str());
+    json(reported, "lastCmd", lastCmd.c_str(), "lastCmdDatetime", System.getDateTime());
   } else {
-    json(reported, "lastCmd", lastCmd.c_str(), cmdKey.c_str(), cmdValue.c_str());
+    json(reported, "lastCmd", lastCmd.c_str(), cmdKey.c_str(), cmdValue.c_str(), "lastCmdDatetime", System.getDateTime());
   }
   json(desired, ("o|" + cmdKey).c_str(), "null");
   report(reported, desired);
@@ -282,6 +295,8 @@ int8_t SystemClass::getRemoteLogLevel() {
 void SystemClass::handleIgnitionOn() {
   // put in normal mode mpu6050
   Motion.setSleepEnabled(false);
+
+  Bluetooth.setSystemStatus(STATUS_IGNITION, 2);
 }
 
 void SystemClass::handleIgnitionOff() {
@@ -292,6 +307,8 @@ void SystemClass::handleIgnitionOff() {
   // put in power-saving mode for canbus, mpu6050
   // Can.sleep(); doesn't work
   Motion.setSleepEnabled(true);
+
+  Bluetooth.setSystemStatus(STATUS_IGNITION, 1);
 }
 
 void SystemClass::simulateIgnition(const String& cmdValue) {
@@ -306,6 +323,10 @@ void SystemClass::simulateIgnition(const String& cmdValue) {
 
 void SystemClass::setIgnitionKey(void* key) {
   ignitionKey = key;
+}
+
+HashMap<void*, int64_t, 20>& SystemClass::getCanBusStatus() {
+  return canBus;
 }
 
 SystemClass System;

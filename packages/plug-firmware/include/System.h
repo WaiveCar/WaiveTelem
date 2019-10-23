@@ -30,12 +30,14 @@ class SystemClass {
   int8_t getRemoteLogLevel();
   void simulateIgnition(const String& cmdValue);
   void setIgnitionKey(void* key);
+  HashMap<void*, int64_t, 20>& getCanBusStatus();
 
  private:
   void checkVin();
   void checkHeartbeat();
   void handleIgnitionOn();
   void handleIgnitionOff();
+  void keepTimeWithMillis();
 
   char id[19];
   int8_t remoteLogLevel = 4;
