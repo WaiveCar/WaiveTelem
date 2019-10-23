@@ -61,26 +61,6 @@
             "bit": 24
           },
           {
-            "name": "window_front_left",
-            "id": 1369,
-            "bit": 8
-          },
-          {
-            "name": "window_front_right",
-            "id": 1369,
-            "bit": 9
-          },
-          {
-            "name": "window_back_left",
-            "id": 1369,
-            "bit": 10
-          },
-          {
-            "name": "window_back_right",
-            "id": 1369,
-            "bit": 11
-          },
-          {
             "name": "mileage",
             "id": 1456,
             "bit": 0,

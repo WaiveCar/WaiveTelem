@@ -20,6 +20,7 @@ class GpsClass {
   int hdop = 0;
   uint32_t speed = 0;
   uint16_t heading = 0;
+  uint32_t lastDataTime = 0;
 };
 
 extern GpsClass Gps;

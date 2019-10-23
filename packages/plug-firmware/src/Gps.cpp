@@ -65,7 +65,7 @@ bool GpsClass::poll() {
   uint32_t start = millis();
   gps_fix fix;
   bool hasData = false;
-  while (!hasData && millis() - start < 2000) {
+  while (!hasData && millis() - start < 10) {
     while (gps.available(GPSSerial)) {
       fix = gps.read();
       if (fix.valid.location && fix.valid.date && fix.valid.time && fix.valid.speed && fix.valid.hdop) {
@@ -80,12 +80,22 @@ bool GpsClass::poll() {
           System.setTimes(fix.dateTime);
         }
         hasData = true;
+        lastDataTime = System.getTime();
         break;
       }
     }
   }
   if (!hasData) {
-    // wakeup();
+    if (lastDataTime == 0) {
+      lastDataTime = System.getTime();
+    }
+    if (System.getTime() - lastDataTime > 30 * 60) {
+      reset();
+    } else {
+#ifndef DEBUG
+      wakeup();
+#endif
+    }
   }
   return hasData;
 }
@@ -138,19 +148,20 @@ void GpsClass::wakeup() {
 }
 
 // crashes the system for some reason
-// void GpsClass::reset() {
-// #ifdef ARDUINO_SAMD_WAIVE1000
-//   static const uint8_t ubxReset[] __PROGMEM =
-//       {
-//           ublox::UBX_CFG, ublox::UBX_CFG_RST,
-//           UBX_MSG_LEN(ublox::cfg_reset_t), 0,  // word length MSB is 0
-//           0, 0,                                // clear bbr section
-//           ublox::cfg_reset_t::HW_RESET,        // reset mode
-//           0x00                                 // reserved
-//       };
-//   const ublox::cfg_reset_t *cfg_cold_ptr = (const ublox::cfg_reset_t *)ubxReset;
-//   gps.send_request_P(*cfg_cold_ptr);
-// #endif
-// }
+void GpsClass::reset() {
+  logTrace(NULL);
+#ifdef ARDUINO_SAMD_WAIVE1000
+  static const uint8_t ubxReset[] __PROGMEM =
+      {
+          ublox::UBX_CFG, ublox::UBX_CFG_RST,
+          UBX_MSG_LEN(ublox::cfg_reset_t), 0,  // word length MSB is 0
+          0, 0,                                // clear bbr section
+          ublox::cfg_reset_t::HW_RESET,        // reset mode
+          0x00                                 // reserved
+      };
+  const ublox::cfg_reset_t *cfg_cold_ptr = (const ublox::cfg_reset_t *)ubxReset;
+  gps.send_request_P(*cfg_cold_ptr);
+#endif
+}
 
 GpsClass Gps;

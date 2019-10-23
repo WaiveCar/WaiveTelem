@@ -22,18 +22,19 @@ void saveConfigAndReboot() {
 void checkModemFirmwareUpdate() {
   // https://www.u-blox.com/sites/default/files/SARA-R4-FW-Update_AppNote_%28UBX-17049154%29.pdf
   delay(16000);
-  // disable OTA firmware update
-  String modemResponse = "";
-  int ret = 0;
-  while (ret != 1 || modemResponse == "ERROR") {
-    MODEM.send("AT+UFOTACONF=2,-1");
-    ret = MODEM.waitForResponse(1000, &modemResponse);
-  }
   // confirm OTA firmware update is disabled
+  String modemResponse = "";
   MODEM.send("AT+UFOTACONF=2");
   MODEM.waitForResponse(5000, &modemResponse);
   if (modemResponse != "+UFOTACONF: 2, -1") {
     logWarn("AT+UFOTACONF=2", modemResponse.c_str());
+
+    // disable OTA firmware update
+    int ret = 0;
+    while (ret != 1 || modemResponse == "ERROR") {
+      MODEM.send("AT+UFOTACONF=2,-1");
+      ret = MODEM.waitForResponse(1000, &modemResponse);
+    }
   }
 }
 

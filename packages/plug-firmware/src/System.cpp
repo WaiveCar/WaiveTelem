@@ -65,13 +65,16 @@ void SystemClass::checkHeartbeat() {
   logTrace("i|time", time, "i|lastHeartbeat", lastHeartbeat, "i|interval", interval, "i|canBus[ignition]", (int32_t)canBus[ignitionKey]);
   uint32_t elapsedTime = getTime() - lastHeartbeat;
   if (interval > 60 && elapsedTime == interval - 60) {
-    // Gps.wakeup();
+#ifndef DEBUG
+    Gps.wakeup();
+#endif
   } else if (lastHeartbeat == -1 || elapsedTime >= interval) {
-    //if (!stayResponsive() && Gps.poll()) {
     if (Gps.poll()) {
       sendHeartbeat();
       if (interval > 60) {
-        // Gps.sleep();
+#ifndef DEBUG
+        Gps.sleep();
+#endif
       }
     }
   }
@@ -138,7 +141,8 @@ void SystemClass::sendHeartbeat() {
     json(cellBuf, "-{", "i|signal", Internet.getSignalStrength(), "carrier", Internet.getCarrier().c_str());
   }
   char buf[512];
-  json(buf, "{|heartbeat", "fa|lat", (double)Gps.getLatitude() / 1e7,
+  json(buf, "{|heartbeat", "datetime", System.getDateTime(),
+       "fa|lat", (double)Gps.getLatitude() / 1e7,
        "fa|long", (double)Gps.getLongitude() / 1e7,
        "i|hdop", Gps.getHdop(),
        "i|speed", Gps.getSpeed() / 869,  // convert to miles per hour
@@ -148,7 +152,6 @@ void SystemClass::sendHeartbeat() {
        //  "i|ble", Bluetooth.getHealth(),
        //  "i|can", Can.getHealth(),
        "i|freeMem", freeMemory(),
-       "datetime", System.getDateTime(),
        vinBuf,
        cellBuf, "}|");
   // system["moreStuff"] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
