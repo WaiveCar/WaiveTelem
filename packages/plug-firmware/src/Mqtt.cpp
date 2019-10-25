@@ -94,10 +94,10 @@ void MqttClass::connect() {
   }
   int signalStrength = Internet.getSignalStrength();
   logDebug("i|signal", signalStrength);
-  // the following is not needed as I saw signal 3 can sometime still work fine
-  // if (signalStrength < 10) {
-  //   return;
-  // }
+  // the following might not be needed as I saw signal 3 can sometime still connect
+  if (signalStrength < 7) {
+    return;
+  }
   logInfo("broker", Eeprom.getMqttUrl());
   int start = millis();
   Watchdog.setup(WDT_SOFTCYCLE1M);

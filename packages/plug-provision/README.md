@@ -6,12 +6,13 @@ This package automatically
 - Sends CSR to AWS, register device, and saves certificate in ./cert (registerAWS.sh)
 - Generate ./config/\${DEVICE_ID}/CONFIG.TXT (generateConfig.sh)
 - Format the SD (formatSD.sh)
-- Copy CONFIG.TXT, DEFAULT.BIN, DEFAULT.CFG, CONFIG.TXT to the SD
+- Copy CONFIG.TXT, DEFAULT.BIN, DEFAULT.CFG and MQTT.TXT to the SD
 - Flash DEFAULT.BIN on the device
 
 ## Preparation:
 
 ### Step 1: (this step is the same for plug-firmware as well)
+
 - Install git (or git bash for windows, https://gitforwindows.org/)
 - Install Python 3.7 https://www.python.org (on Windows, check Add python 3.7 when using the installer)
 - Install Visual Studio Code (https://code.visualstudio.com/download)
@@ -25,6 +26,7 @@ This package automatically
 - Open VSCode Terminal, allow this workspace to modifiy the terminal shell if prompted, exit Terminal.
 - Open VSCode Terminal again, type 'pio' and make sure it is runnable
 - Add waive1000 BSP and increase binary upload speed:
+
 ```bash
 pio run -e mkrnb1500
 ln -F -s $PWD/../plug-firmware/bsp/boards ~/.platformio
@@ -33,6 +35,7 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 ```
 
 ### Step 2:
+
 - Review plug-type, plug-group, and plug-policy on AWS IoT console as they should be considered carefully. They were created with the following:
   - aws iot create-thing-type --thing-type-name type-plug-wifi
   - aws iot create-policy --policy-name plug-policy --policy-document '{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Action": ["iot:Connect"],"Resource": ["arn:aws:iot:us-east-2:179944132799:client/${iot:Connection.Thing.ThingName}"]},{"Effect": "Allow","Action": ["iot:Publish"],"Resource": ["arn:aws:iot:us-east-2:179944132799:topic/$aws/things/${iot:Connection.Thing.ThingName}/shadow/update"]},{"Effect": "Allow","Action": ["iot:Subscribe"],"Resource": ["arn:aws:iot:us-east-2:179944132799:topicfilter/$aws/things/${iot:Connection.Thing.ThingName}/shadow/update/delta"]},{"Effect": "Allow","Action": ["iot:Receive"],"Resource": ["*"]},{"Effect": "Allow","Action": ["iot:UpdateThingShadow"],"Resource": ["arn:aws:iot:us-east-2:179944132799:thing/${iot:Connection.Thing.ThingName}"]}]}'
@@ -44,7 +47,7 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 #### NOTES: If you want to provision a plug that is provisioned already, delete its associated certificate first from the aws console as the private key will be changed.
 
 - Connect to the device via both Atmel-Ice and USB. Insert the SD to your computer.
-  
+
 ```bash
 ./provision.sh
 ```
@@ -56,13 +59,13 @@ sed -i'.bak' -e 's/adapter_khz\ 400/adapter_khz\ 5000/g' ~/.platformio/packages/
 - MQTT_AWS.TXT is one example of mqtt config templates. The device will check if the file exists on SD. If it exists, it will copy it to EEPROM and delete the file from SD.
 
 - to regenerate a config file after the template file is changed
-  
+
 ```bash
 export DEVICE_ID=0123CCBCCC98B697EE; export CAR_TEMPLATE=./config/CAR_IONIQ.TXT; export MQTT_TEMPLATE=./config/MQTT_AWS.TXT; ./generateConfig.sh
 ```
 
 - to upload a config file to a device
-  
+
 ```bash
 export DEVICE_ID=0123CCBCCC98B697EE; ./uploadConfig.sh
 ```

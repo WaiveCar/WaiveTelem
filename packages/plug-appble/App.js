@@ -483,7 +483,7 @@ export default class App extends Component {
           {this.renderButton('DOWNLOAD BIN', () =>
             onPress(
               1,
-              '{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.1.8_de8da132fd7e991918f84c2da97d8e92c0e48f9e191a43fd3b7ed0d9eb3bca1b", "to":"ETADPU.BIN"}}'
+              '{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.3.2_fc277bc970ec26a53f33b8c8cf6874598d1fdbbc73f2a1d3cc0b69f3920ba23e", "to":"ETADPU.BIN"}}'
             )
           )}
           <View style={styles.columnGap} />

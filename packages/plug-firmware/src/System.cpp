@@ -66,14 +66,14 @@ void SystemClass::checkHeartbeat() {
   uint32_t elapsedTime = getTime() - lastHeartbeat;
   if (interval > 60 && elapsedTime == interval - 60) {
 #ifndef DEBUG
-    Gps.wakeup();
+    // Gps.wakeup();
 #endif
   } else if (lastHeartbeat == -1 || elapsedTime >= interval) {
     if (Gps.poll()) {
       sendHeartbeat();
       if (interval > 60) {
 #ifndef DEBUG
-        Gps.sleep();
+        // Gps.sleep();
 #endif
       }
     }
@@ -225,6 +225,10 @@ void SystemClass::sleep() {
 
 void SystemClass::setTimes(uint32_t in) {
   logTrace("i|in", in);
+  // sometime cellular will report 0 time, might be ISR modem AT cmd race condition
+  if (in == 0) {
+    return;
+  }
   time = in;
   if (bootTime == 0) {
     bootTime = in - millis() / 1000;

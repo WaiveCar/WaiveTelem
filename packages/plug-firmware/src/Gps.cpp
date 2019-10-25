@@ -93,7 +93,7 @@ bool GpsClass::poll() {
       reset();
     } else {
 #ifndef DEBUG
-      wakeup();
+      // wakeup();
 #endif
     }
   }

@@ -65,8 +65,8 @@ e.g. for 0123CCBCCC98B697EE
 {"desired":{"immo":"unlock"}}
 {"desired":{"reboot":"true"}}
 {"desired":{"remoteLog":"1"}}
-{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.2.9_f6116d1f86bc4b68fc5dc7c6c9f1747d588b190f7f06ab2b5f3e4460e71566ba", "to":"ETADPU.BIN"}}}
-{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"config_waive-1_dd22d948fbd671c5751640a11dec139da46c5997bb3f20d0b6ad5bd61ac7e0cc", "to":"CONFIG.TXT"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.3.2_fc277bc970ec26a53f33b8c8cf6874598d1fdbbc73f2a1d3cc0b69f3920ba23e", "to":"ETADPU.BIN"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"config_0123CCBCCC98B697EE_e9d1dd7d396224ed9311b8b56ee321fbebf0118c0bad9fa2e914c30c3fb2455b", "to":"CONFIG.TXT"}}}
 {"desired":{"copy":{"from":"DEFAULT.BIN", "to":"ETADPU.BIN"}}}
 {"desired":{"copy":{"from":"DEFAULT.CFG", "to":"CONFIG.TXT"}}}
 {"desired":{"can":"unlock_1"}}
@@ -81,9 +81,10 @@ e.g. for 0123CCBCCC98B697EE
 
 ```json
 {
+  "remoteLog": "4",
   "init": {
-    "firmware": "1.2.4",
-    "debug": 0,
+    "firmware": "1.3.2",
+    "debug": 1,
     "configFreeMem": 239,
     "modem": "L0.0.00.00.05.08,A.02.04",
     "sd": 1,
@@ -91,28 +92,35 @@ e.g. for 0123CCBCCC98B697EE
     "motion": -1,
     "cfg": 1
   },
-  "heartbeat": {
-    "lat": 34.1500113,
-    "long": -118.0278477,
-    "hdop": 870,
-    "speed": 0,
-    "heading": 0,
-    "uptime": 1823,
-    "temp": -1,
-    "signal": 20,
-    "carrier": "AT&T Sierra Wireless"
-  },
-  "lastCmd": "{\"lock\":\"open\"}",
+  "lastCmd": "{\"immo\":\"lock\"}",
+  "immo": "lock",
+  "lastCmdDatetime": "2019-10-24T04:36:55Z",
   "crash": {
-    "time": 1568406162,
+    "time": 1571861930,
     "backtrace": [
-      "698e",
-      "9176"
+      "dda6",
+      "de9c",
+      "11544",
+      "de7e",
+      "116c2",
+      "e14c"
     ]
   },
-  "remoteLog": "4",
-  "lock": "open",
-  "immo": "lock"
+  "heartbeat": {
+    "datetime": "2019-10-25T17:35:05Z",
+    "lat": 34.1500035,
+    "long": -118.0278152,
+    "hdop": 670,
+    "speed": 0,
+    "heading": 0,
+    "uptime": 34250,
+    "temp": -1,
+    "freeMem": 6587,
+    "lastVin": 1229,
+    "signal": 15,
+    "carrier": "Verizon Wireless Sierra Wireless"
+  },
+  "lock": "open"
 }
 ```
 
@@ -134,3 +142,9 @@ Remote Loggin is enabled for log level 4 (ERROR) by default. It can be changed t
 {"desired":{"remoteLog":"1"}}
 ```
 See packages/plug-log-forwarder for how to capture logs from all devices
+
+### Functional Test for each release:
+
+At very least, make sure
+1. All BLE commands and status-read work from the App.
+2. From Device Shadow, all commands should work promptly.
