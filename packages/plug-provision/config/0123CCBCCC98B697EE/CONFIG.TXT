@@ -83,12 +83,12 @@
             "bit": 3
           },
           {
-            "name": "lock_rear_left",
+            "name": "lock_back_left",
             "id": 360,
             "bit": 32
           },
           {
-            "name": "lock_rear_right",
+            "name": "lock_back_right",
             "id": 360,
             "bit": 45
           }
