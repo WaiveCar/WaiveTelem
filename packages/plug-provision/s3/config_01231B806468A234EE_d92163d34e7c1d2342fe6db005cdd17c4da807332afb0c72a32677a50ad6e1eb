@@ -51,12 +51,12 @@
             "len": 8
           },
           {
-            "name": "door_back_left",
+            "name": "door_back_right",
             "id": 1363,
             "bit": 23
           },
           {
-            "name": "door_back_right",
+            "name": "door_back_left",
             "id": 1363,
             "bit": 24
           },
