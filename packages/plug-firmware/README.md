@@ -65,7 +65,7 @@ e.g. for 0123CCBCCC98B697EE
 {"desired":{"immo":"unlock"}}
 {"desired":{"reboot":"true"}}
 {"desired":{"remoteLog":"1"}}
-{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.3.2_fc277bc970ec26a53f33b8c8cf6874598d1fdbbc73f2a1d3cc0b69f3920ba23e", "to":"ETADPU.BIN"}}}
+{"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"waive1000_1.3.3_8b1d3c1d08b4706b0f2a251bebb4fd7774ab57278659ca6278b794a414f700b7", "to":"ETADPU.BIN"}}}
 {"desired":{"download":{"host":"waiveplug.s3.us-east-2.amazonaws.com", "from":"config_0123CCBCCC98B697EE_e9d1dd7d396224ed9311b8b56ee321fbebf0118c0bad9fa2e914c30c3fb2455b", "to":"CONFIG.TXT"}}}
 {"desired":{"copy":{"from":"DEFAULT.BIN", "to":"ETADPU.BIN"}}}
 {"desired":{"copy":{"from":"DEFAULT.CFG", "to":"CONFIG.TXT"}}}

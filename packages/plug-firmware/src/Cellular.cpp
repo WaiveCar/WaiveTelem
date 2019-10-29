@@ -96,13 +96,27 @@ bool InternetClass::connect() {
   JsonObject nb = Config.get()["nb"];
   const char* apn = nb["apn"] | "internet.swir";
   logInfo("apn", apn);
-  nbAccess.setTimeout(20000);
-  gprs.setTimeout(20000);
-  Watchdog.setup(WDT_SOFTCYCLE32S);
+
+  if (needExtraConnectTime) {
+    nbAccess.setTimeout(0xffffffff);
+    gprs.setTimeout(0xffffffff);
+    Watchdog.setup(WDT_OFF);
+  } else {
+    nbAccess.setTimeout(20000);
+    gprs.setTimeout(20000);
+    Watchdog.setup(WDT_SOFTCYCLE32S);
+  }
   MODEM.debug(Serial);
 
   int start = millis();
   if ((nbAccess.begin(nb["pin"].as<char*>(), apn) != NB_READY) || (gprs.attachGPRS() != GPRS_READY)) {
+    String modemResponse = "";
+    MODEM.send("AT+CEREG?");
+    MODEM.waitForResponse(5000, &modemResponse);
+    if (modemResponse.indexOf("+CEREG: 0,2") != -1) {
+      needExtraConnectTime = true;
+    }
+
     logWarn("Failed to connect, try later");
     Watchdog.setup(WDT_SOFTCYCLE8S);
     return false;

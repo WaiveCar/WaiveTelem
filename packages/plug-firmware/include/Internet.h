@@ -20,6 +20,9 @@ class InternetClass {
   int getSignalStrength();
   String getCarrier();
   String getModemVersion();
+
+ private:
+  bool needExtraConnectTime = false;
 };
 
 extern InternetClass Internet;
