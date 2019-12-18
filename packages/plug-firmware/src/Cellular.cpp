@@ -74,6 +74,14 @@ void checkEdrx() {
   }
 }
 
+void modemHardwareReset(){
+    // reset the ublox module
+  digitalWrite(SARA_RESETN, HIGH);
+  delay(10500);
+  digitalWrite(SARA_RESETN, LOW);
+}
+
+
 int InternetClass::begin() {
   Watchdog.setup(WDT_SOFTCYCLE1M);
 
@@ -115,9 +123,12 @@ bool InternetClass::connect() {
     MODEM.waitForResponse(5000, &modemResponse);
     if (modemResponse.indexOf("+CEREG: 0,2") != -1) {
       needExtraConnectTime = true;
+    } else if (modemResponse.indexOf("AT+") == -1){
+      logWarn("didn't get an AT response, trying modem 10sec reset");
+      modemHardwareReset();
     }
 
-    logWarn("Failed to connect, try later");
+    logWarn("Failed to connect, try later.");
     Watchdog.setup(WDT_SOFTCYCLE8S);
     return false;
   }
@@ -152,6 +163,8 @@ String InternetClass::getModemVersion() {
   MODEM.waitForResponse(1000, &modemResponse);
   return modemResponse;
 }
+
+
 
 InternetClass Internet;
 
