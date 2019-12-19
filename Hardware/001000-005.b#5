@@ -8,18 +8,18 @@
 </settings>
 <grid distance="0.05" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.005" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="16" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="14" fill="1" visible="no" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="16" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="14" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
@@ -32,10 +32,10 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
@@ -44,8 +44,8 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="yes"/>
-<layer number="51" name="tDocu" color="6" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="6" fill="1" visible="no" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="no" active="no"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="no" active="no"/>
 <layer number="93" name="Pins" color="2" fill="1" visible="no" active="no"/>
@@ -391,17 +391,219 @@
 <dimension x1="17.077" y1="61.696" x2="0" y2="63" x3="8.5385" y3="75" textsize="1.778" textratio="15" layer="52" dtype="horizontal" precision="1"/>
 <dimension x1="4" y1="4" x2="4" y2="0" x3="-5" y3="2" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 <dimension x1="4" y1="4" x2="0" y2="2" x3="2" y3="-5" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
-<dimension x1="4" y1="4" x2="2.3" y2="4" x3="3.15" y3="-12" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="4" y1="4" x2="2.046025" y2="4" x3="3.0230125" y3="-12" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 <dimension x1="4" y1="4" x2="0.5" y2="4" x3="2.25" y3="-8.4" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 <dimension x1="14.3" y1="4.4" x2="0" y2="0" x3="7.15" y3="-17" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 <dimension x1="42.5" y1="0" x2="0" y2="0" x3="21.25" y3="-14" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
-<dimension x1="23.1" y1="1.5" x2="0" y2="0" x3="11.55" y3="-21" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
-<dimension x1="23" y1="1" x2="27.3" y2="1.5" x3="25.15" y3="-3" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
+<dimension x1="22.338075" y1="1.5" x2="0" y2="0" x3="11.1690375" y3="-21" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 <dimension x1="71.4" y1="-0.9" x2="0" y2="0" x3="35.7" y3="-18" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 <dimension x1="60.9" y1="1.6" x2="0" y2="0" x3="30.45" y3="-25" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 <dimension x1="81" y1="4" x2="85" y2="4" x3="83" y3="4" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 <dimension x1="81" y1="4" x2="81" y2="0" x3="81" y3="2" textsize="1.778" textratio="15" layer="51" dtype="horizontal" precision="1"/>
 <dimension x1="41.91" y1="62.992" x2="41.91" y2="64.516" x3="45.72" y3="63.754" textsize="1.778" textratio="15" layer="1"/>
+<text x="69.1727375" y="52.91670625" size="0.8128" layer="26" rot="MR0" align="center">0010000-005
+Designed for Waive
+J. Landau</text>
+<rectangle x1="77.25051875" y1="53.20769375" x2="77.33688125" y2="53.292275" layer="26"/>
+<rectangle x1="77.1667" y1="53.292275" x2="77.33688125" y2="53.3771125" layer="26"/>
+<rectangle x1="76.99651875" y1="53.3771125" x2="77.33688125" y2="53.46169375" layer="26"/>
+<rectangle x1="76.9127" y1="53.46169375" x2="77.33688125" y2="53.546275" layer="26"/>
+<rectangle x1="76.82888125" y1="53.546275" x2="77.33688125" y2="53.6311125" layer="26"/>
+<rectangle x1="76.74251875" y1="53.6311125" x2="77.33688125" y2="53.71569375" layer="26"/>
+<rectangle x1="76.57488125" y1="53.71569375" x2="77.33688125" y2="53.800275" layer="26"/>
+<rectangle x1="76.48851875" y1="53.800275" x2="77.33688125" y2="53.8851125" layer="26"/>
+<rectangle x1="76.4047" y1="53.8851125" x2="77.33688125" y2="53.96969375" layer="26"/>
+<rectangle x1="76.23451875" y1="53.96969375" x2="77.33688125" y2="54.054275" layer="26"/>
+<rectangle x1="76.1507" y1="54.054275" x2="77.33688125" y2="54.1391125" layer="26"/>
+<rectangle x1="74.20251875" y1="54.1391125" x2="74.3727" y2="54.22369375" layer="26"/>
+<rectangle x1="76.06688125" y1="54.1391125" x2="77.33688125" y2="54.22369375" layer="26"/>
+<rectangle x1="74.1187" y1="54.22369375" x2="74.3727" y2="54.308275" layer="26"/>
+<rectangle x1="75.98051875" y1="54.22369375" x2="77.33688125" y2="54.308275" layer="26"/>
+<rectangle x1="78.60688125" y1="54.22369375" x2="78.6907" y2="54.308275" layer="26"/>
+<rectangle x1="74.03488125" y1="54.308275" x2="74.3727" y2="54.3931125" layer="26"/>
+<rectangle x1="75.81288125" y1="54.308275" x2="77.33688125" y2="54.3931125" layer="26"/>
+<rectangle x1="78.52051875" y1="54.308275" x2="78.60688125" y2="54.3931125" layer="26"/>
+<rectangle x1="73.94851875" y1="54.3931125" x2="74.3727" y2="54.47769375" layer="26"/>
+<rectangle x1="75.72651875" y1="54.3931125" x2="77.33688125" y2="54.47769375" layer="26"/>
+<rectangle x1="78.35288125" y1="54.3931125" x2="78.52051875" y2="54.47769375" layer="26"/>
+<rectangle x1="73.78088125" y1="54.47769375" x2="74.3727" y2="54.562275" layer="26"/>
+<rectangle x1="75.6427" y1="54.47769375" x2="77.33688125" y2="54.562275" layer="26"/>
+<rectangle x1="78.1827" y1="54.47769375" x2="78.4367" y2="54.562275" layer="26"/>
+<rectangle x1="73.69451875" y1="54.562275" x2="74.3727" y2="54.6471125" layer="26"/>
+<rectangle x1="75.55888125" y1="54.562275" x2="77.25051875" y2="54.6471125" layer="26"/>
+<rectangle x1="78.01251875" y1="54.562275" x2="78.35288125" y2="54.6471125" layer="26"/>
+<rectangle x1="73.6107" y1="54.6471125" x2="74.3727" y2="54.73169375" layer="26"/>
+<rectangle x1="75.3887" y1="54.6471125" x2="77.25051875" y2="54.73169375" layer="26"/>
+<rectangle x1="77.84488125" y1="54.6471125" x2="78.26651875" y2="54.73169375" layer="26"/>
+<rectangle x1="73.44051875" y1="54.73169375" x2="74.3727" y2="54.816275" layer="26"/>
+<rectangle x1="75.30488125" y1="54.73169375" x2="77.25051875" y2="54.816275" layer="26"/>
+<rectangle x1="77.6747" y1="54.73169375" x2="78.1827" y2="54.816275" layer="26"/>
+<rectangle x1="73.3567" y1="54.816275" x2="74.3727" y2="54.9011125" layer="26"/>
+<rectangle x1="75.21851875" y1="54.816275" x2="77.25051875" y2="54.9011125" layer="26"/>
+<rectangle x1="77.50451875" y1="54.816275" x2="78.09888125" y2="54.9011125" layer="26"/>
+<rectangle x1="73.27288125" y1="54.9011125" x2="74.3727" y2="54.98569375" layer="26"/>
+<rectangle x1="75.05088125" y1="54.9011125" x2="78.01251875" y2="54.98569375" layer="26"/>
+<rectangle x1="73.18651875" y1="54.98569375" x2="74.3727" y2="55.070275" layer="26"/>
+<rectangle x1="74.96451875" y1="54.98569375" x2="77.9287" y2="55.070275" layer="26"/>
+<rectangle x1="73.01888125" y1="55.070275" x2="74.3727" y2="55.1551125" layer="26"/>
+<rectangle x1="74.8807" y1="55.070275" x2="77.84488125" y2="55.1551125" layer="26"/>
+<rectangle x1="72.93251875" y1="55.1551125" x2="74.3727" y2="55.23969375" layer="26"/>
+<rectangle x1="74.79688125" y1="55.1551125" x2="77.75851875" y2="55.23969375" layer="26"/>
+<rectangle x1="72.8487" y1="55.23969375" x2="74.3727" y2="55.324275" layer="26"/>
+<rectangle x1="74.6267" y1="55.23969375" x2="77.6747" y2="55.324275" layer="26"/>
+<rectangle x1="72.67851875" y1="55.324275" x2="74.3727" y2="55.4091125" layer="26"/>
+<rectangle x1="74.54288125" y1="55.324275" x2="76.06688125" y2="55.4091125" layer="26"/>
+<rectangle x1="76.23451875" y1="55.324275" x2="77.59088125" y2="55.4091125" layer="26"/>
+<rectangle x1="72.5947" y1="55.4091125" x2="75.98051875" y2="55.49369375" layer="26"/>
+<rectangle x1="76.23451875" y1="55.4091125" x2="77.50451875" y2="55.49369375" layer="26"/>
+<rectangle x1="72.51088125" y1="55.49369375" x2="75.8967" y2="55.578275" layer="26"/>
+<rectangle x1="76.23451875" y1="55.49369375" x2="77.4207" y2="55.578275" layer="26"/>
+<rectangle x1="72.42451875" y1="55.578275" x2="75.72651875" y2="55.6631125" layer="26"/>
+<rectangle x1="76.1507" y1="55.578275" x2="77.33688125" y2="55.6631125" layer="26"/>
+<rectangle x1="72.25688125" y1="55.6631125" x2="75.6427" y2="55.74769375" layer="26"/>
+<rectangle x1="76.1507" y1="55.6631125" x2="77.25051875" y2="55.74769375" layer="26"/>
+<rectangle x1="72.17051875" y1="55.74769375" x2="75.55888125" y2="55.832275" layer="26"/>
+<rectangle x1="76.1507" y1="55.74769375" x2="77.1667" y2="55.832275" layer="26"/>
+<rectangle x1="72.0867" y1="55.832275" x2="75.3887" y2="55.9171125" layer="26"/>
+<rectangle x1="76.1507" y1="55.832275" x2="77.08288125" y2="55.9171125" layer="26"/>
+<rectangle x1="71.91651875" y1="55.9171125" x2="75.30488125" y2="56.00169375" layer="26"/>
+<rectangle x1="76.1507" y1="55.9171125" x2="76.99651875" y2="56.00169375" layer="26"/>
+<rectangle x1="71.8327" y1="56.00169375" x2="75.21851875" y2="56.086275" layer="26"/>
+<rectangle x1="76.06688125" y1="56.00169375" x2="76.9127" y2="56.086275" layer="26"/>
+<rectangle x1="71.74888125" y1="56.086275" x2="75.05088125" y2="56.1711125" layer="26"/>
+<rectangle x1="76.06688125" y1="56.086275" x2="76.82888125" y2="56.1711125" layer="26"/>
+<rectangle x1="71.66251875" y1="56.1711125" x2="74.96451875" y2="56.25569375" layer="26"/>
+<rectangle x1="76.06688125" y1="56.1711125" x2="76.74251875" y2="56.25569375" layer="26"/>
+<rectangle x1="71.49488125" y1="56.25569375" x2="73.1027" y2="56.340275" layer="26"/>
+<rectangle x1="73.27288125" y1="56.25569375" x2="74.8807" y2="56.340275" layer="26"/>
+<rectangle x1="76.06688125" y1="56.25569375" x2="76.6587" y2="56.340275" layer="26"/>
+<rectangle x1="71.40851875" y1="56.340275" x2="73.01888125" y2="56.4251125" layer="26"/>
+<rectangle x1="73.27288125" y1="56.340275" x2="74.71051875" y2="56.4251125" layer="26"/>
+<rectangle x1="75.98051875" y1="56.340275" x2="76.57488125" y2="56.4251125" layer="26"/>
+<rectangle x1="71.3247" y1="56.4251125" x2="72.93251875" y2="56.50969375" layer="26"/>
+<rectangle x1="73.27288125" y1="56.4251125" x2="74.6267" y2="56.50969375" layer="26"/>
+<rectangle x1="75.98051875" y1="56.4251125" x2="76.48851875" y2="56.50969375" layer="26"/>
+<rectangle x1="71.15451875" y1="56.50969375" x2="72.8487" y2="56.594275" layer="26"/>
+<rectangle x1="73.27288125" y1="56.50969375" x2="74.54288125" y2="56.594275" layer="26"/>
+<rectangle x1="75.98051875" y1="56.50969375" x2="76.32088125" y2="56.594275" layer="26"/>
+<rectangle x1="71.0707" y1="56.594275" x2="72.67851875" y2="56.6791125" layer="26"/>
+<rectangle x1="73.27288125" y1="56.594275" x2="74.45651875" y2="56.6791125" layer="26"/>
+<rectangle x1="75.98051875" y1="56.594275" x2="76.23451875" y2="56.6791125" layer="26"/>
+<rectangle x1="70.98688125" y1="56.6791125" x2="72.5947" y2="56.76369375" layer="26"/>
+<rectangle x1="73.27288125" y1="56.6791125" x2="74.28888125" y2="56.76369375" layer="26"/>
+<rectangle x1="75.98051875" y1="56.6791125" x2="76.1507" y2="56.76369375" layer="26"/>
+<rectangle x1="70.8167" y1="56.76369375" x2="72.51088125" y2="56.848275" layer="26"/>
+<rectangle x1="73.27288125" y1="56.76369375" x2="74.20251875" y2="56.848275" layer="26"/>
+<rectangle x1="75.8967" y1="56.76369375" x2="76.06688125" y2="56.848275" layer="26"/>
+<rectangle x1="70.73288125" y1="56.848275" x2="72.42451875" y2="56.9331125" layer="26"/>
+<rectangle x1="73.27288125" y1="56.848275" x2="74.1187" y2="56.9331125" layer="26"/>
+<rectangle x1="75.8967" y1="56.848275" x2="75.98051875" y2="56.9331125" layer="26"/>
+<rectangle x1="70.64651875" y1="56.9331125" x2="72.25688125" y2="57.01769375" layer="26"/>
+<rectangle x1="73.27288125" y1="56.9331125" x2="74.03488125" y2="57.01769375" layer="26"/>
+<rectangle x1="70.5627" y1="57.01769375" x2="72.17051875" y2="57.102275" layer="26"/>
+<rectangle x1="73.27288125" y1="57.01769375" x2="73.8647" y2="57.102275" layer="26"/>
+<rectangle x1="70.39251875" y1="57.102275" x2="72.0867" y2="57.1871125" layer="26"/>
+<rectangle x1="73.27288125" y1="57.102275" x2="73.78088125" y2="57.1871125" layer="26"/>
+<rectangle x1="70.3087" y1="57.1871125" x2="72.00288125" y2="57.27169375" layer="26"/>
+<rectangle x1="73.27288125" y1="57.1871125" x2="73.69451875" y2="57.27169375" layer="26"/>
+<rectangle x1="70.22488125" y1="57.27169375" x2="71.8327" y2="57.356275" layer="26"/>
+<rectangle x1="73.18651875" y1="57.27169375" x2="73.52688125" y2="57.356275" layer="26"/>
+<rectangle x1="70.0547" y1="57.356275" x2="71.74888125" y2="57.4411125" layer="26"/>
+<rectangle x1="73.18651875" y1="57.356275" x2="73.44051875" y2="57.4411125" layer="26"/>
+<rectangle x1="69.97088125" y1="57.4411125" x2="71.66251875" y2="57.52569375" layer="26"/>
+<rectangle x1="73.18651875" y1="57.4411125" x2="73.3567" y2="57.52569375" layer="26"/>
+<rectangle x1="69.88451875" y1="57.52569375" x2="71.49488125" y2="57.610275" layer="26"/>
+<rectangle x1="69.8007" y1="57.610275" x2="71.40851875" y2="57.6951125" layer="26"/>
+<rectangle x1="69.71688125" y1="57.6951125" x2="71.3247" y2="57.77969375" layer="26"/>
+<rectangle x1="69.71688125" y1="57.77969375" x2="71.24088125" y2="57.864275" layer="26"/>
+<rectangle x1="69.71688125" y1="57.864275" x2="71.15451875" y2="57.9491125" layer="26"/>
+<rectangle x1="69.71688125" y1="57.9491125" x2="70.98688125" y2="58.03369375" layer="26"/>
+<rectangle x1="69.71688125" y1="58.03369375" x2="70.90051875" y2="58.118275" layer="26"/>
+<rectangle x1="69.71688125" y1="58.118275" x2="70.8167" y2="58.2031125" layer="26"/>
+<rectangle x1="69.71688125" y1="58.2031125" x2="70.73288125" y2="58.28769375" layer="26"/>
+<rectangle x1="69.71688125" y1="58.28769375" x2="70.5627" y2="58.372275" layer="26"/>
+<rectangle x1="69.71688125" y1="58.372275" x2="70.47888125" y2="58.4571125" layer="26"/>
+<rectangle x1="69.71688125" y1="58.4571125" x2="70.39251875" y2="58.54169375" layer="26"/>
+<rectangle x1="69.71688125" y1="58.54169375" x2="70.3087" y2="58.626275" layer="26"/>
+<rectangle x1="69.71688125" y1="58.626275" x2="70.13851875" y2="58.7111125" layer="26"/>
+<rectangle x1="69.71688125" y1="58.7111125" x2="70.0547" y2="58.79569375" layer="26"/>
+<rectangle x1="69.71688125" y1="58.79569375" x2="69.97088125" y2="58.880275" layer="26"/>
+<rectangle x1="69.71688125" y1="58.880275" x2="69.88451875" y2="58.9651125" layer="26"/>
+<wire x1="18.032196875" y1="10.158984375" x2="18.032196875" y2="0.084659375" width="0.1524" layer="21"/>
+<dimension x1="54.864" y1="0" x2="67.564" y2="0" x3="61.214" y3="-7.957871875" textsize="1.27" layer="51" dtype="horizontal"/>
+<rectangle x1="7.323075" y1="10.285984375" x2="7.40689375" y2="10.370565625" layer="26"/>
+<rectangle x1="7.831075" y1="10.285984375" x2="7.91489375" y2="10.370565625" layer="26"/>
+<rectangle x1="7.069075" y1="10.370565625" x2="7.40689375" y2="10.455403125" layer="26"/>
+<rectangle x1="7.831075" y1="10.370565625" x2="8.16889375" y2="10.455403125" layer="26"/>
+<rectangle x1="6.73125625" y1="10.455403125" x2="7.40689375" y2="10.539984375" layer="26"/>
+<rectangle x1="7.831075" y1="10.455403125" x2="8.42289375" y2="10.539984375" layer="26"/>
+<rectangle x1="6.47725625" y1="10.539984375" x2="7.40689375" y2="10.624565625" layer="26"/>
+<rectangle x1="7.831075" y1="10.539984375" x2="8.67689375" y2="10.624565625" layer="26"/>
+<rectangle x1="6.22325625" y1="10.624565625" x2="7.40689375" y2="10.709403125" layer="26"/>
+<rectangle x1="7.831075" y1="10.624565625" x2="8.93089375" y2="10.709403125" layer="26"/>
+<rectangle x1="6.13689375" y1="10.709403125" x2="7.40689375" y2="10.793984375" layer="26"/>
+<rectangle x1="7.831075" y1="10.709403125" x2="9.01725625" y2="10.793984375" layer="26"/>
+<rectangle x1="6.22325625" y1="10.793984375" x2="7.40689375" y2="10.878565625" layer="26"/>
+<rectangle x1="7.831075" y1="10.793984375" x2="9.01725625" y2="10.878565625" layer="26"/>
+<rectangle x1="6.307075" y1="10.878565625" x2="6.73125625" y2="10.963403125" layer="26"/>
+<rectangle x1="6.98525625" y1="10.878565625" x2="7.40689375" y2="10.963403125" layer="26"/>
+<rectangle x1="7.831075" y1="10.878565625" x2="8.16889375" y2="10.963403125" layer="26"/>
+<rectangle x1="8.42289375" y1="10.878565625" x2="8.93089375" y2="10.963403125" layer="26"/>
+<rectangle x1="6.307075" y1="10.963403125" x2="6.73125625" y2="11.047984375" layer="26"/>
+<rectangle x1="6.98525625" y1="10.963403125" x2="7.40689375" y2="11.047984375" layer="26"/>
+<rectangle x1="7.831075" y1="10.963403125" x2="8.16889375" y2="11.047984375" layer="26"/>
+<rectangle x1="8.50925625" y1="10.963403125" x2="8.847075" y2="11.047984375" layer="26"/>
+<rectangle x1="6.39089375" y1="11.047984375" x2="6.64489375" y2="11.132565625" layer="26"/>
+<rectangle x1="6.98525625" y1="11.047984375" x2="7.40689375" y2="11.132565625" layer="26"/>
+<rectangle x1="7.831075" y1="11.047984375" x2="8.16889375" y2="11.132565625" layer="26"/>
+<rectangle x1="8.593075" y1="11.047984375" x2="8.76325625" y2="11.132565625" layer="26"/>
+<rectangle x1="6.47725625" y1="11.132565625" x2="6.561075" y2="11.217403125" layer="26"/>
+<rectangle x1="6.98525625" y1="11.132565625" x2="7.40689375" y2="11.217403125" layer="26"/>
+<rectangle x1="7.831075" y1="11.132565625" x2="8.16889375" y2="11.217403125" layer="26"/>
+<rectangle x1="8.67689375" y1="11.132565625" x2="8.76325625" y2="11.217403125" layer="26"/>
+<rectangle x1="6.98525625" y1="11.217403125" x2="7.40689375" y2="11.301984375" layer="26"/>
+<rectangle x1="7.831075" y1="11.217403125" x2="8.25525625" y2="11.301984375" layer="26"/>
+<rectangle x1="6.89889375" y1="11.301984375" x2="7.40689375" y2="11.386565625" layer="26"/>
+<rectangle x1="7.831075" y1="11.301984375" x2="8.25525625" y2="11.386565625" layer="26"/>
+<rectangle x1="6.89889375" y1="11.386565625" x2="7.40689375" y2="11.471403125" layer="26"/>
+<rectangle x1="7.831075" y1="11.386565625" x2="8.25525625" y2="11.471403125" layer="26"/>
+<rectangle x1="6.89889375" y1="11.471403125" x2="7.40689375" y2="11.555984375" layer="26"/>
+<rectangle x1="7.831075" y1="11.471403125" x2="8.25525625" y2="11.555984375" layer="26"/>
+<rectangle x1="6.89889375" y1="11.555984375" x2="7.40689375" y2="11.640565625" layer="26"/>
+<rectangle x1="7.831075" y1="11.555984375" x2="8.339075" y2="11.640565625" layer="26"/>
+<rectangle x1="6.815075" y1="11.640565625" x2="7.40689375" y2="11.725403125" layer="26"/>
+<rectangle x1="7.831075" y1="11.640565625" x2="8.339075" y2="11.725403125" layer="26"/>
+<rectangle x1="6.815075" y1="11.725403125" x2="7.40689375" y2="11.809984375" layer="26"/>
+<rectangle x1="7.831075" y1="11.725403125" x2="8.42289375" y2="11.809984375" layer="26"/>
+<rectangle x1="6.815075" y1="11.809984375" x2="7.40689375" y2="11.894565625" layer="26"/>
+<rectangle x1="7.831075" y1="11.809984375" x2="8.42289375" y2="11.894565625" layer="26"/>
+<rectangle x1="6.73125625" y1="11.894565625" x2="7.40689375" y2="11.979403125" layer="26"/>
+<rectangle x1="7.831075" y1="11.894565625" x2="8.42289375" y2="11.979403125" layer="26"/>
+<rectangle x1="6.73125625" y1="11.979403125" x2="7.40689375" y2="12.063984375" layer="26"/>
+<rectangle x1="7.831075" y1="11.979403125" x2="8.42289375" y2="12.063984375" layer="26"/>
+<rectangle x1="6.73125625" y1="12.063984375" x2="7.40689375" y2="12.148565625" layer="26"/>
+<rectangle x1="7.831075" y1="12.063984375" x2="8.50925625" y2="12.148565625" layer="26"/>
+<rectangle x1="6.64489375" y1="12.148565625" x2="7.40689375" y2="12.233403125" layer="26"/>
+<rectangle x1="7.831075" y1="12.148565625" x2="8.50925625" y2="12.233403125" layer="26"/>
+<rectangle x1="6.64489375" y1="12.233403125" x2="7.40689375" y2="12.317984375" layer="26"/>
+<rectangle x1="7.831075" y1="12.233403125" x2="8.50925625" y2="12.317984375" layer="26"/>
+<rectangle x1="6.64489375" y1="12.317984375" x2="7.40689375" y2="12.402565625" layer="26"/>
+<rectangle x1="7.831075" y1="12.317984375" x2="8.593075" y2="12.402565625" layer="26"/>
+<rectangle x1="6.561075" y1="12.402565625" x2="7.40689375" y2="12.487403125" layer="26"/>
+<rectangle x1="7.831075" y1="12.402565625" x2="8.593075" y2="12.487403125" layer="26"/>
+<rectangle x1="6.561075" y1="12.487403125" x2="7.40689375" y2="12.571984375" layer="26"/>
+<rectangle x1="7.831075" y1="12.487403125" x2="8.593075" y2="12.571984375" layer="26"/>
+<rectangle x1="6.561075" y1="12.571984375" x2="7.40689375" y2="12.656565625" layer="26"/>
+<rectangle x1="7.831075" y1="12.571984375" x2="8.67689375" y2="12.656565625" layer="26"/>
+<rectangle x1="6.561075" y1="12.656565625" x2="7.40689375" y2="12.741403125" layer="26"/>
+<rectangle x1="7.831075" y1="12.656565625" x2="8.593075" y2="12.741403125" layer="26"/>
+<rectangle x1="6.73125625" y1="12.741403125" x2="7.40689375" y2="12.825984375" layer="26"/>
+<rectangle x1="7.831075" y1="12.741403125" x2="8.42289375" y2="12.825984375" layer="26"/>
+<rectangle x1="6.98525625" y1="12.825984375" x2="7.40689375" y2="12.910565625" layer="26"/>
+<rectangle x1="7.831075" y1="12.825984375" x2="8.25525625" y2="12.910565625" layer="26"/>
+<rectangle x1="7.15289375" y1="12.910565625" x2="7.40689375" y2="12.995403125" layer="26"/>
+<rectangle x1="7.831075" y1="12.910565625" x2="8.085075" y2="12.995403125" layer="26"/>
+<rectangle x1="7.323075" y1="12.995403125" x2="7.40689375" y2="13.079984375" layer="26"/>
 </plain>
 <libraries>
 <library name="SamacSys_Parts">
@@ -1659,6 +1861,75 @@
 <wire x1="-2" y1="1.5" x2="-1.5" y2="2" width="0.1" layer="51"/>
 <circle x="-2.35" y="2" radius="0.125" width="0.25" layer="25"/>
 </package>
+<package name="SOT96P237X111-3N">
+<description>&lt;b&gt;SOT-23 (TO-236) CASE 318-08&lt;/b&gt;&lt;br&gt;
+</description>
+<smd name="1" x="-1.2" y="0.955" dx="1" dy="0.6" layer="1"/>
+<smd name="2" x="-1.2" y="-0.955" dx="1" dy="0.6" layer="1"/>
+<smd name="3" x="1.2" y="0" dx="1" dy="0.6" layer="1"/>
+<text x="0" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
+<wire x1="-1.95" y1="1.77" x2="1.95" y2="1.77" width="0.05" layer="51"/>
+<wire x1="1.95" y1="1.77" x2="1.95" y2="-1.77" width="0.05" layer="51"/>
+<wire x1="1.95" y1="-1.77" x2="-1.95" y2="-1.77" width="0.05" layer="51"/>
+<wire x1="-1.95" y1="-1.77" x2="-1.95" y2="1.77" width="0.05" layer="51"/>
+<wire x1="-0.65" y1="1.46" x2="0.65" y2="1.46" width="0.1" layer="51"/>
+<wire x1="0.65" y1="1.46" x2="0.65" y2="-1.46" width="0.1" layer="51"/>
+<wire x1="0.65" y1="-1.46" x2="-0.65" y2="-1.46" width="0.1" layer="51"/>
+<wire x1="-0.65" y1="-1.46" x2="-0.65" y2="1.46" width="0.1" layer="51"/>
+<wire x1="-0.65" y1="0.505" x2="0.305" y2="1.46" width="0.1" layer="51"/>
+<wire x1="-0.35" y1="1.46" x2="0.35" y2="1.46" width="0.2" layer="21"/>
+<wire x1="0.35" y1="1.46" x2="0.35" y2="-1.46" width="0.2" layer="21"/>
+<wire x1="0.35" y1="-1.46" x2="-0.35" y2="-1.46" width="0.2" layer="21"/>
+<wire x1="-0.35" y1="-1.46" x2="-0.35" y2="1.46" width="0.2" layer="21"/>
+<wire x1="-1.7" y1="1.505" x2="-0.7" y2="1.505" width="0.2" layer="21"/>
+</package>
+<package name="SOT95P237X111-3N">
+<description>&lt;b&gt;SOT-23 (TO-236) CASE 318-08 ISSUE AR_1&lt;/b&gt;&lt;br&gt;
+</description>
+<smd name="1" x="-1.05" y="0.95" dx="1.25" dy="0.6" layer="1"/>
+<smd name="2" x="-1.05" y="-0.95" dx="1.25" dy="0.6" layer="1"/>
+<smd name="3" x="1.05" y="0" dx="1.25" dy="0.6" layer="1"/>
+<text x="0" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
+<wire x1="-1.925" y1="1.77" x2="1.925" y2="1.77" width="0.05" layer="51"/>
+<wire x1="1.925" y1="1.77" x2="1.925" y2="-1.77" width="0.05" layer="51"/>
+<wire x1="1.925" y1="-1.77" x2="-1.925" y2="-1.77" width="0.05" layer="51"/>
+<wire x1="-1.925" y1="-1.77" x2="-1.925" y2="1.77" width="0.05" layer="51"/>
+<wire x1="-0.65" y1="1.46" x2="0.65" y2="1.46" width="0.1" layer="51"/>
+<wire x1="0.65" y1="1.46" x2="0.65" y2="-1.46" width="0.1" layer="51"/>
+<wire x1="0.65" y1="-1.46" x2="-0.65" y2="-1.46" width="0.1" layer="51"/>
+<wire x1="-0.65" y1="-1.46" x2="-0.65" y2="1.46" width="0.1" layer="51"/>
+<wire x1="-0.65" y1="0.51" x2="0.3" y2="1.46" width="0.1" layer="51"/>
+<wire x1="-0.075" y1="1.46" x2="0.075" y2="1.46" width="0.2" layer="21"/>
+<wire x1="0.075" y1="1.46" x2="0.075" y2="-1.46" width="0.2" layer="21"/>
+<wire x1="0.075" y1="-1.46" x2="-0.075" y2="-1.46" width="0.2" layer="21"/>
+<wire x1="-0.075" y1="-1.46" x2="-0.075" y2="1.46" width="0.2" layer="21"/>
+<wire x1="-1.675" y1="1.5" x2="-0.425" y2="1.5" width="0.2" layer="21"/>
+</package>
+<package name="SOT65P210X110-3N">
+<description>&lt;b&gt;SOT323 (SC-70)&lt;/b&gt;&lt;br&gt;
+</description>
+<smd name="1" x="-0.95" y="0.65" dx="1" dy="0.55" layer="1"/>
+<smd name="2" x="-0.95" y="-0.65" dx="1" dy="0.55" layer="1"/>
+<smd name="3" x="0.95" y="0" dx="1" dy="0.55" layer="1"/>
+<text x="0" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
+<wire x1="-1.7" y1="1.35" x2="1.7" y2="1.35" width="0.05" layer="51"/>
+<wire x1="1.7" y1="1.35" x2="1.7" y2="-1.35" width="0.05" layer="51"/>
+<wire x1="1.7" y1="-1.35" x2="-1.7" y2="-1.35" width="0.05" layer="51"/>
+<wire x1="-1.7" y1="-1.35" x2="-1.7" y2="1.35" width="0.05" layer="51"/>
+<wire x1="-0.625" y1="1" x2="0.625" y2="1" width="0.1" layer="51"/>
+<wire x1="0.625" y1="1" x2="0.625" y2="-1" width="0.1" layer="51"/>
+<wire x1="0.625" y1="-1" x2="-0.625" y2="-1" width="0.1" layer="51"/>
+<wire x1="-0.625" y1="-1" x2="-0.625" y2="1" width="0.1" layer="51"/>
+<wire x1="-0.625" y1="0.35" x2="0.025" y2="1" width="0.1" layer="51"/>
+<wire x1="-0.1" y1="1" x2="0.1" y2="1" width="0.2" layer="21"/>
+<wire x1="0.1" y1="1" x2="0.1" y2="-1" width="0.2" layer="21"/>
+<wire x1="0.1" y1="-1" x2="-0.1" y2="-1" width="0.2" layer="21"/>
+<wire x1="-0.1" y1="-1" x2="-0.1" y2="1" width="0.2" layer="21"/>
+<wire x1="-1.45" y1="1.175" x2="-0.45" y2="1.175" width="0.2" layer="21"/>
+</package>
 </packages>
 </library>
 <library name="rc-master">
@@ -2333,7 +2604,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="C3216X7R1V106K160AC" x="-105" y="123.016" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="810-C3216X7R1V106KAC" x="-105" y="123.016" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=810-C3216X7R1V106KAC" x="-105" y="123.016" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="NAME" x="46.148" y="16.285" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="44.675" y="18.97" size="0.8128" layer="26" rot="MR270" align="center"/>
 <attribute name="VALUE" x="46.13" y="18.876" size="1.27" layer="28" rot="MR90" align="center"/>
 </element>
 <element name="C10" library="SamacSys_Parts" package="CAPC3216X180N" value="C3216X7R1V106K160AC" x="48.575" y="18.876" smashed="yes" rot="MR90">
@@ -2343,7 +2614,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="C3216X7R1V106K160AC" x="-106.365" y="43.006" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="810-C3216X7R1V106KAC" x="-106.365" y="43.006" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=810-C3216X7R1V106KAC" x="-106.365" y="43.006" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="NAME" x="48.672" y="16.174" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="50.12" y="18.319" size="0.8128" layer="26" rot="MR270" align="center"/>
 <attribute name="VALUE" x="48.575" y="18.876" size="1.27" layer="28" rot="MR90" align="center"/>
 </element>
 <element name="C11" library="SamacSys_Parts" package="CAPC2012X145N" value="10u" x="60.1727" y="17.35025" smashed="yes" rot="MR0">
@@ -2353,28 +2624,28 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GRM21BC81C106KE15L" x="60.1727" y="17.35025" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="81-GRM21BC81C106KE5L" x="60.1727" y="17.35025" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM21BC81C106KE5L" x="60.1727" y="17.35025" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="58.2042" y="17.00105" size="1.016" layer="26" ratio="18" rot="MR0"/>
+<attribute name="NAME" x="59.5248" y="16.39995" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="61.7601" y="15.12775" size="0.8128" layer="28" ratio="10" rot="MR0"/>
 </element>
-<element name="C12" library="SamacSys_Parts" package="CAPC2012X100N" value="C2012X5R1V106K085AC" x="40.118" y="21.686" smashed="yes" rot="MR0">
-<attribute name="DESCRIPTION" value="Capacitor MLCC 0805 35V 10uF X5R TDK 10uF Multilayer Ceramic Capacitor (MLCC) 35 V dc +/-10% X5R dielectric C SMT max op. temp. +85C" x="-29.732" y="-133.254" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="HEIGHT" value="1mm" x="-29.732" y="-133.254" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="TDK" x="-29.732" y="-133.254" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="C2012X5R1V106K085AC" x="-29.732" y="-133.254" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="810-C2012X5R1V106K0C" x="-29.732" y="-133.254" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=810-C2012X5R1V106K0C" x="-29.732" y="-133.254" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="42.658" y="21.686" size="0.8128" layer="26" rot="MR0" align="center"/>
-<attribute name="VALUE" x="40.118" y="21.686" size="1.27" layer="28" rot="MR0" align="center"/>
+<element name="C12" library="SamacSys_Parts" package="CAPC2012X100N" value="C2012X5R1V106K085AC" x="40.118" y="22.448" smashed="yes" rot="MR0">
+<attribute name="DESCRIPTION" value="Capacitor MLCC 0805 35V 10uF X5R TDK 10uF Multilayer Ceramic Capacitor (MLCC) 35 V dc +/-10% X5R dielectric C SMT max op. temp. +85C" x="-29.732" y="-132.492" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="HEIGHT" value="1mm" x="-29.732" y="-132.492" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="TDK" x="-29.732" y="-132.492" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="C2012X5R1V106K085AC" x="-29.732" y="-132.492" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="810-C2012X5R1V106K0C" x="-29.732" y="-132.492" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=810-C2012X5R1V106K0C" x="-29.732" y="-132.492" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="NAME" x="42.658" y="22.448" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="VALUE" x="40.118" y="22.448" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
-<element name="C13" library="SamacSys_Parts" package="CAPC2012X100N" value="C2012X5R1V106K085AC" x="40.131" y="19.829" smashed="yes" rot="MR0">
-<attribute name="DESCRIPTION" value="Capacitor MLCC 0805 35V 10uF X5R TDK 10uF Multilayer Ceramic Capacitor (MLCC) 35 V dc +/-10% X5R dielectric C SMT max op. temp. +85C" x="-52.579" y="-135.111" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="HEIGHT" value="1mm" x="-52.579" y="-135.111" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="TDK" x="-52.579" y="-135.111" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="C2012X5R1V106K085AC" x="-52.579" y="-135.111" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="810-C2012X5R1V106K0C" x="-52.579" y="-135.111" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=810-C2012X5R1V106K0C" x="-52.579" y="-135.111" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="42.671" y="19.829" size="0.8128" layer="26" rot="MR0" align="center"/>
-<attribute name="VALUE" x="40.131" y="19.829" size="1.27" layer="28" rot="MR0" align="center"/>
+<element name="C13" library="SamacSys_Parts" package="CAPC2012X100N" value="C2012X5R1V106K085AC" x="40.131" y="20.464" smashed="yes" rot="MR0">
+<attribute name="DESCRIPTION" value="Capacitor MLCC 0805 35V 10uF X5R TDK 10uF Multilayer Ceramic Capacitor (MLCC) 35 V dc +/-10% X5R dielectric C SMT max op. temp. +85C" x="-52.579" y="-134.476" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="HEIGHT" value="1mm" x="-52.579" y="-134.476" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="TDK" x="-52.579" y="-134.476" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="C2012X5R1V106K085AC" x="-52.579" y="-134.476" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="810-C2012X5R1V106K0C" x="-52.579" y="-134.476" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=810-C2012X5R1V106K0C" x="-52.579" y="-134.476" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="NAME" x="42.671" y="20.464" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="VALUE" x="40.131" y="20.464" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="C14" library="SamacSys_Parts" package="CAPC2012X145N" value="C2012X5R1A336M125AC" x="37.56" y="25.374" smashed="yes" rot="MR270">
 <attribute name="DESCRIPTION" value="TDK 0805 C 33uF Ceramic Multilayer Capacitor, 10 V dc, +85C, X5R Dielectric, +/-20%" x="192.5" y="-21.616" size="1.778" layer="28" rot="MR270" display="off"/>
@@ -2383,7 +2654,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="C2012X5R1A336M125AC" x="192.5" y="-21.616" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="810-C2012X5R1A336M" x="192.5" y="-21.616" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=810-C2012X5R1A336M" x="192.5" y="-21.616" size="1.778" layer="28" rot="MR270" display="off"/>
-<attribute name="NAME" x="39.523" y="26.003" size="0.8128" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="37.618" y="27.4" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="37.56" y="25.374" size="1.27" layer="28" rot="MR270" align="center"/>
 </element>
 <element name="C15" library="SamacSys_Parts" package="CAPC1608X90N" value="GRM188R71H104KA93D" x="35.846" y="25.413" smashed="yes" rot="MR270">
@@ -2443,7 +2714,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="54.71" y="19.271" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="54.71" y="19.271" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="54.71" y="19.271" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="53.9385" y="18.4161" size="0.8128" layer="26" ratio="18" rot="MR180"/>
+<attribute name="NAME" x="54.0655" y="18.7971" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="55.6625" y="17.6834" size="0.8128" layer="28" ratio="10" rot="MR0"/>
 </element>
 <element name="C20" library="SamacSys_Parts" package="CAPC1608X90N" value="10u" x="50.747" y="50.887" smashed="yes" rot="R270">
@@ -2523,7 +2794,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="22.989" y="43.3999" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="22.989" y="43.3999" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="22.989" y="43.3999" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="24.1445" y="43.8088" size="0.8128" layer="26" ratio="18" rot="MR180"/>
+<attribute name="NAME" x="21.9565" y="43.0592" size="0.8128" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="23.9415" y="41.8123" size="0.8128" layer="28" ratio="10" rot="MR0"/>
 </element>
 <element name="C28" library="SamacSys_Parts" package="CAPC1005X55N" value="15p" x="6.923" y="27.0009875" smashed="yes">
@@ -2553,7 +2824,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GCM1555C1H100JA16D" x="59.919" y="24.49395" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="59.919" y="24.49395" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="59.919" y="24.49395" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="61.1755" y="24.87715" size="0.8128" layer="26" ratio="18" rot="MR180"/>
+<attribute name="NAME" x="60.7945" y="24.87715" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="60.8715" y="22.90635" size="0.8128" layer="28" ratio="10" rot="MR0"/>
 </element>
 <element name="C30" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="61.157" y="44.437" smashed="yes" rot="R90">
@@ -2593,7 +2864,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="79.511" y="40.126" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="79.511" y="40.126" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="79.511" y="40.126" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="NAME" x="80.3049" y="39.1735" size="0.8128" layer="26" ratio="18" rot="MR90"/>
+<attribute name="NAME" x="80.0509" y="39.0465" size="0.8128" layer="26" ratio="18" rot="MR90"/>
 <attribute name="VALUE" x="77.9234" y="39.1735" size="0.8128" layer="28" ratio="10" rot="MR90"/>
 </element>
 <element name="C34" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="62.0486" y="7.457" smashed="yes" rot="R90">
@@ -2646,15 +2917,15 @@ design rules under a new name.</description>
 <attribute name="NAME" x="35.0485" y="22.9559" size="0.8128" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="34.1634" y="21.9745" size="0.8128" layer="28" ratio="10" rot="MR90"/>
 </element>
-<element name="C39" library="SamacSys_Parts" package="CAPC1608X90N" value="GRM188R71H104KA93D" x="40.346" y="18.147" smashed="yes" rot="MR0">
-<attribute name="DESCRIPTION" value="Ceramic  SMT capacitor 100nF 50Vdc Murata 0603 GRM 100nF Ceramic Multilayer Capacitor, 50 V dc, +125?C, X7R Dielectric, ?10%" x="16.216" y="-139.333" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="HEIGHT" value="0.9mm" x="16.216" y="-139.333" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="16.216" y="-139.333" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="GRM188R71H104KA93D" x="16.216" y="-139.333" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="81-GRM39X104K50D" x="16.216" y="-139.333" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM39X104K50D" x="16.216" y="-139.333" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="40.346" y="16.877" size="0.8128" layer="26" rot="MR0" align="center"/>
-<attribute name="VALUE" x="40.346" y="18.147" size="1.27" layer="28" rot="MR0" align="center"/>
+<element name="C39" library="SamacSys_Parts" package="CAPC1608X90N" value="GRM188R71H104KA93D" x="40.346" y="18.782" smashed="yes" rot="MR0">
+<attribute name="DESCRIPTION" value="Ceramic  SMT capacitor 100nF 50Vdc Murata 0603 GRM 100nF Ceramic Multilayer Capacitor, 50 V dc, +125?C, X7R Dielectric, ?10%" x="16.216" y="-138.698" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="HEIGHT" value="0.9mm" x="16.216" y="-138.698" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Murata Electronics" x="16.216" y="-138.698" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="GRM188R71H104KA93D" x="16.216" y="-138.698" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="81-GRM39X104K50D" x="16.216" y="-138.698" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM39X104K50D" x="16.216" y="-138.698" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="NAME" x="42.632" y="18.782" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="VALUE" x="40.346" y="18.782" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="C4" library="SamacSys_Parts" package="CAPC1005X55N" value="2n2" x="59.919" y="21.5813" smashed="yes" rot="MR180">
 <attribute name="DESCRIPTION" value="Murata 0402 GRM 2.2nF Ceramic Multilayer Capacitor, 50 V dc, +125C, X7R Dielectric, +/-10%" x="59.919" y="21.5813" size="1.778" layer="28" rot="MR180" display="off"/>
@@ -2663,7 +2934,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GRM155R71H222KA01D" x="59.919" y="21.5813" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="81-GRM36X222K50" x="59.919" y="21.5813" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM36X222K50" x="59.919" y="21.5813" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="NAME" x="61.1255" y="22.0574" size="0.8128" layer="26" ratio="18" rot="MR180"/>
+<attribute name="NAME" x="60.7445" y="22.0574" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="58.9665" y="23.1689" size="0.8128" layer="28" ratio="10" rot="MR180"/>
 </element>
 <element name="C40" library="SamacSys_Parts" package="CAPC1005X55N" value="10n" x="73.1077" y="13.726" smashed="yes" rot="R270">
@@ -2732,7 +3003,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GRM1555C1H470JA01D" x="-27.5" y="-114.0801" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="81-GRM1555C1H470JA1D" x="-27.5" y="-114.0801" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM1555C1H470JA1D" x="-27.5" y="-114.0801" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="18.22" y="44.5429" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="18.22" y="42.3839" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="18.22" y="43.3999" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="C47" library="SamacSys_Parts" package="CAPC1005X55N" value="GRM1555C1H470JA01D" x="15.714" y="43.3999" smashed="yes" rot="MR0">
@@ -2742,7 +3013,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GRM1555C1H470JA01D" x="-51.596" y="-114.0801" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="81-GRM1555C1H470JA1D" x="-51.596" y="-114.0801" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM1555C1H470JA1D" x="-51.596" y="-114.0801" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="15.714" y="44.5429" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="15.714" y="42.3839" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="15.714" y="43.3999" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="C48" library="SamacSys_Parts" package="CAPC1005X55N" value="GRM1555C1H470JA01D" x="13.157" y="43.3999" smashed="yes" rot="MR0">
@@ -2752,7 +3023,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GRM1555C1H470JA01D" x="-75.743" y="-114.0801" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="81-GRM1555C1H470JA1D" x="-75.743" y="-114.0801" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM1555C1H470JA1D" x="-75.743" y="-114.0801" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="13.157" y="44.5429" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="13.157" y="42.3839" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="13.157" y="43.3999" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="C49" library="SamacSys_Parts" package="CAPC1005X55N" value="GRM1555C1H470JA01D" x="22.989" y="42.32" smashed="yes" rot="MR0">
@@ -2762,7 +3033,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GRM1555C1H470JA01D" x="-87.501" y="-115.16" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="81-GRM1555C1H470JA1D" x="-87.501" y="-115.16" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM1555C1H470JA1D" x="-87.501" y="-115.16" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="22.989" y="43.209" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="22.989" y="41.431" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="22.989" y="42.32" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="C5" library="SamacSys_Parts" package="CAPC1005X55N" value="8n2" x="49.2761" y="24.5468" smashed="yes" rot="MR180">
@@ -2772,7 +3043,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GRM155R71C822KA01D" x="49.2761" y="24.5468" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="81-GRM155R71C822KA1D" x="49.2761" y="24.5468" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM155R71C822KA1D" x="49.2761" y="24.5468" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="NAME" x="49.8474" y="25.2691" size="0.8128" layer="26" ratio="18" rot="MR0"/>
+<attribute name="NAME" x="49.8474" y="25.0151" size="0.8128" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="48.3236" y="26.1344" size="0.8128" layer="28" ratio="10" rot="MR180"/>
 </element>
 <element name="C50" library="SamacSys_Parts" package="CAPC1608X90N" value="10u" x="59.57" y="44.877" smashed="yes" rot="R90">
@@ -2792,7 +3063,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GRM21BC81C106KE15L" x="60.1727" y="13.46" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="81-GRM21BC81C106KE5L" x="60.1727" y="13.46" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM21BC81C106KE5L" x="60.1727" y="13.46" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="62.1918" y="13.9402" size="1.016" layer="26" ratio="18" rot="MR180"/>
+<attribute name="NAME" x="62.1918" y="13.9402" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="61.7601" y="11.2375" size="0.8128" layer="28" ratio="10" rot="MR0"/>
 </element>
 <element name="C7" library="SamacSys_Parts" package="DSK-414_HL" value="DSK-3R3H224U-HL" x="66.8" y="36.3" smashed="yes" rot="R270">
@@ -2831,7 +3102,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="SS13FL" x="149.9781" y="170.784" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="512-SS13FL" x="149.9781" y="170.784" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=512-SS13FL" x="149.9781" y="170.784" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="NAME" x="64.5071" y="19.654" size="1.27" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="64.5071" y="19.654" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="61.0781" y="19.654" size="1.27" layer="28" rot="MR180" align="center"/>
 </element>
 <element name="D10" library="SamacSys_Parts" package="SOD3716X135N" value="MBR0560-TP" x="27.92" y="52.45" smashed="yes" rot="R270">
@@ -2874,7 +3145,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-66.881" y="-120.53" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="-66.881" y="-120.53" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="-66.881" y="-120.53" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="23.289" y="43.173" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="23.289" y="45.586" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="23.289" y="44.57" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="D14" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="20.756" y="44.57" smashed="yes" rot="MR0">
@@ -2884,7 +3155,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-83.384" y="-120.53" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="-83.384" y="-120.53" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="-83.384" y="-120.53" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="20.756" y="43.3" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="20.756" y="45.586" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="20.756" y="44.57" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="D2" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="13.157" y="44.57" smashed="yes" rot="MR0">
@@ -2894,7 +3165,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-93.523" y="-117.99" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="-93.523" y="-117.99" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="-93.523" y="-117.99" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="13.03" y="43.173" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="13.157" y="45.586" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="13.157" y="44.57" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="D3" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="15.69" y="44.57" smashed="yes" rot="MR0">
@@ -2904,7 +3175,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-104.96" y="-117.99" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="-104.96" y="-117.99" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="-104.96" y="-117.99" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="15.69" y="43.173" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="15.69" y="45.586" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="15.69" y="44.57" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="D4" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="18.223" y="44.57" smashed="yes" rot="MR0">
@@ -2914,48 +3185,48 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-2.097" y="-120.53" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="-2.097" y="-120.53" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="-2.097" y="-120.53" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="18.223" y="43.173" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="18.223" y="45.586" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="18.223" y="44.57" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
-<element name="D5" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="44.057" y="14.823" smashed="yes" rot="R270">
-<attribute name="DESCRIPTION" value="TVS Diode Bi-Directional PESD0402-140 40V, SOD-923 2-Pin" x="-121.043" y="-19.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="HEIGHT" value="0.43mm" x="-121.043" y="-19.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="-121.043" y="-19.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-121.043" y="-19.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="-121.043" y="-19.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="-121.043" y="-19.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="44.057" y="14.823" size="0.8128" layer="25" rot="R270" align="center"/>
-<attribute name="VALUE" x="44.057" y="14.823" size="1.27" layer="27" rot="R270" align="center"/>
+<element name="D5" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="44.057" y="14.8255" smashed="yes" rot="R270">
+<attribute name="DESCRIPTION" value="TVS Diode Bi-Directional PESD0402-140 40V, SOD-923 2-Pin" x="-121.043" y="-19.4645" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.43mm" x="-121.043" y="-19.4645" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="-121.043" y="-19.4645" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-121.043" y="-19.4645" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-121.043" y="-19.4645" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-121.043" y="-19.4645" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NAME" x="44.033" y="16.3925" size="0.8128" layer="25" rot="R180" align="center"/>
+<attribute name="VALUE" x="44.057" y="14.8255" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
-<element name="D6" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="45.978" y="14.793" smashed="yes" rot="R270">
-<attribute name="DESCRIPTION" value="TVS Diode Bi-Directional PESD0402-140 40V, SOD-923 2-Pin" x="-119.122" y="-33.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="HEIGHT" value="0.43mm" x="-119.122" y="-33.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="-119.122" y="-33.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-119.122" y="-33.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="-119.122" y="-33.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="-119.122" y="-33.467" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="45.978" y="14.793" size="0.8128" layer="25" rot="R270" align="center"/>
-<attribute name="VALUE" x="45.978" y="14.793" size="1.27" layer="27" rot="R270" align="center"/>
+<element name="D6" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="45.978" y="14.8255" smashed="yes" rot="R270">
+<attribute name="DESCRIPTION" value="TVS Diode Bi-Directional PESD0402-140 40V, SOD-923 2-Pin" x="-119.122" y="-33.4345" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.43mm" x="-119.122" y="-33.4345" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="-119.122" y="-33.4345" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-119.122" y="-33.4345" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-119.122" y="-33.4345" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-119.122" y="-33.4345" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NAME" x="46.04" y="16.4195" size="0.8128" layer="25" align="center"/>
+<attribute name="VALUE" x="45.978" y="14.8255" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
-<element name="D7" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="49.669" y="14.793" smashed="yes" rot="R270">
-<attribute name="DESCRIPTION" value="TVS Diode Bi-Directional PESD0402-140 40V, SOD-923 2-Pin" x="-115.431" y="-47.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="HEIGHT" value="0.43mm" x="-115.431" y="-47.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="-115.431" y="-47.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-115.431" y="-47.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="-115.431" y="-47.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="-115.431" y="-47.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="49.669" y="14.793" size="0.8128" layer="25" rot="R270" align="center"/>
-<attribute name="VALUE" x="49.669" y="14.793" size="1.27" layer="27" rot="R270" align="center"/>
+<element name="D7" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="49.669" y="14.8255" smashed="yes" rot="R270">
+<attribute name="DESCRIPTION" value="TVS Diode Bi-Directional PESD0402-140 40V, SOD-923 2-Pin" x="-115.431" y="-47.4045" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.43mm" x="-115.431" y="-47.4045" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="-115.431" y="-47.4045" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-115.431" y="-47.4045" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-115.431" y="-47.4045" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-115.431" y="-47.4045" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NAME" x="49.6905" y="16.395" size="0.8128" layer="25" align="center"/>
+<attribute name="VALUE" x="49.669" y="14.8255" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
-<element name="D8" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="47.812" y="14.858" smashed="yes" rot="R270">
-<attribute name="DESCRIPTION" value="TVS Diode Bi-Directional PESD0402-140 40V, SOD-923 2-Pin" x="-117.288" y="-61.342" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="HEIGHT" value="0.43mm" x="-117.288" y="-61.342" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="-117.288" y="-61.342" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-117.288" y="-61.342" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="-117.288" y="-61.342" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="-117.288" y="-61.342" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="47.812" y="14.858" size="0.8128" layer="25" rot="R270" align="center"/>
-<attribute name="VALUE" x="47.812" y="14.858" size="1.27" layer="27" rot="R270" align="center"/>
+<element name="D8" library="SamacSys_Parts" package="DIONC1005X43N" value="PESD0402-140" x="47.812" y="14.8255" smashed="yes" rot="R270">
+<attribute name="DESCRIPTION" value="TVS Diode Bi-Directional PESD0402-140 40V, SOD-923 2-Pin" x="-117.288" y="-61.3745" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.43mm" x="-117.288" y="-61.3745" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="TE Connectivity" x="-117.288" y="-61.3745" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="PESD0402-140" x="-117.288" y="-61.3745" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-117.288" y="-61.3745" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-117.288" y="-61.3745" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NAME" x="47.753" y="16.4105" size="0.8128" layer="25" align="center"/>
+<attribute name="VALUE" x="47.812" y="14.8255" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
 <element name="D9" library="SamacSys_Parts" package="SOD2513X110N" value="BAT60AE6327HTSA1" x="72.927" y="36.257" smashed="yes">
 <attribute name="DESCRIPTION" value="INFINEON - BAT60AE6327HTSA1 - RECTIFIER, SCHOTTKY, 3A, 10V, SOD-323" x="147.857" y="-114.873" size="1.778" layer="27" display="off"/>
@@ -2974,7 +3245,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="MINISMDC050F-2" x="182.834" y="-26.32" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="650-MINISMDC050F-2" x="182.834" y="-26.32" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=650-MINISMDC050F-2" x="182.834" y="-26.32" size="1.778" layer="28" rot="MR270" display="off"/>
-<attribute name="NAME" x="35.591" y="16.972" size="1.27" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="38.131" y="16.972" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="35.514" y="16.86" size="1.27" layer="28" rot="MR270" align="center"/>
 </element>
 <element name="FB1" library="SamacSys_Parts" package="BEADC1608X95N" value="BLM18PG471SZ1D" x="52.501" y="50.868" smashed="yes" rot="R270">
@@ -3074,7 +3345,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="AP2112K-3.3TRG1" x="-140.631" y="107.323" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="621-AP2112K-3.3TRG1" x="-140.631" y="107.323" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=621-AP2112K-3.3TRG1" x="-140.631" y="107.323" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="NAME" x="2.879" y="47.633" size="1.27" layer="26" rot="MR90" align="center"/>
+<attribute name="NAME" x="2.879" y="47.633" size="0.8128" layer="26" rot="MR90" align="center"/>
 <attribute name="VALUE" x="5.419" y="47.633" size="1.27" layer="28" rot="MR90" align="center"/>
 </element>
 <element name="IC4" library="SamacSys_Parts" package="SOIC127P600X175-8N" value="TPS54232D" x="54.71" y="22.699" smashed="yes" rot="MR180">
@@ -3084,7 +3355,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="TPS54232D" x="89" y="154.779" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="595-TPS54232D" x="89" y="154.779" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=595-TPS54232D" x="89" y="154.779" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="NAME" x="54.71" y="26.255" size="1.27" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="54.71" y="26.001" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="54.71" y="22.699" size="1.27" layer="28" rot="MR180" align="center"/>
 </element>
 <element name="IC5" library="SamacSys_Parts" package="SOTFL50P160X60-6N" value="TPS563231DRLR" x="37.44" y="22.56" smashed="yes" rot="MR90">
@@ -3126,7 +3397,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="W25Q16JVZPIQ" x="187.994" y="167" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="454-W25Q16JVZPIQ" x="187.994" y="167" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=454-W25Q16JVZPIQ" x="187.994" y="167" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="NAME" x="74.964" y="46.223" size="1.27" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="74.964" y="45.969" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="74.964" y="42.54" size="1.27" layer="28" rot="MR180" align="center"/>
 </element>
 <element name="IC9" library="SamacSys_Parts" package="SON65P300X450X100-15N" value="TJA1048TK,118" x="62.01" y="12.08" smashed="yes" rot="R270">
@@ -3148,7 +3419,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="SF56S006V4BR2000" x="38.667" y="155.676" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="656-SF56S006V4BR2000" x="38.667" y="155.676" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=656-SF56S006V4BR2000" x="38.667" y="155.676" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="NAME" x="14.148" y="52.117" size="1.27" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="25.578" y="59.737" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="16.688" y="58.467" size="1.27" layer="28" rot="MR180" align="center"/>
 </element>
 <element name="J2" library="SamacSys_Parts" package="1040310811" value="1040310811" x="79.55" y="30.85" smashed="yes" rot="MR270">
@@ -3158,7 +3429,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="1040310811" x="172.26" y="-51.7" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="N/A" x="172.26" y="-51.7" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=N%2FA" x="172.26" y="-51.7" size="1.778" layer="28" rot="MR270" display="off"/>
-<attribute name="NAME" x="74.971" y="23.89" size="1.27" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="77.511" y="24.144" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="73.411" y="31.529" size="1.27" layer="28" rot="MR270" align="center"/>
 </element>
 <element name="J3" library="SamacSys_Parts" package="FA1NCRPPCB8" value="FA1-NCRP-PCB-8" x="71.43" y="-0.88" smashed="yes" rot="R90">
@@ -3238,7 +3509,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="SRU1048-4R7Y" x="-80.616" y="121.533" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="652-SRU1048-4R7Y" x="-80.616" y="121.533" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=652-SRU1048-4R7Y" x="-80.616" y="121.533" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="33.684" y="23.743" size="0.8128" layer="25" rot="R180" align="center"/>
+<attribute name="NAME" x="33.684" y="18.155" size="0.8128" layer="25" rot="R180" align="center"/>
 <attribute name="RS_PART_NUMBER" value="" x="-80.616" y="121.533" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="RS_PRICE-STOCK" value="" x="-80.616" y="121.533" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="33.684" y="23.743" size="1.27" layer="27" rot="R180" align="center"/>
@@ -3263,17 +3534,17 @@ design rules under a new name.</description>
 <attribute name="NAME" x="11.215" y="13.306" size="0.8128" layer="25" align="center"/>
 <attribute name="VALUE" x="13.247" y="13.306" size="1.27" layer="27" align="center"/>
 </element>
-<element name="LED3" library="SamacSys_Parts" package="APDA1806SURCK" value="APDA1806SURCK" x="22.133" y="1.016" smashed="yes" rot="R180">
-<attribute name="DESCRIPTION" value="1.8X0.6MM RA RED SMD LED" x="-106.137" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="HEIGHT" value="1.65mm" x="-106.137" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Kingbright" x="-106.137" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="APDA1806SURCK" x="-106.137" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="604-APDA1806SURCK" x="-106.137" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=604-APDA1806SURCK" x="-106.137" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="24.003" y="3.083" size="0.8128" layer="25" rot="R270" align="center"/>
-<attribute name="RS_PART_NUMBER" value="" x="22.133" y="1.016" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="RS_PRICE-STOCK" value="" x="22.133" y="1.016" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="VALUE" x="22.133" y="1.016" size="1.27" layer="27" rot="R180" align="center"/>
+<element name="LED3" library="SamacSys_Parts" package="APDA1806SURCK" value="APDA1806SURCK" x="21.62505" y="1.016" smashed="yes" rot="R180">
+<attribute name="DESCRIPTION" value="1.8X0.6MM RA RED SMD LED" x="-106.64495" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="HEIGHT" value="1.65mm" x="-106.64495" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Kingbright" x="-106.64495" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="APDA1806SURCK" x="-106.64495" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="604-APDA1806SURCK" x="-106.64495" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=604-APDA1806SURCK" x="-106.64495" y="166.116" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NAME" x="19.3468" y="1.389834375" size="0.8128" layer="25" rot="R270" align="center"/>
+<attribute name="RS_PART_NUMBER" value="" x="21.62505" y="1.016" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="RS_PRICE-STOCK" value="" x="21.62505" y="1.016" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="21.62505" y="1.016" size="1.27" layer="27" rot="R180" align="center"/>
 </element>
 <element name="LED4" library="SamacSys_Parts" package="APDA1806SECK" value="APDA1806SECK" x="61.014" y="1.059" smashed="yes" rot="R180">
 <attribute name="DESCRIPTION" value="1.8X0.6MM RA ORANGE SMD LED" x="-55.826" y="166.159" size="1.778" layer="27" rot="R180" display="off"/>
@@ -3314,7 +3585,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="2N7002,215" x="-68.83" y="-111.72" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="771-2N7002-T/R" x="-68.83" y="-111.72" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=771-2N7002-T%2FR" x="-68.83" y="-111.72" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="16.387" y="31.79" size="1.27" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="16.387" y="32.171" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="16.26" y="34.33" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="Q4" library="SamacSys_Parts" package="SOT65P210X100-6N" value="2N7002DW-7-F" x="30.368" y="36.81" smashed="yes" rot="R270">
@@ -3324,7 +3595,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="2N7002DW-7-F" x="-120.762" y="-21.61" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="621-2N7002DW-F" x="-120.762" y="-21.61" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=621-2N7002DW-F" x="-120.762" y="-21.61" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="30.373" y="34.305" size="0.8128" layer="25" align="center"/>
+<attribute name="NAME" x="28.341" y="36.337" size="0.8128" layer="25" align="center"/>
 <attribute name="VALUE" x="30.368" y="36.81" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
 <element name="Q5" library="SamacSys_Parts" package="SOT230P700X170-4N" value="BSP76E6433HUMA1" x="28.891" y="18.14" smashed="yes" rot="MR270">
@@ -3334,7 +3605,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="BSP76E6433HUMA1" x="143.191" y="-91.08" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="143.191" y="-91.08" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="143.191" y="-91.08" size="1.778" layer="28" rot="MR270" display="off"/>
-<attribute name="NAME" x="30.755" y="18.223" size="1.27" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="31.771" y="14.794" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="28.891" y="18.14" size="1.27" layer="28" rot="MR270" align="center"/>
 </element>
 <element name="Q6" library="SamacSys_Parts" package="SOT230P700X170-4N" value="BSP76E6433HUMA1" x="21.54" y="18.14" smashed="yes" rot="MR270">
@@ -3344,7 +3615,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="BSP76E6433HUMA1" x="146" y="-4.72" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="146" y="-4.72" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="146" y="-4.72" size="1.778" layer="28" rot="MR270" display="off"/>
-<attribute name="NAME" x="23.516" y="18.238" size="1.27" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="24.278" y="14.682" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="21.54" y="18.14" size="1.27" layer="28" rot="MR270" align="center"/>
 </element>
 <element name="R1" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="63.16" y="24.081" smashed="yes" rot="MR270">
@@ -3354,18 +3625,18 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="230.8" y="2.491" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="230.8" y="2.491" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="230.8" y="2.491" size="1.778" layer="28" rot="MR270" display="off"/>
-<attribute name="NAME" x="63.168" y="26.076" size="1.27" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="64.221" y="24.179" size="0.8128" layer="26" rot="MR90" align="center"/>
 <attribute name="VALUE" x="63.16" y="24.081" size="1.27" layer="28" rot="MR270" align="center"/>
 </element>
-<element name="R10" library="SamacSys_Parts" package="RESC0603X26N" value="RC0201FR-0710KL" x="40.853" y="23.24" smashed="yes" rot="MR0">
-<attribute name="DESCRIPTION" value="Thick Film Resistors - SMD 10K OHM 1%" x="-34.077" y="-139.32" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="HEIGHT" value="0.26mm" x="-34.077" y="-139.32" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="YAGEO (PHYCOMP)" x="-34.077" y="-139.32" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="RC0201FR-0710KL" x="-34.077" y="-139.32" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="603-RC0201FR-0710KL" x="-34.077" y="-139.32" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=603-RC0201FR-0710KL" x="-34.077" y="-139.32" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="42.755" y="23.242" size="0.8128" layer="26" rot="MR180" align="center"/>
-<attribute name="VALUE" x="40.853" y="23.24" size="1.27" layer="28" rot="MR0" align="center"/>
+<element name="R10" library="SamacSys_Parts" package="RESC0603X26N" value="RC0201FR-0710KL" x="40.853" y="24.129" smashed="yes" rot="MR0">
+<attribute name="DESCRIPTION" value="Thick Film Resistors - SMD 10K OHM 1%" x="-34.077" y="-138.431" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="HEIGHT" value="0.26mm" x="-34.077" y="-138.431" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="YAGEO (PHYCOMP)" x="-34.077" y="-138.431" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RC0201FR-0710KL" x="-34.077" y="-138.431" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="603-RC0201FR-0710KL" x="-34.077" y="-138.431" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=603-RC0201FR-0710KL" x="-34.077" y="-138.431" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="NAME" x="40.85" y="25.147" size="0.8128" layer="26" rot="MR180" align="center"/>
+<attribute name="VALUE" x="40.853" y="24.129" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="R11" library="SamacSys_Parts" package="RESC1005X40N" value="1M2" x="27.93" y="45.1" smashed="yes">
 <attribute name="DESCRIPTION" value="Vishay CRCW Series Thick Film Surface Mount Resistor 402 Case 1.2M +/-1% 0.063W +/-100ppm/C" x="27.93" y="45.1" size="1.778" layer="27" display="off"/>
@@ -3404,18 +3675,18 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="RMCF0402ZT0R00" x="28.797" y="30.731" size="1.778" layer="27" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="28.797" y="30.731" size="1.778" layer="27" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="28.797" y="30.731" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="30.7655" y="30.5088" size="0.8128" layer="25" ratio="18"/>
+<attribute name="NAME" x="30.5115" y="30.5088" size="0.6096" layer="25" ratio="18"/>
 <attribute name="VALUE" x="27.8445" y="29.1435" size="0.8128" layer="27" ratio="10"/>
 </element>
-<element name="R15" library="SamacSys_Parts" package="RESC1005X40N" value="1k96" x="22.263" y="2.209" smashed="yes">
-<attribute name="DESCRIPTION" value="Vishay CRCW Series Thick Film Surface Mount Resistor 0402 Case 1.96k +/-1% 0.063W +/-100ppm/C" x="22.263" y="2.209" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="0.4mm" x="22.263" y="2.209" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="22.263" y="2.209" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="CRCW04021K96FKED" x="22.263" y="2.209" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-1.96K-E3" x="22.263" y="2.209" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-1.96K-E3" x="22.263" y="2.209" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="21.0565" y="3.0028" size="0.8128" layer="25" ratio="18"/>
-<attribute name="VALUE" x="21.3105" y="0.6215" size="0.8128" layer="27" ratio="10"/>
+<element name="R15" library="SamacSys_Parts" package="RESC1005X40N" value="1k96" x="21.75505" y="2.209" smashed="yes">
+<attribute name="DESCRIPTION" value="Vishay CRCW Series Thick Film Surface Mount Resistor 0402 Case 1.96k +/-1% 0.063W +/-100ppm/C" x="21.75505" y="2.209" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="21.75505" y="2.209" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Vishay" x="21.75505" y="2.209" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="CRCW04021K96FKED" x="21.75505" y="2.209" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-1.96K-E3" x="21.75505" y="2.209" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-1.96K-E3" x="21.75505" y="2.209" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="20.54855" y="3.0028" size="0.8128" layer="25" ratio="18"/>
+<attribute name="VALUE" x="20.80255" y="0.6215" size="0.8128" layer="27" ratio="10"/>
 </element>
 <element name="R16" library="SamacSys_Parts" package="RESC1005X40N" value="1M2" x="19.553" y="35.326" smashed="yes" rot="MR180">
 <attribute name="DESCRIPTION" value="Vishay CRCW Series Thick Film Surface Mount Resistor 402 Case 1.2M +/-1% 0.063W +/-100ppm/C" x="19.553" y="35.326" size="1.778" layer="28" rot="MR180" display="off"/>
@@ -3464,7 +3735,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW04021K96FKED" x="33.249" y="-141.771875" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-1.96K-E3" x="33.249" y="-141.771875" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-1.96K-E3" x="33.249" y="-141.771875" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="59.919" y="27.138125" size="1.27" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="59.919" y="26.884125" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="59.919" y="25.868125" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="R20" library="SamacSys_Parts" package="RESC3116X65N" value="0R" x="27.87" y="11.397" smashed="yes" rot="MR180">
@@ -3474,7 +3745,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRG1206ZR" x="27.87" y="11.397" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="279-CRG1206ZR" x="27.87" y="11.397" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=279-CRG1206ZR" x="27.87" y="11.397" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="NAME" x="25.2478" y="11.1455" size="1.016" layer="26" ratio="18" rot="MR0"/>
+<attribute name="NAME" x="25.2478" y="11.1455" size="0.8128" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="25.8062" y="13.6195" size="0.8128" layer="28" ratio="10" rot="MR180"/>
 </element>
 <element name="R21" library="SamacSys_Parts" package="RESC3116X65N" value="0R" x="27.87" y="8.54" smashed="yes" rot="MR180">
@@ -3484,7 +3755,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRG1206ZR" x="27.87" y="8.54" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="279-CRG1206ZR" x="27.87" y="8.54" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=279-CRG1206ZR" x="27.87" y="8.54" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="NAME" x="25.2478" y="8.2875" size="1.016" layer="26" ratio="18" rot="MR0"/>
+<attribute name="NAME" x="25.2478" y="8.2875" size="0.8128" layer="26" ratio="18" rot="MR0"/>
 <attribute name="VALUE" x="25.8062" y="10.7625" size="0.8128" layer="28" ratio="10" rot="MR180"/>
 </element>
 <element name="R22" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="70.417" y="40.38" smashed="yes" rot="MR270">
@@ -3514,7 +3785,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="41.765" y="27.1667" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="41.765" y="27.1667" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="41.765" y="27.1667" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="40.5585" y="27.5159" size="0.8128" layer="25" ratio="18" rot="R180"/>
+<attribute name="NAME" x="40.8485" y="27.7291" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="42.7175" y="28.7542" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="R25" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="41.765" y="25.2184" smashed="yes" rot="R180">
@@ -3524,7 +3795,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="41.765" y="25.2184" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="41.765" y="25.2184" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="41.765" y="25.2184" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="40.4315" y="25.5676" size="0.8128" layer="25" ratio="18" rot="R180"/>
+<attribute name="NAME" x="40.8485" y="25.7404" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="42.7175" y="26.8059" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="R26" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="53.834" y="27.1667" smashed="yes" rot="R180">
@@ -3534,7 +3805,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="53.834" y="27.1667" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="53.834" y="27.1667" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="53.834" y="27.1667" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="52.5005" y="27.6429" size="0.8128" layer="25" ratio="18" rot="R180"/>
+<attribute name="NAME" x="52.9095" y="27.7291" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="54.7865" y="28.7542" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="R27" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="53.834" y="25.2184" smashed="yes" rot="R180">
@@ -3544,7 +3815,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="53.834" y="25.2184" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="53.834" y="25.2184" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="53.834" y="25.2184" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="52.6275" y="25.5676" size="0.8128" layer="25" ratio="18" rot="R180"/>
+<attribute name="NAME" x="52.9095" y="25.7404" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="54.7865" y="26.8059" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="R28" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="53.834" y="29.115" smashed="yes" rot="R180">
@@ -3554,7 +3825,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="53.834" y="29.115" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="53.834" y="29.115" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="53.834" y="29.115" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="52.6275" y="29.4642" size="0.8128" layer="25" ratio="18" rot="R180"/>
+<attribute name="NAME" x="52.9095" y="29.7178" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="54.7865" y="30.7025" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="R29" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="41.765" y="29.115" smashed="yes" rot="R180">
@@ -3564,7 +3835,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="41.765" y="29.115" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="41.765" y="29.115" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="41.765" y="29.115" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="40.4315" y="29.4642" size="0.8128" layer="25" ratio="18" rot="R180"/>
+<attribute name="NAME" x="40.8485" y="29.7178" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="42.7175" y="30.7025" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="R3" library="SamacSys_Parts" package="RESC1005X40N" value="28k" x="59.919" y="23.037575" smashed="yes" rot="MR0">
@@ -3574,7 +3845,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040228K0FKED" x="59.919" y="23.037575" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-28K-E3" x="59.919" y="23.037575" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-28K-E3" x="59.919" y="23.037575" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="61.1755" y="23.412625" size="0.8128" layer="26" ratio="18" rot="MR180"/>
+<attribute name="NAME" x="61.0485" y="23.412625" size="0.8128" layer="26" ratio="18" rot="MR180"/>
 <attribute name="VALUE" x="60.8715" y="21.450075" size="0.8128" layer="28" ratio="10" rot="MR0"/>
 </element>
 <element name="R30" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="64.993" y="7.49" smashed="yes" rot="R270">
@@ -3617,15 +3888,15 @@ design rules under a new name.</description>
 <attribute name="NAME" x="38.6635" y="55.1362" size="0.8128" layer="25" ratio="18" rot="R180"/>
 <attribute name="VALUE" x="40.8225" y="56.2475" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="R34" library="SamacSys_Parts" package="RESC1005X40N" value="0R" x="26.539" y="29.437" smashed="yes" rot="R270">
-<attribute name="DESCRIPTION" value="General Purpose Thick Film Surface Mount Chip Resistor" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="HEIGHT" value="0.4mm" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Stackpole Electronics Inc." x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="RMCF0402ZT0R00" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="26.539" y="29.437" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="27.5225" y="29.1108" size="0.8128" layer="25" ratio="18"/>
-<attribute name="VALUE" x="24.9515" y="30.3895" size="0.8128" layer="27" ratio="10" rot="R270"/>
+<element name="R34" library="SamacSys_Parts" package="RESC1005X40N" value="0R" x="26.824" y="28.571" smashed="yes">
+<attribute name="DESCRIPTION" value="General Purpose Thick Film Surface Mount Chip Resistor" x="26.824" y="28.571" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="26.824" y="28.571" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Stackpole Electronics Inc." x="26.824" y="28.571" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RMCF0402ZT0R00" x="26.824" y="28.571" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="26.824" y="28.571" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="26.824" y="28.571" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="28.1575" y="28.3488" size="0.6096" layer="25" ratio="18"/>
+<attribute name="VALUE" x="25.8715" y="26.9835" size="0.8128" layer="27" ratio="10"/>
 </element>
 <element name="R35" library="SamacSys_Parts" package="RESC1005X40N" value="40k2" x="38.554" y="19.935" smashed="yes" rot="R180">
 <attribute name="DESCRIPTION" value="CRCW0402 Resistor T/R 0.063W,1%,40K2 Vishay CRCW Series Thick Film Surface Mount Resistor 0402 Case 40.2k +/-1% 0.063W +/-100ppm/C" x="38.554" y="19.935" size="1.778" layer="27" rot="R180" display="off"/>
@@ -3712,7 +3983,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040237K4FKED" x="115.297" y="183.23875" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-37.4K-E3" x="115.297" y="183.23875" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-37.4K-E3" x="115.297" y="183.23875" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="NAME" x="47.225" y="23.21875" size="0.8128" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="47.352" y="23.21875" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="49.257" y="23.21875" size="1.27" layer="28" rot="MR180" align="center"/>
 </element>
 <element name="R8" library="SamacSys_Parts" package="RESC1005X40N" value="CRCW0402169KFKED" x="49.257" y="21.973" smashed="yes" rot="MR0">
@@ -3722,18 +3993,18 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW0402169KFKED" x="-37.103" y="-138.047" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-169K-E3" x="-37.103" y="-138.047" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-169K-E3" x="-37.103" y="-138.047" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="47.263" y="21.969" size="0.8128" layer="26" rot="MR180" align="center"/>
+<attribute name="NAME" x="47.39" y="21.969" size="0.8128" layer="26" rot="MR180" align="center"/>
 <attribute name="VALUE" x="49.257" y="21.973" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
-<element name="R9" library="SamacSys_Parts" package="RESC1005X40N" value="CRCW040253K6FKED" x="39.291" y="23.915" smashed="yes" rot="MR90">
-<attribute name="DESCRIPTION" value="VISHAY - CRCW040253K6FKED. - RES, THICK FILM, 53K6, 1%, 0.063W, 0402" x="-120.729" y="130.595" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="HEIGHT" value="0.4mm" x="-120.729" y="130.595" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="-120.729" y="130.595" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040253K6FKED" x="-120.729" y="130.595" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-53.6K-E3" x="-120.729" y="130.595" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-53.6K-E3" x="-120.729" y="130.595" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="NAME" x="40.728" y="24.432" size="0.8128" layer="26" rot="MR0" align="center"/>
-<attribute name="VALUE" x="39.291" y="23.915" size="1.27" layer="28" rot="MR90" align="center"/>
+<element name="R9" library="SamacSys_Parts" package="RESC1005X40N" value="CRCW040253K6FKED" x="39.291" y="24.677" smashed="yes" rot="MR90">
+<attribute name="DESCRIPTION" value="VISHAY - CRCW040253K6FKED. - RES, THICK FILM, 53K6, 1%, 0.063W, 0402" x="-120.729" y="131.357" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="-120.729" y="131.357" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Vishay" x="-120.729" y="131.357" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040253K6FKED" x="-120.729" y="131.357" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-53.6K-E3" x="-120.729" y="131.357" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-53.6K-E3" x="-120.729" y="131.357" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="NAME" x="39.331" y="26.337" size="0.8128" layer="26" rot="MR0" align="center"/>
+<attribute name="VALUE" x="39.291" y="24.677" size="1.27" layer="28" rot="MR90" align="center"/>
 </element>
 <element name="S1" library="SamacSys_Parts" package="TL4100AF120QG" value="TL4100AF120QG" x="33.393" y="60.227" smashed="yes" rot="R180">
 <attribute name="DESCRIPTION" value="Tactile Switches Right Angle Edge Mounted Tact Switch" x="13.073" y="192.307" size="1.778" layer="27" rot="R180" display="off"/>
@@ -3746,31 +4017,31 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="33.393" y="60.227" size="1.27" layer="27" rot="R180" align="center"/>
 </element>
 <element name="MPWR_ON" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.549" y="35.019" smashed="yes">
-<attribute name="NAME" x="28.608" y="35.566" size="0.6096" layer="25" ratio="10" rot="R90"/>
+<attribute name="NAME" x="26.93" y="34.257" size="0.6096" layer="25" ratio="10"/>
 <attribute name="POPULARITY" value="1" x="26.549" y="35.019" size="1.778" layer="27" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="25.914" y="33.114" size="1" layer="37"/>
 <attribute name="VALUE" x="25.914" y="34.257" size="0.0254" layer="27"/>
 </element>
 <element name="MRST" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.58" y="38.51" smashed="yes">
-<attribute name="NAME" x="26.641" y="39.534" size="0.6096" layer="25" ratio="10" rot="R90"/>
+<attribute name="NAME" x="26.961" y="39.018" size="0.6096" layer="25" ratio="10"/>
 <attribute name="POPULARITY" value="1" x="26.58" y="38.51" size="1.778" layer="27" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="25.945" y="36.605" size="1" layer="37"/>
 <attribute name="VALUE" x="25.945" y="37.748" size="0.0254" layer="27"/>
 </element>
-<element name="TP_MDCD" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.627" y="26.765" smashed="yes">
-<attribute name="NAME" x="27.643" y="26.892" size="0.6096" layer="25" ratio="10"/>
-<attribute name="POPULARITY" value="1" x="26.627" y="26.765" size="1.778" layer="27" display="off"/>
-<attribute name="TP_SIGNAL_NAME" value="" x="25.992" y="24.86" size="1" layer="37"/>
-<attribute name="VALUE" x="25.992" y="26.003" size="0.0254" layer="27"/>
+<element name="MDCD" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.627" y="26.257" smashed="yes">
+<attribute name="NAME" x="25.738" y="26.638" size="0.6096" layer="25" ratio="10"/>
+<attribute name="POPULARITY" value="1" x="26.627" y="26.257" size="1.778" layer="27" display="off"/>
+<attribute name="TP_SIGNAL_NAME" value="" x="25.992" y="24.352" size="1" layer="37"/>
+<attribute name="VALUE" x="25.992" y="25.495" size="0.0254" layer="27"/>
 </element>
 <element name="TP_1V8" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.674" y="25.289" smashed="yes">
-<attribute name="NAME" x="27.69" y="25.543" size="0.6096" layer="25" ratio="10"/>
+<attribute name="NAME" x="25.404" y="24.4" size="0.6096" layer="25" ratio="10"/>
 <attribute name="POPULARITY" value="1" x="26.674" y="25.289" size="1.778" layer="27" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="26.039" y="23.384" size="1" layer="37"/>
 <attribute name="VALUE" x="26.039" y="24.527" size="0.0254" layer="27"/>
 </element>
 <element name="MVUSB" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.578" y="36.826" smashed="yes">
-<attribute name="NAME" x="27.69" y="37.5" size="0.6096" layer="25" ratio="10" rot="R90"/>
+<attribute name="NAME" x="27.047" y="38.446" size="0.6096" layer="25" ratio="10" rot="R270"/>
 <attribute name="POPULARITY" value="1" x="26.578" y="36.826" size="1.778" layer="27" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="25.943" y="34.921" size="1" layer="37"/>
 <attribute name="VALUE" x="25.943" y="36.064" size="0.0254" layer="27"/>
@@ -3788,7 +4059,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="14.229" y="43.793" size="0.0254" layer="27"/>
 </element>
 <element name="TP_MTX" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.608" y="31.73" smashed="yes">
-<attribute name="NAME" x="28.722" y="31.688" size="0.6096" layer="25" ratio="10" rot="R90"/>
+<attribute name="NAME" x="27.243" y="32.238" size="0.6096" layer="25" ratio="10"/>
 <attribute name="POPULARITY" value="1" x="26.608" y="31.73" size="1.778" layer="27" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="25.973" y="29.825" size="1" layer="37"/>
 <attribute name="VALUE" x="25.973" y="30.968" size="0.0254" layer="27"/>
@@ -3831,7 +4102,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="53.834" y="23.27" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="53.834" y="23.27" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="53.834" y="23.27" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="52.6275" y="23.6191" size="0.8128" layer="25" ratio="18" rot="R180"/>
+<attribute name="NAME" x="52.7825" y="23.7519" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="54.7865" y="24.8576" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="C53" library="SamacSys_Parts" package="CAPC1005X55N" value="100n" x="41.765" y="23.2701" smashed="yes" rot="R180">
@@ -3841,11 +4112,11 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="41.765" y="23.2701" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="41.765" y="23.2701" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="41.765" y="23.2701" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="40.5585" y="23.7462" size="0.8128" layer="25" ratio="18" rot="R180"/>
+<attribute name="NAME" x="40.7215" y="23.7518" size="0.8128" layer="25" ratio="18"/>
 <attribute name="VALUE" x="42.7175" y="24.8577" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="TP_MRX" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.587" y="33.349" smashed="yes">
-<attribute name="NAME" x="27.738" y="33.191" size="0.6096" layer="25" ratio="10" rot="R90"/>
+<attribute name="NAME" x="27.222" y="33.222" size="0.6096" layer="25" ratio="10"/>
 <attribute name="POPULARITY" value="1" x="26.587" y="33.349" size="1.778" layer="27" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="26.587" y="33.349" size="1.778" layer="27" font="vector" ratio="15" display="off"/>
 <attribute name="VALUE" x="25.952" y="32.587" size="0.0254" layer="27"/>
@@ -3861,19 +4132,19 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="63.2335" y="51.5196" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="TP3V3" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="3.429" y="52.07" smashed="yes" rot="MR0">
-<attribute name="NAME" x="4.064" y="53.086" size="1.27" layer="26" ratio="10" rot="MR0"/>
+<attribute name="NAME" x="4.064" y="53.086" size="0.8128" layer="26" ratio="10" rot="MR0"/>
 <attribute name="POPULARITY" value="1" x="3.429" y="52.07" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="4.064" y="50.165" size="1" layer="38" rot="MR0"/>
 <attribute name="VALUE" x="4.064" y="51.308" size="0.0254" layer="28" rot="MR0"/>
 </element>
 <element name="TP3V8" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="30.48" y="24.13" smashed="yes" rot="MR0">
-<attribute name="NAME" x="31.115" y="25.146" size="1.27" layer="26" ratio="10" rot="MR0"/>
+<attribute name="NAME" x="31.115" y="25.146" size="0.8128" layer="26" ratio="10" rot="MR0"/>
 <attribute name="POPULARITY" value="1" x="30.48" y="24.13" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="30.48" y="24.13" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="VALUE" x="31.115" y="23.368" size="0.0254" layer="28" rot="MR0"/>
 </element>
 <element name="TP5V" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="57.404" y="14.351" smashed="yes" rot="MR0">
-<attribute name="NAME" x="58.039" y="15.367" size="1.27" layer="26" ratio="10" rot="MR0"/>
+<attribute name="NAME" x="57.15" y="14.732" size="0.8128" layer="26" ratio="10" rot="MR90"/>
 <attribute name="POPULARITY" value="1" x="57.404" y="14.351" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="57.404" y="14.351" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="VALUE" x="58.039" y="13.589" size="0.0254" layer="28" rot="MR0"/>
@@ -3885,40 +4156,40 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GCM1555C1H101JA16D" x="51.7903" y="53.721" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="51.7903" y="53.721" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="51.7903" y="53.721" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
-<attribute name="NAME" x="51.7903" y="53.721" size="1.27" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="51.7903" y="52.705" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="51.7903" y="53.721" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
-<element name="LED1" library="SamacSys_Parts" package="APDA1806CGCK" value="APDA1806CGCK" x="26.797" y="1.016" smashed="yes" rot="R180">
-<attribute name="DESCRIPTION" value="Standard LEDs - SMD 1.8x0.6mm RA GREEN SMD LED" x="28.067" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
-<attribute name="HEIGHT" value="1.6mm" x="28.067" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Kingbright" x="28.067" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="APDA1806CGCK" x="28.067" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="604-APDA1806CGCK" x="28.067" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=604-APDA1806CGCK" x="28.067" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
-<attribute name="NAME" x="27.813" y="3.048" size="0.8128" layer="25" rot="R270" align="center"/>
-<attribute name="RS_PART_NUMBER" value="" x="26.797" y="1.016" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="RS_PRICE-STOCK" value="" x="26.797" y="1.016" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="VALUE" x="26.797" y="1.016" size="1.27" layer="27" rot="R180" align="center"/>
+<element name="LED1" library="SamacSys_Parts" package="APDA1806CGCK" value="APDA1806CGCK" x="26.543025" y="1.016" smashed="yes" rot="R180">
+<attribute name="DESCRIPTION" value="Standard LEDs - SMD 1.8x0.6mm RA GREEN SMD LED" x="27.813025" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
+<attribute name="HEIGHT" value="1.6mm" x="27.813025" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Kingbright" x="27.813025" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="APDA1806CGCK" x="27.813025" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="604-APDA1806CGCK" x="27.813025" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=604-APDA1806CGCK" x="27.813025" y="1.016" size="1.778" layer="27" font="vector" ratio="15" rot="R180" display="off"/>
+<attribute name="NAME" x="28.659584375" y="1.524153125" size="0.8128" layer="25" rot="R270" align="center"/>
+<attribute name="RS_PART_NUMBER" value="" x="26.543025" y="1.016" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="RS_PRICE-STOCK" value="" x="26.543025" y="1.016" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="26.543025" y="1.016" size="1.27" layer="27" rot="R180" align="center"/>
 </element>
-<element name="R41" library="SamacSys_Parts" package="RESC1005X40N" value="1k96" x="25.781" y="2.794" smashed="yes" rot="R90">
-<attribute name="DESCRIPTION" value="Vishay CRCW Series Thick Film Surface Mount Resistor 0402 Case 1.96k +/-1% 0.063W +/-100ppm/C" x="25.781" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
-<attribute name="HEIGHT" value="0.4mm" x="25.781" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="25.781" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="CRCW04021K96FKED" x="25.781" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-1.96K-E3" x="25.781" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-1.96K-E3" x="25.781" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
-<attribute name="NAME" x="25.908" y="4.445" size="0.8128" layer="25" rot="R180" align="center"/>
-<attribute name="VALUE" x="25.781" y="2.794" size="1.27" layer="27" rot="R90" align="center"/>
+<element name="R41" library="SamacSys_Parts" package="RESC1005X40N" value="1k96" x="25.527025" y="2.794" smashed="yes" rot="R90">
+<attribute name="DESCRIPTION" value="Vishay CRCW Series Thick Film Surface Mount Resistor 0402 Case 1.96k +/-1% 0.063W +/-100ppm/C" x="25.527025" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="25.527025" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Vishay" x="25.527025" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="CRCW04021K96FKED" x="25.527025" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-1.96K-E3" x="25.527025" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-1.96K-E3" x="25.527025" y="2.794" size="1.778" layer="27" font="vector" ratio="15" rot="R90" display="off"/>
+<attribute name="NAME" x="25.654025" y="4.445" size="0.8128" layer="25" rot="R180" align="center"/>
+<attribute name="VALUE" x="25.527025" y="2.794" size="1.27" layer="27" rot="R90" align="center"/>
 </element>
-<element name="F2" library="SamacSys_Parts" package="FUSC4632X194N" value="MINISMDC150F_24-2" x="47.117" y="14.605" smashed="yes" rot="MR180">
-<attribute name="DESCRIPTION" value="LITTELFUSE - MINISMDC150F/24-2 - POLYSWITCH, SMD, 1812, 1.5A" x="47.117" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
-<attribute name="HEIGHT" value="1.94mm" x="47.117" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="LITTELFUSE" x="47.117" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="MINISMDC150F/24-2" x="47.117" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="650-MINISMDC150F/24" x="47.117" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=650-MINISMDC150F%2F24" x="47.117" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
-<attribute name="NAME" x="47.117" y="14.605" size="1.27" layer="26" rot="MR180" align="center"/>
-<attribute name="VALUE" x="47.117" y="14.605" size="1.27" layer="28" rot="MR180" align="center"/>
+<element name="F2" library="SamacSys_Parts" package="FUSC4632X194N" value="MINISMDC150F_24-2" x="52.197" y="14.605" smashed="yes" rot="MR180">
+<attribute name="DESCRIPTION" value="LITTELFUSE - MINISMDC150F/24-2 - POLYSWITCH, SMD, 1812, 1.5A" x="52.197" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
+<attribute name="HEIGHT" value="1.94mm" x="52.197" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="LITTELFUSE" x="52.197" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="MINISMDC150F/24-2" x="52.197" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="650-MINISMDC150F/24" x="52.197" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=650-MINISMDC150F%2F24" x="52.197" y="14.605" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
+<attribute name="NAME" x="56.007" y="14.859" size="0.8128" layer="26" rot="MR180" align="center"/>
+<attribute name="VALUE" x="52.197" y="14.605" size="1.27" layer="28" rot="MR180" align="center"/>
 </element>
 <element name="R42" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="46.228" y="49.022" smashed="yes" rot="MR180">
 <attribute name="DESCRIPTION" value="CRCW0402 Resistor T/R 0.063W,1%,10K2 Vishay CRCW Series Thick Film Surface Mount Resistor 0402 Case 10.2k +/-1% 0.063W +/-100ppm/C" x="46.228" y="49.022" size="1.778" layer="28" font="vector" ratio="15" rot="MR180" display="off"/>
@@ -3967,7 +4238,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="MPU-6050" x="34.544" y="51.308" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="N/A" x="34.544" y="51.308" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="http://www.mouser.com/Search/ProductDetail.aspx?qs=u4fy%2fsgLU9O14B5JgyQFvg%3d%3d" x="34.544" y="51.308" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
-<attribute name="NAME" x="34.544" y="51.308" size="1.27" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="37.592" y="51.054" size="0.8128" layer="26" rot="MR270" align="center"/>
 <attribute name="VALUE" x="34.544" y="51.308" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="R46" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="35.052" y="55.372" smashed="yes" rot="MR90">
@@ -3977,7 +4248,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="35.052" y="56.642" size="1.778" layer="28" font="vector" ratio="15" rot="MR90" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="35.052" y="56.642" size="1.778" layer="28" font="vector" ratio="15" rot="MR90" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="35.052" y="56.642" size="1.778" layer="28" font="vector" ratio="15" rot="MR90" display="off"/>
-<attribute name="NAME" x="35.052" y="55.372" size="1.27" layer="26" rot="MR90" align="center"/>
+<attribute name="NAME" x="34.163" y="55.88" size="0.8128" layer="26" rot="MR90" align="center"/>
 <attribute name="VALUE" x="35.052" y="55.372" size="1.27" layer="28" rot="MR90" align="center"/>
 </element>
 <element name="R47" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="36.322" y="55.372" smashed="yes" rot="MR90">
@@ -3987,7 +4258,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="36.322" y="56.642" size="1.778" layer="28" font="vector" ratio="15" rot="MR90" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="36.322" y="56.642" size="1.778" layer="28" font="vector" ratio="15" rot="MR90" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="36.322" y="56.642" size="1.778" layer="28" font="vector" ratio="15" rot="MR90" display="off"/>
-<attribute name="NAME" x="36.322" y="55.372" size="1.27" layer="26" rot="MR90" align="center"/>
+<attribute name="NAME" x="37.338" y="55.372" size="0.8128" layer="26" rot="MR90" align="center"/>
 <attribute name="VALUE" x="36.322" y="55.372" size="1.27" layer="28" rot="MR90" align="center"/>
 </element>
 <element name="C55" library="SamacSys_Parts" package="CAPC1005X55N" value="GCM155R71C104KA55J" x="32.512" y="48.006" smashed="yes" rot="MR0">
@@ -3997,7 +4268,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="32.512" y="48.006" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="32.512" y="48.006" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="32.512" y="48.006" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
-<attribute name="NAME" x="32.512" y="48.006" size="1.27" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="32.512" y="47.117" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="32.512" y="48.006" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="C56" library="SamacSys_Parts" package="CAPC1005X55N" value="GCM155R71C104KA55J" x="31.369" y="50.546" smashed="yes" rot="MR90">
@@ -4007,7 +4278,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GCM155R71C104KA55J" x="31.369" y="50.546" size="1.778" layer="28" font="vector" ratio="15" rot="MR90" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="" x="31.369" y="50.546" size="1.778" layer="28" font="vector" ratio="15" rot="MR90" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="31.369" y="50.546" size="1.778" layer="28" font="vector" ratio="15" rot="MR90" display="off"/>
-<attribute name="NAME" x="31.369" y="50.546" size="1.27" layer="26" rot="MR90" align="center"/>
+<attribute name="NAME" x="30.48" y="50.546" size="0.8128" layer="26" rot="MR90" align="center"/>
 <attribute name="VALUE" x="31.369" y="50.546" size="1.27" layer="28" rot="MR90" align="center"/>
 </element>
 <element name="C57" library="SamacSys_Parts" package="CAPC1005X55N" value="GRM155R71H222KA01D" x="33.274" y="54.483" smashed="yes" rot="MR0">
@@ -4017,7 +4288,7 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="GRM155R71H222KA01D" x="33.274" y="54.483" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="81-GRM36X222K50" x="33.274" y="54.483" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=81-GRM36X222K50" x="33.274" y="54.483" size="1.778" layer="28" font="vector" ratio="15" rot="MR0" display="off"/>
-<attribute name="NAME" x="33.274" y="54.483" size="1.27" layer="26" rot="MR0" align="center"/>
+<attribute name="NAME" x="32.893" y="55.372" size="0.8128" layer="26" rot="MR0" align="center"/>
 <attribute name="VALUE" x="33.274" y="54.483" size="1.27" layer="28" rot="MR0" align="center"/>
 </element>
 <element name="C58" library="SamacSys_Parts" package="CAPC1005X55N" value="GCM155R71H103KA55D" x="37.084" y="48.006" smashed="yes" rot="MR0">
@@ -4037,17 +4308,17 @@ design rules under a new name.</description>
 <attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="34.798" y="46.228" size="1.778" layer="28" font="vector" ratio="15" rot="MR270" display="off"/>
 <attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="34.798" y="46.228" size="1.778" layer="28" font="vector" ratio="15" rot="MR270" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="34.798" y="46.228" size="1.778" layer="28" font="vector" ratio="15" rot="MR270" display="off"/>
-<attribute name="NAME" x="34.798" y="47.498" size="1.27" layer="26" rot="MR270" align="center"/>
+<attribute name="NAME" x="35.687" y="47.498" size="0.8128" layer="26" rot="MR270" align="center"/>
 <attribute name="VALUE" x="34.798" y="47.498" size="1.27" layer="28" rot="MR270" align="center"/>
 </element>
 <element name="TP_SCL" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="45.72" y="47.879" smashed="yes" rot="MR0">
-<attribute name="NAME" x="46.863" y="46.736" size="0.6096" layer="26" ratio="10" rot="MR0"/>
+<attribute name="NAME" x="46.863" y="46.736" size="0.8128" layer="26" ratio="10" rot="MR0"/>
 <attribute name="POPULARITY" value="1" x="45.72" y="47.879" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="45.72" y="47.879" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="VALUE" x="46.355" y="47.117" size="0.0254" layer="28" rot="MR0"/>
 </element>
 <element name="TP_SDA" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="45.593" y="51.181" smashed="yes" rot="MR0">
-<attribute name="NAME" x="47.117" y="51.689" size="0.6096" layer="26" ratio="10" rot="MR0"/>
+<attribute name="NAME" x="47.117" y="51.689" size="0.8128" layer="26" ratio="10" rot="MR0"/>
 <attribute name="POPULARITY" value="1" x="45.593" y="51.181" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="45.593" y="51.181" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="VALUE" x="46.228" y="50.419" size="0.0254" layer="28" rot="MR0"/>
@@ -4219,6 +4490,80 @@ design rules under a new name.</description>
 <attribute name="POPULARITY" value="1" x="40.64" y="57.277" size="0.8128" layer="27" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="40.64" y="57.277" size="0.8128" layer="27" display="off"/>
 <attribute name="VALUE" x="40.386" y="56.896" size="0.0254" layer="27"/>
+</element>
+<element name="R49" library="SamacSys_Parts" package="RESC1005X40N" value="28k" x="43.0078375" y="14.352321875" smashed="yes" rot="MR270">
+<attribute name="DESCRIPTION" value="Vishay CRCW Series Thick Film Surface Mount Resistor 0402 Case 28k +/-1% 0.063W +/-100ppm/C" x="43.0078375" y="14.352321875" size="1.27" layer="28" font="vector" rot="MR270" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="43.0078375" y="14.352321875" size="1.27" layer="28" font="vector" rot="MR270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Vishay" x="43.0078375" y="14.352321875" size="1.27" layer="28" font="vector" rot="MR270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040228K0FKED" x="43.0078375" y="14.352321875" size="1.27" layer="28" font="vector" rot="MR270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-28K-E3" x="43.0078375" y="14.352321875" size="1.27" layer="28" font="vector" rot="MR270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-28K-E3" x="43.0078375" y="14.352321875" size="1.27" layer="28" font="vector" rot="MR270" display="off"/>
+<attribute name="NAME" x="44.0238375" y="14.352321875" size="0.8128" layer="26" rot="MR270" align="center"/>
+<attribute name="VALUE" x="43.0078375" y="14.352321875" size="1.27" layer="28" rot="MR270" align="center"/>
+</element>
+<element name="Q7" library="SamacSys_Parts" package="SOT96P237X111-3N" value="NTR4502PT1G" x="47.072753125" y="14.64421875" smashed="yes" rot="MR180">
+<attribute name="DESCRIPTION" value="Power MOSFET" x="47.072753125" y="14.64421875" size="1.27" layer="28" font="vector" rot="MR180" display="off"/>
+<attribute name="HEIGHT" value="1.11mm" x="47.072753125" y="14.64421875" size="1.27" layer="28" font="vector" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ON Semiconductor" x="47.072753125" y="14.64421875" size="1.27" layer="28" font="vector" rot="MR180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="NTR4502PT1G" x="47.072753125" y="14.64421875" size="1.27" layer="28" font="vector" rot="MR180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="863-NTR4502PT1G" x="47.072753125" y="14.64421875" size="1.27" layer="28" font="vector" rot="MR180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=863-NTR4502PT1G" x="47.072753125" y="14.64421875" size="1.27" layer="28" font="vector" rot="MR180" display="off"/>
+<attribute name="NAME" x="47.072753125" y="12.10421875" size="0.8128" layer="26" rot="MR180" align="center"/>
+<attribute name="VALUE" x="47.072753125" y="14.64421875" size="1.27" layer="28" rot="MR180" align="center"/>
+</element>
+<element name="Z1" library="SamacSys_Parts" package="SOT95P237X111-3N" value="BZX84C18LT1G" x="40.38948125" y="15.957475" smashed="yes" rot="MR90">
+<attribute name="DESCRIPTION" value="Zener Diode Voltage Regulator, 250 mW, 18 V, +/-5% Tight Tolerance" x="40.38948125" y="15.957475" size="1.27" layer="28" font="vector" rot="MR90" display="off"/>
+<attribute name="HEIGHT" value="1.11mm" x="40.38948125" y="15.957475" size="1.27" layer="28" font="vector" rot="MR90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ON Semiconductor" x="40.38948125" y="15.957475" size="1.27" layer="28" font="vector" rot="MR90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="BZX84C18LT1G" x="40.38948125" y="15.957475" size="1.27" layer="28" font="vector" rot="MR90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="863-BZX84C18LT1G" x="40.38948125" y="15.957475" size="1.27" layer="28" font="vector" rot="MR90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=863-BZX84C18LT1G" x="40.38948125" y="15.957475" size="1.27" layer="28" font="vector" rot="MR90" display="off"/>
+<attribute name="NAME" x="42.92948125" y="15.957475" size="0.8128" layer="26" rot="MR90" align="center"/>
+<attribute name="VALUE" x="40.38948125" y="15.957475" size="1.27" layer="28" rot="MR90" align="center"/>
+</element>
+<element name="R50" library="SamacSys_Parts" package="RESC1005X40N" value="10k2" x="22.688396875" y="9.312403125" smashed="yes">
+<attribute name="DESCRIPTION" value="CRCW0402 Resistor T/R 0.063W,1%,10K2 Vishay CRCW Series Thick Film Surface Mount Resistor 0402 Case 10.2k +/-1% 0.063W +/-100ppm/C" x="22.688396875" y="9.312403125" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="22.688396875" y="9.312403125" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Vishay" x="22.688396875" y="9.312403125" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040210K2FKED" x="22.688396875" y="9.312403125" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-10.2K-E3" x="22.688396875" y="9.312403125" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-10.2K-E3" x="22.688396875" y="9.312403125" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="24.974165625" y="9.312403125" size="0.8128" layer="25" align="center"/>
+<attribute name="VALUE" x="22.688396875" y="9.312403125" size="1.27" layer="27" align="center"/>
+</element>
+<element name="R51" library="SamacSys_Parts" package="RESC1005X40N" value="40k2" x="22.688396875" y="7.873209375" smashed="yes" rot="R180">
+<attribute name="DESCRIPTION" value="CRCW0402 Resistor T/R 0.063W,1%,40K2 Vishay CRCW Series Thick Film Surface Mount Resistor 0402 Case 40.2k +/-1% 0.063W +/-100ppm/C" x="22.688396875" y="7.873209375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="HEIGHT" value="0.4mm" x="22.688396875" y="7.873209375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Vishay" x="22.688396875" y="7.873209375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="CRCW040240K2FKED" x="22.688396875" y="7.873209375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="71-CRCW0402-40.2K-E3" x="22.688396875" y="7.873209375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=71-CRCW0402-40.2K-E3" x="22.688396875" y="7.873209375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NAME" x="24.88950625" y="7.873209375" size="0.8128" layer="25" rot="R180" align="center"/>
+<attribute name="VALUE" x="22.688396875" y="7.873209375" size="1.27" layer="27" rot="R180" align="center"/>
+</element>
+<element name="Q8" library="SamacSys_Parts" package="SOT65P210X110-3N" value="BC847CW,115" x="22.603740625" y="5.502784375" smashed="yes" rot="R270">
+<attribute name="DESCRIPTION" value="NEXPERIA - BC847CW,115 - TRANSISTOR, NPN, 45V, 0.1A, SOT-323" x="22.603740625" y="5.502784375" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="1.1mm" x="22.603740625" y="5.502784375" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Nexperia" x="22.603740625" y="5.502784375" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="BC847CW,115" x="22.603740625" y="5.502784375" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="771-BC847CW-T/R" x="22.603740625" y="5.502784375" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=771-BC847CW-T%2FR" x="22.603740625" y="5.502784375" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NAME" x="24.80485" y="5.58744375" size="0.8128" layer="25" align="center"/>
+<attribute name="RS_PART_NUMBER" value="" x="22.603740625" y="5.502784375" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="RS_PRICE-STOCK" value="" x="22.603740625" y="5.502784375" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="22.603740625" y="5.502784375" size="1.27" layer="27" rot="R270" align="center"/>
+</element>
+<element name="MRTS" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.67" y="29.591" smashed="yes">
+<attribute name="NAME" x="27.259" y="29.3561" size="0.6096" layer="25"/>
+<attribute name="POPULARITY" value="1" x="26.67" y="29.591" size="1.778" layer="27" font="vector" ratio="15" display="off"/>
+<attribute name="TP_SIGNAL_NAME" value="" x="26.67" y="29.591" size="1.778" layer="27" font="vector" ratio="15" display="off"/>
+<attribute name="VALUE" x="26.416" y="29.21" size="0.0254" layer="27"/>
+</element>
+<element name="MCTS" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP06R" package3d_urn="urn:adsk.eagle:package:27954/1" value="PTR1TP06R" x="26.67" y="30.607" smashed="yes">
+<attribute name="NAME" x="27.259" y="31.2611" size="0.6096" layer="25"/>
+<attribute name="POPULARITY" value="1" x="26.67" y="30.607" size="1.778" layer="27" font="vector" ratio="15" display="off"/>
+<attribute name="TP_SIGNAL_NAME" value="" x="26.67" y="30.607" size="1.778" layer="27" font="vector" ratio="15" display="off"/>
+<attribute name="VALUE" x="26.416" y="30.226" size="0.0254" layer="27"/>
 </element>
 </elements>
 <signals>
@@ -4636,7 +4981,6 @@ design rules under a new name.</description>
 <contactref element="C24" pad="1"/>
 <contactref element="C23" pad="1"/>
 <contactref element="C28" pad="1"/>
-<contactref element="LED3" pad="1"/>
 <contactref element="IC1" pad="18"/>
 <contactref element="C18" pad="1"/>
 <contactref element="J1" pad="4"/>
@@ -4750,13 +5094,12 @@ design rules under a new name.</description>
 <wire x1="6.463" y1="27.0009875" x2="6.463" y2="25.51505" width="0.254" layer="1"/>
 <wire x1="6.463" y1="25.51505" x2="6.463" y2="24.0291125" width="0.254" layer="1"/>
 <wire x1="6.463" y1="24.0291125" x2="6.463" y2="22.543175" width="0.254" layer="1"/>
-<wire x1="41.046" y1="18.147" x2="41.046" y2="19.744" width="0.4064" layer="16"/>
-<wire x1="41.046" y1="19.744" x2="41.131" y2="19.829" width="0.254" layer="16"/>
-<wire x1="41.131" y1="19.829" x2="41.118" y2="19.842" width="0.254" layer="16"/>
-<wire x1="41.118" y1="19.842" x2="41.118" y2="21.686" width="0.4064" layer="16"/>
-<wire x1="41.193" y1="23.24" x2="41.118" y2="23.165" width="0.254" layer="16"/>
-<wire x1="41.118" y1="23.165" x2="41.118" y2="21.686" width="0.254" layer="16"/>
-<wire x1="31.018" y1="37.81" x2="31.0474" y2="37.7806" width="0.254" layer="1"/>
+<wire x1="41.046" y1="18.782" x2="41.046" y2="20.379" width="0.4064" layer="16"/>
+<wire x1="41.046" y1="20.379" x2="41.131" y2="20.464" width="0.254" layer="16"/>
+<wire x1="41.131" y1="20.464" x2="41.118" y2="20.477" width="0.254" layer="16"/>
+<wire x1="41.118" y1="20.477" x2="41.118" y2="22.448" width="0.4064" layer="16"/>
+<wire x1="41.193" y1="24.129" x2="41.118" y2="24.054" width="0.254" layer="16"/>
+<wire x1="41.118" y1="24.054" x2="41.118" y2="22.448" width="0.254" layer="16"/>
 <wire x1="35.162" y1="36.8185" x2="36.575" y2="36.8185" width="0.254" layer="1"/>
 <wire x1="36.02" y1="40.43" x2="35.62" y2="40.43" width="0.254" layer="1"/>
 <wire x1="39.22926875" y1="50.6494" x2="39.0656" y2="50.48573125" width="0.254" layer="16"/>
@@ -4795,7 +5138,6 @@ design rules under a new name.</description>
 <wire x1="62.0486" y1="6.997" x2="62.0486" y2="5.9645875" width="0.254" layer="1"/>
 <wire x1="62.0486" y1="5.9645875" x2="62.04200625" y2="5.95799375" width="0.254" layer="1"/>
 <via x="62.04200625" y="5.95799375" extent="1-16" drill="0.381"/>
-<via x="24.44" y="1.981" extent="1-16" drill="0.381"/>
 <via x="4.427" y="15.9" extent="1-16" drill="0.381" diameter="1"/>
 <wire x1="11.9" y1="17.97" x2="11.9" y2="16.4" width="0.254" layer="1"/>
 <via x="11.9" y="16.4" extent="1-16" drill="0.381"/>
@@ -4908,14 +5250,13 @@ design rules under a new name.</description>
 <wire x1="51.03613125" y1="34.4" x2="52" y2="33.43613125" width="0.254" layer="1"/>
 <wire x1="52" y1="33.43613125" x2="52" y2="29.4" width="0.254" layer="1"/>
 <via x="44.1" y="17.97" extent="1-16" drill="0.381"/>
-<wire x1="44.1" y1="17.97" x2="44.1" y2="15.416" width="0.254" layer="1"/>
-<wire x1="44.1" y1="15.416" x2="44.057" y2="15.373" width="0.254" layer="1"/>
-<wire x1="45.978" y1="15.343" x2="44.173" y2="15.343" width="0.254" layer="1"/>
-<wire x1="44.173" y1="15.343" x2="44.1" y2="15.416" width="0.254" layer="1"/>
-<wire x1="45.978" y1="15.343" x2="46.043" y2="15.408" width="0.254" layer="1"/>
-<wire x1="46.043" y1="15.408" x2="47.812" y2="15.408" width="0.254" layer="1"/>
-<wire x1="47.812" y1="15.408" x2="49.604" y2="15.408" width="0.254" layer="1"/>
-<wire x1="49.604" y1="15.408" x2="49.669" y2="15.343" width="0.254" layer="1"/>
+<wire x1="44.1" y1="17.97" x2="44.1" y2="15.4185" width="0.254" layer="1"/>
+<wire x1="44.1" y1="15.4185" x2="44.1" y2="15.416" width="0.254" layer="1"/>
+<wire x1="44.1" y1="15.4185" x2="44.057" y2="15.3755" width="0.254" layer="1"/>
+<wire x1="45.978" y1="15.3755" x2="44.1405" y2="15.3755" width="0.254" layer="1"/>
+<wire x1="44.1405" y1="15.3755" x2="44.1" y2="15.416" width="0.254" layer="1"/>
+<wire x1="45.978" y1="15.3755" x2="47.812" y2="15.3755" width="0.254" layer="1"/>
+<wire x1="47.812" y1="15.3755" x2="49.669" y2="15.3755" width="0.254" layer="1"/>
 <wire x1="30.63" y1="48.95" x2="30.63" y2="48.03" width="0.254" layer="1"/>
 <wire x1="30.63" y1="48.03" x2="30.6" y2="48" width="0.254" layer="1"/>
 <via x="30.6" y="48" extent="1-16" drill="0.381"/>
@@ -5052,7 +5393,8 @@ design rules under a new name.</description>
 <wire x1="54.61" y1="22.098" x2="54.61" y2="21.1541" width="0.508" layer="16"/>
 <via x="54.61" y="21.1541" extent="1-16" drill="0.381"/>
 <via x="35.179" y="21.1454" extent="1-16" drill="0.381"/>
-<wire x1="41.118" y1="21.686" x2="42.291" y2="21.686" width="0.254" layer="16"/>
+<wire x1="41.529" y1="22.448" x2="42.291" y2="21.686" width="0.254" layer="16"/>
+<wire x1="41.529" y1="22.448" x2="41.118" y2="22.448" width="0.254" layer="16"/>
 <via x="42.291" y="21.686" extent="1-16" drill="0.381"/>
 <wire x1="35.846" y1="26.113" x2="35.846" y2="26.862" width="0.508" layer="16"/>
 <wire x1="35.846" y1="26.862" x2="36.254" y2="27.27" width="0.508" layer="16"/>
@@ -5102,7 +5444,6 @@ design rules under a new name.</description>
 <via x="6.463" y="27.94" extent="1-16" drill="0.381"/>
 <wire x1="54.98" y1="36.969" x2="54.82" y2="37.129" width="0.254" layer="1"/>
 <wire x1="54.82" y1="37.129" x2="54.82" y2="38.622" width="0.254" layer="1"/>
-<wire x1="64.424" y1="25.372" x2="64.2448" y2="25.5512" width="0.254" layer="1"/>
 <wire x1="66.24" y1="25.1" x2="65.968" y2="25.372" width="0.254" layer="1"/>
 <wire x1="65.968" y1="25.372" x2="64.424" y2="25.372" width="0.254" layer="1"/>
 <wire x1="41.609" y1="19.935" x2="41.305" y2="20.239" width="0.254" layer="1"/>
@@ -5157,7 +5498,7 @@ design rules under a new name.</description>
 <wire x1="57.43" y1="53.0599" x2="57.4138" y2="53.0761" width="0.254" layer="1"/>
 <wire x1="57.4138" y1="53.0761" x2="57.4138" y2="54.3" width="0.254" layer="1"/>
 <contactref element="LED1" pad="1"/>
-<via x="26.797" y="2.032" extent="1-16" drill="0.381"/>
+<via x="26.543025" y="2.032" extent="1-16" drill="0.381"/>
 <wire x1="5.426" y1="44.601" x2="4.469" y2="44.601" width="0.508" layer="16"/>
 <wire x1="4.469" y1="44.601" x2="4.445" y2="44.577" width="0.508" layer="16"/>
 <via x="4.445" y="44.577" extent="1-16" drill="0.381"/>
@@ -5267,10 +5608,32 @@ design rules under a new name.</description>
 <wire x1="43" y1="57.224" x2="43" y2="59.029" width="0.254" layer="1"/>
 <wire x1="40.64" y1="57.277" x2="40.64" y2="57.15" width="0.254" layer="1"/>
 <wire x1="40.64" y1="57.15" x2="41.14" y2="56.65" width="0.254" layer="1"/>
-<wire x1="23.033" y1="1.016" x2="23.475" y2="1.016" width="0.254" layer="1"/>
-<wire x1="23.475" y1="1.016" x2="24.44" y2="1.981" width="0.254" layer="1"/>
-<wire x1="27.697" y1="1.016" x2="26.797" y2="1.916" width="0.254" layer="1"/>
-<wire x1="26.797" y1="1.916" x2="26.797" y2="2.032" width="0.254" layer="1"/>
+<wire x1="27.443025" y1="1.016" x2="26.543025" y2="1.916" width="0.254" layer="1"/>
+<wire x1="26.543025" y1="1.916" x2="26.543025" y2="2.032" width="0.254" layer="1"/>
+<contactref element="R49" pad="2"/>
+<wire x1="40.91323125" y1="13.977675" x2="40.73468125" y2="14.156225" width="0.254" layer="16"/>
+<wire x1="39.96323125" y1="17.937275" x2="40.201275" y2="17.937275" width="0.254" layer="16"/>
+<wire x1="40.201275" y1="17.937275" x2="41.046" y2="18.782" width="0.254" layer="16"/>
+<wire x1="39.67828125" y1="16.362625" x2="39.67828125" y2="17.652325" width="0.254" layer="16"/>
+<wire x1="39.67828125" y1="17.652325" x2="39.96323125" y2="17.937275" width="0.254" layer="16"/>
+<wire x1="43.0078375" y1="13.802321875" x2="42.832484375" y2="13.977675" width="0.254" layer="16"/>
+<wire x1="42.832484375" y1="13.977675" x2="40.91323125" y2="13.977675" width="0.254" layer="16"/>
+<wire x1="40.73468125" y1="14.156225" x2="40.73468125" y2="15.306225" width="0.254" layer="16"/>
+<wire x1="40.73468125" y1="15.306225" x2="39.67828125" y2="16.362625" width="0.254" layer="16"/>
+<contactref element="Q8" pad="2"/>
+<contactref element="R51" pad="2"/>
+<wire x1="21.953740625" y1="6.452784375" x2="21.953740625" y2="7.688553125" width="0.254" layer="1"/>
+<wire x1="21.953740625" y1="7.688553125" x2="22.138396875" y2="7.873209375" width="0.254" layer="1"/>
+<wire x1="21.953740625" y1="6.452784375" x2="20.852215625" y2="6.452784375" width="0.254" layer="1"/>
+<wire x1="20.852215625" y1="6.452784375" x2="20.828" y2="6.477" width="0.254" layer="1"/>
+<via x="20.828" y="6.477" extent="1-16" drill="0.35"/>
+<contactref element="R34" pad="2"/>
+<wire x1="27.74575" y1="31.3358" x2="28.74825" y2="31.3358" width="0.254" layer="1"/>
+<wire x1="28.74825" y1="31.3358" x2="28.9268" y2="31.15725" width="0.254" layer="1"/>
+<wire x1="28.9268" y1="31.15725" x2="28.9268" y2="31.1512" width="0.254" layer="1"/>
+<wire x1="28.9268" y1="31.1512" x2="29.347" y2="30.731" width="0.254" layer="1"/>
+<wire x1="27.374" y1="28.571" x2="27.374" y2="30.96405" width="0.254" layer="1"/>
+<wire x1="27.374" y1="30.96405" x2="27.74575" y2="31.3358" width="0.254" layer="1"/>
 </signal>
 <signal name="MRX" class="2">
 <contactref element="IC2" pad="13"/>
@@ -5284,24 +5647,13 @@ design rules under a new name.</description>
 <wire x1="33.401" y1="35.814" x2="30.813" y2="33.226" width="0.2032" layer="1"/>
 <wire x1="30.813" y1="33.226" x2="26.464" y2="33.226" width="0.2032" layer="1"/>
 </signal>
-<signal name="MCTS" class="2">
-<contactref element="IC2" pad="11"/>
-<contactref element="R34" pad="1"/>
-<wire x1="26.539" y1="29.987" x2="24.417" y2="29.987" width="0.254" layer="1"/>
-<wire x1="24.417" y1="29.987" x2="24.4" y2="29.97" width="0.254" layer="1"/>
-</signal>
-<signal name="MRTS" class="2">
-<contactref element="IC2" pad="10"/>
-<contactref element="R34" pad="2"/>
-<wire x1="26.539" y1="28.887" x2="24.417" y2="28.887" width="0.254" layer="1"/>
-<wire x1="24.417" y1="28.887" x2="24.4" y2="28.87" width="0.254" layer="1"/>
-</signal>
 <signal name="MTX" class="2">
 <contactref element="IC2" pad="12"/>
 <contactref element="U1" pad="5"/>
 <contactref element="TP_MTX" pad="TP"/>
-<wire x1="30.46" y1="31.73" x2="33.79" y2="35.06" width="0.2032" layer="1"/>
-<wire x1="30.46" y1="31.73" x2="26.608" y2="31.73" width="0.2032" layer="1"/>
+<wire x1="31.095" y1="32.365" x2="33.79" y2="35.06" width="0.2032" layer="1"/>
+<wire x1="31.095" y1="32.365" x2="27.243" y2="32.365" width="0.2032" layer="1"/>
+<wire x1="27.243" y1="32.365" x2="26.608" y2="31.73" width="0.2032" layer="1"/>
 <wire x1="33.79" y1="38.82" x2="33.79" y2="35.06" width="0.2032" layer="1"/>
 <wire x1="24.4" y1="31.07" x2="26" y2="31.07" width="0.2032" layer="1"/>
 <wire x1="26" y1="31.07" x2="26.608" y2="31.678" width="0.2032" layer="1"/>
@@ -5386,20 +5738,20 @@ design rules under a new name.</description>
 <wire x1="54.894878125" y1="41.021109375" x2="58.6477" y2="37.2682875" width="0.2032" layer="16"/>
 <wire x1="83.4678" y1="40.47515" x2="83.4678" y2="26.67" width="0.2032" layer="16"/>
 <wire x1="74.99463125" y1="16.9459" x2="80.459365625" y2="22.410634375" width="0.2032" layer="16"/>
-<wire x1="26.6083625" y1="3.175" x2="24.13" y2="3.175" width="0.2032" layer="16"/>
+<wire x1="26.6083625" y1="3.175" x2="24.46863125" y2="3.175" width="0.2032" layer="16"/>
 <wire x1="28.3263625" y1="1.457" x2="26.6083625" y2="3.175" width="0.2032" layer="16"/>
 <wire x1="58.8477" y1="5.13693125" x2="58.8477" y2="7.6667" width="0.2032" layer="16"/>
 <wire x1="58.8477" y1="5.13693125" x2="55.16776875" y2="1.457" width="0.2032" layer="16"/>
 <wire x1="55.16776875" y1="1.457" x2="28.3263625" y2="1.457" width="0.2032" layer="16"/>
-<via x="24.13" y="3.175" extent="1-16" drill="0.2032"/>
+<via x="24.46863125" y="3.175" extent="1-16" drill="0.2032"/>
 <wire x1="66.8569" y1="15.6759" x2="67.40545" y2="15.6759" width="0.2032" layer="16"/>
 <wire x1="67.40545" y1="15.6759" x2="68.67545" y2="16.9459" width="0.2032" layer="16"/>
 <wire x1="58.8477" y1="7.6667" x2="66.8569" y2="15.6759" width="0.2032" layer="16"/>
 <wire x1="68.67545" y1="16.9459" x2="74.99463125" y2="16.9459" width="0.2032" layer="16"/>
 <wire x1="80.459365625" y1="22.410634375" x2="80.459365625" y2="23.661565625" width="0.2032" layer="16"/>
 <wire x1="80.459365625" y1="23.661565625" x2="83.4678" y2="26.67" width="0.2032" layer="16"/>
-<wire x1="24.13" y1="3.175" x2="24.299" y2="3.344" width="0.2032" layer="1"/>
-<wire x1="24.299" y1="3.344" x2="25.781" y2="3.344" width="0.2032" layer="1"/>
+<wire x1="24.46863125" y1="3.175" x2="24.63763125" y2="3.344" width="0.2032" layer="1"/>
+<wire x1="24.63763125" y1="3.344" x2="25.527025" y2="3.344" width="0.2032" layer="1"/>
 </signal>
 <signal name="PA04_BT_RST" class="2">
 <contactref element="IC1" pad="9"/>
@@ -5416,9 +5768,9 @@ design rules under a new name.</description>
 <wire x1="65" y1="47.6" x2="65" y2="47.5747375" width="0.254" layer="16"/>
 <wire x1="65" y1="47.5747375" x2="68" y2="47.5747375" width="0.2032" layer="16"/>
 <wire x1="68" y1="47.5747375" x2="69.0252625" y2="48.6" width="0.2032" layer="16"/>
-<wire x1="76.67695" y1="57.432" x2="74.729" y2="57.432" width="0.2032" layer="1"/>
-<wire x1="77.2776" y1="50.31125625" x2="77.2776" y2="56.83135" width="0.2032" layer="1"/>
-<wire x1="77.2776" y1="56.83135" x2="76.67695" y2="57.432" width="0.2032" layer="1"/>
+<wire x1="75.745709375" y1="57.432" x2="74.729" y2="57.432" width="0.2032" layer="1"/>
+<wire x1="77.2776" y1="50.31125625" x2="77.2776" y2="55.900109375" width="0.2032" layer="1"/>
+<wire x1="77.2776" y1="55.900109375" x2="75.745709375" y2="57.432" width="0.2032" layer="1"/>
 <contactref element="BT_RST" pad="TP"/>
 <wire x1="76.073" y1="47.371" x2="76.0696" y2="47.3744" width="0.2032" layer="1"/>
 <wire x1="76.0696" y1="47.3744" x2="75" y2="47.3744" width="0.2032" layer="1"/>
@@ -5924,9 +6276,9 @@ design rules under a new name.</description>
 <wire x1="52.8906" y1="37.76876875" x2="53.05426875" y2="37.6051" width="0.2032" layer="1"/>
 <wire x1="53.05426875" y1="37.6051" x2="53.0901875" y2="37.6051" width="0.2032" layer="1"/>
 <wire x1="53.0901875" y1="37.6051" x2="53.4" y2="37.2952875" width="0.2032" layer="1"/>
-<wire x1="76.4648" y1="50.64793125" x2="76.4648" y2="54.5612" width="0.2032" layer="1"/>
-<wire x1="76.4648" y1="54.5612" x2="76.134" y2="54.892" width="0.2032" layer="1"/>
-<wire x1="76.134" y1="54.892" x2="74.729" y2="54.892" width="0.2032" layer="1"/>
+<wire x1="76.4648" y1="50.64793125" x2="76.4648" y2="54.137909375" width="0.2032" layer="1"/>
+<wire x1="76.4648" y1="54.137909375" x2="75.710709375" y2="54.892" width="0.2032" layer="1"/>
+<wire x1="75.710709375" y1="54.892" x2="74.729" y2="54.892" width="0.2032" layer="1"/>
 <contactref element="SPI2_MOSI" pad="TP"/>
 <wire x1="68.58" y1="42.545" x2="67.8189" y2="43.3061" width="0.2032" layer="1"/>
 </signal>
@@ -6036,9 +6388,9 @@ design rules under a new name.</description>
 <wire x1="57.6809125" y1="45.11" x2="57.84045625" y2="45.26954375" width="0.2032" layer="1"/>
 <wire x1="57.84045625" y1="45.26954375" x2="57.84045625" y2="45.3287125" width="0.2032" layer="1"/>
 <wire x1="57.84045625" y1="45.3287125" x2="57.8249" y2="45.34426875" width="0.2032" layer="1"/>
-<wire x1="76.299" y1="56.162" x2="74.729" y2="56.162" width="0.2032" layer="1"/>
-<wire x1="76.8712" y1="50.47959375" x2="76.8712" y2="55.5898" width="0.2032" layer="1"/>
-<wire x1="76.8712" y1="55.5898" x2="76.299" y2="56.162" width="0.2032" layer="1"/>
+<wire x1="75.79105" y1="56.162" x2="74.729" y2="56.162" width="0.2032" layer="1"/>
+<wire x1="76.8712" y1="50.47959375" x2="76.8712" y2="55.08185" width="0.2032" layer="1"/>
+<wire x1="76.8712" y1="55.08185" x2="75.79105" y2="56.162" width="0.2032" layer="1"/>
 <contactref element="BT_SS" pad="TP"/>
 <wire x1="72.009" y1="45.466" x2="72" y2="45.475" width="0.2032" layer="1"/>
 <wire x1="72" y1="45.475" x2="72" y2="46.4078" width="0.2032" layer="1"/>
@@ -6224,7 +6576,6 @@ design rules under a new name.</description>
 <vertex x="31.81" y="23"/>
 <vertex x="31.81" y="11"/>
 </polygon>
-<wire x1="33" y1="24.559" x2="32.559" y2="24.559" width="0.254" layer="16"/>
 <via x="8" y="43" extent="1-16" drill="0.381" diameter="1"/>
 <via x="7.254" y="16" extent="1-16" drill="0.381" diameter="1"/>
 <contactref element="TP3V8" pad="TP"/>
@@ -6233,7 +6584,7 @@ design rules under a new name.</description>
 <wire x1="35.846" y1="24.713" x2="35.692" y2="24.559" width="0.3048" layer="16"/>
 <wire x1="35.692" y1="24.559" x2="32.559" y2="24.559" width="0.508" layer="16"/>
 <wire x1="32.559" y1="24.559" x2="32" y2="24" width="0.508" layer="16"/>
-<wire x1="39.291" y1="24.465" x2="39.291" y2="25.4" width="0.254" layer="16"/>
+<wire x1="39.291" y1="25.227" x2="39.291" y2="25.4" width="0.254" layer="16"/>
 <wire x1="39.291" y1="25.4" x2="31.75" y2="25.4" width="0.254" layer="16"/>
 <wire x1="31.75" y1="25.4" x2="31.75" y2="24.25" width="0.254" layer="16"/>
 <wire x1="31.75" y1="24.25" x2="32" y2="24" width="0.254" layer="16"/>
@@ -6261,6 +6612,14 @@ design rules under a new name.</description>
 <wire x1="5.969" y1="47.498" x2="6.35" y2="47.117" width="0.254" layer="16"/>
 <wire x1="6.35" y1="47.117" x2="6.35" y2="46.364" width="0.254" layer="16"/>
 <wire x1="6.35" y1="46.364" x2="6.346" y2="46.36" width="0.254" layer="16"/>
+<contactref element="R15" pad="2"/>
+<via x="15.91541875" y="12.52909375" extent="1-16" drill="0.35"/>
+<wire x1="22.30505" y1="2.209" x2="21.88485" y2="2.6292" width="0.254" layer="1"/>
+<wire x1="21.88485" y1="2.6292" x2="21.88485" y2="2.63525" width="0.254" layer="1"/>
+<wire x1="15.91541875" y1="12.52909375" x2="15.943178125" y2="12.52909375" width="0.254" layer="1"/>
+<wire x1="20.02080625" y1="8.451465625" x2="15.943178125" y2="12.52909375" width="0.254" layer="1"/>
+<wire x1="20.02080625" y1="4.49929375" x2="20.02080625" y2="8.451465625" width="0.254" layer="1"/>
+<wire x1="21.88485" y1="2.63525" x2="20.02080625" y2="4.49929375" width="0.254" layer="1"/>
 </signal>
 <signal name="MRI" class="2">
 <contactref element="IC2" pad="7"/>
@@ -6268,11 +6627,10 @@ design rules under a new name.</description>
 <signal name="MDTR" class="2">
 <contactref element="IC2" pad="9"/>
 <contactref element="R14" pad="1"/>
-<wire x1="27.3684" y1="30.731" x2="28.247" y2="30.731" width="0.254" layer="1"/>
-<wire x1="24.4" y1="27.77" x2="24.4206" y2="27.7906" width="0.254" layer="1"/>
-<wire x1="27.3684" y1="28.34506875" x2="27.3684" y2="30.731" width="0.254" layer="1"/>
-<wire x1="24.4206" y1="27.7906" x2="26.81393125" y2="27.7906" width="0.254" layer="1"/>
-<wire x1="26.81393125" y1="27.7906" x2="27.3684" y2="28.34506875" width="0.254" layer="1"/>
+<wire x1="28.247" y1="30.731" x2="28.2574" y2="30.7206" width="0.254" layer="1"/>
+<wire x1="28.2574" y1="30.7206" x2="28.2574" y2="27.4096" width="0.254" layer="1"/>
+<wire x1="28.2574" y1="27.4096" x2="24.7604" y2="27.4096" width="0.254" layer="1"/>
+<wire x1="24.4" y1="27.77" x2="24.7604" y2="27.4096" width="0.254" layer="1"/>
 </signal>
 <signal name="PWR_ON">
 <contactref element="IC2" pad="15"/>
@@ -6288,8 +6646,8 @@ design rules under a new name.</description>
 <signal name="N$22">
 <contactref element="R15" pad="1"/>
 <contactref element="LED3" pad="2"/>
-<wire x1="21.233" y1="1.016" x2="21.713" y2="1.496" width="0.254" layer="1"/>
-<wire x1="21.713" y1="1.496" x2="21.713" y2="2.209" width="0.254" layer="1"/>
+<wire x1="20.72505" y1="1.016" x2="21.20505" y2="1.496" width="0.254" layer="1"/>
+<wire x1="21.20505" y1="1.496" x2="21.20505" y2="2.209" width="0.254" layer="1"/>
 </signal>
 <signal name="MRST" class="2">
 <contactref element="Q4" pad="3"/>
@@ -6470,11 +6828,12 @@ design rules under a new name.</description>
 <wire x1="14.177" y1="11.356" x2="14.177" y2="5.383" width="0.8128" layer="1"/>
 <wire x1="14.177" y1="5.383" x2="14.24" y2="5.32" width="0.8128" layer="1"/>
 </signal>
-<signal name="N$24">
+<signal name="MDCD">
 <contactref element="IC2" pad="8"/>
-<contactref element="TP_MDCD" pad="TP"/>
-<wire x1="26.627" y1="26.765" x2="26.532" y2="26.67" width="0.254" layer="1"/>
-<wire x1="26.532" y1="26.67" x2="24.4" y2="26.67" width="0.254" layer="1"/>
+<contactref element="MDCD" pad="TP"/>
+<wire x1="26.627" y1="26.257" x2="26.468" y2="26.416" width="0.254" layer="1"/>
+<wire x1="26.468" y1="26.416" x2="24.654" y2="26.416" width="0.254" layer="1"/>
+<wire x1="24.654" y1="26.416" x2="24.4" y2="26.67" width="0.254" layer="1"/>
 </signal>
 <signal name="M_USB_N" class="2">
 <contactref element="IC2" pad="28"/>
@@ -6551,19 +6910,19 @@ design rules under a new name.</description>
 <wire x1="41.99818125" y1="29.063" x2="36.937" y2="29.063" width="0.2032" layer="16"/>
 <wire x1="44.5342" y1="26.52698125" x2="41.99818125" y2="29.063" width="0.2032" layer="16"/>
 </signal>
-<signal name="N$3">
+<signal name="NET_STAT">
 <contactref element="IC2" pad="16"/>
-<contactref element="R15" pad="2"/>
 <via x="14.6" y="25.3" extent="1-16" drill="0.2032"/>
 <wire x1="14.6" y1="26.46513125" x2="14.6" y2="25.3" width="0.2032" layer="1"/>
-<wire x1="14.6" y1="25.3" x2="14.6" y2="13.892" width="0.2032" layer="16"/>
-<wire x1="22.73" y1="5.762" x2="22.73" y2="3.222" width="0.2032" layer="16"/>
-<wire x1="22.73" y1="5.762" x2="14.6" y2="13.892" width="0.2032" layer="16"/>
-<via x="22.73" y="3.222" extent="1-16" drill="0.2032"/>
+<wire x1="14.6" y1="25.3" x2="14.6" y2="14.73858125" width="0.2032" layer="16"/>
+<wire x1="20.7828625" y1="8.555465625" x2="20.7828625" y2="8.55571875" width="0.2032" layer="16"/>
+<wire x1="20.7828625" y1="8.55571875" x2="14.6" y2="14.73858125" width="0.2032" layer="16"/>
+<via x="20.7828625" y="8.555465625" extent="1-16" drill="0.2032"/>
 <wire x1="24.4" y1="35.47" x2="23.60486875" y2="35.47" width="0.2032" layer="1"/>
 <wire x1="23.60486875" y1="35.47" x2="14.6" y2="26.46513125" width="0.2032" layer="1"/>
-<wire x1="22.813" y1="2.209" x2="22.73" y2="2.292" width="0.254" layer="1"/>
-<wire x1="22.73" y1="2.292" x2="22.73" y2="3.222" width="0.254" layer="1"/>
+<contactref element="R50" pad="1"/>
+<wire x1="20.7828625" y1="8.555465625" x2="21.5398" y2="9.312403125" width="0.2032" layer="1"/>
+<wire x1="21.5398" y1="9.312403125" x2="22.138396875" y2="9.312403125" width="0.2032" layer="1"/>
 </signal>
 <signal name="+12V">
 <contactref element="IC4" pad="2"/>
@@ -6594,12 +6953,12 @@ design rules under a new name.</description>
 <wire x1="37.67426875" y1="22.8811" x2="37.5106" y2="23.04476875" width="0.2032" layer="16"/>
 <wire x1="37.5106" y1="23.04476875" x2="37.5106" y2="23.3274" width="0.2032" layer="16"/>
 <wire x1="37.5106" y1="23.3274" x2="37.44" y2="23.398" width="0.2032" layer="16"/>
-<wire x1="37.94" y1="21.722" x2="39.082" y2="21.722" width="0.3048" layer="16"/>
-<wire x1="39.082" y1="21.722" x2="39.118" y2="21.686" width="0.254" layer="16"/>
-<wire x1="39.118" y1="21.686" x2="39.131" y2="21.673" width="0.254" layer="16"/>
-<wire x1="39.131" y1="21.673" x2="39.131" y2="19.829" width="0.4064" layer="16"/>
-<wire x1="39.131" y1="19.829" x2="39.646" y2="19.314" width="0.4064" layer="16"/>
-<wire x1="39.646" y1="19.314" x2="39.646" y2="18.147" width="0.4064" layer="16"/>
+<wire x1="37.94" y1="21.722" x2="38.392" y2="21.722" width="0.3048" layer="16"/>
+<wire x1="38.392" y1="21.722" x2="39.118" y2="22.448" width="0.254" layer="16"/>
+<wire x1="39.118" y1="22.448" x2="39.131" y2="22.435" width="0.254" layer="16"/>
+<wire x1="39.131" y1="22.435" x2="39.131" y2="20.464" width="0.4064" layer="16"/>
+<wire x1="39.131" y1="20.464" x2="39.646" y2="19.949" width="0.4064" layer="16"/>
+<wire x1="39.646" y1="19.949" x2="39.646" y2="18.782" width="0.4064" layer="16"/>
 <wire x1="38.004" y1="19.935" x2="36.979" y2="19.935" width="0.2032" layer="1"/>
 <wire x1="36.979" y1="19.935" x2="36.34" y2="20.574" width="0.2032" layer="1"/>
 <wire x1="36.34" y1="20.574" x2="35.514" y2="19.748" width="0.6096" layer="16"/>
@@ -6612,9 +6971,13 @@ design rules under a new name.</description>
 <wire x1="50.546" y1="21.683" x2="50.546" y2="21.209" width="0.3048" layer="16"/>
 <wire x1="50.546" y1="21.209" x2="49.593" y2="20.256" width="0.3048" layer="16"/>
 <wire x1="49.593" y1="20.256" x2="48.575" y2="20.256" width="0.3048" layer="16"/>
-<contactref element="F2" pad="1"/>
-<wire x1="45.017" y1="14.605" x2="42.291" y2="14.605" width="1.016" layer="16"/>
-<via x="42.291" y="14.605" extent="1-16" drill="0.381" diameter="1.2"/>
+<contactref element="Q7" pad="2"/>
+<contactref element="Z1" pad="3"/>
+<wire x1="45.872753125" y1="15.59921875" x2="44.47178125" y2="15.59921875" width="0.8128" layer="16"/>
+<wire x1="44.47178125" y1="15.59921875" x2="42.672" y2="17.399" width="0.8128" layer="16"/>
+<via x="42.672" y="17.399" extent="1-16" drill="0.381" diameter="1.2"/>
+<wire x1="42.672" y1="17.399" x2="40.78100625" y2="17.399" width="0.8128" layer="16"/>
+<wire x1="40.78100625" y1="17.399" x2="40.38948125" y2="17.007475" width="0.8128" layer="16"/>
 </signal>
 <signal name="N$5">
 <contactref element="IC4" pad="1"/>
@@ -6747,10 +7110,11 @@ design rules under a new name.</description>
 <contactref element="R10" pad="2"/>
 <contactref element="R9" pad="1"/>
 <contactref element="IC5" pad="6"/>
-<wire x1="40.513" y1="23.24" x2="39.416" y2="23.24" width="0.2032" layer="16"/>
-<wire x1="39.416" y1="23.24" x2="39.291" y2="23.365" width="0.2032" layer="16"/>
-<wire x1="39.291" y1="23.365" x2="37.973" y2="23.365" width="0.2032" layer="16"/>
-<wire x1="37.973" y1="23.365" x2="37.94" y2="23.398" width="0.2032" layer="16"/>
+<wire x1="40.513" y1="24.129" x2="39.293" y2="24.129" width="0.2032" layer="16"/>
+<wire x1="39.291" y1="24.127" x2="39.293" y2="24.129" width="0.2032" layer="16"/>
+<wire x1="39.291" y1="24.127" x2="39.177" y2="24.127" width="0.2032" layer="16"/>
+<wire x1="37.94" y1="23.398" x2="38.448" y2="23.398" width="0.2032" layer="16"/>
+<wire x1="39.177" y1="24.127" x2="38.448" y2="23.398" width="0.2032" layer="16"/>
 </signal>
 <signal name="N$16">
 <contactref element="IC5" pad="2"/>
@@ -7054,7 +7418,7 @@ design rules under a new name.</description>
 <contactref element="D8" pad="2"/>
 <contactref element="J4" pad="9"/>
 <wire x1="48.5" y1="11.63" x2="47.812" y2="12.318" width="0.2032" layer="1"/>
-<wire x1="47.812" y1="12.318" x2="47.812" y2="14.308" width="0.2032" layer="1"/>
+<wire x1="47.812" y1="12.318" x2="47.812" y2="14.2755" width="0.2032" layer="1"/>
 <wire x1="63.31" y1="10.63" x2="63.31" y2="9.1547375" width="0.2032" layer="1"/>
 <wire x1="63.31" y1="9.1547375" x2="63.4064" y2="9.0583375" width="0.2032" layer="1"/>
 <wire x1="63.4064" y1="9.0583375" x2="63.4064" y2="5.8316625" width="0.2032" layer="1"/>
@@ -7073,7 +7437,7 @@ design rules under a new name.</description>
 <contactref element="D7" pad="2"/>
 <contactref element="J4" pad="2"/>
 <wire x1="48.5" y1="8.63" x2="49.669" y2="9.799" width="0.2032" layer="1"/>
-<wire x1="49.669" y1="9.799" x2="49.669" y2="14.243" width="0.2032" layer="1"/>
+<wire x1="49.669" y1="9.799" x2="49.669" y2="14.2755" width="0.2032" layer="1"/>
 <wire x1="62.66" y1="10.63" x2="62.66" y2="8.89" width="0.2032" layer="1"/>
 <wire x1="62.66" y1="8.89" x2="63" y2="8.89" width="0.2032" layer="1"/>
 <wire x1="63" y1="8.89" x2="63" y2="6" width="0.2032" layer="1"/>
@@ -7089,8 +7453,8 @@ design rules under a new name.</description>
 <contactref element="IC9" pad="10"/>
 <contactref element="D6" pad="2"/>
 <contactref element="J4" pad="10"/>
-<wire x1="45.5" y1="11.63" x2="45.5" y2="13.765" width="0.2032" layer="1"/>
-<wire x1="45.5" y1="13.765" x2="45.978" y2="14.243" width="0.2032" layer="1"/>
+<wire x1="45.5" y1="11.63" x2="45.5" y2="13.7975" width="0.2032" layer="1"/>
+<wire x1="45.5" y1="13.7975" x2="45.978" y2="14.2755" width="0.2032" layer="1"/>
 <wire x1="61.36" y1="10.63" x2="61.36" y2="9" width="0.2032" layer="1"/>
 <via x="58" y="5.0795" extent="1-16" drill="0.2032"/>
 <wire x1="58" y1="5.0795" x2="57.6731" y2="5.4064" width="0.2032" layer="16"/>
@@ -7110,7 +7474,7 @@ design rules under a new name.</description>
 <contactref element="D5" pad="2"/>
 <contactref element="J4" pad="3"/>
 <wire x1="45.5" y1="8.63" x2="44.057" y2="10.073" width="0.2032" layer="1"/>
-<wire x1="44.057" y1="10.073" x2="44.057" y2="14.273" width="0.2032" layer="1"/>
+<wire x1="44.057" y1="10.073" x2="44.057" y2="14.2755" width="0.2032" layer="1"/>
 <wire x1="60.71" y1="9" x2="60.71" y2="10.63" width="0.2032" layer="1"/>
 <via x="57" y="6" extent="1-16" drill="0.2032"/>
 <wire x1="57" y1="6" x2="60" y2="6" width="0.2032" layer="1"/>
@@ -7285,14 +7649,14 @@ design rules under a new name.</description>
 <signal name="N$4">
 <contactref element="R41" pad="1"/>
 <contactref element="LED1" pad="2"/>
-<wire x1="25.781" y1="2.244" x2="25.897" y2="2.128" width="0.2032" layer="1"/>
-<wire x1="25.897" y1="2.128" x2="25.897" y2="1.016" width="0.2032" layer="1"/>
+<wire x1="25.527025" y1="2.244" x2="25.643025" y2="2.128" width="0.2032" layer="1"/>
+<wire x1="25.643025" y1="2.128" x2="25.643025" y2="1.016" width="0.2032" layer="1"/>
 </signal>
 <signal name="12V_IN">
 <contactref element="F2" pad="2"/>
 <contactref element="J4" pad="8"/>
-<wire x1="51.5" y1="11.63" x2="51.5" y2="12.322" width="1.016" layer="16"/>
-<wire x1="51.5" y1="12.322" x2="49.217" y2="14.605" width="1.016" layer="16"/>
+<wire x1="51.5" y1="11.63" x2="51.5" y2="11.808" width="1.016" layer="16"/>
+<wire x1="51.5" y1="11.808" x2="54.297" y2="14.605" width="1.016" layer="16"/>
 </signal>
 <signal name="N$14">
 <contactref element="IC11" pad="12"/>
@@ -7341,7 +7705,6 @@ design rules under a new name.</description>
 <signal name="MPU_REGOUT">
 <contactref element="C55" pad="1"/>
 <contactref element="IC14" pad="10"/>
-<wire x1="34.294" y1="49.358" x2="34.294" y2="49.328" width="0.254" layer="16"/>
 <wire x1="34.294" y1="49.358" x2="34.2234" y2="49.2874" width="0.2032" layer="16"/>
 <wire x1="33.7263875" y1="48.2346" x2="33.2006" y2="48.2346" width="0.2032" layer="16"/>
 <wire x1="33.2006" y1="48.2346" x2="32.972" y2="48.006" width="0.2032" layer="16"/>
@@ -7375,6 +7738,57 @@ design rules under a new name.</description>
 <wire x1="66.6869" y1="8.89" x2="68.58" y2="10.7831" width="0.2032" layer="1"/>
 <wire x1="68.58" y1="10.7831" x2="68.58" y2="11.9862" width="0.2032" layer="1"/>
 <wire x1="68.58" y1="11.9862" x2="65.9412" y2="14.625" width="0.2032" layer="1"/>
+</signal>
+<signal name="N$25">
+<contactref element="F2" pad="1"/>
+<contactref element="Q7" pad="3"/>
+<wire x1="50.097" y1="14.605" x2="48.311971875" y2="14.605" width="0.8128" layer="16"/>
+<wire x1="48.311971875" y1="14.605" x2="48.272753125" y2="14.64421875" width="0.8128" layer="16"/>
+</signal>
+<signal name="N$31">
+<contactref element="Q7" pad="1"/>
+<contactref element="Z1" pad="1"/>
+<contactref element="R49" pad="1"/>
+<wire x1="45.872753125" y1="13.68921875" x2="45.772534375" y2="13.589" width="0.254" layer="16"/>
+<wire x1="43.434084375" y1="14.482121875" x2="43.4280375" y2="14.482121875" width="0.254" layer="16"/>
+<wire x1="43.4280375" y1="14.482121875" x2="43.0078375" y2="14.902321875" width="0.254" layer="16"/>
+<wire x1="44.32720625" y1="13.589" x2="43.434084375" y2="14.482121875" width="0.254" layer="16"/>
+<wire x1="45.772534375" y1="13.589" x2="44.32720625" y2="13.589" width="0.254" layer="16"/>
+<wire x1="43.0078375" y1="14.902321875" x2="41.344634375" y2="14.902321875" width="0.254" layer="16"/>
+<wire x1="41.344634375" y1="14.902321875" x2="41.33948125" y2="14.907475" width="0.254" layer="16"/>
+</signal>
+<signal name="N$3">
+<contactref element="Q8" pad="1"/>
+<contactref element="R50" pad="2"/>
+<contactref element="R51" pad="1"/>
+<wire x1="23.238396875" y1="9.312403125" x2="23.238396875" y2="7.873209375" width="0.2032" layer="1"/>
+<wire x1="23.238396875" y1="7.873209375" x2="23.253740625" y2="7.857865625" width="0.2032" layer="1"/>
+<wire x1="23.253740625" y1="7.857865625" x2="23.253740625" y2="6.452784375" width="0.2032" layer="1"/>
+</signal>
+<signal name="N$41">
+<contactref element="LED3" pad="1"/>
+<contactref element="Q8" pad="3"/>
+<wire x1="22.603740625" y1="4.552784375" x2="22.603740625" y2="2.980440625" width="0.2032" layer="1"/>
+<wire x1="22.603740625" y1="2.980440625" x2="22.95945" y2="2.62473125" width="0.2032" layer="1"/>
+<wire x1="22.95945" y1="2.62473125" x2="22.95945" y2="1.4504" width="0.2032" layer="1"/>
+<wire x1="22.95945" y1="1.4504" x2="22.52505" y2="1.016" width="0.2032" layer="1"/>
+</signal>
+<signal name="MRTS">
+<contactref element="IC2" pad="10"/>
+<contactref element="R34" pad="1"/>
+<contactref element="MRTS" pad="TP"/>
+<wire x1="24.4" y1="28.87" x2="25.975" y2="28.87" width="0.254" layer="1"/>
+<wire x1="25.975" y1="28.87" x2="26.274" y2="28.571" width="0.254" layer="1"/>
+<wire x1="26.274" y1="28.571" x2="26.274" y2="29.195" width="0.254" layer="1"/>
+<wire x1="26.274" y1="29.195" x2="26.67" y2="29.591" width="0.254" layer="1"/>
+</signal>
+<signal name="MCTS">
+<contactref element="IC2" pad="11"/>
+<contactref element="MCTS" pad="TP"/>
+<wire x1="24.4" y1="29.97" x2="24.7952" y2="30.3652" width="0.254" layer="1"/>
+<wire x1="24.7952" y1="30.3652" x2="25.27625" y2="30.3652" width="0.254" layer="1"/>
+<wire x1="25.51805" y1="30.607" x2="26.67" y2="30.607" width="0.254" layer="1"/>
+<wire x1="25.27625" y1="30.3652" x2="25.51805" y2="30.607" width="0.254" layer="1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
@@ -7417,6 +7831,10 @@ design rules under a new name.</description>
 </board>
 </drawing>
 <compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
 <note version="8.2" severity="warning">
 Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)
